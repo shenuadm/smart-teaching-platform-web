@@ -61,6 +61,11 @@ const routes = [
             component: () => import('@/views/superUser/menuManagement/laboratoryReport')
           },
           {
+            path: '/laboratoryStep',
+            name: 'laboratoryStep',
+            component: () => import('@/views/superUser/menuManagement/laboratoryStep')
+          },
+          {
             path: '/aboutUS',
             name: 'aboutUS',
             component: () => import('@/views/superUser/aboutUS')

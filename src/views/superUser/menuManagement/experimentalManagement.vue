@@ -116,22 +116,26 @@
         placeholder="请输入实验标题"
         v-model="revise.title"
       >
-        <template slot="prepend">实验标题</template>
+        <template slot="prepend"
+          >实验标题<span class="span" style="color: red">*</span></template
+        >
       </el-input>
       <el-input
         class="inputw"
         placeholder="请输入课时"
         v-model="revise.classHour"
       >
-        <template slot="prepend">课时</template>
+        <template slot="prepend"
+          >实验课时<span class="span" style="color: red">*</span></template
+        >
       </el-input>
+      <div class="dec">实验描述</div>
       <el-input
+        id="inputwd"
         type="textarea"
-        class="inputw"
-        placeholder="请输入描述"
+        placeholder="请输入实验描述"
         v-model="revise.description"
       >
-        <template slot="prepend">描述</template>
       </el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -157,6 +161,7 @@ export default {
       exdialogtabledata: false,
       dialogVisible: false,
       articleId: 0,
+      id: 0,
       edit: "",
       revise: {
         title: "",
@@ -225,7 +230,7 @@ export default {
           console.log(res);
           this.dialogVisible = false;
           this.edit == "";
-          window.location.reload();
+          this.break();
         });
       } else {
         let data = {
@@ -240,14 +245,13 @@ export default {
           console.log(res);
           this.dialogVisible = false;
           this.edit == "";
-          window.location.reload();
+          this.break();
         });
       }
     },
     //取消
     cancel() {
       this.dialogVisible = false;
-      window.location.reload();
     },
     //删除
     del(e) {
@@ -258,7 +262,7 @@ export default {
       })
         .then(() => {
           experdel(e).then((res) => {
-            window.location.reload();
+            this.break();
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -277,7 +281,7 @@ export default {
         .then(() => {
           let data = this.arr;
           mexperdel(data).then((res) => {
-            window.location.reload();
+            this.break();
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -323,12 +327,16 @@ export default {
         console.log(arrdel);
       });
     },
+    break: function () {
+      exper(this.id).then((res) => {
+        this.tableData = res.data;
+        console.log(res);
+      });
+    },
   },
   mounted() {
     const id = this.$route.query.id;
     this.articleId = parseInt(id);
-    console.log(id);
-    console.log(this.articleId);
     exper(id).then((res) => {
       this.tableData = res.data;
       console.log(res);
@@ -338,6 +346,19 @@ export default {
 </script>
 
 <style scoped>
+.span {
+  position: relative;
+  left: -100px;
+}
+.dec {
+  width: 104px;
+  height: 40px;
+  margin-top: 10px;
+  margin-left: 50px;
+  border: 1px solid #dcdfe6;
+  line-height: 40px;
+  color: #909399;
+}
 .header {
   position: relative;
   width: 100%;
@@ -359,33 +380,34 @@ export default {
   margin-left: 5px;
   border-radius: 5px;
   color: white;
-  left: 150px;
 }
 .exper {
   position: relative;
-  left: 155px;
+  margin-left: 5px;
   text-align: center;
   line-height: 7px;
 }
 .inputw {
-  width: 300px;
+  width: 300px !important;
   margin-top: 10px;
 }
-/* .opertea {
-  margin-left: -330px;
-} */
+
+.el-input {
+  width: 150px;
+}
 </style>
 <style>
 #inputh {
   height: 30px !important;
   width: 150px !important;
 }
-.el-color-picker__icon,
-.el-input,
-.el-textarea {
-  width: 0px;
-}
 .el-input-group__prepend {
   width: 55px;
+}
+#inputwd {
+  width: 198px !important;
+  margin-left: 154px;
+  margin-top: -59px;
+  height: 42px !important;
 }
 </style>

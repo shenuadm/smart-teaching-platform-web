@@ -24,7 +24,7 @@ export default Vue.extend({
   data() {
     return {
       editor: null,
-      html: "<p>hello</p>",
+      html: "",
       toolbarConfig: {},
       editorConfig: {
         placeholder: "请输入内容",
@@ -73,9 +73,9 @@ export default Vue.extend({
   },
   mounted() {
     // 模拟 ajax 请求，异步渲染编辑器
-    setTimeout(() => {
-      this.html = "";
-    }, 1500);
+    // setTimeout(() => {
+    //   this.html = "";
+    // }, 1500);
   },
   beforeDestroy() {
     const editor = this.editor;

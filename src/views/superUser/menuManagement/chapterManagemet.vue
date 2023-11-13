@@ -98,24 +98,34 @@
         placeholder="请输入章节标题"
         v-model="revise.name"
       >
-        <template slot="prepend">章节标题</template>
+        <template slot="prepend"
+          >章节标题
+          <span style="color: red">*</span>
+        </template>
       </el-input>
       <el-input
         class="inputw"
         placeholder="请输入课时"
         v-model="revise.classHour"
       >
-        <template slot="prepend">课时</template>
+        <template slot="prepend"
+          >章节课时
+          <span style="color: red">*</span>
+        </template>
       </el-input>
       <el-input class="inputw" placeholder="请输入序号" v-model="revise.sort">
-        <template slot="prepend">排序</template>
+        <template slot="prepend"
+          >章节排序
+          <span style="color: red">*</span>
+        </template>
       </el-input>
+      <div class="dec">章节描述</div>
       <el-input
-        class="inputw"
+        id="inputwd"
+        type="textarea"
         placeholder="请输入课程描述"
         v-model="revise.description"
       >
-        <template slot="prepend">描述</template>
       </el-input>
       <label for="fileInput" class="custom-file-button"> 上传课件 </label>
       <el-input
@@ -141,27 +151,35 @@
         placeholder="请输入章节标题"
         v-model="revise.name"
       >
-        <template slot="prepend">章节标题</template>
+        <template slot="prepend"
+          >标题<span style="color: red">*</span></template
+        >
       </el-input>
       <el-input
         class="inputw"
         placeholder="请输入课时"
         v-model="revise.classHour"
       >
-        <template slot="prepend">课时</template>
+        <template slot="prepend"
+          >课时<span style="color: red">*</span></template
+        >
       </el-input>
       <el-input class="inputw" placeholder="请输入序号" v-model="revise.sort">
-        <template slot="prepend">排序</template>
+        <template slot="prepend"
+          >排序<span style="color: red">*</span></template
+        >
       </el-input>
+      <div class="dec">描述</div>
       <el-input
-        class="inputw"
+        id="inputwd"
         type="textarea"
         placeholder="请输入课程描述"
         v-model="revise.description"
       >
-        <template slot="prepend">描述</template>
       </el-input>
-      <label for="fileInput" class="custom-file-button"> 上传课件 </label>
+      <label for="fileInput" class="custom-file-button">
+        课件 <span style="color: red">*</span></label
+      >
       <el-input
         class="inputw"
         placeholder="请输入课件"
@@ -177,34 +195,41 @@
         <el-button @click="serveji">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 修改 -->
     <el-dialog title="修改章节信息" :visible.sync="rdialogVisible" width="30%">
       <el-input
         class="inputw"
         placeholder="请输入章节标题"
         v-model="revise.name"
       >
-        <template slot="prepend">章节标题</template>
+        <template slot="prepend"
+          >标题<span style="color: red">*</span></template
+        >
       </el-input>
       <el-input
         class="inputw"
         placeholder="请输入课时"
         v-model="revise.classHour"
       >
-        <template slot="prepend">课时</template>
+        <template slot="prepend"
+          >课时<span style="color: red">*</span></template
+        >
       </el-input>
       <el-input class="inputw" placeholder="请输入序号" v-model="revise.sort">
-        <template slot="prepend">排序</template>
+        <template slot="prepend"
+          >排序<span style="color: red">*</span></template
+        >
       </el-input>
+      <div class="dec">描述</div>
       <el-input
+        id="inputwd"
         type="textarea"
-        class="inputw"
         placeholder="请输入课程描述"
         v-model="revise.description"
       >
-        <template slot="prepend">描述</template>
       </el-input>
       <label for="fileInput" class="custom-file-buttont custom-file-button">
-        上传课件
+        课件
       </label>
       <el-input
         class="inputw"
@@ -243,6 +268,7 @@ export default {
       tableData: [],
       courseId: 0,
       pid: 0,
+      id: 0,
     };
   },
   methods: {
@@ -290,7 +316,7 @@ export default {
       addchapter(article)
         .then((res) => {
           console.log(article);
-          window.location.reload();
+          this.break();
         })
         .catch((error) => {
           // 处理错误
@@ -306,6 +332,7 @@ export default {
     //取消
     cancel() {
       this.dialogVisible = !this.dialogVisible;
+      this.break();
     },
     //保存
     serve() {
@@ -321,7 +348,7 @@ export default {
       console.log(article);
       addchapter(article)
         .then((res) => {
-          window.location.reload();
+          this.break();
         })
         .catch((error) => {
           // 处理错误
@@ -339,7 +366,7 @@ export default {
     rcancel() {
       this.empty(this.revise);
       this.rdialogVisible = !this.rdialogVisible;
-      window.location.reload();
+      this.break();
     },
     //保存修改
     rserve() {
@@ -358,7 +385,7 @@ export default {
         .then((res) => {
           console.log(res);
           console.log(article);
-          window.location.reload();
+          this.break();
         })
         .catch((error) => {
           // 处理错误
@@ -375,7 +402,7 @@ export default {
       })
         .then(() => {
           dalchapter(e).then((res) => {
-            window.location.reload();
+            this.break();
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -393,6 +420,7 @@ export default {
         path: "/courseManagement",
         name: "courseManagement",
       });
+      this.break();
     },
     empty: function (obj) {
       for (const prop of Object.keys(obj)) {
@@ -402,13 +430,18 @@ export default {
     handleRowClick(row) {
       console.log(row); // 输出所选行的数据
     },
+    break: function () {
+      chapter(this.id).then((res) => {
+        this.tableData = res.data;
+      });
+    },
   },
   mounted() {
-    const id = this.$route.query.id;
+    this.id = parseInt(this.$route.query.id);
     const sort = this.$route.query.sort;
     this.sort = sort;
-    this.courseId = id;
-    chapter(id).then((res) => {
+    this.courseId = this.id;
+    chapter(this.id).then((res) => {
       this.tableData = res.data;
     });
   },
@@ -419,8 +452,24 @@ export default {
 .el-input-group__prepend {
   width: 56px;
 }
+#inputwd {
+  width: 205px !important;
+  margin-left: 148px;
+  margin-top: -59px;
+  height: 42px !important;
+}
 </style>
 <style scoped>
+.dec {
+  width: 97px;
+  height: 40px;
+  margin-top: 10px;
+  margin-left: 50px;
+  border: 1px solid #dcdfe6;
+  line-height: 40px;
+  color: #909399;
+}
+
 a {
   color: #606266;
 }
@@ -429,9 +478,9 @@ a {
   margin-top: 10px;
 }
 .inputwh {
-  width: 205px;
-  margin-top: 10px;
-  margin-left: 95px;
+  width: 192px;
+  margin-top: -9px;
+  margin-left: 106px;
 }
 .header {
   width: 220px;
@@ -440,13 +489,17 @@ a {
   position: absolute;
   top: 294px;
   left: 72px;
-  width: 95px;
+  width: 106px;
   height: 37px;
   border: 1px solid #dcdfe6;
   color: #909399;
   line-height: 37px;
 }
 .custom-file-buttont {
-  top: 308px !important;
+  top: 295px !important;
+}
+span {
+  position: relative;
+  left: -100px;
 }
 </style>
