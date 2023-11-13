@@ -405,7 +405,7 @@ export default {
 }
 .el-tree {
   width: 900px;
-  height: 430px;
+  height: 380px;
 }
 .el-input-group {
   margin: 0 50px 20px 20px !important;
