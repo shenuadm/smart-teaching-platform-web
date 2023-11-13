@@ -1,0 +1,190 @@
+body {
+  height: 100%;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  vertical-align: middle !important;
+}
+
+.container {
+  margin: 0 auto;
+}
+
+/* 主体颜色 */
+.theme-bg-black {
+  background-color: #212121;
+}
+
+.theme-bg-white {
+  background-color: #fff;
+}
+
+/* 字体大小 */
+/* 一级标题 */
+.zh-fs-20 {
+  font-size: 20px;
+}
+
+/* 二级标题 */
+.zh-fs-18 {
+  font-size: 18px;
+}
+
+/* 三级标题 */
+.zh-fs-16 {
+  font-size: 16px;
+}
+
+/* 四级标题 */
+.zh-fs-14 {
+  font-size: 14px;
+}
+
+/* 字体加粗 */
+.zh-fw-m {
+  font-weight: 560;
+}
+
+.zh-fw-b {
+  font-weight: 700;
+}
+
+/* 字体颜色 */
+.zh-fc-black {
+  color: #000
+}
+
+.zh-fc-white {
+  color: #fff;
+}
+
+.zh-fc-grey {
+  color: #a19f9f;
+}
+
+.zh-fc-blue {
+  color: #409EFF;
+}
+
+/* 外边距 */
+.zh-mg-x {
+  margin: 0 10px;
+}
+
+.zh-mg-10 {
+  margin: 10px;
+}
+
+.zh-mg-15 {
+  margin: 15px;
+}
+
+.zh-mg-20 {
+  margin: 20px;
+}
+
+.zh-mgt-10 {
+  margin-top: 10px;
+}
+
+.zh-mgt-20 {
+  margin-top: 20px;
+}
+
+.zh-mgb-10 {
+  margin-bottom: 10px;
+}
+
+.zh-mgb-20 {
+  margin-bottom: 20px;
+}
+
+.zh-mgl-10 {
+  margin-left: 10px;
+}
+
+.zh-mgl-20 {
+  margin-left: 20px;
+}
+
+.zh-mgl-30 {
+  margin-left: 30px;
+}
+
+.zh-mgr-10 {
+  margin-right: 10px;
+}
+
+.zh-mgr-20 {
+  margin-right: 20px;
+}
+
+/* 内填充 */
+.zh-pd-5 {
+  padding: 5px;
+}
+
+.zh-pd-10 {
+  padding: 10px;
+}
+
+.zh-pdx-5 {
+  padding: 0 5px;
+}
+
+.zh-pdx-10 {
+  padding: 0 10px;
+}
+
+.zh-pdx-15 {
+  padding: 0 15px;
+}
+
+.zh-pdy-5 {
+  padding: 5px 0;
+}
+
+.zh-pdy-10 {
+  padding: 10px 0;
+}
+
+.zh-pdy-15 {
+  padding: 15px 0;
+}
+
+/* 按钮背景颜色 */
+.btn-bg-b {
+  background-color: #4faff0;
+  color: #fff;
+}
+
+.btn-bg-g {
+  background-color: #43bc60;
+}
+
+.btn-bg-r {
+  background-color: #F56C6C;
+}
+
+/* 按钮圆角 */
+.btn-radius-5 {
+  border-radius: 5px;
+}
+
+.btn-radius-10 {
+  border-radius: 10px;
+}
+
+.btn-radius-30 {
+  border-radius: 30px;
+}
