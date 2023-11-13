@@ -5,6 +5,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/test',
+    name: 'index',
+    component: () => import('@/views/superUser/menuManagement/test')
+  },
+  {
     path: '/',
     name: 'index',
     component: () => import('@/components/index'),

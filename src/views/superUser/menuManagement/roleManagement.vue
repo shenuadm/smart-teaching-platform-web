@@ -241,12 +241,12 @@ export default {
     confirmEmpower() {
       let data = {
         roleId: this.roleId,
-        permissionIds: this.checked.join(","),
+        permissionIds: this.$refs.tree.getCheckedKeys().join(),
       };
       console.log(data);
       ackEmpower(data).then((res) => {
         console.log(res);
-        // this.roleManagement();
+        this.roleManagement();
       });
       this.empowerVisible = false;
     },
