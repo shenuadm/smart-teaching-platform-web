@@ -86,7 +86,12 @@
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="title" label="实验标题" width="100">
       </el-table-column>
-      <el-table-column prop="classHour" label="用户类型" width="100">
+      <el-table-column prop="type" label="用户类型" width="100">
+        <template slot-scope="scope">
+          <div v-if="scope.row.type == 0">系统</div>
+          <div v-if="scope.row.type == 1">老师</div>
+          <div v-if="scope.row.type == 2">学生</div>
+        </template>
       </el-table-column>
       <el-table-column prop="classHour" label="课时" width="60">
       </el-table-column>
@@ -99,10 +104,9 @@
       </el-table-column>
       <el-table-column prop="status" label="状态" width="80">
         <template slot-scope="scope">
-          <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">
-            禁用
-          </div>
+          <div v-if="scope.row.status === 0">已保存</div>
+          <div v-else-if="scope.row.status === 1">已提交</div>
+          <div v-else-if="scope.row.status === 2">已评阅</div>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="240">
@@ -112,7 +116,7 @@
             size="small"
             class="opertea"
             @click="exreport(scope.row)"
-            >实验报告</el-button
+            >实验步骤</el-button
           >
           <el-button type="primary" size="small" @click="editexrept(scope.row)"
             >编辑</el-button
@@ -292,17 +296,12 @@ export default {
     },
     //搜索
     search() {
-      for (let i = 0; i < this.tableData.length; i++) {
-        const item = this.tableData[i];
-
-        // 判断条件，这里假设满足 condition 为 true 的对象
-        if (item.title === this.input) {
-          // 将满足条件的对象添加到 newArray 数组中
-          this.reportdata.push(item);
-          this.dialogtabledata = false;
-          this.exdialogtabledata = true;
-        }
-      }
+      this.dialogtabledata = false;
+      this.exdialogtabledata = true;
+      this.reportdata = this.tableData.filter((item) => {
+        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
+        return item.title.includes(this.input);
+      });
     },
     //重置
     resetting() {
@@ -313,11 +312,7 @@ export default {
     },
     //返回实验
     returnexper() {
-      this.$router.push({
-        path: "/chapterManagemet",
-        name: "chapterManagemet",
-      });
-      this.break();
+      history.back();
     },
     //添加实验报告
     addreport() {
@@ -395,7 +390,6 @@ export default {
     break: function () {
       report(this.id).then((res) => {
         this.tableData = res.data;
-        console.log(res);
       });
     },
   },

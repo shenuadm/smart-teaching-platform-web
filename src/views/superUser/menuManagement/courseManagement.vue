@@ -6,7 +6,13 @@
       <button class="but btn-bg-b" @click="search">搜索</button>
       <button class="but btn-bg-b" @click="resetting">重置</button>
       <button class="buttow btn-bg-b" @click="addcourse">添加课程</button>
-      <button class="buttow btn-bg-r" @click="batchdel">删除</button>
+      <button
+        class="buttow btn-bg-r"
+        style="background: #f56c6c"
+        @click="batchdel"
+      >
+        批量删除
+      </button>
     </div>
     <el-table
       ref="multipleTable"
@@ -42,7 +48,7 @@
       </el-table-column>
       <el-table-column label="封面图片" width="120">
         <template>
-          <el-image :src="imgSrc" alt="图片" />
+          <el-image :src="imgSrc" alt="图片未找到" />
         </template>
         <!-- <template slot-scope="scope"
           ><el-image
@@ -94,7 +100,7 @@
       </el-table-column>
       <el-table-column label="封面图片" width="120">
         <template>
-          <el-image :src="imgSrc" alt="图片" />
+          <el-image :src="imgSrc" alt="图片未找到" />
         </template>
         <!-- <template slot-scope="scope"
           ><el-image
@@ -221,17 +227,12 @@ export default {
     },
     //课程搜索
     search() {
-      for (let i = 0; i < this.tableData.length; i++) {
-        const item = this.tableData[i];
-
-        // 判断条件，这里假设满足 condition 为 true 的对象
-        if (item.title === this.input) {
-          // 将满足条件的对象添加到 newArray 数组中
-          this.searchdata.push(item);
-          this.dialogtable = true;
-          this.dialogtabledata = false;
-        }
-      }
+      this.dialogtable = true;
+      this.dialogtabledata = false;
+      this.searchdata = this.tableData.filter((item) => {
+        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
+        return item.title.includes(this.input);
+      });
     },
     //保存
     serve() {
@@ -365,7 +366,6 @@ export default {
   mounted() {
     course().then((res) => {
       this.tableData = res.data;
-      console.log(res.data);
     });
   },
 };

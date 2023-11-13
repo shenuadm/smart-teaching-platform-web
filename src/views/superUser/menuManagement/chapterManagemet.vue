@@ -24,7 +24,7 @@
       <el-table-column
         prop="fileUrl"
         label="课件"
-        width="120"
+        width="100"
         show-overflow-tooltip
       >
         <template slot-scope="scope">
@@ -34,11 +34,11 @@
       <el-table-column
         prop="description"
         label="描述"
-        width="130"
+        width="110"
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column label="操作" width="280">
+      <el-table-column label="操作" width="325">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -416,11 +416,7 @@ export default {
     },
     //返回课程
     returncourse() {
-      this.$router.push({
-        path: "/courseManagement",
-        name: "courseManagement",
-      });
-      this.break();
+      history.back();
     },
     empty: function (obj) {
       for (const prop of Object.keys(obj)) {

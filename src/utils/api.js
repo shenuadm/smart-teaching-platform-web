@@ -166,6 +166,10 @@ export function mdelstep(data) {
 export function delstep(id) {
   return http.get('ExperimentReportPlan/delete/' + id)
 }
+//实验步骤查看详情
+export function getdetail(id) {
+  return http.get('ExperimentReportPlan/getDetail/' + id)
+}
 // 修改菜单管理数据
 export function upmenuData(u) {
   return http.post("/menu/update", u, {
