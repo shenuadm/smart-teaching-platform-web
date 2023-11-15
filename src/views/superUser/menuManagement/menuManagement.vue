@@ -42,7 +42,7 @@
               <el-col :span="2">
                 <span>{{ node.data.type}}</span>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="5" class="funurl">
                 <span>{{ node.data.funurl}}</span>
               </el-col>
               <el-col :span="2">
@@ -70,10 +70,7 @@
                 </span>
               </el-col>
             </el-row>
-            
             <!-- <span>{{ node.data.menuName}}</span> -->
-            
-            
           </span>
         </el-tree>
       </div>
@@ -105,7 +102,7 @@
         </el-form-item>
         <el-form-item label="菜单类型" class="type" prop="type">
           <el-select v-model="add.type" placeholder="请输入菜单类型">
-            <el-option label="导航" value="0"></el-option>
+            <el-option label="目录" value="0"></el-option>
             <el-option label="菜单" value="1"></el-option>
           </el-select>
         </el-form-item>
@@ -125,7 +122,7 @@
     </el-dialog>
     <!-- 新增节点功能 -->
     <el-dialog
-      title="新增节点"
+      title="新增子节点"
       :visible.sync="addsonVisible"
       width="40%"
     >
@@ -431,6 +428,11 @@ export default {
   background-color: #fafafa;
   box-shadow: 0 2px 2px #dddddd;
 }
+.funurl{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
 <style>
 /* 添加根菜单 */
@@ -441,6 +443,8 @@ export default {
   color: white;
   display: block;
   border: none;
+  font-size: 14px;
+  border-radius: 3px;
 }
 /* 按钮 */
 .el-button {
