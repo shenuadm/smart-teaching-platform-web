@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="header">
-      <div class="title">实验名称:</div>
+      <div class="title">步骤名称:</div>
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
       <button class="but" @click="search">搜索</button>
       <button class="but" @click="resetting">重置</button>
-      <el-button type="primary" class="exper" @click="addreport"
-        >添加实验报告</el-button
+      <el-button type="primary" class="step" @click="addstep"
+        >添加步骤</el-button
       >
-      <el-button type="primary" class="exper" @click="returnexper"
-        >返回实验</el-button
+      <el-button type="primary" class="step" @click="returnstep"
+        >返回实验报告</el-button
       >
-      <el-button type="danger" class="exper" @click="delexper"
+      <el-button type="danger" class="step" @click="delstep"
         >批量删除</el-button
       >
     </div>
@@ -28,42 +28,24 @@
       v-if="dialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="100">
+      <el-table-column prop="name" label="步骤名称" width="100">
       </el-table-column>
-      <el-table-column prop="type" label="用户类型" width="100">
+      <el-table-column label="步骤内容" width="350">
         <template slot-scope="scope">
-          <div v-if="scope.row.type == 0">系统</div>
-          <div v-if="scope.row.type == 1">老师</div>
-          <div v-if="scope.row.type == 2">学生</div>
+          <div class="edit" v-html="scope.row.content"></div>
         </template>
       </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60">
-      </el-table-column>
-      <el-table-column
-        prop="description"
-        label="实验描述"
-        width="260"
-        show-overflow-tooltip
-      >
-      </el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
+      <el-table-column label="操作" width="235">
         <template slot-scope="scope">
-          <div v-if="scope.row.status === 0">已保存</div>
-          <div v-else-if="scope.row.status === 1">已提交</div>
-          <div v-else-if="scope.row.status === 2">已评阅</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="240">
-        <template slot-scope="scope">
+          <el-button type="primary" size="small" @click="editstep(scope.row)"
+            >编辑</el-button
+          >
           <el-button
             type="primary"
             size="small"
-            class="opertea"
-            @click="exreport(scope.row)"
-            >实验步骤</el-button
-          >
-          <el-button type="primary" size="small" @click="editexrept(scope.row)"
-            >编辑</el-button
+            @click="todetails(scope.row.id)"
+            >查看详情</el-button
           >
           <el-button type="danger" size="small" @click="del(scope.row.id)"
             >删除</el-button
@@ -75,7 +57,7 @@
     <el-table
       ref="multipleTable"
       :data="
-        reportdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+        stepdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
       "
       tooltip-effect="dark"
       style="width: 100%"
@@ -84,38 +66,33 @@
       v-if="exdialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="100">
+      <el-table-column prop="name" label="步骤名称" width="100">
       </el-table-column>
-      <el-table-column prop="classHour" label="用户类型" width="100">
+      <el-table-column prop="content" label="内容" width="100">
       </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60">
-      </el-table-column>
+      <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
       <el-table-column
         prop="description"
-        label="实验描述"
-        width="260"
+        label="描述"
+        width="190"
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
-        <template slot-scope="scope">
-          <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">
-            禁用
-          </div>
+      <el-table-column prop="status" label="实验步骤图片" width="120">
+        <template>
+          <el-image :src="imgSrc" alt="图片" />
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="240">
+      <el-table-column label="操作" width="235">
         <template slot-scope="scope">
+          <el-button type="primary" size="small" @click="editstep(scope.row)"
+            >编辑</el-button
+          >
           <el-button
             type="primary"
             size="small"
-            class="opertea"
-            @click="exreport(scope.row)"
-            >实验报告</el-button
-          >
-          <el-button type="primary" size="small" @click="editexrept(scope.row)"
-            >编辑</el-button
+            @click="todetails(scope.row.id)"
+            >查看详情</el-button
           >
           <el-button type="danger" size="small" @click="del(scope.row.id)"
             >删除</el-button
@@ -124,65 +101,34 @@
       </el-table-column>
     </el-table>
     <!-- 添加/编辑实验 -->
-    <el-dialog :visible.sync="dialogVisible" width="30%">
-      <template v-if="report">
-        <span slot="title">添加实验报告</span>
+    <el-dialog :visible.sync="dialogVisible" width="40%">
+      <template v-if="step">
+        <span slot="title">添加实验步骤</span>
       </template>
       <template v-else>
-        <span slot="title">修改实验报告</span>
+        <span slot="title">修改实验步骤</span>
       </template>
       <el-input
         class="inputw"
-        placeholder="请输入实验标题"
-        v-model="revise.title"
+        placeholder="请输入实验名称"
+        v-model="revise.name"
       >
         <template slot="prepend"
-          >实验标题<span style="color: red">*</span></template
+          >步骤名称<span style="color: red">*</span></template
         >
       </el-input>
       <el-input
         class="inputw"
-        placeholder="请输入课时"
-        v-model="revise.classHour"
+        placeholder="请输入实验顺序"
+        v-model="revise.sort"
       >
         <template slot="prepend"
-          >实验课时<span style="color: red">*</span></template
+          >步骤顺序<span style="color: red">*</span></template
         >
       </el-input>
-      <div v-if="report == false" class="status">
-        <div class="statusx">类型</div>
-        <el-select v-model="revise.type" placeholder="请选择">
-          <el-option :label="0" :value="0"> 系统 </el-option>
-          <el-option :label="1" :value="1"> 老师 </el-option>
-          <el-option :label="2" :value="2"> 学生 </el-option>
-        </el-select>
-        <div class="statusx type">状态</div>
-        <el-radio-group v-model="revise.status">
-          <el-radio :label="0">已保存</el-radio>
-          <el-radio :label="1">已提交</el-radio>
-          <el-radio :label="2">已评阅</el-radio>
-        </el-radio-group>
+      <div class="editor">
+        <Editor ref="editor" :value="this.revise.content"></Editor>
       </div>
-      <div class="dec">实验描述</div>
-      <el-input
-        id="inputwd"
-        type="textarea"
-        placeholder="请输入实验描述"
-        v-model="revise.description"
-      >
-      </el-input>
-      <label for="fileInput" class="custom-file-buttont custom-file-button">
-        实验课件<span style="color: red">*</span>
-      </label>
-      <el-input
-        class="inputw"
-        placeholder="请输入课件"
-        v-model="revise.fileUrl"
-        type="file"
-        id="fileInput"
-        style="display: none"
-      >
-      </el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
         <el-button @click="serve">保 存</el-button>
@@ -204,19 +150,15 @@
 </template>
 
 <script>
-import {
-  report,
-  reportadd,
-  reportupdate,
-  reportdelete,
-  mreportdelete,
-} from "@/utils/api";
+import { step, addstep, updatestep, mdelstep, delstep } from "@/utils/api";
+import editor from "../../../components/editor.vue";
 export default {
+  components: { editor },
   data() {
     return {
       multipleSelection: [],
       tableData: [],
-      reportdata: [],
+      stepdata: [],
       arr: [],
       currentPage: 1,
       pageSize: 5,
@@ -224,64 +166,55 @@ export default {
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
-      report: "",
-      experimentId: "",
+      step: "",
+      imgSrc: "",
       id: 0,
       revise: {
-        title: "",
-        type: "",
-        classHour: "",
         description: "",
-        status: "",
+        name: "",
+        content: "",
+        sort: "",
+        imageStorePath: "",
       },
     };
   },
   methods: {
-    //跳转至实验步骤
-    exreport(e) {
-      this.$router.push({
-        path: "/laboratoryStep",
-        name: "laboratoryStep",
-        query: {
-          id: e.id,
-        },
+    //查看详情
+    todetails() {
+      this.$router.path({
+        url: "",
+        name: "",
       });
     },
     //保存
     serve() {
-      if (this.report == true) {
+      if (this.step == true) {
         let data = {
-          title: this.revise.title,
-          classHour: this.revise.classHour,
-          description: this.revise.description,
-          type: 0,
-          status: 0,
-          experimentId: this.experimentId,
-          file: "",
+          experimentReportId: parseInt(this.id),
+          name: this.revise.name,
+          content: this.$refs.editor.html,
+          sort: parseInt(this.revise.sort),
         };
         console.log(data);
-        reportadd(data).then((res) => {
+        addstep(data).then((res) => {
           console.log(res);
           this.dialogVisible = false;
-          this.report == "";
+          this.step = "";
           this.break();
         });
       } else {
         let data = {
-          title: this.revise.title,
-          classHour: this.revise.classHour,
-          description: this.revise.description,
-          type: this.revise.type,
-          status: this.revise.status,
-          experimentId: this.revise.experimentId,
-          file: "",
           id: this.revise.id,
+          experimentReportId: this.revise.experimentReportId,
+          name: this.revise.name,
+          content: this.$refs.editor.html,
+          sort: this.revise.sort,
         };
         console.log(data);
-        reportupdate(data).then((res) => {
+        updatestep(data).then((res) => {
           console.log(res);
           this.dialogVisible = false;
-          this.report == "";
+          this.step = "";
           this.break();
         });
       }
@@ -289,6 +222,30 @@ export default {
     //取消
     cancel() {
       this.dialogVisible = false;
+      if (this.step == true) {
+        this.$refs.editor.html = "";
+      }
+    },
+    //返回实验报告
+    returnstep() {
+      this.$router.push({
+        path: "/laboratoryReport",
+        name: "laboratoryReport",
+      });
+    },
+    //添加实验步骤
+    addstep() {
+      this.dialogVisible = true;
+      this.step = true;
+    },
+    //编辑实验
+    editstep(e) {
+      this.revise = e;
+      console.log(this.revise);
+      this.dialogVisible = true;
+      this.step = false;
+      // this.$refs.editor.txt.html(this.revise.content);
+      this.$refs.editor = this.revise.content;
     },
     //搜索
     search() {
@@ -296,9 +253,9 @@ export default {
         const item = this.tableData[i];
 
         // 判断条件，这里假设满足 condition 为 true 的对象
-        if (item.title === this.input) {
+        if (item.name === this.input) {
           // 将满足条件的对象添加到 newArray 数组中
-          this.reportdata.push(item);
+          this.stepdata.push(item);
           this.dialogtabledata = false;
           this.exdialogtabledata = true;
         }
@@ -309,26 +266,14 @@ export default {
       this.dialogtabledata = true;
       this.exdialogtabledata = false;
       this.input = "";
-      this.reportdata = [];
+      this.stepdata = [];
     },
     //返回实验
-    returnexper() {
+    returnstep() {
       this.$router.push({
         path: "/chapterManagemet",
         name: "chapterManagemet",
       });
-      this.break();
-    },
-    //添加实验报告
-    addreport() {
-      this.dialogVisible = true;
-      this.report = true;
-    },
-    //编辑实验
-    editexrept(e) {
-      this.revise = e;
-      this.dialogVisible = true;
-      this.report = false;
     },
     //删除
     del(e) {
@@ -338,7 +283,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          reportdelete(e).then((res) => {
+          delstep(e).then((res) => {
             this.break();
             this.$message({
               type: "success",
@@ -349,7 +294,7 @@ export default {
         .catch(() => {});
     },
     //批量删除
-    delexper() {
+    delstep() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -357,7 +302,7 @@ export default {
       })
         .then(() => {
           let data = this.arr;
-          mreportdelete(data).then((res) => {
+          mdelstep(data).then((res) => {
             this.break();
             this.$message({
               type: "success",
@@ -366,6 +311,21 @@ export default {
           });
         })
         .catch(() => {});
+    },
+    //图片上传
+    handleChooseFile() {
+      this.$refs.fileInput.click();
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      if (file) {
+        this.revise.imageStorePath = file.name; // 仅保留文件名
+      }
+      reader.onload = (e) => {
+        this.revise.imageStorePath = e.target.result;
+      };
+      reader.readAsDataURL(file);
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -393,25 +353,23 @@ export default {
       });
     },
     break: function () {
-      report(this.id).then((res) => {
-        this.tableData = res.data;
+      step(this.id).then((res) => {
         console.log(res);
+        this.tableData = res.data;
       });
     },
   },
   mounted() {
     this.id = this.$route.query.id;
-    this.experimentId = parseInt(this.id);
-    this.break();
+    step(this.id).then((res) => {
+      console.log(res);
+      this.tableData = res.data;
+    });
   },
 };
 </script>
 
 <style scoped>
-span {
-  position: relative;
-  left: -100px;
-}
 .header {
   position: relative;
   width: 100%;
@@ -434,89 +392,69 @@ span {
   border-radius: 5px;
   color: white;
 }
-.exper {
+.step {
   position: relative;
   margin-left: 5px;
   text-align: center;
   line-height: 7px;
 }
 .inputw {
-  width: 300px !important;
+  width: 445px !important;
   margin-top: 10px;
 }
 .el-input {
   width: 150px;
 }
 .dec {
-  position: relative;
-  width: 100px;
+  width: 105px;
   height: 40px;
-  top: 10px;
+  margin-top: 10px;
   margin-left: 54px;
   border: 1px solid #dcdfe6;
   line-height: 40px;
   color: #909399;
 }
-.custom-file-button {
+span {
   position: relative;
-  display: block;
+  left: -100px;
+}
+.editor {
+  position: relative;
+  width: 450px;
   top: 10px;
-  left: 54px;
-  width: 100px;
-  height: 37px !important;
-  border: 1px solid #dcdfe6;
-  color: #909399;
-  line-height: 37px;
-}
-.custom-file-buttont {
-  position: relative;
-  top: 10px;
-}
-.status {
-  position: relative;
-  width: 300px;
-  height: 100px;
-  margin-left: 51px;
-  line-height: 40px;
-  top: 10px;
-}
-.statusx {
-  position: relative;
-  width: 100px;
-  height: 38px;
-  border: 1px solid #dcdfe6;
-  left: 3px;
-}
-.type {
-  position: relative;
-  top: -30px;
-}
-.el-radio-group {
-  position: relative;
-  top: -74px;
-  left: 85px;
+  left: 52px;
 }
 </style>
 <style>
+.edit > p > img {
+  width: 350px !important;
+  height: 100px !important;
+}
 #inputh {
   height: 30px !important;
   width: 150px !important;
 }
 #inputwd {
-  position: relative;
   width: 200px !important;
   margin-left: 155px;
-  top: 10px;
+  margin-top: -59px;
   height: 42px !important;
 }
 .el-input-group__prepend {
   width: 55px;
 }
-.el-input--suffix {
-  position: relative;
-  left: 52px;
-  top: -40px;
-  width: 196px;
+.img {
+  width: 100px;
+  height: 80px;
+  margin-left: 30px;
+}
+.custom-file-button {
+  position: absolute;
+  top: 292px;
+  left: 73px;
+  width: 103px;
   height: 40px;
+  border: 1px solid #dcdfe6;
+  color: #909399;
 }
 </style>

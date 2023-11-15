@@ -44,6 +44,13 @@
         <template>
           <el-image :src="imgSrc" alt="图片" />
         </template>
+        <!-- <template slot-scope="scope"
+          ><el-image
+            :src="imgurl(scope.row.imageStorePath)"
+            :preview-src-list="[imgurl(scope.row.imageStorePath)]"
+            style="width: 50px; height: 50px"
+          ></el-image
+        ></template> -->
       </el-table-column>
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
@@ -89,6 +96,13 @@
         <template>
           <el-image :src="imgSrc" alt="图片" />
         </template>
+        <!-- <template slot-scope="scope"
+          ><el-image
+            :src="imgurl(scope.row.imageStorePath)"
+            :preview-src-list="[imgurl(scope.row.imageStorePath)]"
+            style="width: 50px; height: 50px"
+          ></el-image
+        ></template> -->
       </el-table-column>
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
@@ -117,33 +131,43 @@
         placeholder="请输入课程名称"
         v-model="revise.name"
       >
-        <template slot="prepend">课程名称</template>
+        <template slot="prepend"
+          >课程名称
+          <span style="color: red">*</span>
+        </template>
       </el-input>
       <el-input
         class="inputw"
         placeholder="请输入课程标题"
         v-model="revise.title"
       >
-        <template slot="prepend">课程标题</template>
+        <template slot="prepend"
+          >课程标题<span style="color: red">*</span></template
+        >
       </el-input>
       <el-input class="inputw" placeholder="请输入学分" v-model="revise.credit">
-        <template slot="prepend">学分</template>
+        <template slot="prepend"
+          >课程学分<span style="color: red">*</span></template
+        >
       </el-input>
+      <div class="dec">课程描述<span style="color: red">*</span></div>
       <el-input
-        class="inputw"
+        id="inputwd"
         type="textarea"
         placeholder="请输入课程描述"
         v-model="revise.description"
       >
-        <template slot="prepend">课程描述</template>
       </el-input>
-      <el-input
-        class="inputw"
-        placeholder="请输入课程状态"
-        v-model="revise.status"
-      >
-        <template slot="prepend">状态</template>
-      </el-input>
+      <div class="status">
+        <div class="statusx">
+          状态
+          <!-- <span style="color: red">*</span> -->
+        </div>
+        <el-radio-group v-model="revise.status">
+          <el-radio :label="true">启用</el-radio>
+          <el-radio :label="false">禁用</el-radio>
+        </el-radio-group>
+      </div>
       <button @click="handleChooseFile" class="custom-file-button">
         添加封面图片
       </button>
@@ -221,7 +245,7 @@ export default {
       };
       addcourse(data)
         .then((res) => {
-          window.location.reload();
+          this.break();
           this.$message({
             message: "添加课程成功",
             type: "success",
@@ -253,7 +277,7 @@ export default {
         .then(() => {
           let data = this.arr;
           delcoursem(data).then((res) => {
-            window.location.reload();
+            this.break();
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -329,6 +353,12 @@ export default {
         const arrdel = [...new Set(this.arr)];
         this.arr = arrdel;
         console.log(arrdel);
+      });
+    },
+    break: function () {
+      course().then((res) => {
+        this.tableData = res.data;
+        console.log(res.data);
       });
     },
   },
@@ -408,8 +438,37 @@ export default {
 .is-scrolling-none {
   border: 1px solid rgb(214, 214, 214);
 } */
+.status {
+  border: 1px solid #dcdfe6;
+  width: 300px;
+  height: 40px;
+  margin-left: 50px;
+  line-height: 40px;
+}
+.statusx {
+  width: 106px;
+  height: 40px;
+  border-right: 1px solid #dcdfe6;
+}
+.dec {
+  width: 102px;
+  height: 40px;
+  margin-top: 10px;
+  margin-left: 50px;
+  border: 1px solid #dcdfe6;
+  line-height: 40px;
+}
+
+.el-radio-group {
+  margin-top: -77px;
+  margin-left: 90px;
+}
 .inputw {
   width: 300px;
+}
+span {
+  position: relative;
+  left: -100px;
 }
 </style>
 <style>
@@ -428,6 +487,12 @@ export default {
   width: 150px;
 }
 .el-input-group__prepend {
-  width: 55px !important;
+  width: 66px !important;
+}
+#inputwd {
+  width: 200px !important;
+  margin-left: 152px;
+  margin-top: -59px;
+  height: 42px !important;
 }
 </style>

@@ -146,6 +146,26 @@ export function reportdelete(id) {
 export function mreportdelete(data) {
   return http.get('experimentReport/deletes/' + data)
 }
+//实验步骤请求数据
+export function step(id) {
+  return http.get('ExperimentReportPlan/list/' + id)
+}
+//添加实验步骤
+export function addstep(data) {
+  return http.post('ExperimentReportPlan/add', data)
+}
+//编辑实验步骤
+export function updatestep(data) {
+  return http.post('ExperimentReportPlan/update', data)
+}
+//批量删除实验步骤
+export function mdelstep(data) {
+  return http.delete('ExperimentReportPlan/deletes/' + data)
+}
+//删除实验步骤
+export function delstep(id) {
+  return http.get('ExperimentReportPlan/delete/' + id)
+}
 // 修改菜单管理数据
 export function upmenuData(u) {
   return http.post("/menu/update", u, {
@@ -208,8 +228,8 @@ export function addRole(data) {
   return http.post('/role/add', data)
 }
 // 修改角色
-export function updateRole(userId) {
-  return http.put('/role/update')
+export function updateRole(data) {
+  return http.post('/role/update',data)
 }
 // 删除角色
 export function delRole(id) {

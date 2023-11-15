@@ -5,6 +5,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/test',
+    name: 'index',
+    component: () => import('@/views/superUser/menuManagement/test')
+  },
+  {
     path: '/',
     name: 'index',
     component: () => import('@/components/index'),
@@ -59,6 +64,11 @@ const routes = [
             path: '/laboratoryReport',
             name: 'laboratoryReport',
             component: () => import('@/views/superUser/menuManagement/laboratoryReport')
+          },
+          {
+            path: '/laboratoryStep',
+            name: 'laboratoryStep',
+            component: () => import('@/views/superUser/menuManagement/laboratoryStep')
           },
           {
             path: '/aboutUS',
