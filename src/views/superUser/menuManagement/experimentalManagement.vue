@@ -352,12 +352,12 @@ export default {
   left: -100px;
 }
 .dec {
-  width: 104px;
-  height: 40px;
+  width: 105px;
+  height: 70px;
   margin-top: 10px;
-  margin-left: 50px;
+  margin-left: 53px;
   border: 1px solid #dcdfe6;
-  line-height: 40px;
+  line-height: 70px;
   color: #909399;
 }
 .header {
@@ -406,9 +406,10 @@ export default {
   width: 55px;
 }
 #inputwd {
-  width: 198px !important;
-  margin-left: 154px;
-  margin-top: -59px;
-  height: 42px !important;
+  width: 195px !important;
+  margin-left: 160px;
+  margin-top: -89px;
+  height: 72px !important;
+  border-radius: none;
 }
 </style>

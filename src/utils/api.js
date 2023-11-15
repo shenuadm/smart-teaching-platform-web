@@ -82,6 +82,10 @@ export function course() {
 export function addcourse(data) {
   return http.post('/course/add ', data)
 }
+//课程修改数据
+export function updatecourse(data) {
+  return http.post('/course/update', data)
+}
 //课程删除数据
 export function delcourse(id) {
   return http.get('/course/delete/' + id)

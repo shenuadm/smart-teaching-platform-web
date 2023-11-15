@@ -128,7 +128,7 @@
       </el-table-column>
     </el-table>
     <!-- 添加/编辑实验 -->
-    <el-dialog :visible.sync="dialogVisible" width="30%">
+    <el-dialog :visible.sync="dialogVisible" width="40%">
       <template v-if="report">
         <span slot="title">添加实验报告</span>
       </template>
@@ -387,7 +387,7 @@ export default {
         console.log(arrdel);
       });
     },
-    break: function () {
+    break() {
       report(this.id).then((res) => {
         this.tableData = res.data;
       });
@@ -443,19 +443,19 @@ span {
 }
 .dec {
   position: relative;
-  width: 100px;
-  height: 40px;
+  width: 101px;
+  height: 70px;
   top: 10px;
-  margin-left: 54px;
+  margin-left: 127px;
   border: 1px solid #dcdfe6;
-  line-height: 40px;
+  line-height: 70px;
   color: #909399;
 }
 .custom-file-button {
   position: relative;
   display: block;
   top: 10px;
-  left: 54px;
+  left: 125px;
   width: 100px;
   height: 37px !important;
   border: 1px solid #dcdfe6;
@@ -464,13 +464,13 @@ span {
 }
 .custom-file-buttont {
   position: relative;
-  top: 10px;
+  top: -53px;
 }
 .status {
   position: relative;
   width: 300px;
   height: 100px;
-  margin-left: 51px;
+  margin-left: 122px;
   line-height: 40px;
   top: 10px;
 }
@@ -499,9 +499,9 @@ span {
 #inputwd {
   position: relative;
   width: 200px !important;
-  margin-left: 155px;
-  top: 10px;
-  height: 42px !important;
+  margin-left: 228px;
+  top: -62px;
+  height: 72px !important;
 }
 .el-input-group__prepend {
   width: 55px;
