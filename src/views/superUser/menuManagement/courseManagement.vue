@@ -18,6 +18,7 @@
       @selection-change="handleSelectionChange"
       class="custom-table"
       v-if="dialogtabledata"
+      border
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="name" label="课程名称" width="120">
@@ -28,11 +29,11 @@
       <el-table-column
         prop="description"
         label="课程描述"
-        width="210"
+        width="150"
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           <div v-if="scope.row.status === true" class="user">启用</div>
           <div v-else-if="scope.row.status === false" class="forbidden">
@@ -52,7 +53,7 @@
           ></el-image
         ></template> -->
       </el-table-column>
-      <el-table-column label="操作" width="240">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="chapter(scope.row)"
             >章节管理</el-button
@@ -222,7 +223,7 @@ export default {
       dialogVisible: false,
       cour: "",
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       input: "",
       imgSrc: "",
       revise: {
@@ -453,7 +454,6 @@ export default {
   margin-left: 30px;
 }
 .custom-file-button {
-  /* margin-top: 16px; */
   position: absolute;
   top: 407px;
   left: 148px;
@@ -463,10 +463,6 @@ export default {
   color: #909399;
   background-color: white;
 }
-/* .input-content>input{
-  display: inline-block;
-  height: 33px !important;
-} */
 .el-dialog .el-input {
   padding: 8px;
 }
@@ -475,7 +471,6 @@ export default {
   width: 100%;
   height: 30px;
   display: flex;
-  /* top: -10px; */
 }
 .title {
   width: 80px;
@@ -504,18 +499,11 @@ export default {
 .block {
   margin-top: 20px;
 }
-/* .el-table__header-wrapper {
-  border: 1px solid rgb(217, 216, 216);
-}
-.el-table__body-wrapper,
-.is-scrolling-none {
-  border: 1px solid rgb(214, 214, 214);
-} */
 .status {
   border: 1px solid #dcdfe6;
   width: 400px;
   height: 40px;
-  margin-left: 128px;
+  margin-left: 86px;
   line-height: 40px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -527,25 +515,16 @@ export default {
   background-color: #F5F7FA;
 }
 .dec {
-/* <<<<<<< HEAD
-  width: 66px;
-  height: 80px;
+  width: 105px;
+  height: 70px;
   margin-top: 10px;
-  margin-left: 84px;
+  margin-left: 85px;
   border: 1px solid #dcdfe6;
-  line-height: 80px;
-  padding: 0 20px;
+  line-height: 70px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   background-color: #F5F7FA;
   color: #909399;
-======= */
-  width: 105px;
-  height: 70px;
-  margin-top: 10px;
-  margin-left: 128px;
-  border: 1px solid #dcdfe6;
-  line-height: 70px;
 }
 .el-radio-group {
   margin-top: -77px;
@@ -587,17 +566,11 @@ span {
   width: 150px;
 }
 #inputwd {
-/* <<<<<<< HEAD
-  width: 293px !important;
+  width: 292px !important;
   margin-left: 191px;
-  margin-top: -98px;
-  height: 82px !important;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-======= */
-  width: 195px !important;
-  margin-left: 234px;
   margin-top: -89px;
   height: 72px !important;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 </style>

@@ -75,7 +75,8 @@ export default {
   },
   methods: {
     exitLogin() {
-      localStorage.clear("account", "username");
+      // localStorage.clear("account", "username");
+      sessionStorage.clear()
       this.$store.state.username = ''
       this.$router.push({
         path: "/",

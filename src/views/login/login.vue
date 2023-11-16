@@ -136,14 +136,18 @@ export default {
             let navData = JSON.stringify(res.menuVoList);
             localStorage.setItem("navData", navData);
             localStorage.setItem("roleId",res.roleId);
-            if(res.roleId){
-              this.$store.commit("updateUsername",res.username);
-              localStorage.setItem("username",res.username);
-              localStorage.setItem("oldpwd", data.password);
-              this.$router.push({
-                path:"/personInfo",
-                name:"personInfo"
-              })
+            this.$store.commit("updateUsername",res.username);
+            // localStorage.setItem("username",res.username);
+            sessionStorage.setItem("username",res.username)
+            localStorage.setItem("oldpwd", data.password);
+            if(res.roleId === 1){
+              this.$router.push({path:"/personmsg"})
+            }
+            if(res.roleId === 2){
+              this.$router.push({path:"/personalInfo"})
+            }
+            if(res.roleId === 3){
+              this.$router.push({path:"/personInfo"})
             }
           }
         });

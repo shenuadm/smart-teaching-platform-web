@@ -31,6 +31,7 @@
       @selection-change="handleSelectionChange"
       class="custom-table"
       v-if="dialogtabledata"
+      border
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column
@@ -200,7 +201,7 @@ export default {
       dialogVisible: false,
       resetPassword: false,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       serch: {
         account: "",
         username: "",
@@ -421,6 +422,7 @@ export default {
     },
     getUserData() {
       getUserData().then((res) => {
+        console.log(res);
         this.tableData = res.data;
       });
     },
@@ -457,30 +459,9 @@ export default {
   width: 80px;
   line-height: 30px;
 }
-/* .but {
-  text-align: center;
-  line-height: 30px;
-  width: 60px !important;
-  background-color: #409eff;
-  border: none;
-  margin-left: 5px;
-  border-radius: 5px;
-  color: white;
-} */
 .btn-search{
   margin-left: 10px;
 }
-/* .buttow {
-  position: relative;
-  background-color: #409eff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  margin-left: 10px;
-} */
-/* .buttowDel {
-  background-color: #f56c6c;
-} */
 .block {
   margin-top: 20px;
 }

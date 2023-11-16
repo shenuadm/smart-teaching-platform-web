@@ -80,10 +80,6 @@
                 </span>
               </el-col>
             </el-row>
-            
-            <!-- <span>{{ node.data.menuName}}</span> -->
-            
-            
           </span>
         </el-tree>
       </div>
@@ -466,7 +462,7 @@ export default {
 }
 .el-tree {
   width: 900px;
-  height: 430px;
+  /* height: 430px; */
 }
 .el-input-group {
   margin: 0 50px 20px 20px !important;
@@ -484,16 +480,21 @@ export default {
 }
 .top {
   display: block;
-  width: 100%;
+  width: 90.5%;
   height: 50px;
   margin: 5px 0 0;
   text-align: center;
   line-height: 50px;
   background-color: #fafafa;
   box-shadow: 0 2px 2px #dddddd;
+  margin-top: 20px;
 }
 .funurl {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.el-col{
   overflow: hidden;
   text-overflow: ellipsis;
 }

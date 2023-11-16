@@ -14,7 +14,7 @@
       >
     </div>
     <div class="table">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" style="width: 100%" border>
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="content" label="内容"></el-table-column>
@@ -93,5 +93,8 @@ export default {
 .el-button--primary:hover {
   background-color: #7ebbf8;
   border-color: #7ebbf8;
+}
+.table{
+  margin-top: 20px;
 }
 </style>
