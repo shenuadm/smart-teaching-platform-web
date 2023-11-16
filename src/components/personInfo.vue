@@ -31,30 +31,19 @@
         <el-button type="primary" @click="submitForm('ruleForm')"
           >保存</el-button
         >
-        <el-button type="primary" @click="resetForm('ruleForm')"
-          >重置</el-button
-        >
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
     <div class="login-log">
-      <p>上次登录时间：{{personMsg.lastLoginTime}}</p>
-      <p>上次登录IP：{{personMsg.lastLoginIp}}</p>
+      <p>上次登录时间：2023-10-23 10:41:12</p>
+      <p>上次登录IP：192.168.20.254</p>
     </div>
   </div>
 </template>
 
 <script>
-import { getPersonInfo, savePersonInfo } from "@/utils/api.js";
 export default {
   data() {
-    // 判断旧密码是否正确
-    let oldpwd = (rule,value,callback)=>{
-      if(value != localStorage.getItem("oldpwd")){
-        callback(new Error("原密码输入错误，请重新输入"))
-      }else{
-        callback();
-      }
-    }
     //正则判断新密码
     let newpwd = (rule, value, callback) => {
       const regex = /^[a-zA-Z0-9]\w{5,17}$/;
@@ -88,40 +77,31 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入账号", trigger: "blur" }],
         nickname: [{ required: true, message: "请输入昵称", trigger: "blur" }],
-        oldpwd: [{ required: true, validator:oldpwd, message: "请输入原密码", trigger: "blur" }],
-        newpwd: [{ required: true, validator: newpwd, message:"请输入新密码", trigger: "blur" }],
-        renewpwd: [{ required: true, validator: renewpwd, message:"再次输入新密码", trigger: "blur" }],
+        oldpwd: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        newpwd: [{ required: true, validator: newpwd, trigger: "blur" }],
+        renewpwd: [{ required: true, validator: renewpwd, trigger: "blur" }],
       },
-      // 接收个人信息
-      personMsg:{}
     };
   },
-  created() {
-    getPersonInfo().then(res=>{
-      this.personMsg = res.data
-      this.ruleForm.name = this.personMsg.account
-      this.ruleForm.nickname = this.personMsg.username
-    })
+  mounted() {
+    this.personInfo();
   },
-  mounted() {},
   methods: {
+    personInfo() {
+      let account = localStorage.getItem("account");
+      let username = localStorage.getItem("username");
+      this.ruleForm.name = account;
+      this.ruleForm.nickname = username;
+    },
     // 保存表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        let oldpwd = localStorage.getItem("oldpwd");
-        let data = {
-          oldpwd: this.ruleForm.oldpwd,
-          password: this.ruleForm.newpwd,
-        };
-        if (valid && this.ruleForm.oldpwd === oldpwd) {
-          savePersonInfo(data).then((res) => {
-            this.$message({
-              message: res.msg,
-            });
-          });
+        if (valid) {
+          console.log(this.ruleForm);
         } else {
+          // console.log("error submit!!");
           this.$message({
-            message: "信息修改失败",
+            title: "信息修改失败",
             type: "warning",
           });
           return false;
@@ -133,6 +113,7 @@ export default {
       this.$refs[formName].resetFields();
       this.ruleForm.name = localStorage.getItem("account");
       this.ruleForm.nickname = localStorage.getItem("username");
+      // this.$refs[formName].resetField();
     },
   },
 };

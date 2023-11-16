@@ -30,12 +30,9 @@
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="name" label="步骤名称" width="100">
       </el-table-column>
-      <el-table-column label="步骤内容" width="350">
-        <template slot-scope="scope">
-          <div class="edit" v-html="scope.row.content"></div>
-        </template>
-      </el-table-column>
       <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
+      <el-table-column prop="updateTime" label="修改时间" width="250">
+      </el-table-column>
       <el-table-column label="操作" width="235">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)"
@@ -55,6 +52,7 @@
     </el-table>
     <!-- 搜索 -->
     <el-table
+      height="410"
       ref="multipleTable"
       :data="
         stepdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
@@ -68,20 +66,9 @@
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="name" label="步骤名称" width="100">
       </el-table-column>
-      <el-table-column prop="content" label="内容" width="100">
-      </el-table-column>
+
       <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
-      <el-table-column
-        prop="description"
-        label="描述"
-        width="190"
-        show-overflow-tooltip
-      >
-      </el-table-column>
-      <el-table-column prop="status" label="实验步骤图片" width="120">
-        <template>
-          <el-image :src="imgSrc" alt="图片" />
-        </template>
+      <el-table-column prop="updateTime" label="修改时间" width="250">
       </el-table-column>
       <el-table-column label="操作" width="235">
         <template slot-scope="scope">
@@ -127,12 +114,29 @@
         >
       </el-input>
       <div class="editor">
-        <Editor ref="editor" :value="this.revise.content"></Editor>
+        <Editor ref="editor"></Editor>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
         <el-button @click="serve">保 存</el-button>
       </span>
+    </el-dialog>
+    <!-- 实验详情 -->
+    <el-dialog title="实验详情" :visible.sync="dialogTableVisible">
+      <div class="box">
+        <p>
+          步骤名称：
+          {{ detailsdata.name }}
+        </p>
+        <p>
+          实验顺序：
+          {{ detailsdata.sort }}
+        </p>
+        <div class="box">
+          <p>实验内容：</p>
+          <p class="pimg" v-html="this.detailsdata.content"></p>
+        </div>
+      </div>
     </el-dialog>
     <div class="block">
       <el-pagination
@@ -150,7 +154,14 @@
 </template>
 
 <script>
-import { step, addstep, updatestep, mdelstep, delstep } from "@/utils/api";
+import {
+  step,
+  addstep,
+  updatestep,
+  mdelstep,
+  delstep,
+  getdetail,
+} from "@/utils/api";
 import editor from "../../../components/editor.vue";
 export default {
   components: { editor },
@@ -159,13 +170,16 @@ export default {
       multipleSelection: [],
       tableData: [],
       stepdata: [],
+      detailsdata: [],
       arr: [],
+      detailsData: [],
       currentPage: 1,
       pageSize: 5,
       input: "",
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
+      dialogTableVisible: false,
       step: "",
       imgSrc: "",
       id: 0,
@@ -180,11 +194,12 @@ export default {
   },
   methods: {
     //查看详情
-    todetails() {
-      this.$router.path({
-        url: "",
-        name: "",
+    todetails(e) {
+      getdetail(e).then((res) => {
+        this.detailsdata = res.data;
       });
+      this.detailsdata = e;
+      this.dialogTableVisible = true;
     },
     //保存
     serve() {
@@ -194,10 +209,9 @@ export default {
           name: this.revise.name,
           content: this.$refs.editor.html,
           sort: parseInt(this.revise.sort),
+          updateTime: new Date().toISOString(),
         };
-        console.log(data);
         addstep(data).then((res) => {
-          console.log(res);
           this.dialogVisible = false;
           this.step = "";
           this.break();
@@ -209,10 +223,9 @@ export default {
           name: this.revise.name,
           content: this.$refs.editor.html,
           sort: this.revise.sort,
+          updateTime: new Date().toISOString(),
         };
-        console.log(data);
         updatestep(data).then((res) => {
-          console.log(res);
           this.dialogVisible = false;
           this.step = "";
           this.break();
@@ -228,10 +241,7 @@ export default {
     },
     //返回实验报告
     returnstep() {
-      this.$router.push({
-        path: "/laboratoryReport",
-        name: "laboratoryReport",
-      });
+      history.back();
     },
     //添加实验步骤
     addstep() {
@@ -244,22 +254,22 @@ export default {
       console.log(this.revise);
       this.dialogVisible = true;
       this.step = false;
-      // this.$refs.editor.txt.html(this.revise.content);
-      this.$refs.editor = this.revise.content;
+      if (this.revise.content !== null) {
+        setTimeout(() => {
+          this.$nextTick(() => {
+            this.$refs.editor.html = this.revise.content;
+          });
+        });
+      }
     },
     //搜索
     search() {
-      for (let i = 0; i < this.tableData.length; i++) {
-        const item = this.tableData[i];
-
-        // 判断条件，这里假设满足 condition 为 true 的对象
-        if (item.name === this.input) {
-          // 将满足条件的对象添加到 newArray 数组中
-          this.stepdata.push(item);
-          this.dialogtabledata = false;
-          this.exdialogtabledata = true;
-        }
-      }
+      this.dialogtabledata = false;
+      this.exdialogtabledata = true;
+      this.stepdata = this.tableData.filter((item) => {
+        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
+        return item.name.includes(this.input);
+      });
     },
     //重置
     resetting() {
@@ -267,13 +277,6 @@ export default {
       this.exdialogtabledata = false;
       this.input = "";
       this.stepdata = [];
-    },
-    //返回实验
-    returnstep() {
-      this.$router.push({
-        path: "/chapterManagemet",
-        name: "chapterManagemet",
-      });
     },
     //删除
     del(e) {
@@ -312,21 +315,6 @@ export default {
         })
         .catch(() => {});
     },
-    //图片上传
-    handleChooseFile() {
-      this.$refs.fileInput.click();
-    },
-    handleFileChange(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      if (file) {
-        this.revise.imageStorePath = file.name; // 仅保留文件名
-      }
-      reader.onload = (e) => {
-        this.revise.imageStorePath = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
     handleSizeChange(val) {
       this.pageSize = val;
     },
@@ -354,7 +342,6 @@ export default {
     },
     break: function () {
       step(this.id).then((res) => {
-        console.log(res);
         this.tableData = res.data;
       });
     },
@@ -362,7 +349,6 @@ export default {
   mounted() {
     this.id = this.$route.query.id;
     step(this.id).then((res) => {
-      console.log(res);
       this.tableData = res.data;
     });
   },
@@ -424,6 +410,9 @@ span {
   top: 10px;
   left: 52px;
 }
+.box > p {
+  text-align: left;
+}
 </style>
 <style>
 .edit > p > img {
@@ -456,5 +445,10 @@ span {
   height: 40px;
   border: 1px solid #dcdfe6;
   color: #909399;
+}
+
+.pimg > p > img {
+  width: 100% !important;
+  height: 350px !important;
 }
 </style>

@@ -42,7 +42,7 @@
       </el-table-column>
       <el-table-column label="封面图片" width="120">
         <template>
-          <el-image :src="imgSrc" alt="图片" />
+          <el-image :src="imgSrc" alt="图片未找到" />
         </template>
         <!-- <template slot-scope="scope"
           ><el-image
@@ -52,14 +52,21 @@
           ></el-image
         ></template> -->
       </el-table-column>
-      <el-table-column label="操作" width="100">
+      <el-table-column label="操作" width="240">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="chapter(scope.row)"
+          <el-button type="primary" size="small" @click="chapter(scope.row)"
             >章节管理</el-button
+          >
+          <el-button type="primary" size="small" @click="updatacour(scope.row)"
+            >修改</el-button
+          >
+          <el-button type="danger" size="small" @click="del(scope.row.id)"
+            >删除</el-button
           >
         </template>
       </el-table-column>
     </el-table>
+    <!-- 搜索页面 -->
     <el-table
       ref="multipleTable"
       :data="
@@ -94,7 +101,7 @@
       </el-table-column>
       <el-table-column label="封面图片" width="120">
         <template>
-          <el-image :src="imgSrc" alt="图片" />
+          <el-image :src="imgSrc" alt="图片未找到" />
         </template>
         <!-- <template slot-scope="scope"
           ><el-image
@@ -104,10 +111,16 @@
           ></el-image
         ></template> -->
       </el-table-column>
-      <el-table-column label="操作" width="100">
+      <el-table-column label="操作" width="240">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="chapter(scope.row)"
             >章节管理</el-button
+          >
+          <el-button type="primary" size="small" @click="updatacour(scope.row)"
+            >修改</el-button
+          >
+          <el-button type="danger" size="small" @click="del(scope.row.id)"
+            >删除</el-button
           >
         </template>
       </el-table-column>
@@ -125,7 +138,13 @@
       </el-pagination>
     </div>
     <!-- 新增课程 -->
-    <el-dialog title="请输入课程信息" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :visible.sync="dialogVisible" width="40%">
+      <template v-if="cour">
+        <span slot="title">添加课程</span>
+      </template>
+      <template v-else>
+        <span slot="title">修改课程</span>
+      </template>
       <el-input
         class="inputw"
         placeholder="请输入课程名称"
@@ -187,7 +206,13 @@
 </template>
 
 <script>
-import { course, addcourse, delcourse, delcoursem } from "@/utils/api";
+import {
+  course,
+  addcourse,
+  delcourse,
+  delcoursem,
+  updatecourse,
+} from "@/utils/api";
 import teacherVue from "../../teacher/teacher.vue";
 export default {
   data() {
@@ -195,6 +220,7 @@ export default {
       dialogtabledata: true,
       dialogtable: false,
       dialogVisible: false,
+      cour: "",
       currentPage: 1,
       pageSize: 5,
       input: "",
@@ -204,7 +230,7 @@ export default {
         title: "",
         credit: "",
         description: "",
-        status: "",
+        status: false,
         picture: "",
       },
       searchdata: [],
@@ -215,51 +241,81 @@ export default {
     };
   },
   methods: {
+    //修改课程
+    updatacour(e) {
+      this.revise = e;
+      this.dialogVisible = !this.dialogVisible;
+      this.cour = false;
+    },
     //添加课程
     addcourse() {
       this.dialogVisible = !this.dialogVisible;
-      this.revise.status = false
+      this.revise.status = false;
+      this.cour = true;
     },
     //课程搜索
     search() {
-      for (let i = 0; i < this.tableData.length; i++) {
-        const item = this.tableData[i];
-
-        // 判断条件，这里假设满足 condition 为 true 的对象
-        if (item.title === this.input) {
-          // 将满足条件的对象添加到 newArray 数组中
-          this.searchdata.push(item);
-          this.dialogtable = true;
-          this.dialogtabledata = false;
-        }
-      }
+      this.dialogtable = true;
+      this.dialogtabledata = false;
+      this.searchdata = this.tableData.filter((item) => {
+        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
+        return item.title.includes(this.input);
+      });
     },
     //保存
     serve() {
-      let data = {
-        name: this.revise.name,
-        title: this.revise.title,
-        credit: this.revise.credit,
-        description: this.revise.description,
-        status: Boolean(this.revise.status),
-        picture: this.revise.picture,
-      };
-      addcourse(data)
-        .then((res) => {
-          this.break();
-          this.$message({
-            message: "添加课程成功",
-            type: "success",
+      if (this.cour == true) {
+        let data = {
+          name: this.revise.name,
+          title: this.revise.title,
+          credit: this.revise.credit,
+          description: this.revise.description,
+          status: this.revise.status,
+          picture: this.revise.picture,
+        };
+        addcourse(data)
+          .then((res) => {
+            this.break();
+            this.$message({
+              message: "添加课程成功",
+              type: "success",
+            });
+          })
+          .catch((error) => {
+            // 处理错误
+            // console.error(error);
+            this.$message({
+              message: "添加课程失败",
+              type: "warning",
+            });
           });
-        })
-        .catch((error) => {
-          // 处理错误
-          // console.error(error);
-          this.$message({
-            message: "添加课程失败",
-            type: "warning",
+      } else {
+        let data = {
+          name: this.revise.name,
+          title: this.revise.title,
+          credit: this.revise.credit,
+          description: this.revise.description,
+          status: this.revise.status,
+          picture: this.revise.picture,
+        };
+        updatecourse(data)
+          .then((res) => {
+            this.break();
+            this.$message({
+              message: "修改课程成功",
+              type: "success",
+            });
+          })
+          .catch((error) => {
+            // 处理错误
+            // console.error(error);
+            this.break();
+            this.$message({
+              message: "修改课程失败",
+              type: "warning",
+            });
           });
-        });
+      }
       this.empty(this.revise);
       this.dialogVisible = !this.dialogVisible;
     },
@@ -267,30 +323,41 @@ export default {
     cancel() {
       this.empty(this.revise);
       this.dialogVisible = !this.dialogVisible;
+      this.break();
     },
     //删除
+    del(e) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        delcourse(e).then((res) => {
+          this.break();
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        });
+      });
+    },
+
+    //批量删除
     batchdel() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      })
-        .then(() => {
-          let data = this.arr;
-          delcoursem(data).then((res) => {
-            this.break();
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-          });
-        })
-        .catch(() => {
+      }).then(() => {
+        let data = this.arr;
+        delcoursem(data).then((res) => {
+          this.break();
           this.$message({
-            type: "info",
-            message: "已取消删除",
+            type: "success",
+            message: "删除成功!",
           });
         });
+      });
     },
     //重置按钮
     resetting() {
@@ -311,7 +378,7 @@ export default {
       });
     },
     //清空对象
-    empty: function (obj) {
+    empty(obj) {
       for (const prop of Object.keys(obj)) {
         obj[prop] = "";
       }
@@ -356,7 +423,7 @@ export default {
         console.log(arrdel);
       });
     },
-    break: function () {
+    break() {
       course().then((res) => {
         this.tableData = res.data;
         console.log(res.data);
@@ -366,7 +433,6 @@ export default {
   mounted() {
     course().then((res) => {
       this.tableData = res.data;
-      console.log(res.data);
     });
   },
 };
@@ -376,7 +442,6 @@ export default {
 .user {
   background-color: #08b1e4;
   color: white;
-  border-radius: 3px;
 }
 .forbidden {
   background-color: rgb(166, 2, 2);
@@ -390,12 +455,13 @@ export default {
 .custom-file-button {
   /* margin-top: 16px; */
   position: absolute;
-  bottom: 43px;
-  left: 103px;
-  width: 95px;
+  top: 407px;
+  left: 148px;
+  width: 105px;
   height: 40px;
   border: 1px solid #dcdfe6;
   color: #909399;
+  background-color: white;
 }
 /* .input-content>input{
   display: inline-block;
@@ -415,14 +481,41 @@ export default {
   width: 80px;
   line-height: 30px;
 }
+.but {
+  text-align: center;
+  line-height: 30px;
+  width: 40px !important;
+  /* background-color: #45c864; */
+  background-color: #409eff;
+  border: none;
+  margin-left: 5px;
+  border-radius: 5px;
+  color: white;
+}
+.buttow {
+  position: relative;
+  /* background-color: #05d1d1; */
+  background-color: #409eff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+}
 .block {
   margin-top: 20px;
 }
+/* .el-table__header-wrapper {
+  border: 1px solid rgb(217, 216, 216);
+}
+.el-table__body-wrapper,
+.is-scrolling-none {
+  border: 1px solid rgb(214, 214, 214);
+} */
 .status {
   border: 1px solid #dcdfe6;
   width: 400px;
   height: 40px;
-  margin-left: 83px;
+  margin-left: 128px;
   line-height: 40px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -434,6 +527,7 @@ export default {
   background-color: #F5F7FA;
 }
 .dec {
+/* <<<<<<< HEAD
   width: 66px;
   height: 80px;
   margin-top: 10px;
@@ -445,6 +539,13 @@ export default {
   border-bottom-left-radius: 4px;
   background-color: #F5F7FA;
   color: #909399;
+======= */
+  width: 105px;
+  height: 70px;
+  margin-top: 10px;
+  margin-left: 128px;
+  border: 1px solid #dcdfe6;
+  line-height: 70px;
 }
 .el-radio-group {
   margin-top: -77px;
@@ -472,6 +573,13 @@ span {
 .el-checkbox__inner {
   border: 1px solid #0944cd !important;
 }
+#inputh {
+  height: 30px !important;
+  width: 150px !important;
+}
+.el-input {
+  width: 150px;
+}
 .el-input-group__prepend {
   width: 66px !important;
 }
@@ -479,11 +587,17 @@ span {
   width: 150px;
 }
 #inputwd {
+/* <<<<<<< HEAD
   width: 293px !important;
   margin-left: 191px;
   margin-top: -98px;
   height: 82px !important;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
+======= */
+  width: 195px !important;
+  margin-left: 234px;
+  margin-top: -89px;
+  height: 72px !important;
 }
 </style>

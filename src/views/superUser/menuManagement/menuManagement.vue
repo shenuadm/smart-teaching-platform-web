@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" size="small" class="addRoot" @click="addMenuDate()">添加根节点</el-button>
+    <button class="addRoot" @click="addMenuDate()">添加根节点</button>
     <span class="top">
       <el-row style="width:100%">
         <el-col :span="4">
@@ -42,7 +42,7 @@
               <el-col :span="2">
                 <span>{{ node.data.type}}</span>
               </el-col>
-              <el-col :span="5" class="funurl">
+              <el-col :span="5">
                 <span>{{ node.data.funurl}}</span>
               </el-col>
               <el-col :span="2">
@@ -70,7 +70,10 @@
                 </span>
               </el-col>
             </el-row>
+            
             <!-- <span>{{ node.data.menuName}}</span> -->
+            
+            
           </span>
         </el-tree>
       </div>
@@ -102,7 +105,7 @@
         </el-form-item>
         <el-form-item label="菜单类型" class="type" prop="type">
           <el-select v-model="add.type" placeholder="请输入菜单类型">
-            <el-option label="目录" value="0"></el-option>
+            <el-option label="导航" value="0"></el-option>
             <el-option label="菜单" value="1"></el-option>
           </el-select>
         </el-form-item>
@@ -122,7 +125,7 @@
     </el-dialog>
     <!-- 新增节点功能 -->
     <el-dialog
-      title="新增子节点"
+      title="新增节点"
       :visible.sync="addsonVisible"
       width="40%"
     >
@@ -384,10 +387,6 @@ export default {
 </script>
 
 <style scoped>
-/* 添加根菜单 */
-.addRoot {
-  display: block;
-}
 /* 导航栏 */
 .el-menu-vertical-demo {
   width: 200px;
@@ -406,7 +405,7 @@ export default {
 }
 .el-tree {
   width: 900px;
-  height: 380px;
+  height: 430px;
 }
 .el-input-group {
   margin: 0 50px 20px 20px !important;
@@ -426,20 +425,27 @@ export default {
   display: block;
   width: 100%;
   height: 50px;
-  /* margin: 5px 0 0; */
-  margin-top: 20px;
+  margin: 5px 0 0;
   text-align: center;
   line-height: 50px;
   background-color: #fafafa;
   box-shadow: 0 2px 2px #dddddd;
 }
-.funurl{
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 </style>
 <style>
+/* 添加根菜单 */
+.addRoot {
+  width: 100px;
+  height: 30px;
+  background-color: #409EFF;
+  color: white;
+  display: block;
+  border: none;
+}
+/* 按钮 */
+.el-button {
+  font-size: 14px;
+}
 .el-tree-node__content {
   margin: 5px 0;
   height: 50px;

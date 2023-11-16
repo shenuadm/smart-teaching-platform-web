@@ -45,6 +45,8 @@ export default {
 </script>
 
 <style scoped>
+.chapter-details {
+}
 /* 头部面包屑导航 */
 .chapter-details .el-breadcrumb {
   padding: 0 20px;

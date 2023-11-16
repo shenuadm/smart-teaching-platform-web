@@ -48,7 +48,7 @@
             <el-button type="primary" @click="submitForm('ruleForm')"
               >保存</el-button
             >
-            <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
+            <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
         <div class="login-log">
@@ -62,7 +62,6 @@
 
 <script>
 import adapter from "./adapter";
-import {getPersonInfo} from '@/utils/api.js'
 export default {
   data() {
     //正则判断新密码

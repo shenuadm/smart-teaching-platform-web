@@ -12,7 +12,7 @@
         >批量删除</el-button
       >
       <el-button type="primary" class="exper" @click="returnexper"
-        >返回实验</el-button
+        >返回章节</el-button
       >
     </div>
     <el-table
@@ -75,7 +75,13 @@
       </el-table-column>
       <el-table-column prop="classHour" label="课时" width="60">
       </el-table-column>
-      <el-table-column prop="description" label="实验描述" width="300">
+      <el-table-column
+        prop="description"
+        label="实验描述"
+        width="300"
+        text-align:
+        center
+      >
       </el-table-column>
       <el-table-column label="操作" width="280">
         <template slot-scope="scope">
@@ -86,8 +92,12 @@
             @click="exreport(scope.row)"
             >实验报告</el-button
           >
-          <el-button type="primary" size="small">编辑</el-button>
-          <el-button type="danger" size="small">删除</el-button>
+          <el-button type="primary" size="small" @click="editexrept(scope.row)"
+            >编辑</el-button
+          >
+          <el-button type="danger" size="small" @click="del(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -185,17 +195,12 @@ export default {
     },
     //搜索
     search() {
-      for (let i = 0; i < this.tableData.length; i++) {
-        const item = this.tableData[i];
-
-        // 判断条件，这里假设满足 condition 为 true 的对象
-        if (item.title === this.input) {
-          // 将满足条件的对象添加到 newArray 数组中
-          this.searchdata.push(item);
-          this.dialogtabledata = false;
-          this.exdialogtabledata = true;
-        }
-      }
+      this.dialogtabledata = false;
+      this.exdialogtabledata = true;
+      this.searchdata = this.tableData.filter((item) => {
+        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
+        return item.title.includes(this.input);
+      });
     },
     //重置
     resetting() {
@@ -297,10 +302,7 @@ export default {
     },
     //返回章节
     returnexper() {
-      this.$router.push({
-        path: "/chapterManagemet",
-        name: "chapterManagemet",
-      });
+      history.back();
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -339,7 +341,6 @@ export default {
     this.articleId = parseInt(id);
     exper(id).then((res) => {
       this.tableData = res.data;
-      console.log(res);
     });
   },
 };
@@ -351,12 +352,12 @@ export default {
   left: -100px;
 }
 .dec {
-  width: 104px;
-  height: 40px;
+  width: 105px;
+  height: 70px;
   margin-top: 10px;
-  margin-left: 50px;
+  margin-left: 53px;
   border: 1px solid #dcdfe6;
-  line-height: 40px;
+  line-height: 70px;
   color: #909399;
 }
 .header {
@@ -405,9 +406,10 @@ export default {
   width: 55px;
 }
 #inputwd {
-  width: 198px !important;
-  margin-left: 154px;
-  margin-top: -59px;
-  height: 42px !important;
+  width: 195px !important;
+  margin-left: 160px;
+  margin-top: -89px;
+  height: 72px !important;
+  border-radius: none;
 }
 </style>
