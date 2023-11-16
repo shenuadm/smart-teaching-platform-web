@@ -80,7 +80,10 @@
                 </span>
               </el-col>
             </el-row>
+            
             <!-- <span>{{ node.data.menuName}}</span> -->
+            
+            
           </span>
         </el-tree>
       </div>
@@ -108,7 +111,7 @@
         </el-form-item>
         <el-form-item label="菜单类型" class="type" prop="type">
           <el-select v-model="add.type" placeholder="请输入菜单类型">
-            <el-option label="目录" value="0"></el-option>
+            <el-option label="导航" value="0"></el-option>
             <el-option label="菜单" value="1"></el-option>
           </el-select>
         </el-form-item>
@@ -445,10 +448,6 @@ export default {
 </script>
 
 <style scoped>
-/* 添加根菜单 */
-.addRoot {
-  display: block;
-}
 /* 导航栏 */
 .el-menu-vertical-demo {
   width: 200px;
@@ -467,7 +466,7 @@ export default {
 }
 .el-tree {
   width: 900px;
-  height: 380px;
+  height: 430px;
 }
 .el-input-group {
   margin: 0 50px 20px 20px !important;
@@ -487,8 +486,7 @@ export default {
   display: block;
   width: 100%;
   height: 50px;
-  /* margin: 5px 0 0; */
-  margin-top: 20px;
+  margin: 5px 0 0;
   text-align: center;
   line-height: 50px;
   background-color: #fafafa;
@@ -501,6 +499,19 @@ export default {
 }
 </style>
 <style>
+/* 添加根菜单 */
+.addRoot {
+  width: 100px;
+  height: 30px;
+  background-color: #409EFF;
+  color: white;
+  display: block;
+  border: none;
+}
+/* 按钮 */
+.el-button {
+  font-size: 14px;
+}
 .el-tree-node__content {
   margin: 5px 0;
   height: 50px;

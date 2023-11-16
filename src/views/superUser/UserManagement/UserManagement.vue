@@ -15,12 +15,10 @@
         id="inputh"
         placeholder="请输入昵称"
       ></el-input>
-      <button class="but" @click="search">搜索</button>
-      <button class="but" @click="resetting">重置</button>
-      <button class="buttow" @click="add">添加用户</button>
-      <button type="danger" class="buttow buttowDel" @click="batchdel">
-        批量删除
-      </button>
+      <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
+      <el-button type="primary" size="small" @click="resetting">重置</el-button>
+      <el-button type="primary" size="small" @click="add">添加用户</el-button>
+      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
     </div>
     <el-table
       ref="multipleTable"
@@ -75,84 +73,16 @@
         <template slot-scope="scope">
           <el-button
             type="primary"
-            size="small"
+            size="mini"
             @click="reset(scope.row.userid)"
             >重置密码</el-button
           >
-          <el-button type="primary" size="small" @click="reviseuser(scope.row)"
+          <el-button type="primary" size="mini" @click="reviseuser(scope.row)"
             >编辑</el-button
           >
           <el-button
             type="danger"
-            size="small"
-            @click="delUser(scope.row.userid)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-table
-      ref="multipleTable"
-      :data="
-        searchdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-      class="custom-table"
-      v-if="dialogtable"
-    >
-      <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column
-        prop="account"
-        label="账号"
-        width="120"
-      ></el-table-column>
-      <el-table-column
-        prop="username"
-        label="昵称"
-        width="160"
-      ></el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="160">
-      </el-table-column>
-      <el-table-column
-        prop="lastLoginTime"
-        label="最近登录时间"
-        width="210"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="lastLoginIp"
-        label="最近登录IP"
-        width="210"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="roleName"
-        label="用户类型"
-        width="210"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column prop="active" label="是否激活" width="80">
-        <template slot-scope="scope">
-          <div v-if="scope.row.active === 0" class="user">激活</div>
-          <div v-else-if="scope.row.active === 1" class="forbidden">未激活</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="300">
-        <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="small"
-            @click="reset(scope.row.userid)"
-            >重置密码</el-button
-          >
-          <el-button type="primary" size="small" @click="chapter(scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            type="danger"
-            size="small"
+            size="mini"
             @click="delUser(scope.row.userid)"
             >删除</el-button
           >
@@ -522,13 +452,12 @@ export default {
   width: 100%;
   height: 30px;
   display: flex;
-  top: -10px;
 }
 .title {
   width: 80px;
   line-height: 30px;
 }
-.but {
+/* .but {
   text-align: center;
   line-height: 30px;
   width: 60px !important;
@@ -537,18 +466,21 @@ export default {
   margin-left: 5px;
   border-radius: 5px;
   color: white;
+} */
+.btn-search{
+  margin-left: 10px;
 }
-.buttow {
+/* .buttow {
   position: relative;
   background-color: #409eff;
   color: white;
   border: none;
   border-radius: 5px;
   margin-left: 10px;
-}
-.buttowDel {
+} */
+/* .buttowDel {
   background-color: #f56c6c;
-}
+} */
 .block {
   margin-top: 20px;
 }
@@ -566,6 +498,9 @@ export default {
 .active {
   width: 230px !important;
 }
+.el-table{
+  margin-top: 20px;
+}
 </style>
 <style >
 .el-table th.el-table__cell > .cell,
@@ -576,7 +511,7 @@ export default {
   border: 1px solid #0944cd !important;
 }
 #inputh {
-  height: 30px !important;
+  height: 33px !important;
   width: 150px !important;
 }
 .el-input-group__prepend {

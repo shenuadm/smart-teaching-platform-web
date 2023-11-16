@@ -24,7 +24,7 @@
       <el-table-column
         prop="fileUrl"
         label="课件"
-        width="120"
+        width="100"
         show-overflow-tooltip
       >
         <template slot-scope="scope">
@@ -34,11 +34,11 @@
       <el-table-column
         prop="description"
         label="描述"
-        width="130"
+        width="110"
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column label="操作" width="280">
+      <el-table-column label="操作" width="325">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -92,7 +92,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="添加章" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="添加章" :visible.sync="dialogVisible" width="40%">
       <el-input
         class="inputw"
         placeholder="请输入章节标题"
@@ -145,7 +145,7 @@
       </span>
     </el-dialog>
     <!-- 添加节 -->
-    <el-dialog title="添加节" :visible.sync="dialogVisibleji" width="30%">
+    <el-dialog title="添加节" :visible.sync="dialogVisibleji" width="40%">
       <el-input
         class="inputw"
         placeholder="请输入章节标题"
@@ -196,7 +196,7 @@
       </span>
     </el-dialog>
     <!-- 修改 -->
-    <el-dialog title="修改章节信息" :visible.sync="rdialogVisible" width="30%">
+    <el-dialog title="修改章节信息" :visible.sync="rdialogVisible" width="40%">
       <el-input
         class="inputw"
         placeholder="请输入章节标题"
@@ -416,11 +416,7 @@ export default {
     },
     //返回课程
     returncourse() {
-      this.$router.push({
-        path: "/courseManagement",
-        name: "courseManagement",
-      });
-      this.break();
+      history.back();
     },
     empty: function (obj) {
       for (const prop of Object.keys(obj)) {
@@ -450,23 +446,23 @@ export default {
 
 <style>
 .el-input-group__prepend {
-  width: 56px;
+  width: 65px;
 }
 #inputwd {
-  width: 205px !important;
-  margin-left: 148px;
-  margin-top: -59px;
-  height: 42px !important;
+  width: 195px !important;
+  margin-left: 234px;
+  margin-top: -89px;
+  height: 72px !important;
 }
 </style>
 <style scoped>
 .dec {
-  width: 97px;
-  height: 40px;
+  width: 105px;
+  height: 70px;
   margin-top: 10px;
-  margin-left: 50px;
+  margin-left: 128px;
   border: 1px solid #dcdfe6;
-  line-height: 40px;
+  line-height: 70px;
   color: #909399;
 }
 
@@ -480,23 +476,23 @@ a {
 .inputwh {
   width: 192px;
   margin-top: -9px;
-  margin-left: 106px;
+  margin-left: 105px;
 }
 .header {
   width: 220px;
 }
 .custom-file-button {
   position: absolute;
-  top: 294px;
-  left: 72px;
-  width: 106px;
+  top: 324px;
+  left: 148px;
+  width: 105px;
   height: 37px;
   border: 1px solid #dcdfe6;
   color: #909399;
   line-height: 37px;
 }
 .custom-file-buttont {
-  top: 295px !important;
+  top: 325px !important;
 }
 span {
   position: relative;

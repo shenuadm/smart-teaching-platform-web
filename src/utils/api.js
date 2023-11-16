@@ -82,6 +82,10 @@ export function course() {
 export function addcourse(data) {
   return http.post('/course/add ', data)
 }
+//课程修改数据
+export function updatecourse(data) {
+  return http.post('/course/update', data)
+}
 //课程删除数据
 export function delcourse(id) {
   return http.get('/course/delete/' + id)
@@ -166,6 +170,10 @@ export function mdelstep(data) {
 export function delstep(id) {
   return http.get('ExperimentReportPlan/delete/' + id)
 }
+//实验步骤查看详情
+export function getdetail(id) {
+  return http.get('ExperimentReportPlan/getDetail/' + id)
+}
 // 修改菜单管理数据
 export function upmenuData(u) {
   return http.post("/menu/update", u, {
@@ -228,8 +236,8 @@ export function addRole(data) {
   return http.post('/role/add', data)
 }
 // 修改角色
-export function updateRole(data) {
-  return http.post('/role/update',data)
+export function updateRole(userId) {
+  return http.put('/role/update')
 }
 // 删除角色
 export function delRole(id) {

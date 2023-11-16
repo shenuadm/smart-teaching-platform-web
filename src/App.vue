@@ -20,7 +20,4 @@ body {
   width: 1200px;
   margin: 0 auto;
 }
-.el-button{
-  font-size: 14px !important;
-}
 </style>

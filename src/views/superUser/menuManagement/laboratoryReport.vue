@@ -86,7 +86,12 @@
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="title" label="实验标题" width="100">
       </el-table-column>
-      <el-table-column prop="classHour" label="用户类型" width="100">
+      <el-table-column prop="type" label="用户类型" width="100">
+        <template slot-scope="scope">
+          <div v-if="scope.row.type == 0">系统</div>
+          <div v-if="scope.row.type == 1">老师</div>
+          <div v-if="scope.row.type == 2">学生</div>
+        </template>
       </el-table-column>
       <el-table-column prop="classHour" label="课时" width="60">
       </el-table-column>
@@ -99,10 +104,9 @@
       </el-table-column>
       <el-table-column prop="status" label="状态" width="80">
         <template slot-scope="scope">
-          <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">
-            禁用
-          </div>
+          <div v-if="scope.row.status === 0">已保存</div>
+          <div v-else-if="scope.row.status === 1">已提交</div>
+          <div v-else-if="scope.row.status === 2">已评阅</div>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="240">
@@ -112,7 +116,7 @@
             size="small"
             class="opertea"
             @click="exreport(scope.row)"
-            >实验报告</el-button
+            >实验步骤</el-button
           >
           <el-button type="primary" size="small" @click="editexrept(scope.row)"
             >编辑</el-button
@@ -124,7 +128,7 @@
       </el-table-column>
     </el-table>
     <!-- 添加/编辑实验 -->
-    <el-dialog :visible.sync="dialogVisible" width="30%">
+    <el-dialog :visible.sync="dialogVisible" width="40%">
       <template v-if="report">
         <span slot="title">添加实验报告</span>
       </template>
@@ -292,17 +296,12 @@ export default {
     },
     //搜索
     search() {
-      for (let i = 0; i < this.tableData.length; i++) {
-        const item = this.tableData[i];
-
-        // 判断条件，这里假设满足 condition 为 true 的对象
-        if (item.title === this.input) {
-          // 将满足条件的对象添加到 newArray 数组中
-          this.reportdata.push(item);
-          this.dialogtabledata = false;
-          this.exdialogtabledata = true;
-        }
-      }
+      this.dialogtabledata = false;
+      this.exdialogtabledata = true;
+      this.reportdata = this.tableData.filter((item) => {
+        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
+        return item.title.includes(this.input);
+      });
     },
     //重置
     resetting() {
@@ -313,11 +312,7 @@ export default {
     },
     //返回实验
     returnexper() {
-      this.$router.push({
-        path: "/chapterManagemet",
-        name: "chapterManagemet",
-      });
-      this.break();
+      history.back();
     },
     //添加实验报告
     addreport() {
@@ -392,10 +387,9 @@ export default {
         console.log(arrdel);
       });
     },
-    break: function () {
+    break() {
       report(this.id).then((res) => {
         this.tableData = res.data;
-        console.log(res);
       });
     },
   },
@@ -449,19 +443,19 @@ span {
 }
 .dec {
   position: relative;
-  width: 100px;
-  height: 40px;
+  width: 101px;
+  height: 70px;
   top: 10px;
-  margin-left: 54px;
+  margin-left: 127px;
   border: 1px solid #dcdfe6;
-  line-height: 40px;
+  line-height: 70px;
   color: #909399;
 }
 .custom-file-button {
   position: relative;
   display: block;
   top: 10px;
-  left: 54px;
+  left: 125px;
   width: 100px;
   height: 37px !important;
   border: 1px solid #dcdfe6;
@@ -470,13 +464,13 @@ span {
 }
 .custom-file-buttont {
   position: relative;
-  top: 10px;
+  top: -53px;
 }
 .status {
   position: relative;
   width: 300px;
   height: 100px;
-  margin-left: 51px;
+  margin-left: 122px;
   line-height: 40px;
   top: 10px;
 }
@@ -505,9 +499,9 @@ span {
 #inputwd {
   position: relative;
   width: 200px !important;
-  margin-left: 155px;
-  top: 10px;
-  height: 42px !important;
+  margin-left: 228px;
+  top: -62px;
+  height: 72px !important;
 }
 .el-input-group__prepend {
   width: 55px;

@@ -5,11 +5,6 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/test',
-    name: 'index',
-    component: () => import('@/views/superUser/menuManagement/test')
-  },
-  {
     path: '/',
     name: 'index',
     component: () => import('@/components/index'),
@@ -25,15 +20,10 @@ const routes = [
         name: 'superUser',
         component: () => import('@/views/superUser/superUser'),
         children: [
-          // {
-          //   path: '/personmsg',
-          //   name: 'personmsg',
-          //   component: () => import('@/views/superUser/personmsg/personmsg'),
-          // },
           {
-            path: '/personInfo',
-            name: 'personInfo',
-            component: () => import('@/views/main/personInfo/personInfo')
+            path: '/personmsg',
+            name: 'personmsg',
+            component: () => import('@/views/superUser/personmsg/personmsg'),
           },
           {
             path: '/menuManagement',
@@ -135,15 +125,10 @@ const routes = [
         children: [
           // 个人信息
           {
-            path: '/personInfo',
-            name: 'personInfo',
-            component: () => import('@/views/main/personInfo/personInfo')
+            path: '/personalInfo',
+            name: 'personalInfo',
+            component: () => import('@/views/teacher/personalInfo/personalInfo')
           },
-          // {
-          //   path: '/personalInfo',
-          //   name: 'personalInfo',
-          //   component: () => import('@/views/teacher/personalInfo/personalInfo')
-          // },
           // 课程中心
           {
             path: '/courseCenter',
@@ -164,6 +149,12 @@ const routes = [
         name: 'chapterDetails',
         component: () => import('@/views/teacher/chapterDetails/chapterDetails')
       },
+      // 公司介绍
+      {
+        path: '/companyProfile',
+        name: 'companyProfile',
+        component: () => import('@/views/companyProfile/companyProfile')
+      }
     ]
   }
 ]

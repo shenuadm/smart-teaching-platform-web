@@ -43,7 +43,7 @@ export default {
   methods: {
     switchNav(index) {
       this.activeIndex = index;
-      const routes = ["personInfo", "courseCenter", "myTeaching"];
+      const routes = ["personalInfo", "courseCenter", "myTeaching"];
       const targetRoute = routes[index];
       if (this.$route.fullPath === `/${targetRoute}`) return; //防止连续点击，路由报错
       this.$router.push({ name: targetRoute });
