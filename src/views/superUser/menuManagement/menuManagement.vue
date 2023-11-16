@@ -111,7 +111,7 @@
         </el-form-item>
         <el-form-item label="菜单类型" class="type" prop="type">
           <el-select v-model="add.type" placeholder="请输入菜单类型">
-            <el-option label="导航" value="0"></el-option>
+            <el-option label="目录" value="0"></el-option>
             <el-option label="菜单" value="1"></el-option>
           </el-select>
         </el-form-item>
