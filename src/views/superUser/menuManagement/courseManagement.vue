@@ -2,7 +2,7 @@
   <div>
     <div class="header">
       <div class="title">课程名称:</div>
-      <el-input v-model="input" class="zh-mgl-10 zh-mgr-10" placeholder="请输入内容"></el-input>
+      <el-input v-model="input" class="zh-mgl-10 zh-mgr-10 input-content" placeholder="请输入内容"></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="addcourse">添加课程</el-button>
@@ -125,7 +125,7 @@
       </el-pagination>
     </div>
     <!-- 新增课程 -->
-    <el-dialog title="请输入课程信息" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="请输入课程信息" :visible.sync="dialogVisible" width="40%">
       <el-input
         class="inputw"
         placeholder="请输入课程名称"
@@ -218,6 +218,7 @@ export default {
     //添加课程
     addcourse() {
       this.dialogVisible = !this.dialogVisible;
+      this.revise.status = false
     },
     //课程搜索
     search() {
@@ -387,14 +388,19 @@ export default {
   margin-left: 30px;
 }
 .custom-file-button {
+  /* margin-top: 16px; */
   position: absolute;
-  top: 372px;
-  left: 72px;
+  bottom: 43px;
+  left: 103px;
   width: 95px;
   height: 40px;
   border: 1px solid #dcdfe6;
   color: #909399;
 }
+/* .input-content>input{
+  display: inline-block;
+  height: 33px !important;
+} */
 .el-dialog .el-input {
   padding: 8px;
 }
@@ -403,7 +409,7 @@ export default {
   width: 100%;
   height: 30px;
   display: flex;
-  top: -10px;
+  /* top: -10px; */
 }
 .title {
   width: 80px;
@@ -414,38 +420,45 @@ export default {
 }
 .status {
   border: 1px solid #dcdfe6;
-  width: 300px;
+  width: 400px;
   height: 40px;
-  margin-left: 50px;
+  margin-left: 83px;
   line-height: 40px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 .statusx {
   width: 106px;
   height: 40px;
   border-right: 1px solid #dcdfe6;
+  background-color: #F5F7FA;
 }
 .dec {
-  width: 102px;
-  height: 40px;
+  width: 66px;
+  height: 80px;
   margin-top: 10px;
-  margin-left: 50px;
+  margin-left: 84px;
   border: 1px solid #dcdfe6;
-  line-height: 40px;
+  line-height: 80px;
+  padding: 0 20px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  background-color: #F5F7FA;
+  color: #909399;
 }
-
 .el-radio-group {
   margin-top: -77px;
   margin-left: 90px;
 }
 .inputw {
-  width: 300px;
+  width: 400px !important;
 }
 span {
   position: relative;
   left: -100px;
 }
-.el-input {
-  width: 150px;
+.el-table{
+  margin-top: 20px;
 }
 </style>
 <style>
@@ -453,16 +466,24 @@ span {
 .el-table__body td.el-table__cell {
   text-align: center;
 }
+.el-input__inner {
+  height: 33px;
+}
 .el-checkbox__inner {
   border: 1px solid #0944cd !important;
 }
 .el-input-group__prepend {
   width: 66px !important;
 }
+.el-input {
+  width: 150px;
+}
 #inputwd {
-  width: 200px !important;
-  margin-left: 152px;
-  margin-top: -59px;
-  height: 42px !important;
+  width: 293px !important;
+  margin-left: 191px;
+  margin-top: -98px;
+  height: 82px !important;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 </style>

@@ -68,8 +68,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submit">提交</el-button>
-          <el-button @click="cancal('form')">取消</el-button>
+          <el-button type="primary" size="small" @click="submit">提交</el-button>
+          <el-button type="primary" size="small" @click="cancal('form')">取消</el-button>
         </div>
       </el-dialog>
     </div>
@@ -88,8 +88,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="confirmModify">确认修改</el-button>
-          <el-button @click="cancelModify('form')">取消修改</el-button>
+          <el-button type="primary" size="small" @click="confirmModify">确认修改</el-button>
+          <el-button type="primary" size="small" @click="cancelModify('form')">取消修改</el-button>
         </div>
       </el-dialog>
     </div>
@@ -106,8 +106,8 @@
         >
         </el-tree>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="confirmEmpower">确认授权</el-button>
-          <el-button type="success" @click="cancelEmpower">取消授权</el-button>
+          <el-button type="primary" size="small" @click="confirmEmpower">确认授权</el-button>
+          <el-button type="success" size="small" @click="cancelEmpower">取消授权</el-button>
         </div>
       </el-dialog>
     </div>

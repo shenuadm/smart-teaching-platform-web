@@ -164,6 +164,12 @@ const routes = [
         name: 'chapterDetails',
         component: () => import('@/views/teacher/chapterDetails/chapterDetails')
       },
+      // 公司介绍
+      {
+        path: '/companyProfile',
+        name: 'companyProfile',
+        component: () => import('@/views/companyProfile/companyProfile')
+      }
     ]
   }
 ]
