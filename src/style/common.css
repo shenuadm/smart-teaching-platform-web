@@ -164,8 +164,15 @@ img {
 
 /* 按钮背景颜色 */
 .btn-bg-b {
-  background-color: #4faff0;
+  background-color: #409eff;
+  border-color: #4094ff;
+  font-size: 14px;
+  padding: 9px 15px;
+  border-radius: 3px;
+  outline: 0;
+  line-height: 1;
   color: #fff;
+  font-weight: 500;
 }
 
 .btn-bg-g {

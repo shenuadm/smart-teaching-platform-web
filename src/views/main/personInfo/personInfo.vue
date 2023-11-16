@@ -131,8 +131,8 @@ export default {
     // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.ruleForm.name = localStorage.getItem("account");
-      this.ruleForm.nickname = localStorage.getItem("username");
+      this.ruleForm.name = this.personMsg.account;
+      this.ruleForm.nickname = this.personMsg.username;
     },
   },
 };

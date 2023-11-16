@@ -25,10 +25,15 @@ const routes = [
         name: 'superUser',
         component: () => import('@/views/superUser/superUser'),
         children: [
+          // {
+          //   path: '/personmsg',
+          //   name: 'personmsg',
+          //   component: () => import('@/views/superUser/personmsg/personmsg'),
+          // },
           {
-            path: '/personmsg',
-            name: 'personmsg',
-            component: () => import('@/views/superUser/personmsg/personmsg'),
+            path: '/personInfo',
+            name: 'personInfo',
+            component: () => import('@/views/main/personInfo/personInfo')
           },
           {
             path: '/menuManagement',
@@ -130,10 +135,15 @@ const routes = [
         children: [
           // 个人信息
           {
-            path: '/personalInfo',
-            name: 'personalInfo',
-            component: () => import('@/views/teacher/personalInfo/personalInfo')
+            path: '/personInfo',
+            name: 'personInfo',
+            component: () => import('@/views/main/personInfo/personInfo')
           },
+          // {
+          //   path: '/personalInfo',
+          //   name: 'personalInfo',
+          //   component: () => import('@/views/teacher/personalInfo/personalInfo')
+          // },
           // 课程中心
           {
             path: '/courseCenter',

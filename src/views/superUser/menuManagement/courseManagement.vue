@@ -2,11 +2,11 @@
   <div>
     <div class="header">
       <div class="title">课程名称:</div>
-      <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
-      <button class="but btn-bg-b" @click="search">搜索</button>
-      <button class="but btn-bg-b" @click="resetting">重置</button>
-      <button class="buttow btn-bg-b" @click="addcourse">添加课程</button>
-      <button class="buttow btn-bg-r" @click="batchdel">删除</button>
+      <el-input v-model="input" class="zh-mgl-10 zh-mgr-10" placeholder="请输入内容"></el-input>
+      <el-button type="primary" size="small" @click="search">搜索</el-button>
+      <el-button type="primary" size="small" @click="resetting">重置</el-button>
+      <el-button type="primary" size="small" @click="addcourse">添加课程</el-button>
+      <el-button type="primary" size="small" @click="batchdel">删除</el-button>
     </div>
     <el-table
       ref="multipleTable"
@@ -54,7 +54,7 @@
       </el-table-column>
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="chapter(scope.row)"
+          <el-button type="primary" size="mini" @click="chapter(scope.row)"
             >章节管理</el-button
           >
         </template>
@@ -375,6 +375,7 @@ export default {
 .user {
   background-color: #08b1e4;
   color: white;
+  border-radius: 3px;
 }
 .forbidden {
   background-color: rgb(166, 2, 2);
@@ -408,36 +409,9 @@ export default {
   width: 80px;
   line-height: 30px;
 }
-.but {
-  text-align: center;
-  line-height: 30px;
-  width: 40px !important;
-  /* background-color: #45c864; */
-  background-color: #409eff;
-  border: none;
-  margin-left: 5px;
-  border-radius: 5px;
-  color: white;
-}
-.buttow {
-  position: relative;
-  /* background-color: #05d1d1; */
-  background-color: #409eff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  margin-left: 10px;
-}
 .block {
   margin-top: 20px;
 }
-/* .el-table__header-wrapper {
-  border: 1px solid rgb(217, 216, 216);
-}
-.el-table__body-wrapper,
-.is-scrolling-none {
-  border: 1px solid rgb(214, 214, 214);
-} */
 .status {
   border: 1px solid #dcdfe6;
   width: 300px;
@@ -470,6 +444,9 @@ span {
   position: relative;
   left: -100px;
 }
+.el-input {
+  width: 150px;
+}
 </style>
 <style>
 .el-table th.el-table__cell > .cell,
@@ -478,13 +455,6 @@ span {
 }
 .el-checkbox__inner {
   border: 1px solid #0944cd !important;
-}
-#inputh {
-  height: 30px !important;
-  width: 150px !important;
-}
-.el-input {
-  width: 150px;
 }
 .el-input-group__prepend {
   width: 66px !important;

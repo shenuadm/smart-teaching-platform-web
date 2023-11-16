@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="addRoot" @click="addMenuDate()">添加根节点</button>
+    <el-button type="primary" size="small" class="addRoot" @click="addMenuDate()">添加根节点</el-button>
     <span class="top">
       <el-row style="width:100%">
         <el-col :span="4">
@@ -70,10 +70,6 @@
                 </span>
               </el-col>
             </el-row>
-            
-            <!-- <span>{{ node.data.menuName}}</span> -->
-            
-            
           </span>
         </el-tree>
       </div>
@@ -387,6 +383,10 @@ export default {
 </script>
 
 <style scoped>
+/* 添加根菜单 */
+.addRoot {
+  display: block;
+}
 /* 导航栏 */
 .el-menu-vertical-demo {
   width: 200px;
@@ -425,7 +425,8 @@ export default {
   display: block;
   width: 100%;
   height: 50px;
-  margin: 5px 0 0;
+  /* margin: 5px 0 0; */
+  margin-top: 20px;
   text-align: center;
   line-height: 50px;
   background-color: #fafafa;
@@ -433,19 +434,6 @@ export default {
 }
 </style>
 <style>
-/* 添加根菜单 */
-.addRoot {
-  width: 100px;
-  height: 30px;
-  background-color: #409EFF;
-  color: white;
-  display: block;
-  border: none;
-}
-/* 按钮 */
-.el-button {
-  font-size: 14px;
-}
 .el-tree-node__content {
   margin: 5px 0;
   height: 50px;

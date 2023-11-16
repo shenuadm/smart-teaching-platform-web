@@ -10,7 +10,7 @@
               >易腾智慧教学-网络安全实验平台</span
             >
           </el-col>
-          <el-col :span="12">
+          <el-col :span="10">
             <el-menu
               default-active="1"
               class="el-menu-demo"
@@ -28,27 +28,13 @@
             </el-menu>
             <div class="line"></div>
           </el-col>
-          <el-col :span="2" class="login-tx">
-            <el-menu
-              class="el-menu-demo"
-              mode="horizontal"
-              active-text-color="#409EFF"
-              text-color="#fff"
-              background-color="#212121"
-              router
-            >
-              <el-submenu index="1">
-                <template slot="title">
-                  <img src="../assets/tx.jpg" alt="" />
-                </template>
-                <el-menu-item index="1-1">修改信息</el-menu-item>
-                <el-menu-item @click="exitLogin">退出登录</el-menu-item>
-              </el-submenu>
-            </el-menu>
+          <el-col :span="5">
+            <div v-if="this.$store.state.username" class="login-name zh-fc-white">{{this.$store.state.username}}</div>
+            <div v-else></div>
           </el-col>
-          <el-col :span="3" class="name zh-fc-white">
-            <div v-if="username">{{username}}</div>
-            <div v-else>尚未登录</div>
+          <el-col :span="2">
+            <div v-if="this.$store.state.username" class="name zh-fc-white" @click="exitLogin">退出登录</div>
+            <div v-else></div>
           </el-col>
         </el-row>
       </el-header>
@@ -78,17 +64,19 @@ export default {
   components: {},
   data() {
     return {
-      username:'',
     };
   },
+  computed:{
+  },
   created() {
-    this.username = localStorage.getItem("username")
   },
   mounted() {
+    
   },
   methods: {
     exitLogin() {
       localStorage.clear("account", "username");
+      this.$store.state.username = ''
       this.$router.push({
         path: "/",
         name: "login",
@@ -110,11 +98,6 @@ export default {
   height: 60px;
   padding: 0 30px;
 }
-.el-col {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
 .logo {
   box-sizing: border-box;
 }
@@ -130,18 +113,17 @@ export default {
 .el-input {
   padding: 10px 0;
 }
-.name{
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-}
 .login-tx img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   padding: 10px 0;
   margin-left: 20px;
+}
+.login-name,.name{
+  height: 60px;
+  line-height: 60px;
+  text-align: right;
 }
 .el-menu-item:hover {
   background-color: rgb(91, 92, 94) !important;
