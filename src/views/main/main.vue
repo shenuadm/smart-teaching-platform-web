@@ -40,6 +40,7 @@ export default {
         });
       }
     });
+    console.log(this.navList);
   },
   mounted() {},
   methods: {
@@ -85,7 +86,7 @@ export default {
   border-left: 2px solid #43bc60;
 }
 .main-content {
-  width: 980px;
+  width: 1050px;
   float: right;
   flex: 1;
   border-radius: 5px;

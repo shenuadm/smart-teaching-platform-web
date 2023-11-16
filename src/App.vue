@@ -17,7 +17,13 @@ body {
   background-color: #f8f6f6;
 }
 .warpper {
-  width: 1200px;
+  width: 1300px;
   margin: 0 auto;
+}
+.el-button{
+  font-size: 14px !important;
+}
+.aside-nav .aside-nav-item{
+  font-weight: 700 !important;
 }
 </style>

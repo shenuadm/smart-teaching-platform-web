@@ -32,13 +32,14 @@
             </p>
           </div>
         </div>
-        <button
+        <!-- <button
           class="choose zh-fc-white btn-radius-5 btn-bg-b"
           :data-id="item.id"
           @click="selectCourse"
         >
           选课
-        </button>
+        </button> -->
+        <el-button type="primary" size="small" :data-id="item.id" @click="selectCourse" class="choose">选课</el-button>
       </li>
     </ul>
   </div>
@@ -128,8 +129,8 @@ export default {
   height: 150px;
 }
 .choose {
-  width: 100px;
-  height: 35px;
+  /* width: 100px; */
+  /* height: 35px; */
   border: 0;
   position: absolute;
   top: 50%;

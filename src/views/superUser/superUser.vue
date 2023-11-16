@@ -8,7 +8,7 @@
         @close="handleClose"
         router
       >
-        <el-menu-item index="/personmsg">
+        <el-menu-item index="/personInfo">
           <span slot="title">个人信息</span>
         </el-menu-item>
         <el-submenu index="2">
@@ -67,6 +67,7 @@ export default {
 .el-aside {
   width: 150px !important;
 }
+
 .el-main {
   margin-left: 50px;
   background-color: #fff;

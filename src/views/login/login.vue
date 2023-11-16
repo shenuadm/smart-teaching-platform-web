@@ -18,7 +18,7 @@
             <span>账号</span>
             <input
               type="text"
-              class="input-number center"
+              class="input-number center zh-mgt-10"
               placeholder="账号"
               v-model="logNum"
             />
@@ -27,7 +27,7 @@
             <span>密码</span>
             <input
               type="password"
-              class="input-pas center"
+              class="input-pas center zh-mgt-10"
               placeholder="密码"
               v-model="logPas"
             />
@@ -42,28 +42,30 @@
         <!-- 注册 -->
         <div class="enroll-login" v-if="enrolldis">
           <div class="enr-number center">
-            <span>手机/邮箱</span>
-            <input
-              type="text"
-              class="input-enr-number center"
-              placeholder="填写你常用的手机号或邮箱号"
-              v-model="enrNum"
-            />
-          </div>
-          <div class="name center">
             <span>用户名</span>
             <input
               type="text"
-              class="input-name center"
-              placeholder="中英文均可，最长18个英文或9个汉字"
+              class="input-enr-number center zh-mgt-10"
+              placeholder="请填写用户名，最长30个字符"
+              maxlength="30"
               v-model="username"
             />
           </div>
-          <div class="pas center">
+          <div class="name center">
+            <span>昵称</span>
+            <input
+              type="text"
+              class="input-name center zh-mgt-10"
+              placeholder="请填写昵称，最长20个字符"
+              maxlength="20"
+              v-model="nikename"
+            />
+          </div>
+          <div class="pas center pass">
             <span>密码</span>
             <input
               type="password"
-              class="input-pas center"
+              class="input-pas center zh-mgt-10"
               placeholder="5-20位英文、数字、符号、区分大小写"
               v-model="password"
             />
@@ -72,7 +74,7 @@
             <span>确认密码</span>
             <input
               type="password"
-              class="input-pas-tow center"
+              class="input-pas-tow center zh-mgt-10"
               placeholder="请确认密码"
               v-model="enrPast"
             />
@@ -87,6 +89,7 @@
 </template>
 <script>
 import { toLogin } from "@/utils/api.js";
+import store from '@/store/index.js'
 export default {
   components: {},
   data() {
@@ -95,8 +98,8 @@ export default {
       enrolldis: false,
       logNum: "",
       logPas: "",
-      enrNum: "",
       username: "",
+      nikename: "",
       password: "",
       enrPast: "",
     };
@@ -116,51 +119,43 @@ export default {
         account: this.logNum,
         password: this.logPas,
       };
-      // 登录
-      toLogin(data).then((res) => {
-        if (res.msg != "success") {
-          this.$message.error(res.msg);
-        } else {
-          let tokenValue = res.tokenValue;
-          let username = res.username;
-          localStorage.setItem("satoken", tokenValue);
-          let navData = JSON.stringify(res.menuVoList);
-          localStorage.setItem("navData", navData);
-          localStorage.setItem("roleId",res.roleId);
-          if (res.roleId === 1) {
-            localStorage.setItem("username", username); //用户名
-            localStorage.setItem("account", data.account); //账号
-            //超级管理员端
-            this.$router.push({
-              path: "/personmsg",
-              name: "personmsg",
-            });
-          } else if (res.roleId === 2) {
-            localStorage.setItem("username", username); //用户名
-            localStorage.setItem("account", data.account); //账号
-            //教师端
-            this.$router.push({
-              path: "/personalInfo",
-              name: "personalInfo",
-            });
-          } else if (res.roleId === 3) {
-            localStorage.setItem("oldpwd", data.password);
-            //学生端
-            this.$router.push({
-              path: "/personInfo",
-              name: "personInfo",
-            });
+      if(this.logNum === '' || this.logPas === ''){
+        this.$message({
+          message:'用户名或者密码不可为空',
+          type:'error'
+        })
+      }else{
+        // 登录
+        toLogin(data).then((res) => {
+          console.log(res);
+          if (res.msg != "success") {
+            this.$message.error(res.msg);
+          } else {
+            let tokenValue = res.tokenValue;
+            localStorage.setItem("satoken", tokenValue);
+            let navData = JSON.stringify(res.menuVoList);
+            localStorage.setItem("navData", navData);
+            localStorage.setItem("roleId",res.roleId);
+            if(res.roleId){
+              this.$store.commit("updateUsername",res.username);
+              localStorage.setItem("username",res.username);
+              localStorage.setItem("oldpwd", data.password);
+              this.$router.push({
+                path:"/personInfo",
+                name:"personInfo"
+              })
+            }
           }
-        }
-      });
+        });
+      }
     },
     toRegister(){
       this.enrolldis = true
       this.logindis = false
     },
     Enroll() {
-      if (/^.{11,}$/.test(this.enrNum)) {
-        if (/^(?:[\u4e00-\u9fa5]{1,9}|[\w]{1,18})$/.test(this.username)) {
+      if (/^.{1,30}$/.test(this.username)) {
+        if (/^.{1,20}$/.test(this.nikename)) {
           if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,12}$/.test(this.password)) {
             if (this.password === this.enrPast) {
               console.log(this.password);
@@ -178,15 +173,15 @@ export default {
           } else {
             this.$message.error("密码格式错误，必须包含字母和数字");
           }
-        } else if (this.username == "") {
-          this.$message.error("用户名不能为空");
+        } else if (this.nikename == "") {
+          this.$message.error("昵称不能为空");
         } else {
-          this.$message.error("用户名格式错误");
+          this.$message.error("昵称格式错误");
         }
-      } else if (this.enrNum == "") {
-        this.$message.error("账号不能为空");
+      } else if (this.username == "") {
+        this.$message.error("用户不能为空");
       } else {
-        this.$message.error("请输入正确的手机号");
+        this.$message.error("请输入用户名");
       }
     },
   },
@@ -243,14 +238,16 @@ img {
 .content {
   position: relative;
   width: 428px;
-  height: 390px;
+  height: auto;
+  padding-bottom: 10px;
+  box-sizing: border-box;
 }
 .content-login {
-  height: 250px;
+  height: auto;
 }
 .enroll-login {
   position: relative;
-  height: 420px;
+  height: auto;
   top: -10px;
 }
 .number,
@@ -262,6 +259,10 @@ img {
   width: 338px;
   height: 67px;
   margin-top: 20px;
+}
+.pas-tow>span{
+  display: inline-block;
+  text-indent: 10px;
 }
 .input-number,
 .input-pas,
@@ -308,7 +309,18 @@ img {
   border: 1px solid #36964d;
   color: white;
   border-radius: 5px;
-  margin-top: 20px;
+  margin-top: 25px;
   cursor: pointer;
+}
+.enr-number>span::before,
+.name>span::before,
+.pass>span::before,
+.pas-tow>span::before{
+  content: "*";
+  color: red;
+  margin-right: 10px;
+  position: absolute;
+  top: 3px;
+  left: -9px;
 }
 </style>
