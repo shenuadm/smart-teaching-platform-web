@@ -35,14 +35,14 @@
       </el-form-item>
     </el-form>
     <div class="login-log">
-      <p>上次登录时间：2023-10-23 10:41:12</p>
-      <p>上次登录IP：192.168.20.254</p>
+      <p>上次登录时间：{{personMsg.lastLoginTime}}</p>
+      <p>上次登录IP：{{personMsg.lastLoginIp}}</p>
     </div>
   </div>
 </template>
 
 <script>
-import {savePersonInfo} from '@/utils/api.js'
+import {getPersonInfo,savePersonInfo} from '@/utils/api.js'
 export default {
   data() {
     //正则判断新密码
@@ -82,19 +82,20 @@ export default {
         newpwd: [{ required: true, validator: newpwd, trigger: "blur" }],
         renewpwd: [{ required: true, validator: renewpwd, trigger: "blur" }],
       },
+      // 接收个人信息
+      personMsg:{}
     };
   },
+  created() {
+    getPersonInfo().then(res=>{
+      this.personMsg = res.data
+      this.ruleForm.name = this.personMsg.account
+      this.ruleForm.nickname = this.personMsg.username
+    })
+  },
   mounted() {
-    this.personInfo();
   },
   methods: {
-    personInfo() {
-      let account = localStorage.getItem("account");
-      let username = localStorage.getItem("username");
-      let oldpwd = localStorage.getItem("oldpwd")
-      this.ruleForm.name = account;
-      this.ruleForm.nickname = username;
-    },
     // 保存表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -122,8 +123,8 @@ export default {
     // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.ruleForm.name = localStorage.getItem("account");
-      this.ruleForm.nickname = localStorage.getItem("username");
+      this.ruleForm.name = this.personMsg.account
+      this.ruleForm.nickname = this.personMsg.username
     },
   },
 };

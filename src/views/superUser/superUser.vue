@@ -8,7 +8,7 @@
         @close="handleClose"
         router
       >
-        <el-menu-item index="/personInfo">
+        <el-menu-item index="/personmsg">
           <span slot="title">个人信息</span>
         </el-menu-item>
         <el-submenu index="2">
@@ -78,6 +78,9 @@ export default {
 }
 .el-menu-item:hover {
   background-color: rgb(225, 227, 240) !important;
+}
+.el-menu>li{
+  font-weight: 700;
 }
 /* 二级目录 */
 .second {

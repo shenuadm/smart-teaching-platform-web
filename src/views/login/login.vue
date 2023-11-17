@@ -89,7 +89,7 @@
 </template>
 <script>
 import { toLogin } from "@/utils/api.js";
-import store from '@/store/index.js'
+// import store from '@/store/index.js'
 export default {
   components: {},
   data() {
@@ -137,7 +137,6 @@ export default {
             localStorage.setItem("navData", navData);
             localStorage.setItem("roleId",res.roleId);
             this.$store.commit("updateUsername",res.username);
-            // localStorage.setItem("username",res.username);
             sessionStorage.setItem("username",res.username)
             localStorage.setItem("oldpwd", data.password);
             if(res.roleId === 1){
@@ -175,7 +174,7 @@ export default {
           } else if (this.password == "") {
             this.$message.error("请输入密码");
           } else {
-            this.$message.error("密码格式错误，必须包含字母和数字");
+            this.$message.error("密码格式错误，5-20位英文、数字、符号、区分大小写");
           }
         } else if (this.nikename == "") {
           this.$message.error("昵称不能为空");

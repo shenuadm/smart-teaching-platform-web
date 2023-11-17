@@ -57,7 +57,6 @@ export default {
 .personalInfo {
   min-height: 80vh;
   margin: 30px auto;
-  /* box-shadow: 0 2px 5px #f1f1f1; */
 }
 .person-nav {
   float: left;
@@ -75,13 +74,14 @@ export default {
   text-align: left;
   font-size: 15px;
   cursor: pointer;
+  font-weight: 700;
 }
 .active {
   color: #43bc60;
   border-left: 2px solid #43bc60;
 }
 .person-container {
-  width: 980px;
+  width: 1030px;
   float: right;
   flex: 1;
   border-radius: 5px;

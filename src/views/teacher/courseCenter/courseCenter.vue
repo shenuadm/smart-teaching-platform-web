@@ -9,6 +9,7 @@
       <input v-model="search" placeholder="请输入课程名称" />
       <button class="btn-bg-b">搜索</button>
       <button class="btn-bg-b">重置</button>
+      <!-- <el-button></el-button> -->
     </div>
     <!-- 每一项数据 -->
     <div class="course-center">

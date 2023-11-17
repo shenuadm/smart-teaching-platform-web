@@ -52,8 +52,8 @@
           </el-form-item>
         </el-form>
         <div class="login-log">
-          <p>上次登录时间：2023-10-23 10:41:12</p>
-          <p>上次登录IP：192.168.20.254</p>
+          <p>上次登录时间：{{personMsg.lastLoginTime}}</p>
+          <p>上次登录IP：{{personMsg.lastLoginIp}}</p>
         </div>
       </div>
     </div>
@@ -62,6 +62,7 @@
 
 <script>
 import adapter from "./adapter";
+import { getPersonInfo,savePersonInfo } from "@/utils/api.js";
 export default {
   data() {
     //正则判断新密码
@@ -121,13 +122,17 @@ export default {
           },
         ],
       },
+      // 接收个人信息
+      personMsg:{}
     };
   },
   created() {
-    let account = localStorage.getItem("account");
-    let username = localStorage.getItem("username");
-    this.ruleForm.account = account;
-    this.ruleForm.nickname = username;
+    getPersonInfo().then(res=>{
+      console.log(res);
+      this.personMsg = res.data
+      this.ruleForm.account = this.personMsg.account
+      this.ruleForm.nickname = this.personMsg.username
+    })
   },
   mounted() {},
   methods: {
@@ -135,10 +140,22 @@ export default {
     // 保存表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log(this.ruleForm);
+        let oldpwd = localStorage.getItem("oldpwd");
+        let data = {
+          oldpwd: this.ruleForm.oldpwd,
+          password: this.ruleForm.newpwd,
+        };
+        if (valid && this.ruleForm.oldpwd === oldpwd) {
+          savePersonInfo(data).then((res) => {
+            this.$message({
+              message: res.msg,
+            });
+          });
         } else {
-          console.log("error submit!!");
+          this.$message({
+            message: "信息修改失败",
+            type: "warning",
+          });
           return false;
         }
       });
@@ -146,8 +163,8 @@ export default {
     // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.ruleForm.account = localStorage.getItem("account");
-      this.ruleForm.nickname = localStorage.getItem("username");
+      this.ruleForm.account = this.personMsg.account
+      this.ruleForm.nickname = this.personMsg.username
     },
   },
 };
