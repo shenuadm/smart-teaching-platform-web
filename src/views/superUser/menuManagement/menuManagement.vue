@@ -37,7 +37,7 @@
           accordion
           :expand-on-click-node="false"
         >
-          <span class="custom-tree-node" slot-scope="{ node, data }">
+          <span class="custom-tree-node" slot-scope="{ node }">
             <el-row style="width: 101%">
               <el-col :span="3">
                 <span>{{ node.data.title }}</span>
