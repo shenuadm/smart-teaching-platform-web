@@ -39,7 +39,7 @@
         >
           选课
         </button> -->
-        <el-button type="primary" size="small" :data-id="item.id" @click="selectCourse" class="choose">选课</el-button>
+        <el-button type="primary" size="small" @click="selectCourse(item)" class="choose">选课</el-button>
       </li>
     </ul>
   </div>
@@ -73,7 +73,8 @@ export default {
   methods: {
     // 选课
     selectCourse(e) {
-      let data = { teacherCourseId: e.target.dataset.id };
+      console.log(e);
+      let data = { teacherCourseId: e.id };
       // 请求接口
       clickSelectCourse(data).then((res) => {
         if (res.msg != "success") {

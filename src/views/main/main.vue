@@ -47,7 +47,7 @@ export default {
     // 路由跳转
     switchTo(index) {
       this.activeIndex = index;
-      const route = ['personInfo','selectCourseCenter','myCourse']
+      const route = ['personInfo','myCourse','selectCourseCenter']
       const currentRoute = route[index]
       if(this.$route.fullPath === `/${currentRoute}`) return;//防止再次点击路由报错
       this.$router.push({name:currentRoute})
