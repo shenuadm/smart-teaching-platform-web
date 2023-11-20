@@ -66,8 +66,8 @@ export function getStudentScore(id) {
   return http.get('/experimentReport/listByStudent/' + id)
 }
 // 保存实验报告
-export function saveExperimentReport(id, data) {
-  return http.post('/experimentReport/commitExperimentContent/' + id, data)
+export function saveExperimentReport(data) {
+  return http.post('/experimentReport/commitExperimentContent', data)
 }
 // 超级管理员端
 // 删除菜单管理数据
