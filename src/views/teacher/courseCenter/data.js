@@ -4,14 +4,14 @@ let data = {
     dialogVisible: false,//弹框显示隐藏
     // 表单数据
     editCourse: {
-        name: '',
-        chooseStartDate: '',
-        chooseEndDate: '',
-        mostPersonCount: '',
-        coursePlace: '',
-        courseStartDate: '',
-        courseEndDate: '',
-        courseStatus: 1,
+        title: '',
+        selectStartDate: '',
+        selectEndDate: '',
+        maxTaker: '',
+        address: '',
+        startDate: '',
+        endDate: '',
+        status: 0,
     }
 }
 
