@@ -7,32 +7,32 @@
     <div class="course-search zh-pd-10">
       <span>课程名称：</span>
       <input v-model="search" placeholder="请输入课程名称" />
-      <button class="btn-bg-b">搜索</button>
-      <button class="btn-bg-b">重置</button>
-      <!-- <el-button></el-button> -->
+      <el-button type="primary" size="small">搜索</el-button>
+      <el-button type="primary" size="small">重置</el-button>
     </div>
     <!-- 每一项数据 -->
     <div class="course-center">
-      <div class="course-center-item">
-        <img src="@/assets/169681739455410.jpg" alt="课程logo图片" />
+      <div class="course-center-item" v-for="item in courseList" :key="item.id">
+        <!-- <img src="@/assets/169681739455410.jpg" alt="课程logo图片" /> -->
+        <img :src="item.picture" alt="课程logo图片" />
         <div class="course-center-text">
-          <div class="course-name">课程名称：《WEB安全》</div>
-          <div class="course-title">课程标题：WEB渗透测试技术</div>
-          <div class="course-score">学分：16</div>
+          <div class="course-name">课程名称：{{item.name}}</div>
+          <div class="course-title">课程标题：{{item.title}}</div>
+          <div class="course-score">学分：{{item.credit}}</div>
           <el-popover
             placement="bottom"
             width="400"
             trigger="hover"
-            content="Web安全，计算机术语，随着Web2.0、社交网络、微博等等一系列新型的互联网产品的诞生，基于Web环境的互联网应用越来越广泛。"
+            :content="item.description"
           >
             <p slot="reference" class="course-describe">
-              课程描述：Web安全，计算机术语，随着Web2.0、社交网络、微博等等一系列新型的互联网产品的诞生，基于Web环境的互联网应用越来越广泛。
+              课程描述：{{item.description}}
             </p>
           </el-popover>
         </div>
         <div class="course-center-btn">
-          <button class="edit btn-bg-b" @click="toChapterDetails">查看章节</button>
-          <button class="detail btn-bg-b" @click="editCourseClick">选择授课</button>
+          <button class="edit btn-bg-b" @click="toChapterDetails(item)">查看章节</button>
+          <button class="detail btn-bg-b" @click="editCourseClick(item)">选择授课</button>
         </div>
       </div>
       <!-- 编辑框 -->
@@ -119,10 +119,12 @@
 
 <script>
 import adapter from "./adapter.js";
+import {courseCenter,saveCourse} from '@/utils/api.js'
 export default {
   data() {
     return {
       ...adapter.data,
+      courseList:[],
       // 表单校验
       rules: {
         name: [{ required: true, message: "请输入您的课程名称", trigger: "blur" }],
@@ -144,6 +146,11 @@ export default {
         ],
       },
     };
+  },
+  created() {
+    courseCenter().then(res=>{
+      this.courseList = res.data;
+    })
   },
   methods: {
     ...adapter.methods,
@@ -170,7 +177,7 @@ export default {
 }
 .course-search input {
   padding: 0 10px;
-  height: 35px;
+  height: 33px;
   border: 1px solid #ccc;
   outline: none;
 }
