@@ -142,6 +142,7 @@
 <script>
 import {myTeaching} from '@/utils/api.js'
 import adapter from "./adapter.js";
+import {courseStatusConvert} from '@/utils/status.js'
 export default {
   data() {
     return {
@@ -194,7 +195,7 @@ export default {
   created() {
     myTeaching().then(res=>{
       console.log(res);
-      this.myTeachList = res.data
+      this.myTeachList = courseStatusConvert(res.data)
     })
   },
   methods: {

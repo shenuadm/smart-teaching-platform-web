@@ -8,20 +8,37 @@ let adapter = {
         // 保存
         editCourseClick(e) {
             this.dialogVisible = true
-            this.editCourse.name = e.name
-            // console.log(e);
+            this.editCourse.title = e.name
+            this.courseId = e.id
         },
         //保存保存
         submitForm(formName) {
-            let data = this.editCourse
-            console.log(data);
+            let data = {
+                courseId: this.courseId,
+                title: this.editCourse.title,
+                selectStartDate: this.editCourse.selectStartDate,
+                selectEndDate: this.editCourse.selectEndDate,
+                maxTaker: this.editCourse.maxTaker,
+                address: this.editCourse.address,
+                startDate: this.editCourse.startDate,
+                endDate: this.editCourse.endDate,
+                status: this.editCourse.status
+            }
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     saveCourse(data).then(res => {
-                        // console.log(res);
+                        console.log(res);
+                        this.dialogVisible = false
+                        this.$message({
+                            message: '授课成功',
+                            type: 'success'
+                        })
                     })
                 } else {
-                    console.log('error submit!!');
+                    this.$message({
+                        message: '授课失败',
+                        type: 'error'
+                    })
                     return false;
                 }
             });
