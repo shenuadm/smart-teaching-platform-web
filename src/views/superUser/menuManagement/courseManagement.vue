@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <div class="header">
+  <div class="course-manage">
+    <div class="header-course">
       <div class="title">课程名称:</div>
-      <el-input v-model="input" class="zh-mgl-10 zh-mgr-10 input-content" placeholder="请输入内容"></el-input>
+      <el-input
+        v-model="input"
+        class="zh-mgl-10 zh-mgr-10 input-content"
+        placeholder="请输入内容"
+      ></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="addcourse">添加课程</el-button>
@@ -10,9 +14,7 @@
     </div>
     <el-table
       ref="multipleTable"
-      :data="
-        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -21,10 +23,8 @@
       border
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="课程名称" width="120">
-      </el-table-column>
-      <el-table-column prop="title" label="课程标题" width="160">
-      </el-table-column>
+      <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
+      <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
       <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
       <el-table-column
         prop="description"
@@ -36,9 +36,7 @@
       <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">
-            禁用
-          </div>
+          <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column label="封面图片" width="120">
@@ -70,9 +68,7 @@
     <!-- 搜索页面 -->
     <el-table
       ref="multipleTable"
-      :data="
-        searchdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -80,24 +76,20 @@
       v-if="dialogtable"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="课程名称" width="120">
-      </el-table-column>
-      <el-table-column prop="title" label="课程标题" width="160">
-      </el-table-column>
+      <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
+      <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
       <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
       <el-table-column
         prop="description"
         label="课程描述"
-        width="210"
+        width="150"
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">
-            禁用
-          </div>
+          <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column label="封面图片" width="120">
@@ -112,7 +104,7 @@
           ></el-image
         ></template> -->
       </el-table-column>
-      <el-table-column label="操作" width="240">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="chapter(scope.row)"
             >章节管理</el-button
@@ -139,81 +131,62 @@
       </el-pagination>
     </div>
     <!-- 新增课程 -->
-    <el-dialog :visible.sync="dialogVisible" width="40%">
-      <template v-if="cour">
-        <span slot="title">添加课程</span>
-      </template>
-      <template v-else>
-        <span slot="title">修改课程</span>
-      </template>
-      <el-input
-        class="inputw"
-        placeholder="请输入课程名称"
-        v-model="revise.name"
-      >
-        <template slot="prepend"
-          >课程名称
-          <span style="color: red">*</span>
-        </template>
-      </el-input>
-      <el-input
-        class="inputw"
-        placeholder="请输入课程标题"
-        v-model="revise.title"
-      >
-        <template slot="prepend"
-          >课程标题<span style="color: red">*</span></template
-        >
-      </el-input>
-      <el-input class="inputw" placeholder="请输入学分" v-model="revise.credit">
-        <template slot="prepend"
-          >课程学分<span style="color: red">*</span></template
-        >
-      </el-input>
-      <div class="dec">课程描述<span style="color: red">*</span></div>
-      <el-input
-        id="inputwd"
-        type="textarea"
-        placeholder="请输入课程描述"
-        v-model="revise.description"
-      >
-      </el-input>
-      <div class="status">
-        <div class="statusx">
-          状态
-          <!-- <span style="color: red">*</span> -->
-        </div>
-        <el-radio-group v-model="revise.status">
-          <el-radio :label="true">启用</el-radio>
-          <el-radio :label="false">禁用</el-radio>
-        </el-radio-group>
-      </div>
-      <button @click="handleChooseFile" class="custom-file-button">
-        添加封面图片
-      </button>
-      <img :src="revise.picture" class="img" v-if="revise.picture" />
-      <input
-        type="file"
-        ref="fileInput"
-        style="display: none"
-        @change="handleFileChange"
-      />
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button @click="serve">确 定</el-button>
-      </span>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      width="40%"
+      center
+      :title="cour ? '添加课程' : '修改课程'"
+    >
+      <el-form :model="revise" :rules="rules" ref="ruleForm">
+        <el-form-item label="课程名称" prop="name">
+          <el-input class="inputw" placeholder="请输入课程名称" v-model="revise.name">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="课程标题" prop="title">
+          <el-input class="inputw" placeholder="请输入课程标题" v-model="revise.title">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="课程学分" prop="credit">
+          <el-input class="inputw" placeholder="请输入学分" v-model="revise.credit">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="课程描述" prop="description">
+          <el-input
+            class="inputw"
+            type="textarea"
+            placeholder="请输入课程描述"
+            v-model="revise.description"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="状态" class="status">
+          <el-radio-group v-model="revise.status">
+            <el-radio :label="true">启用</el-radio>
+            <el-radio :label="false">禁用</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="选择图片" class="select-pic">
+          <el-upload
+            class="avatar-uploader"
+            action="#"
+            :on-change="handleChange"
+            :show-file-list="false"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item class="form-btn">
+          <el-button type="primary" @click="serve">确定</el-button>
+          <el-button @click="cancel">取消</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {
-  course,
-  addcourse,
-  delcourse,
-  delcoursem,
-  updatecourse,
-} from "@/utils/api";
+import { course, addcourse, delcourse, delcoursem, updatecourse } from "@/utils/api";
 import teacherVue from "../../teacher/teacher.vue";
 export default {
   data() {
@@ -239,23 +212,41 @@ export default {
       multipleSelection: [],
       arr: [],
       id: "",
+      imageUrl: "",
+      rules: {
+        name: [{ required: true, message: "请输入课程名称", trigger: "blur" }],
+        title: [{ required: true, message: "请输入课程标题", trigger: "blur" }],
+        credit: [{ required: true, message: "请输入学分", trigger: "blur" }],
+        description: [{ required: true, message: "请输入课程描述", trigger: "blur" }],
+      },
     };
   },
   methods: {
+    // 图片上传回显
+    handleChange(file) {
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        this.imageUrl = e.target.result;
+      };
+      fileReader.readAsDataURL(file.raw);
+    },
     //修改课程
     updatacour(e) {
-      this.revise = e;
+      const data = JSON.parse(JSON.stringify(e));
+      this.revise = data;
       this.dialogVisible = !this.dialogVisible;
       this.cour = false;
     },
     //添加课程
     addcourse() {
+      this.empty(this.revise);
       this.dialogVisible = !this.dialogVisible;
       this.revise.status = false;
       this.cour = true;
     },
     //课程搜索
     search() {
+      if (!this.input) return;
       this.dialogtable = true;
       this.dialogtabledata = false;
       this.searchdata = this.tableData.filter((item) => {
@@ -265,66 +256,63 @@ export default {
     },
     //保存
     serve() {
-      if (this.cour == true) {
-        let data = {
-          name: this.revise.name,
-          title: this.revise.title,
-          credit: this.revise.credit,
-          description: this.revise.description,
-          status: this.revise.status,
-          picture: this.revise.picture,
-        };
-        addcourse(data)
-          .then((res) => {
-            this.break();
-            this.$message({
-              message: "添加课程成功",
-              type: "success",
-            });
-          })
-          .catch((error) => {
-            // 处理错误
-            // console.error(error);
-            this.$message({
-              message: "添加课程失败",
-              type: "warning",
-            });
-          });
-      } else {
-        let data = {
-          name: this.revise.name,
-          title: this.revise.title,
-          credit: this.revise.credit,
-          description: this.revise.description,
-          status: this.revise.status,
-          picture: this.revise.picture,
-        };
-        updatecourse(data)
-          .then((res) => {
-            this.break();
-            this.$message({
-              message: "修改课程成功",
-              type: "success",
-            });
-          })
-          .catch((error) => {
-            // 处理错误
-            // console.error(error);
-            this.break();
-            this.$message({
-              message: "修改课程失败",
-              type: "warning",
-            });
-          });
-      }
-      this.empty(this.revise);
-      this.dialogVisible = !this.dialogVisible;
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          let data = {
+            name: this.revise.name,
+            title: this.revise.title,
+            credit: this.revise.credit,
+            description: this.revise.description,
+            status: this.revise.status,
+            picture: this.revise.picture,
+          };
+          if (this.cour) {
+            addcourse(data)
+              .then((res) => {
+                this.break();
+                this.$message({
+                  message: "添加课程成功",
+                  type: "success",
+                });
+              })
+              .catch((error) => {
+                // 处理错误
+                // console.error(error);
+                this.$message({
+                  message: "添加课程失败",
+                  type: "warning",
+                });
+              });
+          } else {
+            updatecourse(data)
+              .then((res) => {
+                this.break();
+                this.$message({
+                  message: "修改课程成功",
+                  type: "success",
+                });
+              })
+              .catch((error) => {
+                // 处理错误
+                this.break();
+                this.$message({
+                  message: "修改课程失败",
+                  type: "warning",
+                });
+              });
+          }
+          this.dialogVisible = false;
+        } else {
+          this.$refs["ruleForm"].resetFields();
+          return false;
+        }
+      });
     },
     //取消
     cancel() {
-      this.empty(this.revise);
+      // this.empty(this.revise);
       this.dialogVisible = !this.dialogVisible;
-      this.break();
+      // this.break();
     },
     //删除
     del(e) {
@@ -340,7 +328,7 @@ export default {
             message: "删除成功!",
           });
         });
-      });
+      }).catch(()=>{});
     },
 
     //批量删除
@@ -349,16 +337,18 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      }).then(() => {
-        let data = this.arr;
-        delcoursem(data).then((res) => {
-          this.break();
-          this.$message({
-            type: "success",
-            message: "删除成功!",
+      })
+        .then(() => {
+          let data = this.arr;
+          delcoursem(data).then((res) => {
+            this.break();
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
           });
-        });
-      });
+        })
+        .catch(() => {});
     },
     //重置按钮
     resetting() {
@@ -383,21 +373,6 @@ export default {
       for (const prop of Object.keys(obj)) {
         obj[prop] = "";
       }
-    },
-    //图片上传
-    handleChooseFile() {
-      this.$refs.fileInput.click();
-    },
-    handleFileChange(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      if (file) {
-        this.revise.picture = file.name; // 仅保留文件名
-      }
-      reader.onload = (e) => {
-        this.revise.picture = e.target.result;
-      };
-      reader.readAsDataURL(file);
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -427,19 +402,32 @@ export default {
     break() {
       course().then((res) => {
         this.tableData = res.data;
-        console.log(res.data);
       });
     },
   },
   mounted() {
-    course().then((res) => {
-      this.tableData = res.data;
-    });
+    this.break();
   },
 };
 </script>
 
 <style scoped>
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+}
+.avatar {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+.input-content {
+  width: 150px;
+}
 .user {
   background-color: #08b1e4;
   color: white;
@@ -453,20 +441,7 @@ export default {
   height: 80px;
   margin-left: 30px;
 }
-.custom-file-button {
-  position: absolute;
-  top: 407px;
-  left: 148px;
-  width: 105px;
-  height: 40px;
-  border: 1px solid #dcdfe6;
-  color: #909399;
-  background-color: white;
-}
-.el-dialog .el-input {
-  padding: 8px;
-}
-.header {
+.header-course {
   position: relative;
   width: 100%;
   height: 30px;
@@ -499,21 +474,6 @@ export default {
 .block {
   margin-top: 20px;
 }
-.status {
-  border: 1px solid #dcdfe6;
-  width: 400px;
-  height: 40px;
-  margin-left: 86px;
-  line-height: 40px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-.statusx {
-  width: 106px;
-  height: 40px;
-  border-right: 1px solid #dcdfe6;
-  background-color: #F5F7FA;
-}
 .dec {
   width: 105px;
   height: 70px;
@@ -523,31 +483,55 @@ export default {
   line-height: 70px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
-  background-color: #F5F7FA;
+  background-color: #f5f7fa;
   color: #909399;
-}
-.el-radio-group {
-  margin-top: -77px;
-  margin-left: 90px;
 }
 .inputw {
   width: 400px !important;
 }
-span {
-  position: relative;
-  left: -100px;
-}
-.el-table{
+.el-table {
   margin-top: 20px;
 }
 </style>
+
 <style>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.input-content .el-input__inner {
+  height: 31px;
+}
+.course-manage .el-form-item {
+  display: flex;
+  align-items: center;
+}
+.course-manage .status .el-form-item__label,
+.course-manage .select-pic .el-form-item__label {
+  text-align: left;
+  padding-left: 10px;
+  width: 80px;
+}
+.course-manage .status,
+.course-manage .select-pic,
+.course-manage .form-btn {
+  margin-bottom: 0;
+}
+.course-manage .form-btn .el-form-item__content {
+  width: 100%;
+  padding: 0 100px;
+  display: flex;
+  justify-content: space-between;
+}
 .el-table th.el-table__cell > .cell,
 .el-table__body td.el-table__cell {
   text-align: center;
-}
-.el-input__inner {
-  height: 33px;
 }
 .el-checkbox__inner {
   border: 1px solid #0944cd !important;
@@ -556,14 +540,8 @@ span {
   height: 30px !important;
   width: 150px !important;
 }
-.el-input {
-  width: 150px;
-}
 .el-input-group__prepend {
   width: 66px !important;
-}
-.el-input {
-  width: 150px;
 }
 #inputwd {
   width: 292px !important;
