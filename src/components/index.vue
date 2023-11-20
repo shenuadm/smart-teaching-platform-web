@@ -4,13 +4,13 @@
       <!-- 头部 -->
       <el-header style="position: fixed">
         <el-row class="theme-bg-black">
-          <el-col :span="7" class="logo">
-            <img src="../assets/logo.png" alt="" />
+          <el-col :span="8" class="logo">
+            <img src="../assets/logo1.png" alt="" />
             <span class="zh-fc-white zh-fs-20"
               >易腾智慧教学-网络安全实验平台</span
             >
           </el-col>
-          <el-col :span="10">
+          <el-col :span="9">
             <el-menu
               default-active="1"
               class="el-menu-demo"
@@ -103,7 +103,9 @@ export default {
   box-sizing: border-box;
 }
 .logo img {
-  height: 60px;
+  display: inline-block;
+  height: 30px;
+  width: 120px;
 }
 .logo span {
   display: inline-block;

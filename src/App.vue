@@ -12,12 +12,14 @@
   text-align: center;
   color: #2c3e50;
 }
+
 body {
   margin: 0;
   background-color: #f8f6f6;
 }
 .warpper {
-  width: 1300px;
+  /* width: 1300px; */
+  width: 83%;
   margin: 0 auto;
 }
 .el-button{

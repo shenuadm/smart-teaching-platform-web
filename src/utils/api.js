@@ -59,7 +59,7 @@ export function getExperimentContent(id) {
 }
 // 获取实验步骤
 export function getExperimentData(id, teacherCourseId) {
-  return http.get('/ExperimentReportPlan/selectPlanById/' + id + "?teacherCourseId=" + teacherCourseId)
+  return http.get('/ExperimentReportPlan/selectPlanById/' + id + "/" + teacherCourseId)
 }
 // 获取实验成绩
 export function getStudentScore(id) {
