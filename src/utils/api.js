@@ -248,6 +248,14 @@ export function systemNotice() {
   return http.get('/notice/list')
 }
 // 教师端
+// 课程中心
+export function courseCenter() {
+  return http.get('/course/listByTeacher')
+}
+// 保存授课内容
+export function saveCourse(data) {
+  return http.post('/teacherCourse/add', data)
+}
 // 我的授课
 export function myTeaching() {
   return http.get('/teacherCourse/teacherOwnCourseList')

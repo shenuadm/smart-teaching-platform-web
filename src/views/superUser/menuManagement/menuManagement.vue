@@ -38,7 +38,7 @@
           :expand-on-click-node="false"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
-            <el-row style="width: 100%">
+            <el-row style="width: 101%">
               <el-col :span="3">
                 <span>{{ node.data.title }}</span>
               </el-col>
@@ -469,8 +469,7 @@ export default {
   font-size: 16px;
 }
 .el-tree {
-  width: 900px;
-  /* height: 430px; */
+  width: 992px;
 }
 .el-input-group {
   margin: 0 50px 20px 20px !important;
@@ -488,7 +487,7 @@ export default {
 }
 .top {
   display: block;
-  width: 90.5%;
+  width: 100%;
   height: 50px;
   margin: 5px 0 0;
   text-align: center;

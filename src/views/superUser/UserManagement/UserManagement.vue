@@ -27,7 +27,6 @@
       "
       tooltip-effect="dark"
       style="width: 100%"
-      height="350px"
       @selection-change="handleSelectionChange"
       class="custom-table"
       v-if="dialogtabledata"
@@ -49,13 +48,13 @@
       <el-table-column
         prop="lastLoginTime"
         label="最近登录时间"
-        width="210"
+        width="160"
         show-overflow-tooltip
       ></el-table-column>
       <el-table-column
         prop="lastLoginIp"
         label="最近登录IP"
-        width="210"
+        width="150"
         show-overflow-tooltip
       ></el-table-column>
       <el-table-column
@@ -238,6 +237,9 @@ export default {
         ],
       },
     };
+  },
+  mounted() {
+    this.getUserData();
   },
   methods: {
     //添加用户表
@@ -426,9 +428,6 @@ export default {
         this.tableData = res.data;
       });
     },
-  },
-  mounted() {
-    this.getUserData();
   },
 };
 </script>

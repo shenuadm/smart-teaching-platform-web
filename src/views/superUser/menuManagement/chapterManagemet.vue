@@ -5,7 +5,7 @@
       <el-button type="primary" @click="returncourse">返回课程</el-button>
     </div>
     <el-table
-      height="410"
+      border
       :data="tableData"
       style="width: 100%; margin-bottom: 20px"
       row-key="id"
@@ -38,7 +38,7 @@
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column label="操作" width="325">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             type="primary"

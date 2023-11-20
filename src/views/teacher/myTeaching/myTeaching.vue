@@ -193,6 +193,7 @@ export default {
   },
   created() {
     myTeaching().then(res=>{
+      console.log(res);
       this.myTeachList = res.data
     })
   },
