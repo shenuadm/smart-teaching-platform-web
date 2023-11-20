@@ -194,7 +194,7 @@ export default {
   },
   created() {
     myTeaching().then(res=>{
-      console.log(res);
+      // console.log(res);
       this.myTeachList = courseStatusConvert(res.data)
     })
   },
@@ -202,6 +202,7 @@ export default {
     ...adapter.methods,
     // 查看课程详情
     lookDetails(e){
+      console.log(e);
       localStorage.setItem("hostName", e.hostName); //登录名
       localStorage.setItem("hostPwd", e.hostPwd); //登录密码
       this.$router.push({

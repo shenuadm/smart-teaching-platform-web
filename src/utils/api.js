@@ -58,8 +58,9 @@ export function getExperimentContent(id) {
   return http.get('/experiment/selectById/' + id)
 }
 // 获取实验步骤
-export function getExperimentData(id, teacherCourseId) {
-  return http.get('/ExperimentReportPlan/selectPlanById/' + id + "/" + teacherCourseId)
+export function getExperimentData(id) {
+  // return http.get('/ExperimentReportPlan/selectPlanById/' + id + "/" + teacherCourseId)
+  return http.get('/ExperimentReportPlan/getExperimentPlanId/' + id)
 }
 // 获取实验成绩
 export function getStudentScore(id) {
@@ -259,6 +260,10 @@ export function saveCourse(data) {
 // 我的授课
 export function myTeaching() {
   return http.get('/teacherCourse/teacherOwnCourseList')
+}
+// 查看章节
+export function checkChapter(id) {
+  return http.get('/course/query/' + id)
 }
 // 查看详情
 export function teacherCourseDetails(courseId, id) {
