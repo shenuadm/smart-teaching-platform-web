@@ -39,6 +39,8 @@
         </el-row>
       </el-header>
       <div class="main" style="padding: 60px 0 90px 0">
+        <!-- 侧导航 -->
+        <AsideTem></AsideTem>
         <!-- 路由出口 -->
         <router-view></router-view>
       </div>
@@ -126,6 +128,7 @@ export default {
   height: 60px;
   line-height: 60px;
   text-align: right;
+  cursor: pointer;
 }
 .el-menu-item:hover {
   background-color: rgb(91, 92, 94) !important;
