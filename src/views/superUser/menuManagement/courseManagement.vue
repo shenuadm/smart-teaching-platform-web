@@ -135,6 +135,7 @@
       :visible.sync="dialogVisible"
       width="40%"
       center
+      :before-close="cancel"
       :title="cour ? '添加课程' : '修改课程'"
     >
       <el-form :model="revise" :rules="rules" ref="ruleForm">
@@ -154,6 +155,7 @@
           <el-input
             class="inputw"
             type="textarea"
+            :autosize="{ minRows: 4, maxRows: 4 }"
             placeholder="请输入课程描述"
             v-model="revise.description"
           >
@@ -303,7 +305,6 @@ export default {
           }
           this.dialogVisible = false;
         } else {
-          this.$refs["ruleForm"].resetFields();
           return false;
         }
       });
@@ -311,6 +312,8 @@ export default {
     //取消
     cancel() {
       // this.empty(this.revise);
+      console.log(1);
+      this.$refs["ruleForm"].resetFields();
       this.dialogVisible = !this.dialogVisible;
       // this.break();
     },
@@ -320,15 +323,17 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      }).then(() => {
-        delcourse(e).then((res) => {
-          this.break();
-          this.$message({
-            type: "success",
-            message: "删除成功!",
+      })
+        .then(() => {
+          delcourse(e).then((res) => {
+            this.break();
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
           });
-        });
-      }).catch(()=>{});
+        })
+        .catch(() => {});
     },
 
     //批量删除
@@ -486,9 +491,6 @@ export default {
   background-color: #f5f7fa;
   color: #909399;
 }
-.inputw {
-  width: 400px !important;
-}
 .el-table {
   margin-top: 20px;
 }
@@ -511,6 +513,9 @@ export default {
 .course-manage .el-form-item {
   display: flex;
   align-items: center;
+}
+.course-manage .el-form-item .el-form-item__content {
+  flex: 1;
 }
 .course-manage .status .el-form-item__label,
 .course-manage .select-pic .el-form-item__label {

@@ -44,9 +44,15 @@ let adapter = {
             });
         },
         // 跳转到章节详情页面
-        toChapterDetails() {
-            console.log(1);
-            this.$router.push('/chapterDetails');
+        toChapterDetails(e) {
+            console.log(e);
+            this.$router.push({
+                path: '/courseDetails',
+                name: 'courseDetails',
+                query: {
+                    courseId: e.id
+                }
+            })
         }
     },
 }

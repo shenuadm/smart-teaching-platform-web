@@ -21,9 +21,9 @@
               router
             >
               <el-submenu index="1">
-                <template slot="title">关于我们</template>
-                <el-menu-item index="1-1">公司介绍</el-menu-item>
-                <el-menu-item index="1-2">版本信息</el-menu-item>
+                <template slot="title">首页</template>
+                <!-- <el-menu-item index="1-1">公司介绍</el-menu-item>
+                <el-menu-item index="1-2">版本信息</el-menu-item> -->
               </el-submenu>
             </el-menu>
             <div class="line"></div>
@@ -39,20 +39,21 @@
         </el-row>
       </el-header>
       <div class="main" style="padding: 60px 0 90px 0">
+        <!-- 侧导航 -->
+        <AsideTem></AsideTem>
         <!-- 路由出口 -->
         <router-view></router-view>
       </div>
       <!-- 底部 -->
       <div class="footer theme-bg-black">
         <p class="footer-info-item zh-fc-white">
-          <span>智慧教学平台</span>
-          <span>智慧教学平台</span>
-          <span>智慧教学平台</span>
+          技术支持：成都易腾创想智能科技有限公司
         </p>
         <p class="footer-info-item zh-fc-white">
-          <span>智慧教学平台</span>
-          <span>智慧教学平台</span>
-          <span>智慧教学平台</span>
+          联系方式：028-62539515
+        </p>
+        <p class="footer-info-item zh-fc-white">
+          公司地址：四川省成都市温江区海科路东段777号F栋11楼
         </p>
       </div>
     </el-container>
@@ -127,6 +128,7 @@ export default {
   height: 60px;
   line-height: 60px;
   text-align: right;
+  cursor: pointer;
 }
 .el-menu-item:hover {
   background-color: rgb(91, 92, 94) !important;
@@ -137,5 +139,8 @@ export default {
   width: 100%;
   bottom: 0;
   z-index: 99;
+}
+.footer>p{
+  margin: 5px 0;
 }
 </style>

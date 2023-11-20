@@ -312,7 +312,8 @@ import {
   teacherCourseDetails,
   getStudentScore,
   scoreList,
-  saveExperimentReport
+  saveExperimentReport,
+  checkChapter
 } from "@/utils/api.js";
 import { courseStatusConvert } from "@/utils/status.js";
 import {handleDate} from '@/utils/date.js'
@@ -351,25 +352,29 @@ export default {
     this.roleId = localStorage.getItem("roleId")
     // 教师查看课程详情
     if(this.roleId === '2'){
-      this.path = '/myTeaching'
-      this.teacherId = this.$route.query.id
-      let courseId = this.$route.query.courseId
-      teacherCourseDetails(courseId,this.teacherId).then(res=>{
-        console.log(res);
-        this.courseObj = courseStatusConvert(res.data)
-      })
+      if(this.$route.query.id){
+        this.path = '/myTeaching'
+        this.teacherId = this.$route.query.id
+        let courseId = this.$route.query.courseId
+        teacherCourseDetails(courseId,this.teacherId).then(res=>{
+          // console.log(res);
+          this.courseObj = courseStatusConvert(res.data)
+        })
+      }else{
+        this.path = '/courseCenter'
+        let id = this.$route.query.courseId
+        checkChapter(id).then(res=>{
+          console.log(res);
+          this.courseObj = res.courseInfo
+        })
+      }
     }else if(this.roleId === '3'){//学生查看课程详情
-    this.path = '/myCourse'
+      this.path = '/myCourse'
       this.teacherId = this.$route.query.teacherCourseId;
       // 课程详情
       courseDetails(this.teacherId).then((res) => {
         this.courseObj = courseStatusConvert(res.course);
       });
-      // // 学生的实验成绩
-      // getStudentScore(this.teacherId).then((res) => {
-      //   console.log(res);
-      //   this.tableData = res.data;
-      // });
     }
     let courseId = this.$route.query.courseId;
     // 获取树形数据
@@ -444,7 +449,7 @@ export default {
         });
         // 学生的实验成绩
         getStudentScore(this.teacherId).then((res) => {
-          console.log(res);
+          // console.log(res);
           this.tableData = res.data;
         });
         // 成绩表格(教师端)
