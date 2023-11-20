@@ -346,16 +346,24 @@ export default {
         if (valid) {
           adddata(this.add).then((res) => {
             this.getMenuData();
+            console.log(res)
+            if(res.code === 0){
+              this.$message({
+                message: "恭喜你，添加成功",
+                type: "success",
+              });
+            }else{
+              this.$message({
+                message: "菜单已存在，请勿重复添加",
+                type: "error",
+              });
+            }
+            if(this.addVisible === true){
+              this.addVisible = false
+            }else{
+              this.addsonVisible = false;
+            }
             console.log(this.add);
-          });
-          if(this.addVisible === true){
-            this.addVisible = false
-          }else{
-            this.addsonVisible = false;
-          }
-          this.$message({
-            message: "恭喜你，添加成功",
-            type: "success",
           });
           this.add = {};
         } else {
