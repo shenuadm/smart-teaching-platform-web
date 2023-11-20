@@ -142,6 +142,7 @@
 <script>
 import {myTeaching} from '@/utils/api.js'
 import adapter from "./adapter.js";
+import {courseStatusConvert} from '@/utils/status.js'
 export default {
   data() {
     return {

@@ -39,24 +39,42 @@
       <el-dialog title="选择授课" :visible.sync="dialogVisible">
         <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px">
           <!-- 课程名称 -->
-          <el-form-item label="课程名称：" prop="name">
-            <el-input v-model="editCourse.name" placeholder="课程名称"></el-input>
+          <el-form-item label="课程名称：" prop="title">
+            <el-input v-model="editCourse.title" placeholder="课程名称" disabled></el-input>
           </el-form-item>
           <!-- 选课日期 -->
           <div class="choose-date">
-            <el-form-item label="选课日期：" prop="chooseStartDate">
+            <el-form-item label="选课日期：" prop="selectStartDate">
               <el-date-picker
                 type="date"
                 placeholder="选课开始日期"
-                v-model="editCourse.chooseStartDate"
+                v-model="editCourse.selectStartDate"
               ></el-date-picker>
             </el-form-item>
             <span>——</span>
-            <el-form-item prop="chooseEndDate" class="end-date">
+            <el-form-item prop="selectEndDate" class="end-date">
               <el-date-picker
                 type="date"
                 placeholder="选课结束日期"
-                v-model="editCourse.chooseEndDate"
+                v-model="editCourse.selectEndDate"
+              ></el-date-picker>
+            </el-form-item>
+          </div>
+          <!-- 授课日期 -->
+          <div class="choose-date">
+            <el-form-item label="授课日期：" prop="startDate">
+              <el-date-picker
+                type="date"
+                placeholder="授课开始日期"
+                v-model="editCourse.startDate"
+              ></el-date-picker>
+            </el-form-item>
+            <span>——</span>
+            <el-form-item prop="endDate" class="end-date">
+              <el-date-picker
+                type="date"
+                placeholder="授课结束日期"
+                v-model="editCourse.endDate"
               ></el-date-picker>
             </el-form-item>
           </div>
@@ -64,46 +82,28 @@
             <!-- 最多选课人数 -->
             <el-form-item
               label="最多选课人数："
-              prop="mostPersonCount"
+              prop="maxTaker"
               class="more-person"
               label-width="127px"
             >
               <el-input
-                v-model="editCourse.mostPersonCount"
+                v-model="editCourse.maxTaker"
                 placeholder="课程最大人数"
               ></el-input>
             </el-form-item>
             <!-- 授课地点 -->
-            <el-form-item label="授课地点：" prop="coursePlace" class="course-address">
+            <el-form-item label="授课地点：" prop="address" class="course-address">
               <el-input
-                v-model="editCourse.coursePlace"
+                v-model="editCourse.address"
                 placeholder="授课地点"
               ></el-input>
             </el-form-item>
           </div>
-          <!-- 授课日期 -->
-          <div class="choose-date">
-            <el-form-item label="授课日期：" prop="courseStartDate">
-              <el-date-picker
-                type="date"
-                placeholder="授课开始日期"
-                v-model="editCourse.courseStartDate"
-              ></el-date-picker>
-            </el-form-item>
-            <span>——</span>
-            <el-form-item prop="courseEndDate" class="end-date">
-              <el-date-picker
-                type="date"
-                placeholder="授课结束日期"
-                v-model="editCourse.courseEndDate"
-              ></el-date-picker>
-            </el-form-item>
-          </div>
           <!-- 课程状态 -->
           <el-form-item label="课程状态：">
-            <el-radio-group v-model="editCourse.courseStatus">
-              <el-radio :label="1">未启用</el-radio>
-              <el-radio :label="2">已启用</el-radio>
+            <el-radio-group v-model="editCourse.status">
+              <el-radio :label="0">未启用</el-radio>
+              <el-radio :label="1">已启用</el-radio>
             </el-radio-group>
           </el-form-item>
           <!-- 确认/取消 -->
@@ -145,6 +145,7 @@ export default {
           { required: true, message: "请选择您的授课结束日期", trigger: "blur" },
         ],
       },
+      courseId:'',//选择授课的课程id
     };
   },
   created() {
