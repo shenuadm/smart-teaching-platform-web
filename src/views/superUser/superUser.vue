@@ -1,6 +1,6 @@
 <template>
   <el-container class="warpper">
-    <el-col :span="4">
+    <el-col :span="4" class="warpper-left">
       <el-menu
         default-active="/superUser"
         class="el-menu-vertical-demo"
@@ -61,6 +61,10 @@ export default {
 </script>
 
 <style scoped>
+.warpper-left{
+  position: fixed;
+  z-index: inherit;
+}
 .el-container {
   padding: 20px 0 20px 0;
 }
@@ -69,7 +73,7 @@ export default {
 }
 
 .el-main {
-  margin-left: 50px;
+  margin-left: 220px;
   background-color: #fff;
 }
 /* 导航栏 */

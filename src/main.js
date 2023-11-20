@@ -14,7 +14,9 @@ ElementUI.Dialog.props.lockScroll.default = false;
 import './style/common.css'
 // 导入富文本编辑器
 import Editor from '@/components/editor.vue'
+import Aside from '@/components/aside.vue';
 Vue.component('Editor', Editor)
+Vue.component('AsideTem', Aside)
 Vue.use(VueAxios, axios)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
