@@ -21,7 +21,7 @@
           <el-button type="primary" @click="toCheckDetails(item)"
             >查看详情</el-button
           >
-          <el-button type="primary">查看成绩</el-button>
+          <!-- <el-button type="primary">查看成绩</el-button> -->
           <el-button type="danger" @click="revokeCourse(item)"
             >撤销课程</el-button
           >
@@ -71,9 +71,9 @@ export default {
     // });
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
+    // handleClick(tab, event) {
+    //   console.log(tab, event);
+    // },
     // 查看详情
     toCheckDetails(e) {
       console.log(e);

@@ -176,7 +176,7 @@
                 v-if="roleId==='3'"
                 style="width: 100%"
               >
-                <el-table-column prop="name" label="学生姓名">
+                <el-table-column prop="updateTime" label="提交时间">
                 </el-table-column>
                 <el-table-column prop="title" label="实验标题" width="120">
                 </el-table-column>
@@ -187,8 +187,6 @@
                 <el-table-column prop="comment" label="评语" width="200">
                 </el-table-column>
                 <el-table-column prop="createTime" label="创建时间">
-                </el-table-column>
-                <el-table-column prop="updateTime" label="更新时间">
                 </el-table-column>
               </el-table>
               <div class="block zh-mgt-20">
@@ -357,6 +355,7 @@ export default {
       this.teacherId = this.$route.query.id
       let courseId = this.$route.query.courseId
       teacherCourseDetails(courseId,this.teacherId).then(res=>{
+        console.log(res);
         this.courseObj = courseStatusConvert(res.data)
       })
     }else if(this.roleId === '3'){//学生查看课程详情
@@ -366,10 +365,11 @@ export default {
       courseDetails(this.teacherId).then((res) => {
         this.courseObj = courseStatusConvert(res.course);
       });
-      // 学生的实验成绩
-      getStudentScore(this.teacherId).then((res) => {
-        this.tableData = res.data;
-      });
+      // // 学生的实验成绩
+      // getStudentScore(this.teacherId).then((res) => {
+      //   console.log(res);
+      //   this.tableData = res.data;
+      // });
     }
     let courseId = this.$route.query.courseId;
     // 获取树形数据
@@ -429,6 +429,7 @@ export default {
         this.experimentId = data.id;
         // 实验内容
         getExperimentContent(this.experimentId).then((res) => {
+          // console.log(res);
           this.experimentContent = res.data;
         });
         // 实验操作
@@ -438,11 +439,17 @@ export default {
         this.$refs.downLoadTemplate.href = data.fileUrl
         // 实验步骤
         getExperimentData(this.experimentId, this.teacherId).then((res) => {
+          // console.log(res);
           this.experimentStep = res.data;
+        });
+        // 学生的实验成绩
+        getStudentScore(this.teacherId).then((res) => {
+          console.log(res);
+          this.tableData = res.data;
         });
         // 成绩表格(教师端)
         scoreList(this.experimentId,this.teacherId).then(res=>{
-          console.log(res);
+          // console.log(res);
           this.tableData = handleDate(res.data)
         })
         this.$refs.experiment.style.display = "block";
