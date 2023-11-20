@@ -20,11 +20,7 @@
               background-color="#212121"
               router
             >
-              <el-submenu index="1">
-                <template slot="title">首页</template>
-                <!-- <el-menu-item index="1-1">公司介绍</el-menu-item>
-                <el-menu-item index="1-2">版本信息</el-menu-item> -->
-              </el-submenu>
+              <el-menu-item>首页</el-menu-item>
             </el-menu>
             <div class="line"></div>
           </el-col>

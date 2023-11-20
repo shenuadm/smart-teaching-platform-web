@@ -88,7 +88,7 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="实验操作" name="second">
+            <el-tab-pane v-if="teacherId" label="实验操作" name="second">
               <div class="login-user">
                 <label for="name">登录用户：</label>
                 <input type="text" disabled v-model="form.name" />
@@ -104,7 +104,7 @@
                 <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">新窗口打开</a>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="实验报告" name="third">
+            <el-tab-pane v-if="teacherId" label="实验报告" name="third">
               <div class="experiment-title">
                 <p>【实验模板】</p>
                 <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
@@ -136,7 +136,7 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="实验成绩" name="fourth">
+            <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
               <!-- 教师端 -->
               <el-table
                 :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
@@ -350,8 +350,9 @@ export default {
   },
   created() {
     this.roleId = localStorage.getItem("roleId")
-    // 教师查看课程详情
+    // 教师端
     if(this.roleId === '2'){
+      // 查看课程详情
       if(this.$route.query.id){
         this.path = '/myTeaching'
         this.teacherId = this.$route.query.id
@@ -361,14 +362,16 @@ export default {
           this.courseObj = courseStatusConvert(res.data)
         })
       }else{
+        // 查看章节
         this.path = '/courseCenter'
         let id = this.$route.query.courseId
         checkChapter(id).then(res=>{
-          console.log(res);
+          // console.log(res);
           this.courseObj = res.courseInfo
         })
       }
-    }else if(this.roleId === '3'){//学生查看课程详情
+    }
+    if(this.roleId === '3'){//学生查看课程详情
       this.path = '/myCourse'
       this.teacherId = this.$route.query.teacherCourseId;
       // 课程详情
@@ -416,7 +419,6 @@ export default {
   methods: {
     // 树形控件的点击事件
     handleNodeClick(data) {
-      // console.log(data);
       if (data.textColor == "") {
         data.textColor = "#409eff";
       } else {
@@ -425,6 +427,7 @@ export default {
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = "block";
+        // console.log(data.fileUrl);
         this.$refs.courseWare.src = data.fileUrl
       } else {
         this.$refs.courseWare.style.display = "none";
@@ -440,8 +443,6 @@ export default {
         // 实验操作
         this.form.name = localStorage.getItem("hostName"); //登录名
         this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
-        // 下载实验模版
-        this.$refs.downLoadTemplate.href = data.fileUrl
         // 实验步骤
         getExperimentData(this.experimentId, this.teacherId).then((res) => {
           // console.log(res);
@@ -452,11 +453,15 @@ export default {
           // console.log(res);
           this.tableData = res.data;
         });
-        // 成绩表格(教师端)
-        scoreList(this.experimentId,this.teacherId).then(res=>{
-          // console.log(res);
-          this.tableData = handleDate(res.data)
-        })
+        if(this.teacherId){
+          // 下载实验模版
+          this.$refs.downLoadTemplate.href = data.fileUrl
+          // 成绩表格(教师端)
+          scoreList(this.experimentId,this.teacherId).then(res=>{
+            // console.log(res);
+            this.tableData = handleDate(res.data)
+          })
+        }
         this.$refs.experiment.style.display = "block";
       } else {
         this.$refs.experiment.style.display = "none";
