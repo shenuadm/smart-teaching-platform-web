@@ -427,7 +427,6 @@ export default {
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = "block";
-        // console.log(data.fileUrl);
         this.$refs.courseWare.src = data.fileUrl
       } else {
         this.$refs.courseWare.style.display = "none";
@@ -437,7 +436,6 @@ export default {
         this.experimentId = data.id;
         // 实验内容
         getExperimentContent(this.experimentId).then((res) => {
-          // console.log(res);
           this.experimentContent = res.data;
         });
         // 实验操作
@@ -445,7 +443,6 @@ export default {
         this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
         // 实验步骤
         getExperimentData(this.experimentId, this.teacherId).then((res) => {
-          // console.log(res);
           this.experimentStep = res.data;
         });
         // 学生的实验成绩
@@ -487,8 +484,6 @@ export default {
     },
     // 保存富文本内容
     saveContent() {
-      // console.log(this.html);
-      // console.log(this.$refs.editor);
       this.richText.push(this.$refs.editor.html);//保存实验结果
       this.$refs.editors.map((item) => {
         this.richText.push(item.html);
@@ -501,7 +496,11 @@ export default {
       }
       getExperimentData(this.experimentId,this.teacherId).then(res=>{
         saveExperimentReport(this.experimentId,data).then(res=>{
-
+          // console.log(res);
+          this.$message({
+            message:'保存成功',
+            type:'success'
+          })
         })
       })
     },
