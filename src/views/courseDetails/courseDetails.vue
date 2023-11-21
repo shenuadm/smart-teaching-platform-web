@@ -88,7 +88,7 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="实验操作" name="second">
+            <el-tab-pane v-if="teacherId" label="实验操作" name="second">
               <div class="login-user">
                 <label for="name">登录用户：</label>
                 <input type="text" disabled v-model="form.name" />
@@ -104,7 +104,7 @@
                 <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">新窗口打开</a>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="实验报告" name="third">
+            <el-tab-pane v-if="teacherId" label="实验报告" name="third">
               <div class="experiment-title">
                 <p>【实验模板】</p>
                 <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
@@ -136,7 +136,7 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="实验成绩" name="fourth">
+            <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
               <!-- 教师端 -->
               <el-table
                 :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
@@ -339,7 +339,8 @@ export default {
       experimentContent: {}, //实验内容
       experimentStep: [],//实验步骤
       tableData: [],//学生成绩
-      richText: [], //存储富文本数据
+      richTextResult: [], //存储富文本结果数据
+      richTextPlans: [], //存储富文本步骤数据
       currentPage:1,//当前页
       pageSize:5,//每页的条数
       showReportVisible:false,//是否显示实验报告
@@ -350,8 +351,9 @@ export default {
   },
   created() {
     this.roleId = localStorage.getItem("roleId")
-    // 教师查看课程详情
+    // 教师端
     if(this.roleId === '2'){
+      // 查看课程详情
       if(this.$route.query.id){
         this.path = '/myTeaching'
         this.teacherId = this.$route.query.id
@@ -361,14 +363,16 @@ export default {
           this.courseObj = courseStatusConvert(res.data)
         })
       }else{
+        // 查看章节
         this.path = '/courseCenter'
         let id = this.$route.query.courseId
         checkChapter(id).then(res=>{
-          console.log(res);
+          // console.log(res);
           this.courseObj = res.courseInfo
         })
       }
-    }else if(this.roleId === '3'){//学生查看课程详情
+    }
+    if(this.roleId === '3'){//学生查看课程详情
       this.path = '/myCourse'
       this.teacherId = this.$route.query.teacherCourseId;
       // 课程详情
@@ -416,7 +420,6 @@ export default {
   methods: {
     // 树形控件的点击事件
     handleNodeClick(data) {
-      // console.log(data);
       if (data.textColor == "") {
         data.textColor = "#409eff";
       } else {
@@ -434,17 +437,13 @@ export default {
         this.experimentId = data.id;
         // 实验内容
         getExperimentContent(this.experimentId).then((res) => {
-          // console.log(res);
           this.experimentContent = res.data;
         });
         // 实验操作
         this.form.name = localStorage.getItem("hostName"); //登录名
         this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
-        // 下载实验模版
-        this.$refs.downLoadTemplate.href = data.fileUrl
         // 实验步骤
         getExperimentData(this.experimentId, this.teacherId).then((res) => {
-          // console.log(res);
           this.experimentStep = res.data;
         });
         // 学生的实验成绩
@@ -452,11 +451,15 @@ export default {
           // console.log(res);
           this.tableData = res.data;
         });
-        // 成绩表格(教师端)
-        scoreList(this.experimentId,this.teacherId).then(res=>{
-          // console.log(res);
-          this.tableData = handleDate(res.data)
-        })
+        if(this.teacherId){
+          // 下载实验模版
+          this.$refs.downLoadTemplate.href = data.fileUrl
+          // 成绩表格(教师端)
+          scoreList(this.experimentId,this.teacherId).then(res=>{
+            // console.log(res);
+            this.tableData = handleDate(res.data)
+          })
+        }
         this.$refs.experiment.style.display = "block";
       } else {
         this.$refs.experiment.style.display = "none";
@@ -482,29 +485,32 @@ export default {
     },
     // 保存富文本内容
     saveContent() {
-      // console.log(this.html);
-      // console.log(this.$refs.editor);
-      this.richText.push(this.$refs.editor.html);//保存实验结果
+      this.richTextResult.push(this.$refs.editor.html);//保存实验结果
       this.$refs.editors.map((item) => {
-        this.richText.push(item.html);
+        this.richTextPlans.push(item.html);
       });
-      const planContent = this.richText
+      const planContent = this.richTextPlans
       let data = {
-        experimentContent:this.richText,
-        planContent:planContent.join(","),
-        teacherCourseId:this.teacherId
+        experimentId:this.experimentId,//实验id
+        teacherCourseId:this.teacherId,//课程id
+        experimentContent:this.richTextResult,//实验结果
+        planContent:planContent.join(","),//实验步骤
       }
       getExperimentData(this.experimentId,this.teacherId).then(res=>{
-        saveExperimentReport(this.experimentId,data).then(res=>{
-
+        saveExperimentReport(data).then(res=>{
+          // console.log(res);
+          this.$message({
+            message:'保存成功',
+            type:'success'
+          })
         })
       })
     },
     // 提交实验报告
     submit() {
-      this.richText.push(this.$refs.editor.html);//保存实验结果
+      this.richTextResult.push(this.$refs.editor.html);//保存实验结果
       this.$refs.editors.map((item) => {
-        this.richText.push(item.html);
+        this.richTextPlans.push(item.html);
       });
     },
     // 教师端，成绩表格
