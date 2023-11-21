@@ -6,7 +6,8 @@
         v-for="item in chooseCourse"
       >
         <!-- <img :src="item.img" alt="" /> -->
-        <img src="../../../assets/addbg.jpg" alt="" />
+        <!-- <img src="../../../assets/addbg.jpg" alt="" /> -->
+        <img :src="'data:image/png;base64,'+item.picture" alt="加载失败">
         <div class="choose-item-info zh-mgl-20">
           <div class="item-info-left">
             <p>
@@ -32,13 +33,6 @@
             </p>
           </div>
         </div>
-        <!-- <button
-          class="choose zh-fc-white btn-radius-5 btn-bg-b"
-          :data-id="item.id"
-          @click="selectCourse"
-        >
-          选课
-        </button> -->
         <el-button type="primary" size="small" @click="selectCourse(item)" class="choose">选课</el-button>
       </li>
     </ul>
@@ -57,7 +51,18 @@ export default {
   mounted() {
     // 获取接口数据
     getSelectCourse().then((res) => {
-      this.chooseCourse = selectStatusConvert(res.data);
+      // console.log(res);
+      // this.chooseCourse = selectStatusConvert(res.data);
+      this.chooseCourse  = res.data.map((item)=>{
+        if(item.picture !== null){
+          var picture = item.picture.split(",")[1]
+        }
+        if(!picture){
+          picture = ''
+        }
+        return {...item,picture}
+      })
+      this.chooseCourse = selectStatusConvert(this.chooseCourse)
     });
     // console.log(this.$refs.status);
     // this.$refs.status.map((item) => {

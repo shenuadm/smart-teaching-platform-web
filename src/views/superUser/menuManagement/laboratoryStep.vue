@@ -195,6 +195,7 @@ export default {
   methods: {
     //查看详情
     todetails(e) {
+      console.log(e);
       getdetail(e).then((res) => {
         this.detailsdata = res.data;
       });

@@ -5,9 +5,7 @@
         class="list-item zh-pd-10 zh-mgb-20"
         v-for="(item, index) in courseList"
       >
-        <!-- <img src="@/assets/bg.jpg" alt="" /> -->
-        <img src="@/assets/bg.jpg" alt="" />
-        <!-- <img :src="item.picture" alt="" /> -->
+        <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
         <div class="list-item-info zh-mgl-20">
           <p class="zh-fs-20 zh-fw-m">{{ item.name }}</p>
           <p>
@@ -57,8 +55,14 @@ export default {
   },
   mounted() {
     getMyCourse().then((res) => {
-      // console.log(res.data);
-      this.courseList = selectStatusConvert(res.data);
+      this.courseList = res.data.map((item)=>{
+        let picture = item.picture.split(",")[1]
+        if(!picture){
+          picture = ''
+        }
+        return {...item,picture}
+      })
+      this.courseList = selectStatusConvert(this.courseList)
     });
     // this.$refs.status.map((item) => {
     //   if (item.innerText == "开课中") {
