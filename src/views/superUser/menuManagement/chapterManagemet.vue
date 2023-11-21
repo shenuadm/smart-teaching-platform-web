@@ -13,8 +13,8 @@
     >
       <el-table-column prop="name" label="章节标题" width="200" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="80"> </el-table-column>
-      <el-table-column prop="sort" label="排序" width="80"> </el-table-column>
+      <el-table-column prop="classHour" label="课时" width="50"> </el-table-column>
+      <el-table-column prop="sort" label="排序" width="50"> </el-table-column>
       <el-table-column prop="fileUrl" label="课件" width="100" show-overflow-tooltip>
         <template slot-scope="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
@@ -25,58 +25,42 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
+            v-if="!scope.row.pid"
             type="primary"
             @click="addchapterji(scope.row.id)"
             size="small"
-            v-if="scope.row.isExpanded"
             >添加节</el-button
           >
           <el-button
+            v-if="scope.row.pid"
             type="primary"
             @click="homework(scope.row.id)"
             size="small"
-            v-if="!scope.row.isExpanded"
             >作业管理</el-button
           >
           <el-button
+            v-if="scope.row.pid"
             type="primary"
             @click="exper(scope.row.id)"
             size="small"
-            v-if="!scope.row.isExpanded"
             >实验管理</el-button
           >
-          <el-button
-            type="primary"
-            size="small"
-            @click="revisechapter(scope.row)"
-            v-if="!scope.row.isExpanded"
+          <el-button type="primary" size="small" @click="revisechapter(scope.row)"
             >修改</el-button
           >
-          <el-button
-            type="danger"
-            size="small"
-            @click="deletechapter(scope.row.id)"
-            v-if="!scope.row.isExpanded"
-            >删除</el-button
-          >
-          <el-button
-            type="primary"
-            size="small"
-            @click="revisechapter(scope.row)"
-            v-if="scope.row.isExpanded"
-            >修改</el-button
-          >
-          <el-button
-            type="danger"
-            size="small"
-            @click="deletechapter(scope.row.id)"
-            v-if="scope.row.isExpanded"
+          <el-button type="danger" size="small" @click="deletechapter(scope.row.id)"
             >删除</el-button
           >
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="添加章" :visible.sync="dialogVisible" width="40%">
+    <!-- 添加章 -->
+    <el-dialog
+      :title="isAddChapter ? '添加章' : '修改章'"
+      :visible.sync="dialogVisible"
+      width="40%"
+      :before-close="closeAddChapter"
+    >
       <el-form :model="revise" :rules="rules" ref="formRule">
         <el-form-item label="章节标题" prop="name">
           <el-input placeholder="请输入章节标题" v-model="revise.name"> </el-input>
@@ -96,7 +80,39 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item label="上传课件" class="upload-file">
+        <el-form-item class="form-btn">
+          <el-button @click="serve" type="primary">确 定</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <!-- 添加/修改节 -->
+    <el-dialog
+      :title="isAddJoint ? '添加节' : '修改节'"
+      :visible.sync="dialogVisibleji"
+      width="40%"
+      :before-close="closeAddJoint"
+    >
+      <el-form :model="revise" :rules="rules" ref="formRule">
+        <el-form-item label="章节标题" prop="name">
+          <el-input placeholder="请输入章节标题" v-model="revise.name"></el-input>
+        </el-form-item>
+        <el-form-item label="章节课时" prop="classHour">
+          <el-input placeholder="请输入课时" v-model="revise.classHour"> </el-input>
+        </el-form-item>
+        <el-form-item label="章节排序" prop="sort">
+          <el-input placeholder="请输入序号" v-model="revise.sort"> </el-input>
+        </el-form-item>
+        <el-form-item label="章节描述" prop="description">
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 4, maxRows: 4 }"
+            placeholder="请输入课程描述"
+            v-model="revise.description"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item :label="isAddJoint ? '上传课件' : '修改课件'" class="upload-file">
           <el-upload
             action=""
             :auto-upload="false"
@@ -104,90 +120,18 @@
             :limit="1"
             :on-change="handlePreview"
           >
-            <el-button size="small" type="primary" plain v-if="fileList.length === 0"
-              >点击上传</el-button
-            >
+            <el-button size="small" type="primary" plain v-if="fileList.length === 0">{{
+              isAddJoint ? "点击上传" : "点击修改"
+            }}</el-button>
             <div slot="tip" class="el-upload__tip">只能上传单个文件</div>
           </el-upload>
+          <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view">查看课件</a>
         </el-form-item>
         <el-form-item class="form-btn">
           <el-button @click="serve" type="primary">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
+          <el-button @click="dialogVisibleji = false">取 消</el-button>
         </el-form-item>
       </el-form>
-    </el-dialog>
-    <!-- 添加节 -->
-    <el-dialog title="添加节" :visible.sync="dialogVisibleji" width="40%">
-      <el-input class="inputw" placeholder="请输入章节标题" v-model="revise.name">
-        <template slot="prepend">标题<span style="color: red">*</span></template>
-      </el-input>
-      <el-input class="inputw" placeholder="请输入课时" v-model="revise.classHour">
-        <template slot="prepend">课时<span style="color: red">*</span></template>
-      </el-input>
-      <el-input class="inputw" placeholder="请输入序号" v-model="revise.sort">
-        <template slot="prepend">排序<span style="color: red">*</span></template>
-      </el-input>
-      <div class="dec">描述</div>
-      <el-input
-        id="inputwd"
-        type="textarea"
-        placeholder="请输入课程描述"
-        v-model="revise.description"
-      >
-      </el-input>
-      <label for="fileInput" class="custom-file-button">
-        课件 <span style="color: red">*</span></label
-      >
-      <el-input
-        class="inputw"
-        placeholder="请输入课件"
-        v-model="revise.fileUrl"
-        type="file"
-        id="fileInput"
-        style="display: none"
-      >
-      </el-input>
-      <el-input class="inputwh" v-model="revise.fileUrl"> </el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancelji">取 消</el-button>
-        <el-button @click="serveji">确 定</el-button>
-      </span>
-    </el-dialog>
-    <!-- 修改 -->
-    <el-dialog title="修改章节信息" :visible.sync="rdialogVisible" width="40%">
-      <el-input class="inputw" placeholder="请输入章节标题" v-model="revise.name">
-        <template slot="prepend">标题<span style="color: red">*</span></template>
-      </el-input>
-      <el-input class="inputw" placeholder="请输入课时" v-model="revise.classHour">
-        <template slot="prepend">课时<span style="color: red">*</span></template>
-      </el-input>
-      <el-input class="inputw" placeholder="请输入序号" v-model="revise.sort">
-        <template slot="prepend">排序<span style="color: red">*</span></template>
-      </el-input>
-      <div class="dec">描述</div>
-      <el-input
-        id="inputwd"
-        type="textarea"
-        placeholder="请输入课程描述"
-        v-model="revise.description"
-      >
-      </el-input>
-      <label for="fileInput" class="custom-file-buttont custom-file-button"> 课件 </label>
-      <el-input
-        class="inputw"
-        placeholder="请输入课件"
-        v-model="revise.fileUrl"
-        type="file"
-        id="fileInput"
-        style="display: none"
-      >
-      </el-input>
-      <el-input class="inputwh" v-model="revise.fileUrl" v-if="revise.fileUrl">
-      </el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="rcancel">取 消</el-button>
-        <el-button @click="rserve">保存</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -198,8 +142,10 @@ export default {
   data() {
     return {
       rdialogVisible: false,
-      dialogVisible: false,
-      dialogVisibleji: false,
+      dialogVisible: false, //章dilog显示
+      isAddChapter: true, //是否为添加章否修改章
+      dialogVisibleji: false, //节dilog显示
+      isAddJoint: true, //是否为添加节否修改节
       revise: {
         name: "",
         classHour: "",
@@ -221,6 +167,45 @@ export default {
     };
   },
   methods: {
+    // 关闭章dilog
+    closeAddChapter() {
+      this.dialogVisible = false;
+      this.$refs["formRule"].resetFields();
+    },
+    // 关闭节dilog
+    closeAddJoint() {
+      this.dialogVisibleji = false;
+      this.$refs["formRule"].resetFields();
+    },
+    //添加章
+    addchapter() {
+      this.isAddChapter = true;
+      this.empty(this.revise);
+      this.dialogVisible = true;
+    },
+    //添加节
+    addchapterji() {
+      this.isAddJoint = true;
+      this.empty(this.revise);
+      this.dialogVisibleji = true;
+    },
+    //修改章节回显
+    revisechapter(e) {
+      if (e.pid) {
+        // 修改节
+        this.isAddJoint = false;
+        this.dialogVisibleji = true;
+        const data = JSON.parse(JSON.stringify(e));
+        this.revise = data;
+      } else {
+        //修改章
+        this.isAddChapter = false;
+        this.dialogVisible = true;
+        const data = JSON.parse(JSON.stringify(e));
+        this.revise = data;
+      }
+    },
+    // 上传文件
     handlePreview(file) {
       console.log(file);
     },
@@ -228,7 +213,6 @@ export default {
     exper(e) {
       this.$router.push({
         path: "/experManagemet",
-        name: "experManagemet",
         query: {
           id: e,
         },
@@ -238,19 +222,10 @@ export default {
     homework(e) {
       this.$router.push({
         path: "/homeworkManagement",
-        name: "homeworkManagement",
         query: {
           id: e,
         },
       });
-    },
-    //添加节
-    addchapterji(e) {
-      this.pid = e;
-      this.dialogVisibleji = true;
-    },
-    cancelji() {
-      this.dialogVisibleji = !this.dialogVisibleji;
     },
     //保存节
     serveji() {
@@ -277,17 +252,7 @@ export default {
       this.empty(this.revise);
       this.dialogVisibleji = !this.dialogVisibleji;
     },
-    //添加章
-    addchapter() {
-      this.empty(this.revise)
-      this.dialogVisible = true;
-    },
-    //取消
-    cancel() {
-      this.dialogVisible = !this.dialogVisible;
-      this.break();
-    },
-    //保存
+    //保存章
     serve() {
       this.$refs["formRule"].validate((valid) => {
         if (valid) {
@@ -296,38 +261,54 @@ export default {
             classHour: this.revise.classHour,
             sort: this.revise.sort,
             description: this.revise.description,
-            file: this.revise.file,
-            courseId: this.courseId,
-            name: this.revise.name,
           };
           console.log(article);
-          addchapter(article)
-            .then((res) => {
-              this.break();
-            })
-            .catch((error) => {
-              // 处理错误
-              console.error(error);
-            });
-          this.empty(this.revise);
-          this.dialogVisible = !this.dialogVisible;
+          if (this.isAddChapter) {
+            //添加章
+            addchapter(article)
+              .then((res) => {
+                console.log(res);
+                this.break();
+                this.$message({
+                  message: "添加章节成功",
+                  type: "success",
+                });
+              })
+              .catch((error) => {
+                // 处理错误
+                this.$message({
+                  message: "添加章节失败",
+                  type: "warning",
+                });
+              });
+          } else {
+            (article.courseId = this.courseId),
+              rchapter(article)
+                .then((res) => {
+                  console.log(res);
+                  if (res.code === 0) {
+                    this.$message({
+                      message: "修改章节成功",
+                      type: "success",
+                    });
+                  } else {
+                    this.$message.error(res.msg);
+                  }
+                  this.break();
+                })
+                .catch((error) => {
+                  // 处理错误
+                  this.$message({
+                    message: "修改章节失败",
+                    type: "warning",
+                  });
+                });
+          }
+          this.dialogVisible = false;
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
-    },
-    //修改章节
-    revisechapter(e) {
-      console.log(e);
-      this.rdialogVisible = true;
-      this.revise = e;
-    },
-    //取消修改
-    rcancel() {
-      this.empty(this.revise);
-      this.rdialogVisible = !this.rdialogVisible;
-      this.break();
     },
     //保存修改
     rserve() {
@@ -406,6 +387,19 @@ export default {
 </script>
 
 <style>
+/* 表格 */
+.chapter-managemet .el-table__header-wrapper .el-table__header .el-table__cell,
+.chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell {
+  text-align: center;
+}
+.chapter-managemet
+  .el-table__header-wrapper
+  .el-table__header
+  .el-table__cell:first-child,
+.chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell:first-child,
+.chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell:last-child {
+  text-align: left;
+}
 .chapter-managemet .el-form .is-required {
   display: flex;
   align-items: center;
@@ -429,6 +423,7 @@ export default {
   text-align: right;
 }
 .chapter-managemet .el-form .upload-file .el-form-item__content {
+  display: flex;
   text-align: left;
 }
 .chapter-managemet .el-form .upload-file .el-form-item__content .el-upload__tip {
@@ -454,6 +449,10 @@ export default {
 }
 </style>
 <style scoped>
+.pdf-view {
+  margin-left: 50px;
+  color: #409eff;
+}
 .dec {
   width: 105px;
   height: 70px;

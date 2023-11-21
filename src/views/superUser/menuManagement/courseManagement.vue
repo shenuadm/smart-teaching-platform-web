@@ -39,7 +39,7 @@
           <div v-else class="forbidden">禁用</div>
         </template>
       </el-table-column>
-      <el-table-column label="封面图片" width="120">
+      <el-table-column label="封面图片" width="120" class-name="table-image">
         <template slot-scope="scope">
           <el-image
             v-if="scope.row.picture"
@@ -90,17 +90,15 @@
           <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
         </template>
       </el-table-column>
-      <el-table-column label="封面图片" width="120">
-        <template>
-          <el-image :src="imgSrc" alt="图片未找到" />
+      <el-table-column label="封面图片" width="120" class-name="table-image">
+        <template slot-scope="scope">
+          <el-image
+            v-if="scope.row.picture"
+            :src="'data:image/png;base64,' + scope.row.picture"
+            alt="图片未找到"
+          />
+          <el-image v-else alt="图片未找到" />
         </template>
-        <!-- <template slot-scope="scope"
-          ><el-image
-            :src="imgurl(scope.row.imageStorePath)"
-            :preview-src-list="[imgurl(scope.row.imageStorePath)]"
-            style="width: 50px; height: 50px"
-          ></el-image
-        ></template> -->
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
@@ -440,12 +438,12 @@ export default {
   width: 150px;
 }
 .user {
-  background-color: #08b1e4;
-  color: white;
+  /* background-color: #08b1e4; */
+  color: #08b1e4;
 }
 .forbidden {
-  background-color: rgb(166, 2, 2);
-  color: white;
+  /* background-color: rgb(166, 2, 2); */
+  color: red;
 }
 .img {
   width: 100px;
@@ -503,6 +501,11 @@ export default {
 </style>
 
 <style>
+.course-manage .el-table__row .table-image .cell .el-image{
+  display: flex;
+  height: 40px;
+  width: 100%;
+}
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
