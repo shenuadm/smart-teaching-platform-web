@@ -339,7 +339,8 @@ export default {
       experimentContent: {}, //实验内容
       experimentStep: [],//实验步骤
       tableData: [],//学生成绩
-      richText: [], //存储富文本数据
+      richTextResult: [], //存储富文本结果数据
+      richTextPlans: [], //存储富文本步骤数据
       currentPage:1,//当前页
       pageSize:5,//每页的条数
       showReportVisible:false,//是否显示实验报告
@@ -376,6 +377,7 @@ export default {
       this.teacherId = this.$route.query.teacherCourseId;
       // 课程详情
       courseDetails(this.teacherId).then((res) => {
+        console.log(res);
         this.courseObj = courseStatusConvert(res.course);
       });
     }
@@ -427,7 +429,6 @@ export default {
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = "block";
-        // console.log(data.fileUrl);
         this.$refs.courseWare.src = data.fileUrl
       } else {
         this.$refs.courseWare.style.display = "none";
@@ -437,7 +438,6 @@ export default {
         this.experimentId = data.id;
         // 实验内容
         getExperimentContent(this.experimentId).then((res) => {
-          // console.log(res);
           this.experimentContent = res.data;
         });
         // 实验操作
@@ -445,7 +445,6 @@ export default {
         this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
         // 实验步骤
         getExperimentData(this.experimentId, this.teacherId).then((res) => {
-          // console.log(res);
           this.experimentStep = res.data;
         });
         // 学生的实验成绩
@@ -487,29 +486,33 @@ export default {
     },
     // 保存富文本内容
     saveContent() {
-      // console.log(this.html);
-      // console.log(this.$refs.editor);
-      this.richText.push(this.$refs.editor.html);//保存实验结果
+      this.richTextResult.push(this.$refs.editor.html);//保存实验结果
       this.$refs.editors.map((item) => {
-        this.richText.push(item.html);
+        this.richTextPlans.push(item.html);
       });
-      const planContent = this.richText
+      const planContent = this.richTextPlans
       let data = {
-        experimentContent:this.richText,
-        planContent:planContent.join(","),
-        teacherCourseId:this.teacherId
+        experimentId:this.experimentId,//实验id
+        teacherCourseId:this.teacherId,//课程id
+        experimentContent:this.richTextResult,//实验结果
+        planContent:planContent,//实验步骤
       }
+      console.log(data);
       getExperimentData(this.experimentId,this.teacherId).then(res=>{
-        saveExperimentReport(this.experimentId,data).then(res=>{
-
+        saveExperimentReport(data).then(res=>{
+          console.log(res);
+          // this.$message({
+          //   message:'保存成功',
+          //   type:'success'
+          // })
         })
       })
     },
     // 提交实验报告
     submit() {
-      this.richText.push(this.$refs.editor.html);//保存实验结果
+      this.richTextResult.push(this.$refs.editor.html);//保存实验结果
       this.$refs.editors.map((item) => {
-        this.richText.push(item.html);
+        this.richTextPlans.push(item.html);
       });
     },
     // 教师端，成绩表格
