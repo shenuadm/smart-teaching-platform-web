@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="laboratoryReport">
     <div class="header">
       <div class="title">实验名称:</div>
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
@@ -492,25 +492,18 @@ span {
 }
 </style>
 <style>
-#inputh {
+.laboratoryReport #inputh {
   height: 30px !important;
   width: 150px !important;
 }
-#inputwd {
+.laboratoryReport #inputwd {
   position: relative;
   width: 200px !important;
   margin-left: 228px;
   top: -62px;
   height: 72px !important;
 }
-.el-input-group__prepend {
+.laboratoryReport .el-input-group__prepend {
   width: 55px;
-}
-.el-input--suffix {
-  position: relative;
-  left: 52px;
-  top: -40px;
-  width: 196px;
-  height: 40px;
 }
 </style>

@@ -125,6 +125,7 @@
                   <p class="experiment-report-title zh-fs-16 zh-fw-m">
                     实验结果:
                   </p>
+                  <!-- <div v-if="roleId === '2'">111</div> -->
                   <Editor ref="editor"></Editor>
                 </div>
                 <div class="experiment-report-step">
@@ -459,6 +460,32 @@ export default {
         }else{
           this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
         }
+        // if(this.roleId === '2'){
+        //   // 实验结果
+        //   getExperimentResult(this.experimentId,this.courseId).then(res=>{
+        //     console.log(res);
+        //     if(res.data !== null){
+        //       setTimeout(()=>{
+        //         this.$refs.editor.html = res.data
+        //       },1000)
+        //     }else{
+        //       this.$refs.editor.html = '暂无结果'
+        //     }
+        //   })
+        //   // 实验步骤
+        //   getExperimentData(this.experimentId, this.teacherId).then((res) => {
+        //     this.experimentStep = res.data;
+        //     setTimeout(()=>{
+        //       res.data.forEach((ritem,rindex)=>{
+        //         this.$refs.editors.forEach((eitem,eindex)=>{
+        //           if(rindex === eindex){
+        //             eitem.html = ritem.content
+        //           }
+        //         })
+        //       })
+        //     },1000)
+        //   });
+        // }
         // 实验结果
         getExperimentResult(this.experimentId,this.courseId).then(res=>{
           console.log(res);
@@ -472,6 +499,7 @@ export default {
         })
         // 实验步骤
         getExperimentData(this.experimentId, this.teacherId).then((res) => {
+          console.log(res);
           this.experimentStep = res.data;
           setTimeout(()=>{
             res.data.forEach((ritem,rindex)=>{

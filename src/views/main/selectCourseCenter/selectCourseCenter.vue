@@ -135,8 +135,6 @@ export default {
   height: 150px;
 }
 .choose {
-  /* width: 100px; */
-  /* height: 35px; */
   border: 0;
   position: absolute;
   top: 50%;
