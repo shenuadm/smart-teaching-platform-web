@@ -14,11 +14,11 @@
     <div class="course-center">
       <div class="course-center-item" v-for="item in courseList" :key="item.id">
         <!-- <img src="@/assets/169681739455410.jpg" alt="课程logo图片" /> -->
-        <img :src="item.picture" alt="课程logo图片" />
+        <img :src="'data:image/png;base64,' + item.picture" alt="课程logo图片" />
         <div class="course-center-text">
-          <div class="course-name">课程名称：{{item.name}}</div>
-          <div class="course-title">课程标题：{{item.title}}</div>
-          <div class="course-score">学分：{{item.credit}}</div>
+          <div class="course-name">课程名称：{{ item.name }}</div>
+          <div class="course-title">课程标题：{{ item.title }}</div>
+          <div class="course-score">学分：{{ item.credit }}</div>
           <el-popover
             placement="bottom"
             width="400"
@@ -26,7 +26,7 @@
             :content="item.description"
           >
             <p slot="reference" class="course-describe">
-              课程描述：{{item.description}}
+              课程描述：{{ item.description }}
             </p>
           </el-popover>
         </div>
@@ -40,7 +40,11 @@
         <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px">
           <!-- 课程名称 -->
           <el-form-item label="课程名称：" prop="title">
-            <el-input v-model="editCourse.title" placeholder="课程名称" disabled></el-input>
+            <el-input
+              v-model="editCourse.title"
+              placeholder="课程名称"
+              disabled
+            ></el-input>
           </el-form-item>
           <!-- 选课日期 -->
           <div class="choose-date">
@@ -93,10 +97,7 @@
             </el-form-item>
             <!-- 授课地点 -->
             <el-form-item label="授课地点：" prop="address" class="course-address">
-              <el-input
-                v-model="editCourse.address"
-                placeholder="授课地点"
-              ></el-input>
+              <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
             </el-form-item>
           </div>
           <!-- 课程状态 -->
@@ -119,12 +120,12 @@
 
 <script>
 import adapter from "./adapter.js";
-import {courseCenter,saveCourse} from '@/utils/api.js'
+import { courseCenter, saveCourse } from "@/utils/api.js";
 export default {
   data() {
     return {
       ...adapter.data,
-      courseList:[],
+      courseList: [],
       // 表单校验
       rules: {
         name: [{ required: true, message: "请输入您的课程名称", trigger: "blur" }],
@@ -145,13 +146,20 @@ export default {
           { required: true, message: "请选择您的授课结束日期", trigger: "blur" },
         ],
       },
-      courseId:'',//选择授课的课程id
+      courseId: "", //选择授课的课程id
     };
   },
   created() {
-    courseCenter().then(res=>{
-      this.courseList = res.data;
-    })
+    courseCenter().then((res) => {
+      this.courseList = res.data.map((item) => {
+        let picture = item.picture.split(",")[1];
+        if(!picture){
+          picture =''
+        }
+        return { ...item, picture };
+      });
+      console.log(this.courseList);
+    });
   },
   methods: {
     ...adapter.methods,
