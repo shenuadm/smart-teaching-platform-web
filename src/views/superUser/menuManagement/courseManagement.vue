@@ -33,23 +33,21 @@
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column prop="status" label="状态">
+      <el-table-column label="状态">
         <template slot-scope="scope">
-          <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
+          <div v-if="scope.row.status" class="user">启用</div>
+          <div v-else class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column label="封面图片" width="120">
-        <template>
-          <el-image :src="imgSrc" alt="图片未找到" />
+        <template slot-scope="scope">
+          <el-image
+            v-if="scope.row.picture"
+            :src="'data:image/png;base64,' + scope.row.picture"
+            alt="图片未找到"
+          />
+          <el-image v-else alt="图片未找到" />
         </template>
-        <!-- <template slot-scope="scope"
-          ><el-image
-            :src="imgurl(scope.row.imageStorePath)"
-            :preview-src-list="[imgurl(scope.row.imageStorePath)]"
-            style="width: 50px; height: 50px"
-          ></el-image
-        ></template> -->
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
@@ -173,6 +171,7 @@
             action="#"
             :on-change="handleChange"
             :show-file-list="false"
+            :auto-upload="false"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -214,7 +213,8 @@ export default {
       multipleSelection: [],
       arr: [],
       id: "",
-      imageUrl: "",
+      imageUrl: "", //图片路径
+      file: "", //图片文件
       rules: {
         name: [{ required: true, message: "请输入课程名称", trigger: "blur" }],
         title: [{ required: true, message: "请输入课程标题", trigger: "blur" }],
@@ -226,6 +226,7 @@ export default {
   methods: {
     // 图片上传回显
     handleChange(file) {
+      this.file = file.raw;
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
         this.imageUrl = e.target.result;
@@ -236,12 +237,15 @@ export default {
     updatacour(e) {
       const data = JSON.parse(JSON.stringify(e));
       this.revise = data;
+      console.log(data);
+      this.imageUrl = "data:image/png;base64," + data.picture;
       this.dialogVisible = !this.dialogVisible;
       this.cour = false;
     },
     //添加课程
     addcourse() {
       this.empty(this.revise);
+      this.imageUrl = "";
       this.dialogVisible = !this.dialogVisible;
       this.revise.status = false;
       this.cour = true;
@@ -260,16 +264,17 @@ export default {
     serve() {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
-          let data = {
-            name: this.revise.name,
-            title: this.revise.title,
-            credit: this.revise.credit,
-            description: this.revise.description,
-            status: this.revise.status,
-            picture: this.revise.picture,
-          };
+          this.revise.status = this.revise.status ? 1 : 0;
+          const fd = new FormData();
+          fd.append("name", this.revise.name);
+          fd.append("title", this.revise.title);
+          fd.append("credit", this.revise.credit);
+          fd.append("status", this.revise.status);
+          fd.append("description", this.revise.description);
+          fd.append("file", this.file);
+          console.log(this.revise);
           if (this.cour) {
-            addcourse(data)
+            addcourse(fd)
               .then((res) => {
                 this.break();
                 this.$message({
@@ -286,7 +291,8 @@ export default {
                 });
               });
           } else {
-            updatecourse(data)
+            fd.append("id", this.revise.id);
+            updatecourse(fd)
               .then((res) => {
                 this.break();
                 this.$message({
@@ -311,11 +317,8 @@ export default {
     },
     //取消
     cancel() {
-      // this.empty(this.revise);
-      console.log(1);
       this.$refs["ruleForm"].resetFields();
       this.dialogVisible = !this.dialogVisible;
-      // this.break();
     },
     //删除
     del(e) {
@@ -406,7 +409,10 @@ export default {
     },
     break() {
       course().then((res) => {
-        this.tableData = res.data;
+        this.tableData = res.data.map((item) => {
+          return { ...item, picture: item.picture.split(",")[1] };
+        });
+        console.log(this.tableData);
       });
     },
   },
