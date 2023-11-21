@@ -377,6 +377,7 @@ export default {
       this.teacherId = this.$route.query.teacherCourseId;
       // 课程详情
       courseDetails(this.teacherId).then((res) => {
+        console.log(res);
         this.courseObj = courseStatusConvert(res.course);
       });
     }
@@ -494,15 +495,16 @@ export default {
         experimentId:this.experimentId,//实验id
         teacherCourseId:this.teacherId,//课程id
         experimentContent:this.richTextResult,//实验结果
-        planContent:planContent.join(","),//实验步骤
+        planContent:planContent,//实验步骤
       }
+      console.log(data);
       getExperimentData(this.experimentId,this.teacherId).then(res=>{
         saveExperimentReport(data).then(res=>{
-          // console.log(res);
-          this.$message({
-            message:'保存成功',
-            type:'success'
-          })
+          console.log(res);
+          // this.$message({
+          //   message:'保存成功',
+          //   type:'success'
+          // })
         })
       })
     },
