@@ -14,6 +14,10 @@ const routes = [
         name: 'login',
         component: () => import('@/views/login/login'),
       },
+      {
+        path: '/test',
+        component: () => import('@/views/test.vue')
+      },
       // 超级管理员端
       {
         path: '/superUser',
@@ -156,7 +160,7 @@ const routes = [
         component: () => import('@/views/companyProfile/companyProfile')
       }
     ]
-  }
+  },
 ]
 
 const router = new VueRouter({

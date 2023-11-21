@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="experimentManagement">
     <div class="header">
       <div class="title">课程名称:</div>
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
@@ -18,6 +18,7 @@
     <el-table
       ref="multipleTable"
       height="410"
+      border
       :data="
         tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
       "
@@ -30,17 +31,16 @@
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="title" label="实验标题" width="120">
       </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60">
+      <el-table-column prop="classHour" label="课时" width="120">
       </el-table-column>
       <el-table-column
         prop="description"
         label="实验描述"
-        width="300"
         text-align:
         center
       >
       </el-table-column>
-      <el-table-column label="操作" width="280">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -59,7 +59,7 @@
       </el-table-column>
     </el-table>
     <!-- 搜索 -->
-    <el-table
+    <!-- <el-table
       ref="multipleTable"
       :data="
         searchdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
@@ -100,7 +100,7 @@
           >
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
     <div class="block">
       <el-pagination
         @size-change="handleSizeChange"
@@ -121,35 +121,25 @@
       <template v-else>
         <span slot="title">编辑实验</span>
       </template>
-      <el-input
-        class="inputw"
-        placeholder="请输入实验标题"
-        v-model="revise.title"
-      >
-        <template slot="prepend"
-          >实验标题<span class="span" style="color: red">*</span></template
-        >
-      </el-input>
-      <el-input
-        class="inputw"
-        placeholder="请输入课时"
-        v-model="revise.classHour"
-      >
-        <template slot="prepend"
-          >实验课时<span class="span" style="color: red">*</span></template
-        >
-      </el-input>
-      <div class="dec">实验描述</div>
-      <el-input
-        id="inputwd"
-        type="textarea"
-        placeholder="请输入实验描述"
-        v-model="revise.description"
-      >
-      </el-input>
+      <el-form 
+        :model="revise" 
+        :rules="rules" 
+        ref="revise" 
+        label-width="100px" 
+        class="demo-ruleForm">
+        <el-form-item label="实验标题" prop="title">
+          <el-input v-model="revise.title" placeholder="请输入实验标题"></el-input>
+        </el-form-item>
+        <el-form-item label="实验课时" prop="classHour">
+          <el-input v-model="revise.classHour" placeholder="请输入实验课时"></el-input>
+        </el-form-item>
+        <el-form-item label="实验描述" prop="description">
+          <el-input type="textarea" v-model="revise.description" placeholder="请输入实验描述"></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button @click="serve">保 存</el-button>
+        <el-button type="primary" @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="serve">保 存</el-button>
       </span>
     </el-dialog>
   </div>
@@ -179,7 +169,19 @@ export default {
         description: "",
         fileUrl: "",
       },
+      // 表单校验
+      rules:{
+        title:[
+          { required: true, message: '请输入实验标题', trigger: 'blur' }
+        ],
+        classHour:[
+          {required:true,message:'请输入实验课时',trigger:'blur'}
+        ]
+      }
     };
+  },
+  created() {
+    this.id = this.$route.query.id
   },
   methods: {
     //实验报告
@@ -195,31 +197,41 @@ export default {
     },
     //搜索
     search() {
-      this.dialogtabledata = false;
-      this.exdialogtabledata = true;
-      this.searchdata = this.tableData.filter((item) => {
-        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
-        return item.title.includes(this.input);
-      });
+      // this.dialogtabledata = false;
+      // this.exdialogtabledata = true;
+      // this.searchdata = this.tableData.filter((item) => {
+      //   // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
+      //   return item.title.includes(this.input);
+      // });
+      this.tableData = this.tableData.filter((item)=>{
+        return item.title.includes(this.input)
+      })
     },
     //重置
     resetting() {
-      this.dialogtabledata = true;
-      this.exdialogtabledata = false;
+      // this.dialogtabledata = true;
+      // this.exdialogtabledata = false;
       this.input = "";
-      this.searchdata = [];
+      // this.searchdata = [];
+      this.break()
     },
     //添加实验
     addexper() {
       this.dialogVisible = true;
       this.edit = true;
-      console.log(this.articleId);
+      this.revise = {}
+      // console.log(this.articleId);
     },
     //编辑实验
     editexrept(e) {
       this.revise = e;
       this.dialogVisible = true;
       this.edit = false;
+    },
+    break: function () {
+      exper(this.id).then((res) => {
+        this.tableData = res.data;
+      });
     },
     //保存
     serve() {
@@ -232,7 +244,6 @@ export default {
           articleId: this.articleId,
         };
         experadd(data).then((res) => {
-          console.log(res);
           this.dialogVisible = false;
           this.edit == "";
           this.break();
@@ -247,7 +258,6 @@ export default {
           id: this.revise.id,
         };
         experedit(data).then((res) => {
-          console.log(res);
           this.dialogVisible = false;
           this.edit == "";
           this.break();
@@ -329,12 +339,6 @@ export default {
         console.log(arrdel);
       });
     },
-    break: function () {
-      exper(this.id).then((res) => {
-        this.tableData = res.data;
-        console.log(res);
-      });
-    },
   },
   mounted() {
     const id = this.$route.query.id;
@@ -392,24 +396,29 @@ export default {
   width: 300px !important;
   margin-top: 10px;
 }
-
 .el-input {
-  width: 150px;
+  width: 200px;
+}
+.el-textarea{
+  width: 200px;
 }
 </style>
 <style>
-#inputh {
+.experimentManagement #inputh {
   height: 30px !important;
-  width: 150px !important;
+  width: 200px !important;
 }
-.el-input-group__prepend {
+.experimentManagement .el-input-group__prepend {
   width: 55px;
 }
-#inputwd {
+.experimentManagement #inputwd {
   width: 195px !important;
   margin-left: 160px;
   margin-top: -89px;
   height: 72px !important;
   border-radius: none;
+}
+.experimentManagement .el-table .el-table__cell{
+  text-align: center !important;
 }
 </style>
