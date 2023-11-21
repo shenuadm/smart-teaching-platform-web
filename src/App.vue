@@ -19,7 +19,7 @@ body {
 }
 .warpper {
   /* width: 1300px; */
-  width: 83%;
+  width: 84%;
   margin: 0 auto;
 }
 .el-button{

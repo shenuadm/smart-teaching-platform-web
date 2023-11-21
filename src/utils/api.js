@@ -61,6 +61,10 @@ export function getExperimentContent(id) {
 export function getExperimentData(id) {
   return http.get('/ExperimentReportPlan/getExperimentPlanId/' + id)
 }
+// 获取实验结果
+export function getExperimentResult(id, studentCourseId) {
+  return http.get('/experimentReport/student/' + id + '/' + studentCourseId)
+}
 // 获取实验成绩
 export function getStudentScore(id) {
   return http.get('/experimentReport/listByStudent/' + id)
