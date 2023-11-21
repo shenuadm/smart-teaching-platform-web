@@ -1,0 +1,76 @@
+<template>
+  <el-table
+    border
+    :data="tableData"
+    style="width: 100%; margin-bottom: 20px"
+    row-key="id"
+    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+  >
+    <el-table-column type="expand">
+      <template slot-scope="props">
+        <div>
+          <p>额外的展开内容：</p>
+          <p>随意添加一些内容来展示不同的展开数据，可以根据需要自定义内容。</p>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column prop="name" label="章节标题" width="200" show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column prop="classHour" label="课时" width="80"> </el-table-column>
+    <el-table-column prop="sort" label="排序" width="80"> </el-table-column>
+    <el-table-column prop="fileUrl" label="课件" width="100" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
+      </template>
+    </el-table-column>
+    <el-table-column prop="description" label="描述" width="110" show-overflow-tooltip>
+    </el-table-column>
+  </el-table>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      tableData: [
+        {
+          id: 1,
+          name: "第一章",
+          classHour: 3,
+          sort: 1,
+          fileUrl: "http://example.com/file1",
+          description: "介绍第一章",
+          children: [
+            {
+              id: 2,
+              name: "第一节",
+              classHour: 1,
+              sort: 1,
+              fileUrl: "http://example.com/file2",
+              description: "介绍第一节",
+            },
+          ],
+        },
+        {
+          id: 3,
+          name: "第二章",
+          classHour: 4,
+          sort: 2,
+          fileUrl: "http://example.com/file3",
+          description: "介绍第二章",
+          children: [
+            {
+              id: 4,
+              name: "第一节",
+              classHour: 2,
+              sort: 1,
+              fileUrl: "http://example.com/file4",
+              description: "介绍第一节",
+            },
+          ],
+        },
+      ],
+    };
+  },
+};
+</script>
