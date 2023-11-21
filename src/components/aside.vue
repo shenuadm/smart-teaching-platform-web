@@ -17,7 +17,7 @@ export default {
 <style scoped>
 .aside {
   position: fixed;
-  z-index: 9999;
+  z-index: 99;
   top: 100px;
   right: 20px;
 }

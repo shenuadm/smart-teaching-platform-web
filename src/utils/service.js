@@ -57,7 +57,17 @@ const http = {
       }
     });
   },
-
+  formDate(url, data = {}) {
+    return service({
+      url,
+      method: 'post',
+      data,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        "satoken": localStorage.getItem("satoken")
+      }
+    })
+  }
 };
 
 export default http;
