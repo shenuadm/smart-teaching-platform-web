@@ -1,5 +1,5 @@
 <template>
-  <div class="content warpper">
+  <div class="content warpper" id="courseDeatils">
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }"
@@ -104,12 +104,20 @@
                 <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">新窗口打开</a>
               </div>
             </el-tab-pane>
-            <el-tab-pane v-if="teacherId" label="实验报告" name="third">
+            <el-tab-pane v-if="teacherId" label="实验报告" name="third" class="experiment-report">
               <div class="experiment-title">
                 <p>【实验模板】</p>
                 <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
                   >点击下载实验模板
                 </a>
+              </div>
+              <div class="sumbit-status">
+                <img src="@/assets/notsubmit.png" alt="" class="status-img">
+                <!-- <div class="submitStatus">未提交</div> -->
+                <div class="submitStatus">
+                  <p class="already-submit">已提交</p>
+                  <p class="already-submit">98</p>
+                </div>
               </div>
               <div class="experiment-title">
                 <p>【实验报告】</p>
@@ -124,8 +132,8 @@
                     实验步骤:
                   </p>
                   <ul class="step-all">
-                    <li class="step-item" v-for="item in experimentStep">
-                      <p>{{ item.name }}</p>
+                    <li class="step-item" v-for="(item,index) in experimentStep">
+                      <p>步骤{{index+1}} {{ item.name }}</p>
                       <Editor ref="editors"></Editor>
                     </li>
                   </ul>
@@ -310,6 +318,7 @@ import {
   getExperimentData,
   courseDetails,
   teacherCourseDetails,
+  getExperimentResult,
   getStudentScore,
   scoreList,
   saveExperimentReport,
@@ -336,10 +345,11 @@ export default {
       experimentId: "", //实验id
       teacherId: "", //教师课程id
       roleId:'',
+      courseId:'',
       experimentContent: {}, //实验内容
       experimentStep: [],//实验步骤
       tableData: [],//学生成绩
-      richTextResult: [], //存储富文本结果数据
+      richTextResult: '', //存储富文本结果数据
       richTextPlans: [], //存储富文本步骤数据
       currentPage:1,//当前页
       pageSize:5,//每页的条数
@@ -359,7 +369,6 @@ export default {
         this.teacherId = this.$route.query.id
         let courseId = this.$route.query.courseId
         teacherCourseDetails(courseId,this.teacherId).then(res=>{
-          // console.log(res);
           this.courseObj = courseStatusConvert(res.data)
         })
       }else{
@@ -367,7 +376,6 @@ export default {
         this.path = '/courseCenter'
         let id = this.$route.query.courseId
         checkChapter(id).then(res=>{
-          // console.log(res);
           this.courseObj = res.courseInfo
         })
       }
@@ -381,9 +389,9 @@ export default {
         this.courseObj = courseStatusConvert(res.course);
       });
     }
-    let courseId = this.$route.query.courseId;
+    this.courseId = this.$route.query.courseId;
     // 获取树形数据
-    getTreeData(courseId).then((res) => {
+    getTreeData(this.courseId).then((res) => {
       let dataList = res.data;
       // 添加每个节点添加index，方便填写序号
       // 一级节点
@@ -395,21 +403,21 @@ export default {
             if (cnode.children != null) {
               cnode.children.map((pcode, index, textColor) => {
                 if (pcode.children == null) {
-                  pcode.index = `实验${index + 1}、`;
+                  pcode.index = `实验${index + 1} `;
                 }
                 pcode.textColor = "";
                 return pcode;
               });
             }
             if (cnode.pid !== "") {
-              cnode.index = `第${index + 1}节、`;
+              cnode.index = `第${index + 1}节 `;
             }
             cnode.textColor = "";
             return cnode;
           });
         }
         if (node.pid == 0) {
-          node.index = `第${index + 1}章、`;
+          node.index = `第${index + 1}章 `;
         }
         node.textColor = "";
         return node;
@@ -441,25 +449,55 @@ export default {
           this.experimentContent = res.data;
         });
         // 实验操作
-        this.form.name = localStorage.getItem("hostName"); //登录名
-        this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
+        if(localStorage.getItem("hostName") === 'null'){
+          this.form.name = ''
+        }else{
+          this.form.name = localStorage.getItem("hostName"); //登录名
+        }
+        if(localStorage.getItem("hostPwd") === 'null'){
+          this.form.pwd = ''
+        }else{
+          this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
+        }
+        // 实验结果
+        getExperimentResult(this.experimentId,this.courseId).then(res=>{
+          console.log(res);
+          if(res.data !== null){
+            setTimeout(()=>{
+              this.$refs.editor.html = res.data
+            },1000)
+          }else{
+            this.$refs.editor.html = '暂无结果'
+          }
+        })
         // 实验步骤
         getExperimentData(this.experimentId, this.teacherId).then((res) => {
           this.experimentStep = res.data;
-        });
-        // 学生的实验成绩
-        getStudentScore(this.teacherId).then((res) => {
-          // console.log(res);
-          this.tableData = res.data;
+          setTimeout(()=>{
+            res.data.forEach((ritem,rindex)=>{
+              this.$refs.editors.forEach((eitem,eindex)=>{
+                if(rindex === eindex){
+                  eitem.html = ritem.content
+                }
+              })
+            })
+          },1000)
         });
         if(this.teacherId){
           // 下载实验模版
           this.$refs.downLoadTemplate.href = data.fileUrl
-          // 成绩表格(教师端)
-          scoreList(this.experimentId,this.teacherId).then(res=>{
-            // console.log(res);
-            this.tableData = handleDate(res.data)
-          })
+          if(this.roleId === '2'){
+            // 成绩表格(教师端)
+            scoreList(this.experimentId,this.teacherId).then(res=>{
+              this.tableData = handleDate(res.data)
+            })
+          }
+          if(this.roleId === '3'){
+            // 学生的实验成绩
+            getStudentScore(this.teacherId).then((res) => {
+              this.tableData = res.data;
+            });
+          }
         }
         this.$refs.experiment.style.display = "block";
       } else {
@@ -486,7 +524,8 @@ export default {
     },
     // 保存富文本内容
     saveContent() {
-      this.richTextResult.push(this.$refs.editor.html);//保存实验结果
+      // this.richTextResult.push(this.$refs.editor.html);//保存实验结果
+      this.richTextResult = this.$refs.editor.html
       this.$refs.editors.map((item) => {
         this.richTextPlans.push(item.html);
       });
@@ -497,20 +536,21 @@ export default {
         experimentContent:this.richTextResult,//实验结果
         planContent:planContent,//实验步骤
       }
-      console.log(data);
+      // console.log(data);
       getExperimentData(this.experimentId,this.teacherId).then(res=>{
         saveExperimentReport(data).then(res=>{
           console.log(res);
-          // this.$message({
-          //   message:'保存成功',
-          //   type:'success'
-          // })
+          this.$message({
+            message:'保存成功',
+            type:'success'
+          })
         })
       })
     },
     // 提交实验报告
     submit() {
-      this.richTextResult.push(this.$refs.editor.html);//保存实验结果
+      // this.richTextResult.push(this.$refs.editor.html);//保存实验结果
+      this.richTextResult = this.$refs.editor.html
       this.$refs.editors.map((item) => {
         this.richTextPlans.push(item.html);
       });
@@ -655,7 +695,8 @@ export default {
   position: absolute;
   top: 40px;
   left: 0;
-  width: 500px;
+  width: 100%;
+  height: 600px;
 }
 #vt100 #scrollable{
   overflow-y: hidden !important;
@@ -685,26 +726,56 @@ export default {
 .exSteps>ul{
   padding: 0;
 }
+.experiment-report{
+  position: relative;
+}
+.sumbit-status{
+  position: absolute;
+  top: 5px;
+  right: 140px;
+}
+.status-img{
+  display: inline-block;
+  width: 200px;
+  height: 140px;
+  transform: rotate(35deg);
+}
+.submitStatus{
+    position: absolute;
+    font-size: 24px;
+    font-weight: 500;
+    color: red;
+    top: 42px;
+    right: 63px;
+    transform: rotate(17deg);
+}
+.submitStatus>p{
+  margin: 0;
+  text-align: center;
+}
+.already-submit{
+  color: rgb(11, 139, 11);
+}
 </style>
 <style>
-.el-tabs__item {
+#courseDeatils .el-tabs__item {
   background-color: #b2d5f1 !important;
   color: #000 !important;
   padding: 0 20px !important;
   border-right: 1px solid #fff;
 }
-.el-tabs__item.is-active {
+#courseDeatils .el-tabs__item.is-active {
   background-color: #409eff !important;
   color: #fff !important;
 }
-.el-button--primary {
+#courseDeatils .el-button--primary {
   background-color: #4faff0;
   border-color: #4faff0;
 }
-.el-table .el-table__cell {
+#courseDeatils .el-table .el-table__cell {
   text-align: center;
 }
-.el-table .cell {
+#courseDeatils .el-table .cell {
   display: -webkit-box;
   -webkit-line-clamp: 1; /* 指定要显示的行数 */
   -webkit-box-orient: vertical;
