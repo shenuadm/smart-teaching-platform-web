@@ -30,15 +30,16 @@
       </el-row>
     </span>
     <el-container>
-      <div class="block">
+      <div class="block" style="width: 100%">
         <el-tree
           :data="tableData"
           node-key="id"
           accordion
           :expand-on-click-node="false"
+          style="width: 100%"
         >
           <span class="custom-tree-node" slot-scope="{ node }">
-            <el-row style="width: 101%">
+            <el-row style="width: 100%">
               <el-col :span="3">
                 <span>{{ node.data.title }}</span>
               </el-col>

@@ -80,11 +80,11 @@ export function course() {
 }
 //课程增加数据
 export function addcourse(data) {
-  return http.post('/course/add ', data)
+  return http.formDate('/course/add ', data)
 }
 //课程修改数据
 export function updatecourse(data) {
-  return http.post('/course/update', data)
+  return http.formDate('/course/update', data)
 }
 //课程删除数据
 export function delcourse(id) {
