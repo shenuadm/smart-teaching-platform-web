@@ -113,11 +113,11 @@
               </div>
               <div v-if="roleId === '3'" class="sumbit-status">
                 <img src="@/assets/notsubmit.png" alt="" class="status-img">
-                <!-- <div class="submitStatus">未提交</div> -->
-                <div class="submitStatus">
+                <div v-if="submitStatus" class="submitStatus">
                   <p class="already-submit">已提交</p>
-                  <p class="already-submit">98</p>
+                  <p class="already-submit">{{studentScore}}</p>
                 </div>
+                <div class="submitStatus">未提交</div>
               </div>
               <div class="experiment-title">
                 <p>【实验报告】</p>
@@ -139,8 +139,8 @@
                   </ul>
                 </div>
                 <div v-if="roleId === '3'" class="experiment-report-operate">
-                  <el-button type="primary" @click="saveContent">保存</el-button>
-                  <el-button type="primary" @click="submit">提交</el-button>
+                  <el-button type="primary" @click="saveContent" ref="btnStatus">保存</el-button>
+                  <el-button type="primary" @click="submit" ref="btnStatus">提交</el-button>
                 </div>
               </div>
             </el-tab-pane>
@@ -316,6 +316,7 @@ import {
   getTreeData,
   getExperimentContent,
   getExperimentData,
+  getExperimentStudentData,
   courseDetails,
   teacherCourseDetails,
   getExperimentResult,
@@ -357,6 +358,8 @@ export default {
       showDetailsVisible:false,//是否显示成绩详情
       showEditVisible:false,//是否显示编辑框
       stuForm:{},//学生成绩详情
+      submitStatus:'',//学生实验提交状态
+      studentScore:'',//学生实验成绩
     };
   },
   created() {
@@ -385,7 +388,6 @@ export default {
       this.teacherId = this.$route.query.teacherCourseId;
       // 课程详情
       courseDetails(this.teacherId).then((res) => {
-        console.log(res);
         this.courseObj = courseStatusConvert(res.course);
       });
     }
@@ -425,7 +427,9 @@ export default {
       this.data = dataList;
     });
   },
-  mounted() {},
+  mounted() {
+    // console.log(this.$refs.btnStatus);
+  },
   methods: {
     // 树形控件的点击事件
     handleNodeClick(data) {
@@ -459,30 +463,47 @@ export default {
         }else{
           this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
         }
-        // 实验结果
-        getExperimentResult(this.experimentId,this.courseId).then(res=>{
-          console.log(res);
-          if(res.data !== null){
+        if(this.roleId === '3'){
+          // 学生端实验结果、实验步骤
+          getExperimentStudentData(this.experimentId,this.courseId).then(res=>{
+            // console.log(res);
+            if(res.experimentReport.type === 2 && res.experimentReport.status != 0){//学生已提交实验
+              this.submitStatus = true
+              this.studentScore = res.experimentReport.score
+              this.$refs.btnStatus.disabled = true
+              this.$refs.btnStatus.type = ''
+            }
+            // 实验结果
+            this.$refs.editor.html = res.experimentReport.result
+            // 实验步骤
+            this.experimentStep = res.experimentReportPlans
             setTimeout(()=>{
-              this.$refs.editor.html = res.data
-            },1000)
-          }else{
-            this.$refs.editor.html = '暂无结果'
-          }
-        })
-        // 实验步骤
-        getExperimentData(this.experimentId, this.teacherId).then((res) => {
-          this.experimentStep = res.data;
-          setTimeout(()=>{
-            res.data.forEach((ritem,rindex)=>{
-              this.$refs.editors.forEach((eitem,eindex)=>{
-                if(rindex === eindex){
-                  eitem.html = ritem.content
-                }
+              res.experimentReportPlans.forEach((ritem,rindex)=>{
+                this.$refs.editors.forEach((eitem,eindex)=>{
+                  if(rindex === eindex){
+                    eitem.html = ritem.content
+                  }
+                })
               })
-            })
-          },1000)
-        });
+            },1000)
+          })
+        }
+        // 教师端实验步骤
+        if(this.roleId === '2'){
+          getExperimentData(this.experimentId, this.courseId).then((res) => {
+            this.$refs.editor.html = res.experimentReport.result
+            this.experimentStep = res.experimentReportPlans;
+            setTimeout(()=>{
+              res.experimentReportPlans.forEach((ritem,rindex)=>{
+                this.$refs.editors.forEach((eitem,eindex)=>{
+                  if(rindex === eindex){
+                    eitem.html = ritem.content
+                  }
+                })
+              })
+            },1000)
+          });
+        }
         if(this.teacherId){
           // 下载实验模版
           this.$refs.downLoadTemplate.href = data.fileUrl
@@ -535,21 +556,59 @@ export default {
         experimentContent:this.richTextResult,//实验结果
         planContent:planContent,//实验步骤
       }
-      getExperimentData(this.experimentId,this.teacherId).then(res=>{
-        saveExperimentReport(data).then(res=>{
-          console.log(res);
-          this.$message({
-            message:'保存成功',
-            type:'success'
-          })
+      saveExperimentReport(data).then(res=>{
+          // console.log(res);
+        this.$message({
+          message:'保存成功',
+          type:'success'
         })
       })
+      // getExperimentStudentData(this.experimentId,this.courseId).then(res=>{
+      //   saveExperimentReport(data).then(res=>{
+      //     // console.log(res);
+      //     this.$message({
+      //       message:'保存成功',
+      //       type:'success'
+      //     })
+      //   })
+      // })
     },
     // 提交实验报告
     submit() {
-      this.richTextResult = this.$refs.editor.html
-      this.$refs.editors.map((item) => {
-        this.richTextPlans.push(item.html);
+      this.$confirm('实验只能提交一次，不可重复提交，确定提交吗？', '提交实验', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 获取富文本框的内容
+        this.richTextResult = this.$refs.editor.html
+        this.$refs.editors.map((item) => {
+          this.richTextPlans.push(item.html);
+        });
+        const planContent = this.richTextPlans
+        let data = {
+          experimentId:this.experimentId,//实验id
+          teacherCourseId:this.teacherId,//课程id
+          experimentContent:this.richTextResult,//实验结果
+          planContent:planContent,//实验步骤
+          status:1,//实验状态，表示提交
+        }
+        saveExperimentReport(data).then(res=>{
+          console.log(res);
+          this.$message({
+            type: 'success',
+            message: '提交成功!'
+          });
+        })
+        // this.$message({
+        //   type: 'success',
+        //   message: '提交成功!'
+        // });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消提交'
+        });          
       });
     },
     // 教师端，成绩表格

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="myTeaching">
     <!-- 标题 -->
     <div class="person-title">我的授课</div>
     <div class="my-teaching">
@@ -295,10 +295,10 @@ export default {
 }
 </style>
 <style>
-.my-teaching .end-date .el-form-item__content {
+.myTeaching .my-teaching .end-date .el-form-item__content {
   margin-left: 0 !important;
 }
-.el-table .cell {
+.myTeaching .el-table .cell {
   text-align: center !important;
 }
 </style>

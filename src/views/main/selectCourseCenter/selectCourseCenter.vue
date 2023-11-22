@@ -5,7 +5,6 @@
         class="choose-list-item zh-pd-10 zh-mgb-20"
         v-for="item in chooseCourse"
       >
-        <!-- <img :src="item.img" alt="" /> -->
         <!-- <img src="../../../assets/addbg.jpg" alt="" /> -->
         <img :src="'data:image/png;base64,'+item.picture" alt="加载失败">
         <div class="choose-item-info zh-mgl-20">
@@ -51,8 +50,6 @@ export default {
   mounted() {
     // 获取接口数据
     getSelectCourse().then((res) => {
-      // console.log(res);
-      // this.chooseCourse = selectStatusConvert(res.data);
       this.chooseCourse  = res.data.map((item)=>{
         if(item.picture !== null){
           var picture = item.picture.split(",")[1]
@@ -64,16 +61,6 @@ export default {
       })
       this.chooseCourse = selectStatusConvert(this.chooseCourse)
     });
-    // console.log(this.$refs.status);
-    // this.$refs.status.map((item) => {
-    //   if (item.innerText == "开课中") {
-    //     item.style.color = "green";
-    //   } else if (item.innerText == "已结束") {
-    //     item.style.color = "red";
-    //   } else {
-    //     item.style.color = "blue";
-    //   }
-    // });
   },
   methods: {
     // 选课
@@ -135,8 +122,6 @@ export default {
   height: 150px;
 }
 .choose {
-  /* width: 100px; */
-  /* height: 35px; */
   border: 0;
   position: absolute;
   top: 50%;
