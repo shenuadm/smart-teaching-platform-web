@@ -64,23 +64,11 @@ export default {
       })
       this.courseList = selectStatusConvert(this.courseList)
     });
-    // this.$refs.status.map((item) => {
-    //   if (item.innerText == "开课中") {
-    //     item.style.color = "green";
-    //   } else if (item.innerText == "已结束") {
-    //     item.style.color = "red";
-    //   } else {
-    //     item.style.color = "blue";
-    //   }
-    // });
   },
   methods: {
-    // handleClick(tab, event) {
-    //   console.log(tab, event);
-    // },
     // 查看详情
     toCheckDetails(e) {
-      console.log(e);
+      // console.log(e);
       localStorage.setItem("hostName", e.hostName); //登录名
       localStorage.setItem("hostPwd", e.hostPwd); //登录密码
       // 路由跳转

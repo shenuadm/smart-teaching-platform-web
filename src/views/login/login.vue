@@ -127,7 +127,6 @@ export default {
       }else{
         // 登录
         toLogin(data).then((res) => {
-          console.log(res);
           if (res.msg != "success") {
             this.$message.error(res.msg);
           } else {
@@ -161,8 +160,6 @@ export default {
         if (/^.{1,20}$/.test(this.nikename)) {
           if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,12}$/.test(this.password)) {
             if (this.password === this.enrPast) {
-              console.log(this.password);
-              console.log(this.username);
               this.logindis = true;
               this.enrolldis = false;
               this.$message.success("注册成功");
