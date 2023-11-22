@@ -40,7 +40,6 @@ export default {
         });
       }
     });
-    console.log(this.navList);
   },
   mounted() {},
   methods: {
