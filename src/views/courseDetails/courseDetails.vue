@@ -111,7 +111,7 @@
                   >点击下载实验模板
                 </a>
               </div>
-              <div class="sumbit-status">
+              <div v-if="roleId === '3'" class="sumbit-status">
                 <img src="@/assets/notsubmit.png" alt="" class="status-img">
                 <!-- <div class="submitStatus">未提交</div> -->
                 <div class="submitStatus">
@@ -125,6 +125,7 @@
                   <p class="experiment-report-title zh-fs-16 zh-fw-m">
                     实验结果:
                   </p>
+                  <!-- <div v-if="roleId === '2'">111</div> -->
                   <Editor ref="editor"></Editor>
                 </div>
                 <div class="experiment-report-step">
@@ -138,7 +139,7 @@
                     </li>
                   </ul>
                 </div>
-                <div class="experiment-report-operate">
+                <div v-if="roleId === '3'" class="experiment-report-operate">
                   <el-button type="primary" @click="saveContent">保存</el-button>
                   <el-button type="primary" @click="submit">提交</el-button>
                 </div>
@@ -341,11 +342,11 @@ export default {
         name: "", //登录用户
         pwd: "", //登录密码
       },
-      inputType: "password",
+      inputType: "password",//实验操作的密码框的type类型
       experimentId: "", //实验id
       teacherId: "", //教师课程id
-      roleId:'',
-      courseId:'',
+      roleId:'',//角色id--2表示教师角色，3表示学生角色
+      courseId:'',//课程的id
       experimentContent: {}, //实验内容
       experimentStep: [],//实验步骤
       tableData: [],//学生成绩
@@ -459,6 +460,32 @@ export default {
         }else{
           this.form.pwd = localStorage.getItem("hostPwd"); //登录密码
         }
+        // if(this.roleId === '2'){
+        //   // 实验结果
+        //   getExperimentResult(this.experimentId,this.courseId).then(res=>{
+        //     console.log(res);
+        //     if(res.data !== null){
+        //       setTimeout(()=>{
+        //         this.$refs.editor.html = res.data
+        //       },1000)
+        //     }else{
+        //       this.$refs.editor.html = '暂无结果'
+        //     }
+        //   })
+        //   // 实验步骤
+        //   getExperimentData(this.experimentId, this.teacherId).then((res) => {
+        //     this.experimentStep = res.data;
+        //     setTimeout(()=>{
+        //       res.data.forEach((ritem,rindex)=>{
+        //         this.$refs.editors.forEach((eitem,eindex)=>{
+        //           if(rindex === eindex){
+        //             eitem.html = ritem.content
+        //           }
+        //         })
+        //       })
+        //     },1000)
+        //   });
+        // }
         // 实验结果
         getExperimentResult(this.experimentId,this.courseId).then(res=>{
           console.log(res);
@@ -472,6 +499,7 @@ export default {
         })
         // 实验步骤
         getExperimentData(this.experimentId, this.teacherId).then((res) => {
+          console.log(res);
           this.experimentStep = res.data;
           setTimeout(()=>{
             res.data.forEach((ritem,rindex)=>{
@@ -524,7 +552,6 @@ export default {
     },
     // 保存富文本内容
     saveContent() {
-      // this.richTextResult.push(this.$refs.editor.html);//保存实验结果
       this.richTextResult = this.$refs.editor.html
       this.$refs.editors.map((item) => {
         this.richTextPlans.push(item.html);
@@ -536,7 +563,6 @@ export default {
         experimentContent:this.richTextResult,//实验结果
         planContent:planContent,//实验步骤
       }
-      // console.log(data);
       getExperimentData(this.experimentId,this.teacherId).then(res=>{
         saveExperimentReport(data).then(res=>{
           console.log(res);
@@ -549,7 +575,6 @@ export default {
     },
     // 提交实验报告
     submit() {
-      // this.richTextResult.push(this.$refs.editor.html);//保存实验结果
       this.richTextResult = this.$refs.editor.html
       this.$refs.editors.map((item) => {
         this.richTextPlans.push(item.html);

@@ -33,7 +33,7 @@
       <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
       <el-table-column prop="updateTime" label="修改时间" width="250">
       </el-table-column>
-      <el-table-column label="操作" width="235">
+      <el-table-column label="操作" >
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)"
             >编辑</el-button
@@ -70,7 +70,7 @@
       <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
       <el-table-column prop="updateTime" label="修改时间" width="250">
       </el-table-column>
-      <el-table-column label="操作" width="235">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)"
             >编辑</el-button
@@ -122,7 +122,7 @@
       </span>
     </el-dialog>
     <!-- 实验详情 -->
-    <el-dialog title="实验详情" :visible.sync="dialogTableVisible">
+    <el-dialog title="实验步骤详情" :visible.sync="dialogTableVisible">
       <div class="box">
         <p>
           步骤名称：
@@ -195,6 +195,7 @@ export default {
   methods: {
     //查看详情
     todetails(e) {
+      console.log(e);
       getdetail(e).then((res) => {
         this.detailsdata = res.data;
       });

@@ -199,7 +199,7 @@ export default {
     },
     //添加实验报告
     addreport() {
-      this.isAddReport = true
+      this.isAddReport = true;
       this.empty(this.revise);
       this.dialogVisible = true;
     },
@@ -283,9 +283,9 @@ export default {
     },
     //编辑实验
     editexrept(e) {
-      const data = JSON.parse(JSON.stringify(e))
+      const data = JSON.parse(JSON.stringify(e));
       this.revise = data;
-      this.isAddReport = false
+      this.isAddReport = false;
       this.dialogVisible = true;
       this.report = false;
     },
@@ -503,18 +503,18 @@ export default {
   display: flex;
   justify-content: space-evenly;
 }
-#inputh {
+.laboratory-report #inputh {
   height: 30px !important;
   width: 150px !important;
 }
-#inputwd {
+.laboratory-report #inputwd {
   position: relative;
   width: 200px !important;
   margin-left: 228px;
   top: -62px;
   height: 72px !important;
 }
-.el-input-group__prepend {
+.laboratory-report .el-input-group__prepend {
   width: 55px;
 }
 </style>
