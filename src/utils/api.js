@@ -134,6 +134,20 @@ export function experedit(data) {
 export function mexperdel(data) {
   return http.delete('experiment/deletes/' + data)
 }
+
+// 作业管理
+// 获取作业管理列表
+export const getHomeWorkList = (id, params) => http.get('assignments/list/' + id, params)
+// 添加作业
+export const addHomeWork = (data) => http.post('assignments/add', data)
+// 修改作业
+export const editHomeWork = (data) => http.put('assignments/update', data)
+// 删除作业
+export const delHomeWork = (id) => http.delete('assignments/delete/' + id)
+// 批量删除作业
+export const delAllHomeWork = (ids) => http.delete('assignments/deletes/' + ids)
+
+
 //实验报告数据
 export function report(id) {
   return http.get('experimentReport/list/' + id)
