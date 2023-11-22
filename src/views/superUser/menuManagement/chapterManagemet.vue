@@ -1,9 +1,10 @@
 <template>
   <div class="chapter-managemet">
     <div class="header">
-      <el-button type="primary" @click="addchapter">添加章</el-button>
-      <el-button type="primary" @click="returncourse">返回课程</el-button>
+      <el-button type="primary" size="small" @click="addchapter">添加章</el-button>
+      <el-button type="primary" size="small" @click="returncourse">返回课程</el-button>
     </div>
+    <!-- 表格数据 -->
     <el-table
       border
       :data="tableData"
@@ -13,42 +14,44 @@
     >
       <el-table-column prop="name" label="章节标题" width="200" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="50"> </el-table-column>
-      <el-table-column prop="sort" label="排序" width="50"> </el-table-column>
+      <el-table-column prop="classHour" label="课时" width="50" show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column prop="sort" label="排序" width="50" show-overflow-tooltip>
+      </el-table-column>
       <el-table-column prop="fileUrl" label="课件" width="100" show-overflow-tooltip>
         <template slot-scope="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述" width="110" show-overflow-tooltip>
+      <el-table-column prop="description" label="描述" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="350">
         <template slot-scope="scope">
           <el-button
             v-if="!scope.row.pid"
             type="primary"
             @click="addchapterji(scope.row.id)"
-            size="small"
+            size="mini"
             >添加节</el-button
           >
           <el-button
             v-if="scope.row.pid"
             type="primary"
             @click="homework(scope.row.id)"
-            size="small"
+            size="mini"
             >作业管理</el-button
           >
           <el-button
             v-if="scope.row.pid"
             type="primary"
             @click="exper(scope.row.id)"
-            size="small"
+            size="mini"
             >实验管理</el-button
           >
-          <el-button type="primary" size="small" @click="revisechapter(scope.row)"
+          <el-button type="primary" size="mini" @click="revisechapter(scope.row)"
             >修改</el-button
           >
-          <el-button type="danger" size="small" @click="deletechapter(scope.row.id)"
+          <el-button type="danger" size="mini" @click="deletechapter(scope.row.id)"
             >删除</el-button
           >
         </template>
@@ -81,8 +84,8 @@
           </el-input>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button @click="serve" type="primary">确 定</el-button>
-          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button size="small" @click="serve" type="primary">确 定</el-button>
+          <el-button size="small" @click="closeAddChapter">取 消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -120,7 +123,7 @@
             :limit="1"
             :on-change="handlePreview"
           >
-            <el-button size="small" type="primary" plain v-if="fileList.length === 0">{{
+            <el-button size="mini" type="primary" plain v-if="fileList.length === 0">{{
               isAddJoint ? "点击上传" : "点击修改"
             }}</el-button>
             <div slot="tip" class="el-upload__tip">只能上传单个文件</div>
@@ -128,8 +131,8 @@
           <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view">查看课件</a>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button @click="serve" type="primary">确 定</el-button>
-          <el-button @click="dialogVisibleji = false">取 消</el-button>
+          <el-button size="small" @click="serveji" type="primary">确 定</el-button>
+          <el-button size="small" @click="dialogVisibleji = false">取 消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -155,7 +158,6 @@ export default {
       },
       tableData: [],
       courseId: 0,
-      pid: 0,
       id: 0,
       fileList: [],
       rules: {
@@ -164,6 +166,8 @@ export default {
         sort: [{ required: true, message: "请输入课程名称", trigger: "blur" }],
         description: [{ required: true, message: "请输入课程名称", trigger: "blur" }],
       },
+      chapterId: "", //修改的章节id变量
+      file: "", //上传pdf文件
     };
   },
   methods: {
@@ -184,7 +188,8 @@ export default {
       this.dialogVisible = true;
     },
     //添加节
-    addchapterji() {
+    addchapterji(id) {
+      this.chapterId = id;
       this.isAddJoint = true;
       this.empty(this.revise);
       this.dialogVisibleji = true;
@@ -207,7 +212,7 @@ export default {
     },
     // 上传文件
     handlePreview(file) {
-      console.log(file);
+      this.file = file.raw;
     },
     //实验管理
     exper(e) {
@@ -228,128 +233,105 @@ export default {
       });
     },
     //保存节
-    serveji() {
-      let article = {
-        title: this.revise.name,
-        classHour: this.revise.classHour,
-        sort: this.revise.sort,
-        description: this.revise.description,
-        file: this.revise.file,
-        courseId: this.courseId,
-        name: this.revise.name,
-        pid: this.pid,
-      };
-
-      addchapter(article)
-        .then((res) => {
-          console.log(article);
+    async serveji() {
+      const fd = new FormData();
+      fd.append("title", this.revise.name);
+      fd.append("classHour", this.revise.classHour);
+      fd.append("sort", this.revise.sort);
+      fd.append("description", this.revise.description);
+      fd.append("file", this.file);
+      if (this.isAddJoint) {
+        // 添加结点
+        fd.append("pid", this.chapterId);
+        fd.append("courseId", this.id);
+        const res = await addchapter(fd);
+        if (res.code === 0) {
+          this.$message({
+            message: "添加节点成功",
+            type: "success",
+          });
           this.break();
-        })
-        .catch((error) => {
-          // 处理错误
-          console.error(error);
-        });
-      this.empty(this.revise);
-      this.dialogVisibleji = !this.dialogVisibleji;
+          this.dialogVisibleji = false;
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else {
+        // 修改节点
+        fd.append("id", this.revise.id);
+        const res = await rchapter(fd);
+        if (res.code === 0) {
+          this.$message({
+            message: "修改节点成功",
+            type: "success",
+          });
+          this.break();
+          this.dialogVisibleji = false;
+        } else {
+          this.$message.error(res.msg);
+        }
+      }
     },
     //保存章
     serve() {
-      this.$refs["formRule"].validate((valid) => {
+      this.$refs["formRule"].validate(async (valid) => {
         if (valid) {
-          let article = {
-            title: this.revise.name,
-            classHour: this.revise.classHour,
-            sort: this.revise.sort,
-            description: this.revise.description,
-          };
-          console.log(article);
+          const fd = new FormData();
+          fd.append("title", this.revise.name);
+          fd.append("classHour", this.revise.classHour);
+          fd.append("sort", this.revise.sort);
+          fd.append("description", this.revise.description);
           if (this.isAddChapter) {
             //添加章
-            addchapter(article)
-              .then((res) => {
-                console.log(res);
-                this.break();
-                this.$message({
-                  message: "添加章节成功",
-                  type: "success",
-                });
-              })
-              .catch((error) => {
-                // 处理错误
-                this.$message({
-                  message: "添加章节失败",
-                  type: "warning",
-                });
+            fd.append("courseId", this.courseId);
+            const res = await addchapter(fd);
+            if (res.code === 0) {
+              this.$message({
+                message: "添加章节成功",
+                type: "success",
               });
+              this.break();
+              this.dialogVisible = false;
+            } else {
+              this.$message.error(res.msg);
+            }
           } else {
-            (article.courseId = this.courseId),
-              rchapter(article)
-                .then((res) => {
-                  console.log(res);
-                  if (res.code === 0) {
-                    this.$message({
-                      message: "修改章节成功",
-                      type: "success",
-                    });
-                  } else {
-                    this.$message.error(res.msg);
-                  }
-                  this.break();
-                })
-                .catch((error) => {
-                  // 处理错误
-                  this.$message({
-                    message: "修改章节失败",
-                    type: "warning",
-                  });
-                });
+            // 修改章
+            fd.append("id", this.revise.id);
+            const res = await rchapter(fd);
+            if (res.code === 0) {
+              this.$message({
+                message: "修改章节成功",
+                type: "success",
+              });
+              this.break();
+              this.dialogVisible = false;
+            } else {
+              this.$message.error(res.msg);
+            }
           }
-          this.dialogVisible = false;
         } else {
           return false;
         }
       });
     },
-    //保存修改
-    rserve() {
-      let article = {
-        title: this.revise.name,
-        classHour: this.revise.classHour,
-        sort: this.revise.sort,
-        description: this.revise.description,
-        file: this.revise.file,
-        courseId: this.courseId,
-        name: this.revise.name,
-        id: this.revise.id,
-      };
-      console.log(article);
-      rchapter(article)
-        .then((res) => {
-          console.log(res);
-          console.log(article);
-          this.break();
-        })
-        .catch((error) => {
-          // 处理错误
-          console.error(error);
-        });
-      this.rdialogVisible = !this.rdialogVisible;
-    },
     //删除章节
-    deletechapter(e) {
+    deletechapter(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
-        .then(() => {
-          dalchapter(e).then((res) => {
-            this.break();
+        .then(async () => {
+          const res = await dalchapter(id);
+          if (res.code === 0) {
             this.$message({
               type: "success",
               message: "删除成功!",
             });
-          });
+            this.break();
+          } else {
+            this.$message.error(res.msg);
+          }
         })
         .catch(() => {});
     },
@@ -369,19 +351,17 @@ export default {
       console.log(row); // 输出所选行的数据
     },
     break() {
+      this.id = parseInt(this.$route.query.id);
+      const sort = this.$route.query.sort;
+      this.sort = sort;
+      this.courseId = this.id;
       chapter(this.id).then((res) => {
         this.tableData = res.data;
       });
     },
   },
-  mounted() {
-    this.id = parseInt(this.$route.query.id);
-    const sort = this.$route.query.sort;
-    this.sort = sort;
-    this.courseId = this.id;
-    chapter(this.id).then((res) => {
-      this.tableData = res.data;
-    });
+  created() {
+    this.break();
   },
 };
 </script>

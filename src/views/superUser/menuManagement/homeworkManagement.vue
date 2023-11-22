@@ -27,8 +27,18 @@
         width="80"
         align="center"
       ></el-table-column>
-      <el-table-column prop="content" label="作业内容" align="center"></el-table-column>
-      <el-table-column prop="answer" label="参考答案" align="center"></el-table-column>
+      <el-table-column
+        prop="content"
+        label="作业内容"
+        align="center"
+        show-overflow-tooltip
+      ></el-table-column>
+      <el-table-column
+        prop="answer"
+        label="参考答案"
+        align="center"
+        show-overflow-tooltip
+      ></el-table-column>
       <el-table-column prop="status" label="状态" width="80" align="center">
         <template slot-scope="scope">
           <div v-if="scope.row.status" class="user">启用</div>

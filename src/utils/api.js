@@ -104,11 +104,11 @@ export function chapter(id) {
 }
 //添加章节数据
 export function addchapter(data) {
-  return http.post('/article/add', data)
+  return http.formDate('/article/add', data)
 }
 //修改章节信息
 export function rchapter(data) {
-  return http.post('/article/update', data)
+  return http.formDate('/article/update', data)
 }
 //删除章节信息
 export function dalchapter(id) {
