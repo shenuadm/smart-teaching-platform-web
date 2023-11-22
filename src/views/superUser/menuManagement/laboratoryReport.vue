@@ -1,26 +1,18 @@
 <template>
-  <div>
+  <div class="laboratory-report">
     <div class="header">
       <div class="title">实验名称:</div>
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
       <button class="but" @click="search">搜索</button>
       <button class="but" @click="resetting">重置</button>
-      <el-button type="primary" class="exper" @click="addreport"
-        >添加实验报告</el-button
-      >
-      <el-button type="primary" class="exper" @click="returnexper"
-        >返回实验</el-button
-      >
-      <el-button type="danger" class="exper" @click="delexper"
-        >批量删除</el-button
-      >
+      <el-button type="primary" class="exper" @click="addreport">添加实验报告</el-button>
+      <el-button type="primary" class="exper" @click="returnexper">返回实验</el-button>
+      <el-button type="danger" class="exper" @click="delexper">批量删除</el-button>
     </div>
     <el-table
       height="410"
       ref="multipleTable"
-      :data="
-        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -28,17 +20,8 @@
       v-if="dialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="100">
-      </el-table-column>
-      <el-table-column prop="type" label="用户类型" width="100">
-        <template slot-scope="scope">
-          <div v-if="scope.row.type == 0">系统</div>
-          <div v-if="scope.row.type == 1">老师</div>
-          <div v-if="scope.row.type == 2">学生</div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60">
-      </el-table-column>
+      <el-table-column prop="title" label="实验标题" width="100"> </el-table-column>
+      <el-table-column prop="classHour" label="课时" width="60"> </el-table-column>
       <el-table-column
         prop="description"
         label="实验描述"
@@ -46,14 +29,12 @@
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="fileUrl" label="实验课件" width="100" show-overflow-tooltip>
         <template slot-scope="scope">
-          <div v-if="scope.row.status === 0">已保存</div>
-          <div v-else-if="scope.row.status === 1">已提交</div>
-          <div v-else-if="scope.row.status === 2">已评阅</div>
+          <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="240">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -74,9 +55,7 @@
     <!-- 搜索 -->
     <el-table
       ref="multipleTable"
-      :data="
-        reportdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="reportdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -84,17 +63,8 @@
       v-if="exdialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="100">
-      </el-table-column>
-      <el-table-column prop="type" label="用户类型" width="100">
-        <template slot-scope="scope">
-          <div v-if="scope.row.type == 0">系统</div>
-          <div v-if="scope.row.type == 1">老师</div>
-          <div v-if="scope.row.type == 2">学生</div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60">
-      </el-table-column>
+      <el-table-column prop="title" label="实验标题" width="100"> </el-table-column>
+      <el-table-column prop="classHour" label="课时" width="60"> </el-table-column>
       <el-table-column
         prop="description"
         label="实验描述"
@@ -102,14 +72,12 @@
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="fileUrl" label="实验课件" width="100" show-overflow-tooltip>
         <template slot-scope="scope">
-          <div v-if="scope.row.status === 0">已保存</div>
-          <div v-else-if="scope.row.status === 1">已提交</div>
-          <div v-else-if="scope.row.status === 2">已评阅</div>
+          <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="240">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -128,69 +96,47 @@
       </el-table-column>
     </el-table>
     <!-- 添加/编辑实验 -->
-    <el-dialog :visible.sync="dialogVisible" width="40%">
-      <template v-if="report">
-        <span slot="title">添加实验报告</span>
-      </template>
-      <template v-else>
-        <span slot="title">修改实验报告</span>
-      </template>
-      <el-input
-        class="inputw"
-        placeholder="请输入实验标题"
-        v-model="revise.title"
-      >
-        <template slot="prepend"
-          >实验标题<span style="color: red">*</span></template
-        >
-      </el-input>
-      <el-input
-        class="inputw"
-        placeholder="请输入课时"
-        v-model="revise.classHour"
-      >
-        <template slot="prepend"
-          >实验课时<span style="color: red">*</span></template
-        >
-      </el-input>
-      <div v-if="report == false" class="status">
-        <div class="statusx">类型</div>
-        <el-select v-model="revise.type" placeholder="请选择">
-          <el-option :label="0" :value="0"> 系统 </el-option>
-          <el-option :label="1" :value="1"> 老师 </el-option>
-          <el-option :label="2" :value="2"> 学生 </el-option>
-        </el-select>
-        <div class="statusx type">状态</div>
-        <el-radio-group v-model="revise.status">
-          <el-radio :label="0">已保存</el-radio>
-          <el-radio :label="1">已提交</el-radio>
-          <el-radio :label="2">已评阅</el-radio>
-        </el-radio-group>
-      </div>
-      <div class="dec">实验描述</div>
-      <el-input
-        id="inputwd"
-        type="textarea"
-        placeholder="请输入实验描述"
-        v-model="revise.description"
-      >
-      </el-input>
-      <label for="fileInput" class="custom-file-buttont custom-file-button">
-        实验课件<span style="color: red">*</span>
-      </label>
-      <el-input
-        class="inputw"
-        placeholder="请输入课件"
-        v-model="revise.fileUrl"
-        type="file"
-        id="fileInput"
-        style="display: none"
-      >
-      </el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button @click="serve">保 存</el-button>
-      </span>
+    <el-dialog
+      :title="isAddReport ? '添加实验报告' : '修改实验报告'"
+      :visible.sync="dialogVisible"
+      width="40%"
+      :before-close="closeAddReport"
+    >
+      <el-form :model="revise" :rules="rules" ref="formRule">
+        <el-form-item label="实验标题" prop="title">
+          <el-input placeholder="请输入实验标题" v-model="revise.title"></el-input>
+        </el-form-item>
+        <el-form-item label="实验课时" prop="classHour">
+          <el-input placeholder="请输入课时" v-model="revise.classHour"></el-input>
+        </el-form-item>
+        <el-form-item label="实验描述" prop="description">
+          <el-input
+            placeholder="请输入实验描述"
+            type="textarea"
+            :autosize="{ minRows: 4, maxRows: 4 }"
+            v-model="revise.description"
+          ></el-input>
+        </el-form-item>
+        <el-form-item :label="isAddReport ? '上传课件' : '修改课件'" class="upload-file">
+          <el-upload
+            action=""
+            :auto-upload="false"
+            :file-list="fileList"
+            :limit="1"
+            :on-change="handlePreview"
+          >
+            <el-button size="small" type="primary" plain v-if="fileList.length === 0">{{
+              isAddReport ? "点击上传" : "点击修改"
+            }}</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传单个文件</div>
+          </el-upload>
+          <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view">查看课件</a>
+        </el-form-item>
+        <el-form-item class="form-btn">
+          <el-button @click="serve" type="primary">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
     <div class="block">
       <el-pagination
@@ -218,6 +164,8 @@ import {
 export default {
   data() {
     return {
+      isAddReport: true, //是否添加报告
+      fileList: [],
       multipleSelection: [],
       tableData: [],
       reportdata: [],
@@ -233,14 +181,32 @@ export default {
       id: 0,
       revise: {
         title: "",
-        type: "",
         classHour: "",
         description: "",
-        status: "",
+      },
+      rules: {
+        title: [{ required: true, message: "请输入实验标题", trigger: "blur" }],
+        classHour: [{ required: true, message: "请输入课时", trigger: "blur" }],
+        description: [{ required: true, message: "请输入实验描述", trigger: "blur" }],
       },
     };
   },
   methods: {
+    // 关闭dialog弹框
+    closeAddReport() {
+      this.dialogVisible = false;
+      this.$refs["formRule"].resetFields();
+    },
+    //添加实验报告
+    addreport() {
+      this.isAddReport = true
+      this.empty(this.revise);
+      this.dialogVisible = true;
+    },
+    // 上传报告文件
+    handlePreview(file) {
+      console.log(file);
+    },
     //跳转至实验步骤
     exreport(e) {
       this.$router.push({
@@ -253,45 +219,46 @@ export default {
     },
     //保存
     serve() {
-      if (this.report == true) {
-        let data = {
-          title: this.revise.title,
-          classHour: this.revise.classHour,
-          description: this.revise.description,
-          type: 0,
-          status: 0,
-          experimentId: this.experimentId,
-          file: "",
-        };
-        console.log(data);
-        reportadd(data).then((res) => {
-          console.log(res);
-          this.dialogVisible = false;
-          this.report == "";
-          this.break();
-        });
-      } else {
-        let data = {
-          title: this.revise.title,
-          classHour: this.revise.classHour,
-          description: this.revise.description,
-          type: this.revise.type,
-          status: this.revise.status,
-          experimentId: this.revise.experimentId,
-          file: "",
-          id: this.revise.id,
-        };
-        console.log(data);
-        reportupdate(data).then((res) => {
-          console.log(res);
-          this.dialogVisible = false;
-          this.report == "";
-          this.break();
-        });
-      }
+      this.$refs["formRule"].validate((valid) => {
+        if (valid) {
+          let data = {
+            title: this.revise.title,
+            classHour: this.revise.classHour,
+            description: this.revise.description,
+            type: 0,
+            status: 0,
+            experimentId: this.experimentId,
+            file: "",
+          };
+          if (this.isAddReport) {
+            reportadd(data).then((res) => {
+              if (res.code === 0) {
+                this.break();
+                this.$message({
+                  message: "添加报告成功",
+                  type: "success",
+                });
+                this.dialogVisible = false;
+              } else {
+                this.$message.error(res.msg);
+              }
+            });
+          } else {
+            console.log(1);
+            reportupdate(data).then((res) => {
+              console.log(res);
+              this.break();
+              this.dialogVisible = false;
+            });
+          }
+        } else {
+          return false;
+        }
+      });
     },
     //取消
     cancel() {
+      this.$refs["formRule"].resetFields();
       this.dialogVisible = false;
     },
     //搜索
@@ -314,14 +281,11 @@ export default {
     returnexper() {
       history.back();
     },
-    //添加实验报告
-    addreport() {
-      this.dialogVisible = true;
-      this.report = true;
-    },
     //编辑实验
     editexrept(e) {
-      this.revise = e;
+      const data = JSON.parse(JSON.stringify(e))
+      this.revise = data;
+      this.isAddReport = false
       this.dialogVisible = true;
       this.report = false;
     },
@@ -387,9 +351,15 @@ export default {
         console.log(arrdel);
       });
     },
+    empty(obj) {
+      for (const prop of Object.keys(obj)) {
+        obj[prop] = "";
+      }
+    },
     break() {
       report(this.id).then((res) => {
         this.tableData = res.data;
+        console.log(this.tableData);
       });
     },
   },
@@ -402,10 +372,6 @@ export default {
 </script>
 
 <style scoped>
-span {
-  position: relative;
-  left: -100px;
-}
 .header {
   position: relative;
   width: 100%;
@@ -427,6 +393,7 @@ span {
   margin-left: 5px;
   border-radius: 5px;
   color: white;
+  cursor: pointer;
 }
 .exper {
   position: relative;
@@ -490,8 +457,52 @@ span {
   top: -74px;
   left: 85px;
 }
+.pdf-view {
+  color: #409eff;
+  padding-left: 50px;
+}
 </style>
 <style>
+/* 表格 */
+.laboratory-report .el-table__header-wrapper .el-table__header .el-table__cell,
+.laboratory-report .el-table__body-wrapper .el-table__row .el-table__cell {
+  text-align: center;
+}
+/* dialog框 */
+.laboratory-report .el-dialog__body .el-form-item {
+  display: flex;
+}
+.laboratory-report .el-dialog__body .el-form-item .el-form-item__content {
+  width: 100%;
+  flex: 1;
+}
+.laboratory-report .el-dialog__body .el-form-item .el-form-item__content .el-input {
+  width: 100% !important;
+}
+.laboratory-report .el-dialog__body .upload-file .el-form-item__label {
+  width: 78px;
+}
+.laboratory-report .el-dialog__body .upload-file .el-form-item__content {
+  display: flex;
+  text-align: left;
+}
+.laboratory-report .el-dialog__body .upload-file .el-form-item__content .el-upload__tip,
+.laboratory-report
+  .el-dialog__body
+  .upload-file
+  .el-form-item__content
+  .el-upload__tip
+  .el-upload-list__item {
+  margin-top: 0 !important;
+  height: 30px;
+}
+.laboratory-report .el-dialog__body .form-btn {
+  margin-bottom: 0;
+}
+.laboratory-report .el-dialog__body .form-btn .el-form-item__content {
+  display: flex;
+  justify-content: space-evenly;
+}
 #inputh {
   height: 30px !important;
   width: 150px !important;
@@ -505,12 +516,5 @@ span {
 }
 .el-input-group__prepend {
   width: 55px;
-}
-.el-input--suffix {
-  position: relative;
-  left: 52px;
-  top: -40px;
-  width: 196px;
-  height: 40px;
 }
 </style>

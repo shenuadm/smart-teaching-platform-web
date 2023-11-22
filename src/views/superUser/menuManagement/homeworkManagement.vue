@@ -1,27 +1,19 @@
 <template>
-  <div>
+  <div class="homework-management">
     <div class="header">
       <div class="title">作业名称:</div>
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
       <button class="but" @click="search">搜索</button>
       <button class="but" @click="resetting">重置</button>
-      <el-button type="primary" class="exper" @click="addexper"
-        >添加作业</el-button
-      >
-      <el-button type="danger" class="exper" @click="delexper"
-        >批量删除</el-button
-      >
-      <el-button type="primary" class="exper" @click="returnexper"
-        >返回</el-button
-      >
+      <el-button type="primary" class="exper" @click="addexper">添加作业</el-button>
+      <el-button type="danger" class="exper" @click="delexper">批量删除</el-button>
+      <el-button type="primary" class="exper" @click="returnexper">返回</el-button>
     </div>
 
     <el-table
       ref="multipleTable"
       height="410"
-      :data="
-        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -29,11 +21,7 @@
       v-if="dialogtabledata"
     >
       <el-table-column type="selection" width="50"></el-table-column>
-      <el-table-column
-        prop="name"
-        label="作业名称"
-        width="100"
-      ></el-table-column>
+      <el-table-column prop="name" label="作业名称" width="100"></el-table-column>
       <el-table-column
         prop="content"
         label="作业内容"
@@ -49,9 +37,7 @@
       <el-table-column prop="status" label="状态" width="100" align="center">
         <template slot-scope="scope">
           <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">
-            禁用
-          </div>
+          <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="280" align="center">
@@ -69,9 +55,7 @@
     <!-- 搜索 -->
     <el-table
       ref="multipleTable"
-      :data="
-        searchdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -79,16 +63,8 @@
       v-if="exdialogtabledata"
     >
       <el-table-column type="selection" width="50"></el-table-column>
-      <el-table-column
-        prop="name"
-        label="作业名称"
-        width="60"
-      ></el-table-column>
-      <el-table-column
-        prop="content"
-        label="作业内容"
-        width="200"
-      ></el-table-column>
+      <el-table-column prop="name" label="作业名称" width="60"></el-table-column>
+      <el-table-column prop="content" label="作业内容" width="200"></el-table-column>
       <el-table-column
         prop="answer"
         label="参考答案"
@@ -98,9 +74,7 @@
       <el-table-column prop="status" label="状态" width="100">
         <template slot-scope="scope">
           <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">
-            禁用
-          </div>
+          <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="280">
@@ -124,52 +98,35 @@
     </div>
 
     <!-- 添加/编辑实验 -->
-    <el-dialog :visible.sync="dialogVisible" width="30%">
-      <template v-if="edit">
-        <span slot="name">添加作业</span>
-      </template>
-      <template v-else>
-        <span slot="name">编辑作业</span>
-      </template>
-      <el-input
-        class="inputw"
-        placeholder="请输入作业名称"
-        v-model="revise.name"
-      >
-        <template slot="prepend">作业名称</template>
-      </el-input>
-      <el-input
-        class="inputw"
-        placeholder="请输入作业内容"
-        v-model="revise.content"
-        type="textarea"
-      >
-        <template slot="prepend">作业内容</template>
-      </el-input>
-      <el-input
-        type="textarea"
-        class="inputw"
-        placeholder="请输入参考答案"
-        v-model="revise.answer"
-      >
-        <template slot="prepend">参考答案</template>
-      </el-input>
-      <el-input
-        class="inputw"
-        placeholder="请输入课程状态"
-        v-model="revise.status"
-      >
-        <template slot="prepend">状态</template>
-      </el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取消</el-button>
-        <el-button @click="serve">保存</el-button>
-      </span>
+    <el-dialog :visible.sync="dialogVisible" width="30%" title="添加作业" :before-close="closeDialog">
+      <el-form :model="revise" :rules="rules" ref="formModel">
+        <el-form-item label="作业名称" prop="name">
+          <el-input placeholder="请输入作业名称" v-model="revise.name"> </el-input>
+        </el-form-item>
+        <el-form-item label="作业内容" prop="content">
+          <el-input placeholder="请输入作业内容" v-model="revise.content" type="textarea">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="参考答案" prop="answer">
+          <el-input placeholder="请输入参考答案" v-model="revise.answer" type="textarea">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="状态" class="form-status">
+          <el-radio-group v-model="revise.status">
+            <el-radio :label="true">启用</el-radio>
+            <el-radio :label="false">禁用</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item class="form-btn">
+          <el-button @click="serve" type="primary">保存</el-button>
+          <el-button @click="closeDialog">取消</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import { exper, experadd, experdel, experedit, mexperdel } from "@/utils/api";
 export default {
   data() {
@@ -206,22 +163,21 @@ export default {
         name: "",
         content: "",
         answer: "",
-        status: "",
+        status: false,
+      },
+      rules: {
+        name: { required: true, message: "课程名称不能为空", trigger: "blur" },
+        content: { required: true, message: "课程内容不能为空", trigger: "blur" },
+        answer: { required: true, message: "参考答案不能为空", trigger: "blur" },
       },
     };
   },
   methods: {
-    //实验报告
-    //   exreport(e) {
-    //     this.$router.push({
-    //       path: "/laboratoryReport",
-    //       name: "laboratoryReport",
-    //       query: {
-    //         id: e.id,
-    //         sort: e.sort,
-    //       },
-    //     });
-    //   },
+    // 关闭弹框
+    closeDialog(){
+      this.dialogVisible = false
+      this.$refs['formModel'].resetFields();
+    },
     //搜索
     search() {
       for (let i = 0; i < this.tableData.length; i++) {
@@ -254,12 +210,13 @@ export default {
         name: "",
         content: "",
         answer: "",
-        status: "",
+        status: false,
       };
     },
 
     // 编辑实验
     editexrept(e) {
+      console.log(e);
       this.revise = {
         name: e.name,
         content: e.content,
@@ -314,9 +271,7 @@ export default {
         });
       } else {
         // 编辑实验
-        const index = this.tableData.findIndex(
-          (item) => item.id === this.revise.id
-        );
+        const index = this.tableData.findIndex((item) => item.id === this.revise.id);
         if (index !== -1) {
           this.tableData[index].name = this.revise.name;
           this.tableData[index].content = this.revise.content;
@@ -325,11 +280,6 @@ export default {
         }
       }
       this.dialogVisible = false;
-    },
-    //取消
-    cancel() {
-      this.dialogVisible = false;
-      // window.location.reload();
     },
     //删除
     //   del(e) {
@@ -420,8 +370,8 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .header {
   position: relative;
   width: 100%;
@@ -455,19 +405,26 @@ export default {
   width: 300px;
   margin-top: 10px;
 }
-/* .opertea {
-    margin-left: -330px;
-  } */
+.form-status,
+.form-btn {
+  margin-bottom: 10px;
+}
 </style>
-  <style>
+<style>
 #inputh {
   height: 30px !important;
   width: 150px !important;
 }
-.el-color-picker__icon,
-.el-input,
-.el-textarea {
+.homework-management .el-color-picker__icon,
+.homework-management .header .el-input,
+.homework-management .header .el-textarea {
   width: 0px;
+}
+.homework-management .el-dialog__body .el-form-item {
+  display: flex;
+}
+.homework-management .el-dialog__body .el-form-item .el-form-item__content {
+  flex: 1;
 }
 .el-input-group__prepend {
   width: 55px;
