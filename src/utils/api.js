@@ -1,13 +1,8 @@
-import data from '@/views/teacher/chapterDetails/data.js';
 import http from './service.js';
 
 // 登录
 export function toLogin(data) {
-  return http.post('/user/login', data, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  return http.post('/user/login', data)
 }
 // 注册
 export function toRegister(data) {
@@ -18,11 +13,7 @@ export function getdata() {
   return http.get('/menu/list')
 }
 export function adddata(e) {
-  return http.post('/menu/add', e, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  return http.post('/menu/add', e)
 }
 // 学生端
 // 获取个人信息
@@ -108,11 +99,11 @@ export function chapter(id) {
 }
 //添加章节数据
 export function addchapter(data) {
-  return http.post('/article/add', data)
+  return http.formDate('/article/add', data)
 }
 //修改章节信息
 export function rchapter(data) {
-  return http.post('/article/update', data)
+  return http.formDate('/article/update', data)
 }
 //删除章节信息
 export function dalchapter(id) {
@@ -138,6 +129,20 @@ export function experedit(data) {
 export function mexperdel(data) {
   return http.delete('experiment/deletes/' + data)
 }
+
+// 作业管理
+// 获取作业管理列表
+export const getHomeWorkList = (id, params) => http.get('assignments/list/' + id, params)
+// 添加作业
+export const addHomeWork = (data) => http.post('assignments/add', data)
+// 修改作业
+export const editHomeWork = (data) => http.put('assignments/update', data)
+// 删除作业
+export const delHomeWork = (id) => http.delete('assignments/delete/' + id)
+// 批量删除作业
+export const delAllHomeWork = (ids) => http.delete('assignments/deletes/' + ids)
+
+
 //实验报告数据
 export function report(id) {
   return http.get('experimentReport/list/' + id)
@@ -184,28 +189,16 @@ export function getdetail(id) {
 }
 // 修改菜单管理数据
 export function upmenuData(u) {
-  return http.post("/menu/update", u, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  return http.post("/menu/update", u)
 }
 // 超级管理员用户管理//
 //用户管理数据获取
 export function getUserData(e) {
-  return http.get('/user/list', e, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  return http.get('/user/list', e)
 }
 // 添加用户
 export function addUser(a) {
-  return http.post('/user/add', a, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  return http.post('/user/add', a)
 }
 // 批量删除
 export function delUsers(ids) {

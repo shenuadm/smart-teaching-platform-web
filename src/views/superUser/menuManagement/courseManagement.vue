@@ -13,6 +13,7 @@
       <el-button type="primary" size="small" @click="batchdel">删除</el-button>
     </div>
     <el-table
+      v-loading="loading"
       ref="multipleTable"
       :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
@@ -51,13 +52,13 @@
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="chapter(scope.row)"
+          <el-button type="primary" size="mini" @click="chapter(scope.row)"
             >章节管理</el-button
           >
-          <el-button type="primary" size="small" @click="updatacour(scope.row)"
+          <el-button type="primary" size="mini" @click="updatacour(scope.row)"
             >修改</el-button
           >
-          <el-button type="danger" size="small" @click="del(scope.row.id)"
+          <el-button type="danger" size="mini" @click="del(scope.row.id)"
             >删除</el-button
           >
         </template>
@@ -176,8 +177,8 @@
           </el-upload>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button type="primary" @click="serve">确定</el-button>
-          <el-button @click="cancel">取消</el-button>
+          <el-button size="small" type="primary" @click="serve">确定</el-button>
+          <el-button size="small" @click="cancel">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -219,6 +220,7 @@ export default {
         credit: [{ required: true, message: "请输入学分", trigger: "blur" }],
         description: [{ required: true, message: "请输入课程描述", trigger: "blur" }],
       },
+      loading: true, //load效果
     };
   },
   methods: {
@@ -410,7 +412,7 @@ export default {
         this.tableData = res.data.map((item) => {
           return { ...item, picture: item.picture.split(",")[1] };
         });
-        console.log(this.tableData);
+        this.loading = false;
       });
     },
   },
@@ -501,7 +503,7 @@ export default {
 </style>
 
 <style>
-.course-manage .el-table__row .table-image .cell .el-image{
+.course-manage .el-table__row .table-image .cell .el-image {
   display: flex;
   height: 40px;
   width: 100%;
