@@ -3,11 +3,11 @@
     <div class="header">
       <div class="title">课程名称:</div>
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
-      <button class="but" @click="search">搜索</button>
-      <button class="but" @click="resetting">重置</button>
-      <el-button type="primary" class="exper" @click="addexper">添加实验</el-button>
-      <el-button type="danger" class="exper" @click="delexper">批量删除</el-button>
-      <el-button type="primary" class="exper" @click="returnexper">返回章节</el-button>
+      <el-button size="small" type="primary" @click="search">搜索</el-button>
+      <el-button size="small" type="primary" @click="resetting">重置</el-button>
+      <el-button size="small" type="primary" @click="addexper">添加实验</el-button>
+      <el-button size="small" type="danger" @click="delexper">批量删除</el-button>
+      <el-button size="small" type="primary" @click="returnexper">返回章节</el-button>
     </div>
     <el-table
       ref="multipleTable"
@@ -29,15 +29,15 @@
         <template slot-scope="scope">
           <el-button
             type="primary"
-            size="small"
+            size="mini"
             class="opertea"
             @click="exreport(scope.row)"
             >实验报告</el-button
           >
-          <el-button type="primary" size="small" @click="editexrept(scope.row)"
+          <el-button type="primary" size="mini" @click="editexrept(scope.row)"
             >编辑</el-button
           >
-          <el-button type="danger" size="small" @click="del(scope.row.id)"
+          <el-button type="danger" size="mini" @click="del(scope.row.id)"
             >删除</el-button
           >
         </template>
@@ -83,8 +83,8 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button type="primary" @click="serve">保 存</el-button>
-          <el-button @click="closeDialog">取 消</el-button>
+          <el-button size="small" type="primary" @click="serve">保 存</el-button>
+          <el-button size="small" @click="closeDialog">取 消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -329,6 +329,10 @@ export default {
 }
 .header .el-input {
   width: 200px;
+  margin-right: 10px;
+}
+.block{
+  margin-top: 10px;
 }
 </style>
 <style>
