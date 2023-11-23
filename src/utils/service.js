@@ -48,9 +48,10 @@ const http = {
       method: 'delete',
     });
   },
-  put(url) {
+  put(url, data = {}) {
     return service({
       url,
+      data,
       method: 'put',
       headers: {
         "satoken": localStorage.getItem("satoken")

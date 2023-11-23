@@ -276,9 +276,6 @@ export default {
 .addRole {
   text-align: left;
 }
-.el-form {
-  width: 400px;
-}
 </style>
 <style>
 .el-button--primary {
