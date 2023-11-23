@@ -489,7 +489,7 @@ export default {
           })
         }
         // 教师端实验步骤
-        if(this.roleId === '2'){
+        if(this.roleId === '2' && this.teacherId){
           getExperimentData(this.experimentId, this.courseId).then((res) => {
             this.$refs.editor.html = res.experimentReport.result
             this.experimentStep = res.experimentReportPlans;
@@ -510,7 +510,8 @@ export default {
           if(this.roleId === '2'){
             // 成绩表格(教师端)
             scoreList(this.experimentId,this.teacherId).then(res=>{
-              this.tableData = handleDate(res.data)
+              // this.tableData = handleDate(res.data)
+              this.tableData = res.data
             })
           }
           if(this.roleId === '3'){
@@ -557,7 +558,6 @@ export default {
         planContent:planContent,//实验步骤
       }
       saveExperimentReport(data).then(res=>{
-          // console.log(res);
         this.$message({
           message:'保存成功',
           type:'success'
@@ -600,10 +600,6 @@ export default {
             message: '提交成功!'
           });
         })
-        // this.$message({
-        //   type: 'success',
-        //   message: '提交成功!'
-        // });
       }).catch(() => {
         this.$message({
           type: 'info',

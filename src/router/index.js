@@ -101,6 +101,12 @@ const routes = [
             name: 'personInfo',
             component: () => import('@/views/main/personInfo/personInfo')
           },
+          // 主页
+          {
+            path: '/home',
+            name: 'home',
+            component: () => import('@/views/main/home/home')
+          },
           // 选课中心
           {
             path: '/selectCourseCenter',

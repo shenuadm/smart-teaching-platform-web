@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="menuManagement">
     <el-button
       type="primary"
       size="small"
@@ -508,7 +508,7 @@ export default {
 </style>
 <style>
 /* 添加根菜单 */
-.addRoot {
+.menuManagement .addRoot {
   width: 100px;
   height: 30px;
   background-color: #409EFF;
@@ -517,17 +517,17 @@ export default {
   border: none;
 }
 /* 按钮 */
-.el-button {
+.menuManagement .el-button {
   font-size: 14px;
 }
-.el-tree-node__content {
+.menuManagement .el-tree-node__content {
   margin: 5px 0;
   height: 50px;
   background-color: #fafafa;
   box-shadow: 0 2px 2px #dddddd;
 }
 /* 新增弹出框的脚部 */
-.el-dialog__footer {
+.menuManagement .el-dialog__footer {
   text-align: center !important;
 }
 </style>

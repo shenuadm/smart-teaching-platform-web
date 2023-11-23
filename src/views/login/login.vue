@@ -1,5 +1,5 @@
 <template >
-  <div class="bg">
+  <div class="bg" id="loginRegister">
     <div class="login center">
       <div class="login-tab">
         <div class="login-num" @click="toLogin">
@@ -14,94 +14,137 @@
       <div class="content center">
         <!-- 登录 -->
         <div class="content-login" v-if="logindis">
-          <div class="number center">
-            <span>账号</span>
-            <input
-              type="text"
-              class="input-number center zh-mgt-10"
-              placeholder="账号"
-              v-model="logNum"
-            />
-          </div>
-          <div class="pas center">
-            <span>密码</span>
-            <input
-              type="password"
-              class="input-pas center zh-mgt-10"
-              placeholder="密码"
-              v-model="logPas"
-            />
-          </div>
-          <div>
-            <button class="login-but" @click="Login">登录</button>
-          </div>
+          <el-form 
+            :model="loginForm"
+            :rules="loginRules" 
+            ref="loginForm" 
+            label-width="100px" 
+            class="demo-ruleForm">
+            <el-form-item label="账号" prop="logNum">
+              <el-input 
+                type="text" 
+                v-model="loginForm.logNum" 
+                autocomplete="off"
+                placeholder="请输入用户名">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="logPas">
+              <el-input 
+                type="password" 
+                v-model="loginForm.logPas" 
+                autocomplete="off"
+                placeholder="请输入密码">
+              </el-input>
+            </el-form-item>
+            <el-form-item class="login-btn">
+              <el-button type="primary" @click="Login('loginForm')">登录</el-button>
+            </el-form-item>
+          </el-form>
           <div>
             <p>还没有账号？<a href="javascript:void(0)" class="zh-fc-blue" @click="toRegister">去注册</a></p>
           </div>
         </div>
         <!-- 注册 -->
         <div class="enroll-login" v-if="enrolldis">
-          <div class="enr-number center">
-            <span>用户名</span>
-            <input
-              type="text"
-              class="input-enr-number center zh-mgt-10"
-              placeholder="请填写用户名，最长30个字符"
-              maxlength="30"
-              v-model="username"
-            />
-          </div>
-          <div class="name center">
-            <span>昵称</span>
-            <input
-              type="text"
-              class="input-name center zh-mgt-10"
-              placeholder="请填写昵称，最长20个字符"
-              maxlength="20"
-              v-model="nikename"
-            />
-          </div>
-          <div class="pas center pass">
-            <span>密码</span>
-            <input
-              type="password"
-              class="input-pas center zh-mgt-10"
-              placeholder="5-20位英文、数字、符号、区分大小写"
-              v-model="password"
-            />
-          </div>
-          <div class="pas-tow center">
-            <span>确认密码</span>
-            <input
-              type="password"
-              class="input-pas-tow center zh-mgt-10"
-              placeholder="请确认密码"
-              v-model="enrPast"
-            />
-          </div>
-          <div>
-            <button class="enroll-but" @click="Enroll">注册</button>
-          </div>
+          <el-form 
+            :model="registerForm" 
+            :rules="registerRules" 
+            ref="registerForm" 
+            label-width="100px" 
+            class="demo-ruleForm">
+            <el-form-item label="用户名" prop="username">
+              <el-input 
+                v-model="registerForm.username" 
+                maxlength="30" 
+                placeholder="请输入用户名，最长30个字符">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="昵称" prop="nikename">
+              <el-input 
+                v-model="registerForm.nikename" 
+                maxlength="20" 
+                placeholder="请输入昵称，最长20个字符">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input 
+                v-model="registerForm.password" 
+                maxlength="18" 
+                placeholder="请输入3-18位英文、数字组成的密码">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="enrPast">
+              <el-input 
+                v-model="registerForm.enrPast" 
+                placeholder="请确认密码">
+              </el-input>
+            </el-form-item>
+            <el-form-item class="register-btn">
+              <el-button type="primary" @click="Enroll('registerForm')">注册</el-button>
+            </el-form-item>
+          </el-form>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { toLogin } from "@/utils/api.js";
-// import store from '@/store/index.js'
+import { toLogin,toRegister } from "@/utils/api.js";
 export default {
   components: {},
   data() {
+    // 密码
+    let pwd = (rule, value, callback)=>{
+      const regex = /^[a-zA-Z0-9]{3,18}$/
+      if (value === '') {
+        callback(new Error('请输入密码'));
+      }else if(!regex.test(value)){
+        callback(new Error('请输入3-18位英文、数字组成的密码'))
+      }else{
+        callback()
+      }
+    }
+    // 确认密码
+    let repwd = (rule,value,callback)=>{
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.registerForm.password) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    }
     return {
       logindis: true,
       enrolldis: false,
-      logNum: "",
-      logPas: "",
-      username: "",
-      nikename: "",
-      password: "",
-      enrPast: "",
+      loginForm:{
+        logNum:'',
+        logPas:''
+      },
+      loginRules:{
+        logNum:[{required:true,message:'请输入用户名',trigger:'blur'}],
+        logPas:[{required:true,message:'请输入密码',trigger:'blur'}]
+      },
+      registerForm:{
+        account:'',
+        username:'',
+        password:'',
+        enrPast:''
+      },
+      registerRules:{
+        username:[
+          {required:true,message:'请输入用户名',trigger:'blur'}
+        ],
+        nikename:[
+          {required:true,message:'请输入昵称',trigger:'blur'}
+        ],
+        password:[
+          {required:true,validator:pwd,trigger:'blur'}
+        ],
+        enrPast:[
+          {required:true,validator:repwd,trigger:'blur'}
+        ]
+      }
     };
   },
   mounted() {},
@@ -114,75 +157,77 @@ export default {
       this.logindis = false;
       this.enrolldis = true;
     },
-    Login() {
+    Login(formName) {
       let data = {
-        account: this.logNum,
-        password: this.logPas,
+        account: this.loginForm.logNum,
+        password: this.loginForm.logPas,
       };
-      if(this.logNum === '' || this.logPas === ''){
+      if(this.loginForm.logNum === '' || this.loginForm.logPas === ''){
         this.$message({
           message:'用户名或者密码不可为空',
           type:'error'
         })
       }else{
-        // 登录
-        toLogin(data).then((res) => {
-          if (res.msg != "success") {
-            this.$message.error(res.msg);
-          } else {
-            let tokenValue = res.tokenValue;
-            localStorage.setItem("satoken", tokenValue);
-            let navData = JSON.stringify(res.menuVoList);
-            localStorage.setItem("navData", navData);
-            localStorage.setItem("roleId",res.roleId);
-            this.$store.commit("updateUsername",res.username);
-            sessionStorage.setItem("username",res.username)
-            localStorage.setItem("oldpwd", data.password);
-            if(res.roleId === 1){
-              this.$router.push({path:"/personmsg"})
-            }
-            if(res.roleId === 2){
-              this.$router.push({path:"/personalInfo"})
-            }
-            if(res.roleId === 3){
-              this.$router.push({path:"/personInfo"})
-            }
+        this.$refs[formName].validate((valid)=>{
+          if(valid){
+            // 登录
+            toLogin(data).then((res) => {
+              if (res.msg != "success") {
+                this.$message.error(res.msg);
+              } else {
+                let tokenValue = res.tokenValue;
+                localStorage.setItem("satoken", tokenValue);
+                let navData = JSON.stringify(res.menuVoList);
+                localStorage.setItem("navData", navData);
+                localStorage.setItem("roleId",res.roleId);
+                this.$store.commit("updateUsername",res.username);
+                // this.$store.commit("updateRoleId",res.roleId)
+                sessionStorage.setItem("username",res.username)
+                localStorage.setItem("oldpwd", data.password);
+                if(res.roleId === 1){
+                  this.$router.push({path:"/personmsg"})
+                }
+                if(res.roleId === 2){
+                  this.$router.push({path:"/personalInfo"})
+                }
+                if(res.roleId === 3){
+                  this.$router.push({path:"/home"})
+                }
+              }
+            });
           }
-        });
+        })
       }
     },
     toRegister(){
       this.enrolldis = true
       this.logindis = false
     },
-    Enroll() {
-      if (/^.{1,30}$/.test(this.username)) {
-        if (/^.{1,20}$/.test(this.nikename)) {
-          if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,12}$/.test(this.password)) {
-            if (this.password === this.enrPast) {
-              this.logindis = true;
-              this.enrolldis = false;
-              this.$message.success("注册成功");
-            } else if (this.enrPast == "") {
-              this.$message.error("请再次输入密码");
-            } else {
-              this.$message.error("两次密码不一致，请重新输入");
-            }
-          } else if (this.password == "") {
-            this.$message.error("请输入密码");
-          } else {
-            this.$message.error("密码格式错误，5-20位英文、数字、符号、区分大小写");
-          }
-        } else if (this.nikename == "") {
-          this.$message.error("昵称不能为空");
-        } else {
-          this.$message.error("昵称格式错误");
-        }
-      } else if (this.username == "") {
-        this.$message.error("用户不能为空");
-      } else {
-        this.$message.error("请输入用户名");
+    Enroll(formName) {
+      let data = {
+        account:this.registerForm.username,
+        username:this.registerForm.nikename,
+        password:this.registerForm.password
       }
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          toRegister(data).then(res=>{
+            if(res.msg === 'success'){
+              this.$message({
+                message:'注册成功',
+                type:'success'
+              })
+              this.registerForm = {}
+            }
+          })
+        } else {
+          this.$message({
+            message:'注册失败',
+            type:'info'
+          })
+          return false;
+        }
+      });
     },
   },
 };
@@ -244,11 +289,12 @@ img {
 }
 .content-login {
   height: auto;
+  margin-top: 20px;
 }
 .enroll-login {
   position: relative;
   height: auto;
-  top: -10px;
+  top: 20px;
 }
 .number,
 .pas,
@@ -300,18 +346,6 @@ img {
   font-weight: 700;
   left: -43%;
 }
-.login-but,
-.enroll-but {
-  position: relative;
-  width: 338px;
-  height: 44px;
-  background-color: #43bc60;
-  border: 1px solid #36964d;
-  color: white;
-  border-radius: 5px;
-  margin-top: 25px;
-  cursor: pointer;
-}
 .enr-number>span::before,
 .name>span::before,
 .pass>span::before,
@@ -322,5 +356,13 @@ img {
   position: absolute;
   top: 3px;
   left: -9px;
+}
+</style>
+<style>
+#loginRegister .el-form-item__label{
+  text-align: center;
+}
+#loginRegister .login-btn .el-form-item__content,#loginRegister .register-btn .el-form-item__content{
+  margin: 0 !important;
 }
 </style>

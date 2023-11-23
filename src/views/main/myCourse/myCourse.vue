@@ -44,6 +44,7 @@
 <script>
 import { getMyCourse, ClickRevokeCourse } from "@/utils/api.js";
 import { selectStatusConvert } from "@/utils/status.js";
+import loading from '@/utils/loading.js'
 export default {
   components: {},
   data() {
@@ -54,6 +55,14 @@ export default {
     };
   },
   mounted() {
+    if(this.courseList.length<0){
+      this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+    }
     getMyCourse().then((res) => {
       this.courseList = res.data.map((item)=>{
         let picture = item.picture.split(",")[1]
