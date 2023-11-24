@@ -366,7 +366,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   font-size: 14px;
-  padding-right: 8px;
+  /* padding-right: 8px; */
   font-size: 16px;
 }
 .el-tree {
@@ -421,7 +421,7 @@ export default {
   justify-content: space-evenly;
 }
 /* 添加根菜单 */
-.addRoot {
+.menu-management .addRoot {
   width: 100px;
   height: 30px;
   background-color: #409eff;
@@ -430,17 +430,17 @@ export default {
   border: none;
 }
 /* 按钮 */
-.el-button {
+.menu-management .el-button {
   font-size: 14px;
 }
-.el-tree-node__content {
+.menu-management .el-tree-node .el-tree-node__content {
   margin: 5px 0;
-  height: 50px;
+  height: 50px !important;
   background-color: #fafafa;
   box-shadow: 0 2px 2px #dddddd;
 }
 /* 新增弹出框的脚部 */
-.el-dialog__footer {
+.menu-management .el-dialog__footer {
   text-align: center !important;
 }
 </style>

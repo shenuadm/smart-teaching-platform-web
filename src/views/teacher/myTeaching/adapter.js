@@ -4,6 +4,11 @@ let data = JSON.parse(JSON.stringify(defaultData))
 let adapter = {
     data,
     methods: {
+        // 关闭弹框
+        closeDialog() {
+            this.dialogVisible = false
+            this.$refs['ruleForm'].resetFields();
+        },
         // 修改
         editCourseClick() {
             this.dialogVisible = true
@@ -19,10 +24,6 @@ let adapter = {
                 }
             });
         },
-        // 重置表单
-        resetFrom() {
-            
-        }
     },
 }
 
