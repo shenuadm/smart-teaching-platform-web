@@ -21,6 +21,7 @@
 
 <script>
 export default {
+  name:'teacherIndex',
   data() {
     return {
       navList: [], //侧导航标题
@@ -39,7 +40,7 @@ export default {
         });
       }
     });
-    // console.log(this.navList);
+    console.log(this.navList);
   },
   methods: {
     switchNav(index) {
