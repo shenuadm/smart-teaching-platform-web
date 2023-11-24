@@ -510,8 +510,8 @@ export default {
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = 'block';
-        // this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=${data.fileUrl}`;
-        this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=/static/test.pdf`;
+        this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=${data.fileUrl}`;
+        // this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=/static/test.pdf`;
       } else {
         this.$refs.courseWare.style.display = 'none';
       }
