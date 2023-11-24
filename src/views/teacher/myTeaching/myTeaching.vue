@@ -268,11 +268,13 @@ export default {
 }
 .choose-date {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.choose-date span {
+/* .choose-date span {
   padding: 0 38px;
   padding-top: 10px;
-}
+} */
 .input-small {
   display: flex;
 }
@@ -289,9 +291,6 @@ export default {
 }
 .el-form-item .el-button--default {
   margin-left: 30px;
-}
-.el-form .el-form-item {
-  width: 645px;
 }
 </style>
 <style>

@@ -55,14 +55,15 @@ export default {
 
 <style scoped>
 .personalInfo {
+  display: flex;
   min-height: 80vh;
   margin: 30px auto;
 }
 .person-nav {
-  float: left;
   padding: 20px 0;
-  width: 200px;
+  width: 150px;
   margin-right: 10px;
+  margin-bottom: auto;
   border-radius: 5px;
   background-color: #fff;
   border: 1px solid #e4ecf3;
@@ -81,8 +82,7 @@ export default {
   border-left: 2px solid #43bc60;
 }
 .person-container {
-  width: 1030px;
-  float: right;
+  width: 1000px;
   flex: 1;
   border-radius: 5px;
 }

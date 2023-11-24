@@ -1,4 +1,4 @@
-<template >
+<template>
   <div class="bg">
     <div class="login center">
       <div class="login-tab">
@@ -36,7 +36,14 @@
             <button class="login-but" @click="Login">登录</button>
           </div>
           <div>
-            <p>还没有账号？<a href="javascript:void(0)" class="zh-fc-blue" @click="toRegister">去注册</a></p>
+            <p>
+              还没有账号？<a
+                href="javascript:void(0)"
+                class="zh-fc-blue"
+                @click="toRegister"
+                >去注册</a
+              >
+            </p>
           </div>
         </div>
         <!-- 注册 -->
@@ -119,12 +126,12 @@ export default {
         account: this.logNum,
         password: this.logPas,
       };
-      if(this.logNum === '' || this.logPas === ''){
+      if (this.logNum === "" || this.logPas === "") {
         this.$message({
-          message:'用户名或者密码不可为空',
-          type:'error'
-        })
-      }else{
+          message: "用户名或者密码不可为空",
+          type: "error",
+        });
+      } else {
         // 登录
         toLogin(data).then((res) => {
           if (res.msg != "success") {
@@ -134,26 +141,26 @@ export default {
             localStorage.setItem("satoken", tokenValue);
             let navData = JSON.stringify(res.menuVoList);
             localStorage.setItem("navData", navData);
-            localStorage.setItem("roleId",res.roleId);
-            this.$store.commit("updateUsername",res.username);
-            sessionStorage.setItem("username",res.username)
+            localStorage.setItem("roleId", res.roleId);
+            this.$store.commit("updateUsername", res.username);
+            sessionStorage.setItem("username", res.username);
             localStorage.setItem("oldpwd", data.password);
-            if(res.roleId === 1){
-              this.$router.push({path:"/personmsg"})
+            if (res.roleId === 1) {
+              this.$router.push({ path: "/personmsg" });
             }
-            if(res.roleId === 2){
-              this.$router.push({path:"/personalInfo"})
+            if (res.roleId === 2) {
+              this.$router.push({ path: "/personalInfo" });
             }
-            if(res.roleId === 3){
-              this.$router.push({path:"/personInfo"})
+            if (res.roleId === 3) {
+              this.$router.push({ path: "/personInfo" });
             }
           }
         });
       }
     },
-    toRegister(){
-      this.enrolldis = true
-      this.logindis = false
+    toRegister() {
+      this.enrolldis = true;
+      this.logindis = false;
     },
     Enroll() {
       if (/^.{1,30}$/.test(this.username)) {
@@ -260,7 +267,7 @@ img {
   height: 67px;
   margin-top: 20px;
 }
-.pas-tow>span{
+.pas-tow > span {
   display: inline-block;
   text-indent: 10px;
 }
@@ -312,10 +319,10 @@ img {
   margin-top: 25px;
   cursor: pointer;
 }
-.enr-number>span::before,
-.name>span::before,
-.pass>span::before,
-.pas-tow>span::before{
+.enr-number > span::before,
+.name > span::before,
+.pass > span::before,
+.pas-tow > span::before {
   content: "*";
   color: red;
   margin-right: 10px;
