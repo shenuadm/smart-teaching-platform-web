@@ -1,12 +1,12 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/pdf',
-    component: () => import('@/components/PdfShow.vue')
+    component: () => import('@/components/PdfShow.vue'),
   },
   {
     path: '/',
@@ -20,7 +20,7 @@ const routes = [
       },
       {
         path: '/test',
-        component: () => import('@/views/test.vue')
+        component: () => import('@/views/test.vue'),
       },
       // 超级管理员端
       {
@@ -36,62 +36,71 @@ const routes = [
           {
             path: '/menuManagement',
             name: 'menuManagement',
-            component: () => import('@/views/superUser/menuManagement/menuManagement'),
+            component: () =>
+              import('@/views/superUser/menuManagement/menuManagement'),
           },
           {
             path: '/UserManagement',
             name: 'UserManagement',
-            component: () => import('@/views/superUser/UserManagement/UserManagement')
+            component: () =>
+              import('@/views/superUser/UserManagement/UserManagement'),
           },
           {
             path: '/courseManagement',
             name: 'courseManagement',
-            component: () => import('@/views/superUser/menuManagement/courseManagement')
+            component: () =>
+              import('@/views/superUser/menuManagement/courseManagement'),
           },
           {
             path: '/chapterManagemet',
             name: 'chapterManagemet',
-            component: () => import('@/views/superUser/menuManagement/chapterManagemet')
+            component: () =>
+              import('@/views/superUser/menuManagement/chapterManagemet'),
           },
           {
             path: '/homeworkManagement',
             name: 'homeworkManagement',
-            component: () => import('@/views/superUser/menuManagement/homeworkManagement')
+            component: () =>
+              import('@/views/superUser/menuManagement/homeworkManagement'),
           },
           {
             path: '/experManagemet',
             name: 'experManagemet',
-            component: () => import('@/views/superUser/menuManagement/experimentalManagement')
+            component: () =>
+              import('@/views/superUser/menuManagement/experimentalManagement'),
           },
           {
             path: '/laboratoryReport',
             name: 'laboratoryReport',
-            component: () => import('@/views/superUser/menuManagement/laboratoryReport')
+            component: () =>
+              import('@/views/superUser/menuManagement/laboratoryReport'),
           },
           {
             path: '/laboratoryStep',
             name: 'laboratoryStep',
-            component: () => import('@/views/superUser/menuManagement/laboratoryStep')
+            component: () =>
+              import('@/views/superUser/menuManagement/laboratoryStep'),
           },
           {
             path: '/aboutUS',
             name: 'aboutUS',
-            component: () => import('@/views/superUser/aboutUS')
+            component: () => import('@/views/superUser/aboutUS'),
           },
           // 角色管理
           {
             path: '/roleManagement',
             name: 'roleManagement',
-            component: () => import('@/views/superUser/menuManagement/roleManagement')
+            component: () =>
+              import('@/views/superUser/menuManagement/roleManagement'),
           },
           // 系统通知管理
           {
             path: '/systemNotice',
             name: 'systemNotice',
-            component: () => import('@/views/superUser/systemNotice/systemNotice'),
+            component: () =>
+              import('@/views/superUser/systemNotice/systemNotice'),
           },
-        ]
-
+        ],
       },
       // 学生端
       {
@@ -103,27 +112,28 @@ const routes = [
           {
             path: '/personInfo',
             name: 'personInfo',
-            component: () => import('@/views/main/personInfo/personInfo')
+            component: () => import('@/views/main/personInfo/personInfo'),
           },
           // 主页
           {
             path: '/home',
             name: 'home',
-            component: () => import('@/views/main/home/home')
+            component: () => import('@/views/main/home/home'),
           },
           // 选课中心
           {
             path: '/selectCourseCenter',
             name: 'selectCourseCenter',
-            component: () => import('@/views/main/selectCourseCenter/selectCourseCenter')
+            component: () =>
+              import('@/views/main/selectCourseCenter/selectCourseCenter'),
           },
           // 我的课程
           {
             path: '/myCourse',
             name: 'myCourse',
-            component: () => import('@/views/main/myCourse/myCourse')
-          }
-        ]
+            component: () => import('@/views/main/myCourse/myCourse'),
+          },
+        ],
       },
       // 课程详情
       {
@@ -141,40 +151,43 @@ const routes = [
           {
             path: '/personalInfo',
             name: 'personalInfo',
-            component: () => import('@/views/teacher/personalInfo/personalInfo')
+            component: () =>
+              import('@/views/teacher/personalInfo/personalInfo'),
           },
           // 课程中心
           {
             path: '/courseCenter',
             name: 'courseCenter',
-            component: () => import('@/views/teacher/courseCenter/courseCenter')
+            component: () =>
+              import('@/views/teacher/courseCenter/courseCenter'),
           },
           // 我的授课
           {
             path: '/myTeaching',
             name: 'myTeaching',
-            component: () => import('@/views/teacher/myTeaching/myTeaching')
+            component: () => import('@/views/teacher/myTeaching/myTeaching'),
           },
-        ]
+        ],
       },
       // 章节详情
       {
         path: '/chapterDetails',
         name: 'chapterDetails',
-        component: () => import('@/views/teacher/chapterDetails/chapterDetails')
+        component: () =>
+          import('@/views/teacher/chapterDetails/chapterDetails'),
       },
       // 公司介绍
       {
         path: '/companyProfile',
         name: 'companyProfile',
-        component: () => import('@/views/companyProfile/companyProfile')
-      }
-    ]
+        component: () => import('@/views/companyProfile/companyProfile'),
+      },
+    ],
   },
-]
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

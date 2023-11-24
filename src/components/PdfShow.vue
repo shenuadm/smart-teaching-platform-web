@@ -70,6 +70,8 @@ export default {
   computed: {},
   created() {
     this.prohibit();
+    console.log(this.$route.query.url);
+    this.src = this.$route.query.url;
   },
   destroyed() {
     // 在页面销毁时记得清空 setInterval
@@ -83,7 +85,7 @@ export default {
         : (this.remindShow = this.remindText.refresh);
     }, 4000);
     // 监听滚动条事件
-    this.listenerFunction();
+    // this.listenerFunction();
   },
   data() {
     return {
@@ -105,9 +107,9 @@ export default {
   },
   methods: {
     // // 监听滚动条事件
-    listenerFunction() {
-      document.getElementById('container').addEventListener('scroll', true);
-    },
+    // listenerFunction() {
+    //   document.getElementById('container').addEventListener('scroll', true);
+    // },
     // 页面回到顶部
     toTop() {
       window.scrollTo(0, 0);
