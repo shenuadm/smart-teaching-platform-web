@@ -103,7 +103,7 @@
                 <img src="@/assets/eye.png" alt="" @click="toShow" />
               </div>
               <div class="openWindow">
-                <a
+                <!-- <a
                   href="javascript:void(0)"
                   ref="currentWindow"
                   class="btn-bg-b"
@@ -115,13 +115,20 @@
                   frameborder="0"
                   class="iframeMain"
                   ref="iframeMain"
-                ></iframe>
-                <a
+                ></iframe> -->
+                <!-- <a
                   href="javascript:void(0)"
                   ref="newWindow"
                   class="btn-bg-b"
                   @click="openNewWindow"
                   >新窗口打开</a
+                > -->
+                <a
+                  href="javascript:void(0)"
+                  ref="newWindow"
+                  class="btn-bg-b"
+                  @click="openNewWindow"
+                  >访问实验机</a
                 >
               </div>
             </el-tab-pane>
@@ -634,7 +641,8 @@ export default {
     },
     // 新窗口打开
     openNewWindow() {
-      this.$refs.newWindow.href = 'https://123.60.85.111:4200/';
+      // this.$refs.newWindow.href = 'https://123.60.85.111:4200/';
+      window.open('https://123.60.85.111:4200/');
     },
     // 保存富文本内容
     saveContent() {
