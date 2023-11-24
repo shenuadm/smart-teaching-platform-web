@@ -14,22 +14,28 @@
         </el-table-column>
         <el-table-column prop="description" label="角色描述" align="center">
         </el-table-column>
-        <!-- <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope" v-if="scope.row.roleid !== 1">
             <el-button
               size="mini"
               type="primary"
               @click="empower(scope.$index, scope.row)"
               >授权</el-button
             >
-            <el-button size="mini" type="primary" @click="edit(scope.$index, scope.row)"
+            <el-button
+              size="mini"
+              type="primary"
+              @click="edit(scope.$index, scope.row)"
               >编辑</el-button
             >
-            <el-button size="mini" type="danger" @click="del(scope.$index, scope.row)"
+            <el-button
+              size="mini"
+              type="danger"
+              @click="del(scope.$index, scope.row)"
               >删除</el-button
             >
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
     </div>
     <!-- 添加角色 -->
@@ -200,7 +206,6 @@ export default {
       this.empowerVisible = true;
       this.roleId = row.roleid;
       empowerTree(this.roleId).then((res) => {
-        console.log(res);
         this.treeData = res.data;
         // 一级
         this.treeData.map((item) => {
@@ -241,6 +246,7 @@ export default {
     // 取消授权
     cancelEmpower() {
       this.empowerVisible = false;
+      this.checked = [];
     },
     // 删除
     del(index, row) {
