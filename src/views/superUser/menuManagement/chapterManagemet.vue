@@ -235,7 +235,7 @@ export default {
     // 查看pdf
     goPdf(url) {
       console.log(url);
-      window.open(`http://localhost:8080/#/pdf?url=${url}`);
+      window.open(`${window.location.origin}/#/pdf?url=${url}`);
     },
     // 关闭章dilog
     closeAddChapter() {
