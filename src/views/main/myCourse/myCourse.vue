@@ -77,7 +77,7 @@ export default {
   methods: {
     // 查看详情
     toCheckDetails(e) {
-      // console.log(e);
+      console.log(e);
       localStorage.setItem("hostName", e.hostName); //登录名
       localStorage.setItem("hostPwd", e.hostPwd); //登录密码
       // 路由跳转
@@ -88,6 +88,7 @@ export default {
         query: {
           teacherCourseId: e.teacherCourseId, //用于渲染课程头部详情
           courseId: e.courseId, //用户渲染树形
+          studentCourseId:e.id,//学生实验
         },
       });
     },

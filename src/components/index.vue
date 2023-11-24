@@ -37,9 +37,9 @@
                   router>
                   <el-submenu index="1">
                     <template slot="title">{{this.$store.state.username}}</template>
-                    <el-menu-item v-if="roleId == 1" index="/personmsg">修改信息</el-menu-item>
+                    <!-- <el-menu-item v-if="roleId == 1" index="/personmsg">修改信息</el-menu-item>
                     <el-menu-item v-if="roleId == 2" index="/personalInfo">修改信息</el-menu-item>
-                    <el-menu-item v-if="roleId == 3" index="/personInfo">修改信息</el-menu-item>
+                    <el-menu-item v-if="roleId == 3" index="/personInfo">修改信息</el-menu-item> -->
                     <el-menu-item @click="exitLogin">退出登录</el-menu-item>
                   </el-submenu>
                 </el-menu>
