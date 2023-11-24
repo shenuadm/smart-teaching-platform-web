@@ -5,6 +5,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/pdf',
+    component: () => import('@/components/PdfShow.vue')
+  },
+  {
     path: '/',
     name: 'index',
     component: () => import('@/components/index'),

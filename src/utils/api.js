@@ -237,8 +237,8 @@ export function addRole(data) {
   return http.post('/role/add', data)
 }
 // 修改角色
-export function updateRole(userId) {
-  return http.put('/role/update')
+export function updateRole(data) {
+  return http.post('/role/update',data)
 }
 // 删除角色
 export function delRole(id) {

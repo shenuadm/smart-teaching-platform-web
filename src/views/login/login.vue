@@ -41,7 +41,14 @@
             </el-form-item>
           </el-form>
           <div>
-            <p>还没有账号？<a href="javascript:void(0)" class="zh-fc-blue" @click="toRegister">去注册</a></p>
+            <p>
+              还没有账号？<a
+                href="javascript:void(0)"
+                class="zh-fc-blue"
+                @click="toRegister"
+                >去注册</a
+              >
+            </p>
           </div>
         </div>
         <!-- 注册 -->
@@ -199,9 +206,9 @@ export default {
         })
       }
     },
-    toRegister(){
-      this.enrolldis = true
-      this.logindis = false
+    toRegister() {
+      this.enrolldis = true;
+      this.logindis = false;
     },
     Enroll(formName) {
       let data = {
@@ -306,7 +313,7 @@ img {
   height: 67px;
   margin-top: 20px;
 }
-.pas-tow>span{
+.pas-tow > span {
   display: inline-block;
   text-indent: 10px;
 }

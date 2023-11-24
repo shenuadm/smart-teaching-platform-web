@@ -33,7 +33,7 @@
       <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
       <el-table-column prop="updateTime" label="修改时间" width="250">
       </el-table-column>
-      <el-table-column label="操作" >
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)"
             >编辑</el-button
@@ -161,8 +161,8 @@ import {
   mdelstep,
   delstep,
   getdetail,
-} from "@/utils/api";
-import editor from "../../../components/editor.vue";
+} from '@/utils/api';
+import editor from '../../../components/editor.vue';
 export default {
   components: { editor },
   data() {
@@ -175,20 +175,20 @@ export default {
       detailsData: [],
       currentPage: 1,
       pageSize: 5,
-      input: "",
+      input: '',
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
       dialogTableVisible: false,
-      step: "",
-      imgSrc: "",
+      step: '',
+      imgSrc: '',
       id: 0,
       revise: {
-        description: "",
-        name: "",
-        content: "",
-        sort: "",
-        imageStorePath: "",
+        description: '',
+        name: '',
+        content: '',
+        sort: '',
+        imageStorePath: '',
       },
     };
   },
@@ -214,7 +214,7 @@ export default {
         };
         addstep(data).then((res) => {
           this.dialogVisible = false;
-          this.step = "";
+          this.step = '';
           this.break();
         });
       } else {
@@ -228,7 +228,7 @@ export default {
         };
         updatestep(data).then((res) => {
           this.dialogVisible = false;
-          this.step = "";
+          this.step = '';
           this.break();
         });
       }
@@ -237,7 +237,7 @@ export default {
     cancel() {
       this.dialogVisible = false;
       if (this.step == true) {
-        this.$refs.editor.html = "";
+        this.$refs.editor.html = '';
       }
     },
     //返回实验报告
@@ -276,22 +276,22 @@ export default {
     resetting() {
       this.dialogtabledata = true;
       this.exdialogtabledata = false;
-      this.input = "";
+      this.input = '';
       this.stepdata = [];
     },
     //删除
     del(e) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           delstep(e).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -299,18 +299,18 @@ export default {
     },
     //批量删除
     delstep() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           let data = this.arr;
           mdelstep(data).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
