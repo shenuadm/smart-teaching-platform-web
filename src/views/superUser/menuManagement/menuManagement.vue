@@ -414,14 +414,14 @@ export default {
 }
 </style>
 <style>
-.menu-management .form-btn .el-form-item__content {
+.form-btn .el-form-item__content {
   flex: 1;
   display: flex;
   margin-left: 0 !important;
   justify-content: space-evenly;
 }
 /* 添加根菜单 */
-.menuManagement .addRoot {
+.addRoot {
   width: 100px;
   height: 30px;
   background-color: #409eff;
@@ -430,17 +430,17 @@ export default {
   border: none;
 }
 /* 按钮 */
-.menuManagement .el-button {
+.el-button {
   font-size: 14px;
 }
-.menuManagement .el-tree-node__content {
+.el-tree-node__content {
   margin: 5px 0;
   height: 50px;
   background-color: #fafafa;
   box-shadow: 0 2px 2px #dddddd;
 }
 /* 新增弹出框的脚部 */
-.menuManagement .el-dialog__footer {
+.el-dialog__footer {
   text-align: center !important;
 }
 </style>
