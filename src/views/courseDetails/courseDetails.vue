@@ -347,6 +347,7 @@ export default {
       teacherId: "", //教师课程id
       roleId:'',//角色id--2表示教师角色，3表示学生角色
       courseId:'',//课程的id
+      studentCourseId:'',//学生实验id
       experimentContent: {}, //实验内容
       experimentStep: [],//实验步骤
       tableData: [],//学生成绩
@@ -386,6 +387,7 @@ export default {
     if(this.roleId === '3'){//学生查看课程详情
       this.path = '/myCourse'
       this.teacherId = this.$route.query.teacherCourseId;
+      this.studentCourseId = this.$route.query.studentCourseId
       // 课程详情
       courseDetails(this.teacherId).then((res) => {
         this.courseObj = courseStatusConvert(res.course);
@@ -465,7 +467,7 @@ export default {
         }
         if(this.roleId === '3'){
           // 学生端实验结果、实验步骤
-          getExperimentStudentData(this.experimentId,this.courseId).then(res=>{
+          getExperimentStudentData(this.experimentId,this.studentCourseId).then(res=>{
             // console.log(res);
             if(res.experimentReport.type === 2 && res.experimentReport.status != 0){//学生已提交实验
               this.submitStatus = true
@@ -474,18 +476,33 @@ export default {
               this.$refs.btnStatus.type = ''
             }
             // 实验结果
-            this.$refs.editor.html = res.experimentReport.result
+            if(res.experimentReport.result !== null){
+              this.$refs.editor.html = res.experimentReport.result
+            }
+            // this.$refs.editor.html = res.experimentReport.result
             // 实验步骤
-            this.experimentStep = res.experimentReportPlans
-            setTimeout(()=>{
-              res.experimentReportPlans.forEach((ritem,rindex)=>{
-                this.$refs.editors.forEach((eitem,eindex)=>{
-                  if(rindex === eindex){
-                    eitem.html = ritem.content
-                  }
+            if(res.experimentReportPlans !== null){
+              this.experimentStep = res.experimentReportPlans
+              setTimeout(()=>{
+                res.experimentReportPlans.forEach((ritem,rindex)=>{
+                  this.$refs.editors.forEach((eitem,eindex)=>{
+                    if(rindex === eindex){
+                      eitem.html = ritem.content
+                    }
+                  })
                 })
-              })
-            },1000)
+              },1000)
+            }
+            // this.experimentStep = res.experimentReportPlans
+            // setTimeout(()=>{
+            //   res.experimentReportPlans.forEach((ritem,rindex)=>{
+            //     this.$refs.editors.forEach((eitem,eindex)=>{
+            //       if(rindex === eindex){
+            //         eitem.html = ritem.content
+            //       }
+            //     })
+            //   })
+            // },1000)
           })
         }
         // 教师端实验步骤
@@ -558,20 +575,12 @@ export default {
         planContent:planContent,//实验步骤
       }
       saveExperimentReport(data).then(res=>{
+        console.log(res);
         this.$message({
           message:'保存成功',
           type:'success'
         })
       })
-      // getExperimentStudentData(this.experimentId,this.courseId).then(res=>{
-      //   saveExperimentReport(data).then(res=>{
-      //     // console.log(res);
-      //     this.$message({
-      //       message:'保存成功',
-      //       type:'success'
-      //     })
-      //   })
-      // })
     },
     // 提交实验报告
     submit() {
