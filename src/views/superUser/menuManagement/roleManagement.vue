@@ -1,18 +1,20 @@
 <template>
   <div class="role-management">
     <div class="addRole zh-mgb-20">
-      <el-button type="primary" size="small" @click="addRole">添加角色</el-button>
+      <el-button type="primary" size="small" @click="addRole"
+        >添加角色</el-button
+      >
     </div>
     <div class="roleTable">
       <el-table ref="tableData" :data="tableData" border style="width: 100%">
         <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column prop="rolename" label="角色标识" width="200" align="center">
+        <el-table-column prop="rolename" label="角色标识" align="center">
         </el-table-column>
-        <el-table-column prop="nickname" label="角色名称" width="200" align="center">
+        <el-table-column prop="nickname" label="角色名称" align="center">
         </el-table-column>
-        <el-table-column prop="description" label="角色描述" width="200" align="center">
+        <el-table-column prop="description" label="角色描述" align="center">
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <!-- <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -27,7 +29,7 @@
               >删除</el-button
             >
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
     <!-- 添加角色 -->
@@ -38,7 +40,10 @@
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="角色标识" prop="rolename">
-          <el-input v-model="form.rolename" :disabled="form.roleid < 5"></el-input>
+          <el-input
+            v-model="form.rolename"
+            :disabled="form.roleid < 5"
+          ></el-input>
         </el-form-item>
         <el-form-item label="角色名称" prop="nickname">
           <el-input v-model="form.nickname"></el-input>
@@ -47,7 +52,9 @@
           <el-input v-model="form.description"></el-input>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button type="primary" size="small" @click="submit">提交</el-button>
+          <el-button type="primary" size="small" @click="submit"
+            >提交</el-button
+          >
           <el-button size="small" @click="cancal">取消</el-button>
         </el-form-item>
       </el-form>
@@ -85,7 +92,7 @@ import {
   delRole,
   updateRole,
   addRole,
-} from "@/utils/api.js";
+} from '@/utils/api.js';
 export default {
   data() {
     return {
@@ -93,26 +100,32 @@ export default {
       tableData: [],
       // 编辑表单
       form: {
-        rolename: "",
-        nickname: "",
-        description: "",
+        rolename: '',
+        nickname: '',
+        description: '',
       },
       // 表单校验
       rules: {
-        rolename: [{ required: true, message: "角色标识不能为空", trigger: "blur" }],
-        nickname: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
-        description: [{ required: true, message: "角色描述不能为空", trigger: "blur" }],
+        rolename: [
+          { required: true, message: '角色标识不能为空', trigger: 'blur' },
+        ],
+        nickname: [
+          { required: true, message: '角色名称不能为空', trigger: 'blur' },
+        ],
+        description: [
+          { required: true, message: '角色描述不能为空', trigger: 'blur' },
+        ],
       },
       aeditVisible: false, // 是否显示表单
       empowerVisible: false, //是否显示授权树
       // 授权树
       treeData: [],
       defaultProps: {
-        children: "children",
-        label: "title",
+        children: 'children',
+        label: 'title',
       },
       checked: [], //授权树默认勾选的节点
-      roleId: "",
+      roleId: '',
       isAddRole: true, //是否添加角色
     };
   },
@@ -143,20 +156,20 @@ export default {
     // 关闭弹框
     cancal() {
       this.aeditVisible = false;
-      this.$refs["form"].resetFields();
+      this.$refs['form'].resetFields();
       this.form = {};
     },
     // 提交
     submit() {
-      this.$refs["form"].validate(async (valid) => {
+      this.$refs['form'].validate(async (valid) => {
         if (valid) {
           if (this.isAddRole) {
             // 添加角色
             const res = await addRole(this.form);
             if (res.code === 0) {
               this.$message({
-                type: "success",
-                message: "添加角色成功",
+                type: 'success',
+                message: '添加角色成功',
               });
             } else {
               this.$message.error(res.msg);
@@ -168,8 +181,8 @@ export default {
             const res = await updateRole(this.form);
             if (res.code === 0) {
               this.$message({
-                type: "success",
-                message: "修改角色成功",
+                type: 'success',
+                message: '修改角色成功',
               });
             } else {
               this.$message.error(res.msg);
@@ -219,7 +232,7 @@ export default {
     confirmEmpower() {
       let data = {
         roleId: this.roleId,
-        permissionIds: this.checked.join(","),
+        permissionIds: this.checked.join(','),
       };
       ackEmpower(data).then((res) => {
         console.log(res);
@@ -231,17 +244,17 @@ export default {
     },
     // 删除
     del(index, row) {
-      this.$confirm("你确定要删除吗", "温馨提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('你确定要删除吗', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(async () => {
           const res = await delRole(row.roleid);
           if (res.code === 0) {
             this.$message({
-              type: "success",
-              message: "删除角色成功",
+              type: 'success',
+              message: '删除角色成功',
             });
             this.getroleManagement();
           } else {
