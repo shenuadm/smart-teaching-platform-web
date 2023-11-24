@@ -19,13 +19,13 @@
         <el-input v-model="ruleForm.nickname" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="原密码" prop="oldpwd">
-        <el-input v-model="ruleForm.oldpwd" autocomplete="off"></el-input>
+        <el-input v-model="ruleForm.oldpwd" autocomplete="off" type="password"></el-input>
       </el-form-item>
       <el-form-item label="新密码" prop="newpwd">
-        <el-input v-model="ruleForm.newpwd" autocomplete="off"></el-input>
+        <el-input v-model="ruleForm.newpwd" autocomplete="off" type="password"></el-input>
       </el-form-item>
       <el-form-item label="确认新密码" prop="renewpwd">
-        <el-input v-model="ruleForm.renewpwd" autocomplete="off"></el-input>
+        <el-input v-model="ruleForm.renewpwd" autocomplete="off" type="password"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" size="small" @click="submitForm('ruleForm')"
