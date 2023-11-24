@@ -442,8 +442,17 @@ export default {
       }
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
+        console.log(this.$refs);
         this.$refs.courseWare.style.display = "block";
         this.$refs.courseWare.src = data.fileUrl
+        // if (this.$refs.courseWare) {
+        //   this.$refs.courseWare.onload = function() {
+        //     var iframeWin = this.$refs.courseWare.contentWindow || ifrathis.$refs.courseWareme.contentDocument.defaultView;
+        //     if (iframeWin.document.body) {
+        //       this.$refs.courseWare.style.height = iframeWin.document.body.scrollHeight + 'px';
+        //     }
+        //   };
+        // }
       } else {
         this.$refs.courseWare.style.display = "none";
       }
@@ -711,6 +720,9 @@ export default {
 .courseWare {
   display: none;
   width: 100%;
+}
+.courseWare{
+  height: 450px;
 }
 .experiment-title > p {
   font-size: 18px;
