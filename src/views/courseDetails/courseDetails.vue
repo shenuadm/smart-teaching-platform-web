@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="course-list theme-bg-white btn-radius-5">
+    <div class="course-list content-height theme-bg-white btn-radius-5">
       <!-- 左侧树形结构 -->
       <div class="tree">
         <el-tree
@@ -66,9 +66,8 @@
         <iframe
           src=""
           frameborder="0"
-          class="courseWare"
+          class="courseWare content-height"
           ref="courseWare"
-          style="height: 50vh"
         ></iframe>
         <!-- 实验报告 -->
         <div class="experimentReport" ref="experiment">
@@ -511,7 +510,8 @@ export default {
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = 'block';
-        this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=${data.fileUrl}`;
+        // this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=${data.fileUrl}`;
+        this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=/static/test.pdf`;
       } else {
         this.$refs.courseWare.style.display = 'none';
       }
@@ -746,6 +746,9 @@ export default {
 </script>
 
 <style scoped>
+.content-height {
+  height: 100vh;
+}
 .content {
   margin: 20px auto;
 }
@@ -760,7 +763,6 @@ export default {
 }
 
 .course-list {
-  height: 50vh;
   overflow: hidden;
 }
 
@@ -798,9 +800,6 @@ export default {
 .courseWare {
   display: none;
   width: 100%;
-}
-.courseWare {
-  height: 450px;
 }
 .experiment-title > p {
   font-size: 18px;
