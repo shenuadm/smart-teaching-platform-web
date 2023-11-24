@@ -4,6 +4,10 @@ import http from './service.js';
 export function toLogin(data) {
   return http.post('/user/login', data)
 }
+// 注册
+export function toRegister(data) {
+  return http.post('/user/register', data)
+}
 // 获取全部数据
 export function getdata() {
   return http.get('/menu/list')

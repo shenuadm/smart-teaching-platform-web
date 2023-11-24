@@ -20,21 +20,36 @@
               background-color="#212121"
               router
             >
-              <el-menu-item>首页</el-menu-item>
+              <!-- <el-menu-item>首页</el-menu-item> -->
             </el-menu>
             <div class="line"></div>
           </el-col>
-          <el-col :span="5">
-            <div v-if="this.$store.state.username" class="login-name zh-fc-white">{{this.$store.state.username}}</div>
-            <div v-else></div>
-          </el-col>
-          <el-col :span="2">
-            <div v-if="this.$store.state.username" class="name zh-fc-white" @click="exitLogin">退出登录</div>
+          <el-col :span="7">
+            <div v-if="this.$store.state.username" class="login-info">
+              <img src="@/assets/tx.jpg" alt="" class="login-img">
+              <div  class="login-name zh-fc-white">
+                <el-menu 
+                  class="userInfo"
+                  background-color="#212121"
+                  text-color="#ffffff"
+                  active-text-color="#409EFF"
+                  mode="horizontal"
+                  router>
+                  <el-submenu index="1">
+                    <template slot="title">{{this.$store.state.username}}</template>
+                    <el-menu-item v-if="roleId == 1" index="/personmsg">修改信息</el-menu-item>
+                    <el-menu-item v-if="roleId == 2" index="/personalInfo">修改信息</el-menu-item>
+                    <el-menu-item v-if="roleId == 3" index="/personInfo">修改信息</el-menu-item>
+                    <el-menu-item @click="exitLogin">退出登录</el-menu-item>
+                  </el-submenu>
+                </el-menu>
+              </div>
+            </div>
             <div v-else></div>
           </el-col>
         </el-row>
       </el-header>
-      <div class="main" style="padding: 60px 0 90px 0">
+      <div class="main" style="padding: 60px 0 0 0">
         <!-- 侧导航 -->
         <AsideTem></AsideTem>
         <!-- 路由出口 -->
@@ -61,6 +76,8 @@ export default {
   components: {},
   data() {
     return {
+      roleId:0,
+      routes:''
     };
   },
   computed:{
@@ -68,12 +85,14 @@ export default {
   created() {
   },
   mounted() {
-    
+    let roleId = localStorage.getItem("roleId")
+    console.log(roleId);
+    this.roleId = roleId
   },
   methods: {
     exitLogin() {
-      // localStorage.clear("account", "username");
       sessionStorage.clear()
+      localStorage.clear()
       this.$store.state.username = ''
       this.$router.push({
         path: "/",
@@ -113,30 +132,33 @@ export default {
 .el-input {
   padding: 10px 0;
 }
-.login-tx img {
+.login-info{
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+}
+.login-img{
   width: 40px;
   height: 40px;
   border-radius: 50%;
   padding: 10px 0;
-  margin-left: 20px;
+  margin-right: 20px;
 }
-.login-name,.name{
+.login-name,.ex-name{
   height: 60px;
   line-height: 60px;
   text-align: right;
+}
+.ex-name{
   cursor: pointer;
 }
 .el-menu-item:hover {
   background-color: rgb(91, 92, 94) !important;
 }
-.footer {
-  position: fixed;
-  z-index: 9;
-  width: 100%;
-  bottom: 0;
-  z-index: 99;
+.main{
+  min-height: 582px;
 }
 .footer>p{
-  margin: 5px 0;
+  margin: 10px 0;
 }
 </style>

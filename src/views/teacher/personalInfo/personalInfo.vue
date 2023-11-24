@@ -128,7 +128,7 @@ export default {
   },
   created() {
     getPersonInfo().then(res=>{
-      console.log(res);
+      // console.log(res);
       this.personMsg = res.data
       this.ruleForm.account = this.personMsg.account
       this.ruleForm.nickname = this.personMsg.username
