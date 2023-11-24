@@ -414,7 +414,7 @@ export default {
 }
 </style>
 <style>
-.menu-management .form-btn .el-form-item__content {
+.form-btn .el-form-item__content {
   flex: 1;
   display: flex;
   margin-left: 0 !important;

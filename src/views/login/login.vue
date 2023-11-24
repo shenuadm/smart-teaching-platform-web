@@ -198,7 +198,7 @@ export default {
                   this.$router.push({path:"/personalInfo"})
                 }
                 if(res.roleId === 3){
-                  this.$router.push({path:"/home"})
+                  this.$router.push({path:"/personInfo"})
                 }
               }
             });
