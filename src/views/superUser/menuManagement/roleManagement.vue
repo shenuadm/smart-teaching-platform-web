@@ -75,6 +75,7 @@
           node-key="id"
           :props="defaultProps"
           :default-checked-keys="checked"
+          @check="check"
         >
         </el-tree>
         <div slot="footer" class="dialog-footer">
@@ -140,6 +141,10 @@ export default {
     this.getroleManagement();
   },
   methods: {
+    check(obj, treeInfo) {
+      this.checked = treeInfo.checkedKeys;
+      console.log(this.checked);
+    },
     // 获取数据
     async getroleManagement() {
       const res = await roleManagement();
