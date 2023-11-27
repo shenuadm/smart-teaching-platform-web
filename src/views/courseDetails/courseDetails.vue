@@ -73,7 +73,7 @@
         <iframe
           src=""
           frameborder="0"
-          class="courseWare content-height"
+          class="courseWare iframe"
           ref="courseWare"
         ></iframe>
         <!-- 实验报告 -->
@@ -755,11 +755,8 @@ export default {
       this.currentPage = val;
     },
   },
-  mounted() {
-    console.log(this.isTeachCenter, '11111111');
-  },
   computed: {
-    // 是否是课程中心进入
+    // 是否是课程中心进入,如果是教师端进入，并且url中没有携带id参数，就是从课程中心进入，返回true，不显示课程的除名称外的信息
     isTeachCenter() {
       return this.roleId === '2' && !this.$route.query.id;
     },
@@ -769,7 +766,7 @@ export default {
 
 <style scoped>
 .content-height {
-  height: 100vh;
+  min-height: 100vh;
 }
 .info-content-left {
   display: flex;
@@ -832,6 +829,9 @@ export default {
 .courseWare {
   display: none;
   width: 100%;
+}
+.iframe {
+  height: 100vh;
 }
 .experiment-title > p {
   font-size: 18px;
