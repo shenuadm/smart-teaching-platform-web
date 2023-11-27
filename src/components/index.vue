@@ -155,7 +155,8 @@ export default {
   background-color: rgb(91, 92, 94) !important;
 }
 .main {
-  min-height: 582px;
+  /* min-height: 582px; */
+  min-height: calc(100vh - 166px);
 }
 .footer > p {
   margin: 10px 0;
