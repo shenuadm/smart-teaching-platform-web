@@ -31,6 +31,7 @@ body {
 /* 表格树状结构按钮与表格内容同一行显示 */
 .el-tooltip {
   display: flex;
+  justify-content: center;
 }
 /* 表格树状结构展开字体图标大小保持不变 */
 .el-table__expand-icon,

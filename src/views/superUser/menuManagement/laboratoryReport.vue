@@ -25,25 +25,29 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
+      border="true"
       v-if="dialogtabledata"
     >
-      <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="100">
+      <el-table-column align="center" type="selection" width="50">
       </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60">
+      <el-table-column align="center" prop="title" label="实验标题" width="150">
+      </el-table-column>
+      <el-table-column align="center" prop="classHour" label="课时" width="80">
       </el-table-column>
       <el-table-column
         prop="description"
         label="实验描述"
-        width="260"
+        width="300"
         show-overflow-tooltip
+        align="center"
       >
       </el-table-column>
       <el-table-column
         prop="fileUrl"
         label="实验课件"
-        width="100"
+        width="200"
         show-overflow-tooltip
+        align="center"
       >
         <template slot-scope="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
