@@ -22,6 +22,11 @@
         width="200"
         show-overflow-tooltip
       >
+        <template slot-scope="scope">
+          <div class="ellipsis">
+            {{ scope.row.order }}：{{ scope.row.name }}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column
         prop="classHour"
@@ -81,7 +86,7 @@
           <el-button
             type="primary"
             size="mini"
-            @click="revisechapter(scope.row)"
+            @click="revisechapter(scope, scope.row)"
             >修改</el-button
           >
           <el-button
@@ -261,7 +266,8 @@ export default {
       this.dialogVisibleji = true;
     },
     //修改章节回显
-    revisechapter(e) {
+    revisechapter(q, e) {
+      console.log(q);
       if (e.pid) {
         // 修改节
         this.isAddJoint = false;
@@ -422,7 +428,18 @@ export default {
       this.sort = sort;
       this.courseId = this.id;
       chapter(this.id).then((res) => {
+        // res.data.map((item, index) => {
+        //   item.order = `第${index + 1}章`;
+        // });
+        res.data.forEach((item, index) => {
+          item.order = `第${index + 1}章`;
+          item.children &&
+            item.children.forEach((it, idx) => {
+              it.order = `第${idx + 1}节`;
+            });
+        });
         this.tableData = res.data;
+        console.log(Object.freeze(res.data));
       });
     },
   },
