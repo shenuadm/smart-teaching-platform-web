@@ -38,4 +38,14 @@ body {
 .el-table__placeholder {
   flex-shrink: 0;
 }
+/*在谷歌下移除input[number]的上下箭头*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+/*在firefox下移除input[number]的上下箭头*/
+input[type='number'] {
+  -moz-appearance: textfield;
+}
 </style>

@@ -111,11 +111,20 @@
           </el-input>
         </el-form-item>
         <el-form-item label="章节课时" prop="classHour">
-          <el-input placeholder="请输入课时" v-model="revise.classHour" type="number">
+          <el-input
+            placeholder="请输入课时"
+            v-model="revise.classHour"
+            type="number"
+          >
           </el-input>
         </el-form-item>
         <el-form-item label="章节排序" prop="sort">
-          <el-input placeholder="请输入序号" v-model="revise.sort" type="number"> </el-input>
+          <el-input
+            placeholder="请输入序号"
+            v-model="revise.sort"
+            type="number"
+          >
+          </el-input>
         </el-form-item>
         <el-form-item label="章节描述" prop="description">
           <el-input
@@ -428,9 +437,7 @@ export default {
       this.sort = sort;
       this.courseId = this.id;
       chapter(this.id).then((res) => {
-        // res.data.map((item, index) => {
-        //   item.order = `第${index + 1}章`;
-        // });
+        // 为每一章每一节添加标题
         res.data.forEach((item, index) => {
           item.order = `第${index + 1}章`;
           item.children &&
@@ -439,7 +446,6 @@ export default {
             });
         });
         this.tableData = res.data;
-        console.log(Object.freeze(res.data));
       });
     },
   },

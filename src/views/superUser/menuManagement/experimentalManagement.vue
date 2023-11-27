@@ -5,15 +5,23 @@
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
       <el-button size="small" type="primary" @click="search">搜索</el-button>
       <el-button size="small" type="primary" @click="resetting">重置</el-button>
-      <el-button size="small" type="primary" @click="addexper">添加实验</el-button>
-      <el-button size="small" type="danger" @click="delexper">批量删除</el-button>
-      <el-button size="small" type="primary" @click="returnexper">返回章节</el-button>
+      <el-button size="small" type="primary" @click="addexper"
+        >添加实验</el-button
+      >
+      <el-button size="small" type="danger" @click="delexper"
+        >批量删除</el-button
+      >
+      <el-button size="small" type="primary" @click="returnexper"
+        >返回章节</el-button
+      >
     </div>
     <el-table
       ref="multipleTable"
       height="410"
       border
-      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      :data="
+        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -21,8 +29,10 @@
       v-if="dialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="120"> </el-table-column>
+      <el-table-column prop="title" label="实验标题" width="120">
+      </el-table-column>
+      <el-table-column prop="classHour" label="课时" width="120">
+      </el-table-column>
       <el-table-column prop="description" label="实验描述" text-align: center>
       </el-table-column>
       <el-table-column label="操作">
@@ -70,20 +80,38 @@
         class="demo-ruleForm"
       >
         <el-form-item label="实验标题" prop="title">
-          <el-input v-model="revise.title" placeholder="请输入实验标题"></el-input>
+          <el-input
+            v-model="revise.title"
+            placeholder="请输入实验标题"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="实验排序" prop="sort">
+          <el-input
+            placeholder="请输入序号"
+            type="number"
+            v-model.number="revise.sort"
+          >
+          </el-input>
         </el-form-item>
         <el-form-item label="实验课时" prop="classHour">
-          <el-input v-model="revise.classHour" placeholder="请输入实验课时"></el-input>
+          <el-input
+            v-model.number="revise.classHour"
+            placeholder="请输入实验课时"
+            type="number"
+          ></el-input>
         </el-form-item>
         <el-form-item label="实验描述" prop="description">
           <el-input
             type="textarea"
             v-model="revise.description"
             placeholder="请输入实验描述"
+            :rows="8"
           ></el-input>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button size="small" type="primary" @click="serve">保 存</el-button>
+          <el-button size="small" type="primary" @click="serve"
+            >保 存</el-button
+          >
           <el-button size="small" @click="closeDialog">取 消</el-button>
         </el-form-item>
       </el-form>
@@ -92,7 +120,7 @@
 </template>
 
 <script>
-import { exper, experadd, experdel, experedit, mexperdel } from "@/utils/api";
+import { exper, experadd, experdel, experedit, mexperdel } from '@/utils/api';
 export default {
   data() {
     return {
@@ -102,24 +130,33 @@ export default {
       arr: [],
       currentPage: 1,
       pageSize: 5,
-      input: "",
+      input: '',
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
       articleId: 0,
       id: 0,
-      edit: "",
+      edit: '',
       revise: {
-        title: "",
-        classHour: "",
-        description: "",
-        fileUrl: "",
+        title: '',
+        classHour: '',
+        description: '',
+        fileUrl: '',
+        sort: undefined,
       },
       // 表单校验
       rules: {
-        title: [{ required: true, message: "请输入实验标题", trigger: "blur" }],
-        classHour: [{ required: true, message: "请输入实验课时", trigger: "blur" }],
-        description: [{ required: true, message: "请输入实验描述", trigger: "blur" }],
+        title: [{ required: true, message: '请输入实验标题', trigger: 'blur' }],
+        classHour: [
+          { required: true, message: '请输入实验课时', trigger: 'blur' },
+        ],
+        description: [
+          { required: true, message: '请输入实验描述', trigger: 'blur' },
+        ],
+        sort: [
+          { required: true, message: '请输入实验排序', trigger: 'blur' },
+          { type: 'number', message: '实验排序应为数字' },
+        ],
       },
     };
   },
@@ -129,13 +166,13 @@ export default {
   methods: {
     // 关闭弹框
     closeDialog() {
-      this.$refs["revise"].resetFields();
+      this.$refs['revise'].resetFields();
       this.dialogVisible = false;
     },
     //实验报告
     exreport(e) {
       this.$router.push({
-        path: "/laboratoryReport",
+        path: '/laboratoryReport',
         query: {
           id: e.id,
           sort: e.sort,
@@ -150,7 +187,7 @@ export default {
     },
     //重置
     resetting() {
-      this.input = "";
+      this.input = '';
       this.break();
     },
     //添加实验
@@ -172,27 +209,23 @@ export default {
     },
     //保存
     serve() {
-      this.$refs["revise"].validate((valid) => {
+      this.$refs['revise'].validate(async (valid) => {
         if (valid) {
-          let data = {
-            title: this.revise.title,
-            classHour: this.revise.classHour,
-            description: this.revise.description,
-            file: this.revise.fileUrl,
-            articleId: this.articleId,
-          };
+          const data = { ...this.revise, articleId: this.articleId };
           if (this.edit) {
-            experadd(data).then((res) => {
-              this.dialogVisible = false;
-              this.edit = false;
-              this.break();
-            });
+            // 新增实验
+            await experadd(data);
+            this.edit = false;
+            this.dialogVisible = false;
+            this.break();
+            this.$message.success('添加实验成功');
           } else {
-            experedit(data).then((res) => {
-              this.dialogVisible = false;
-              this.edit = false;
-              this.break();
-            });
+            // 编辑实验
+            await experedit(data);
+            this.edit = false;
+            this.dialogVisible = false;
+            this.break();
+            this.$message.success('编辑实验成功');
           }
         } else {
           return false;
@@ -201,17 +234,17 @@ export default {
     },
     //删除
     del(e) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           experdel(e).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -219,25 +252,25 @@ export default {
     },
     //批量删除
     delexper() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           let data = this.arr;
           mexperdel(data).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
+            type: 'info',
+            message: '已取消删除',
           });
         });
     },
@@ -331,7 +364,7 @@ export default {
   width: 200px;
   margin-right: 10px;
 }
-.block{
+.block {
   margin-top: 10px;
 }
 </style>
