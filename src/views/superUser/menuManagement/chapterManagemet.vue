@@ -106,11 +106,11 @@
           </el-input>
         </el-form-item>
         <el-form-item label="章节课时" prop="classHour">
-          <el-input placeholder="请输入课时" v-model="revise.classHour">
+          <el-input placeholder="请输入课时" v-model="revise.classHour" type="number">
           </el-input>
         </el-form-item>
         <el-form-item label="章节排序" prop="sort">
-          <el-input placeholder="请输入序号" v-model="revise.sort"> </el-input>
+          <el-input placeholder="请输入序号" v-model="revise.sort" type="number"> </el-input>
         </el-form-item>
         <el-form-item label="章节描述" prop="description">
           <el-input
