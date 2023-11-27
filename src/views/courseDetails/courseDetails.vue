@@ -12,20 +12,27 @@
       <img src="@/assets/addbg.jpg" alt="" />
       <div class="info-content zh-mgl-30">
         <div class="info-content-left">
-          <p>
-            课程名称：<span>{{ courseObj.name }}</span>
-          </p>
-          <p>
-            选课开始日期：<span>{{ courseObj.selectStartDate }}</span>
-          </p>
-          <p>
-            授课开始日期：<span>{{ courseObj.startDate }}</span>
-          </p>
-          <p>
-            课程状态：<span ref="status">{{ courseObj.status }}</span>
-          </p>
+          <div class="info-name">
+            <div>
+              课程名称：<span>{{ courseObj.name }}</span>
+            </div>
+            <div v-if="isTeachCenter" class="info-des">
+              {{ courseObj.description }}
+            </div>
+          </div>
+          <div v-if="!isTeachCenter">
+            <p>
+              选课开始日期：<span>{{ courseObj.selectStartDate }}</span>
+            </p>
+            <p>
+              授课开始日期：<span>{{ courseObj.startDate }}</span>
+            </p>
+            <p>
+              课程状态：<span ref="status">{{ courseObj.status }}</span>
+            </p>
+          </div>
         </div>
-        <div class="info-content-right">
+        <div class="info-content-right" v-if="!isTeachCenter">
           <p>
             任课教师：<span>{{ courseObj.userName }}</span>
           </p>
@@ -66,7 +73,7 @@
         <iframe
           src=""
           frameborder="0"
-          class="courseWare content-height"
+          class="courseWare iframe"
           ref="courseWare"
         ></iframe>
         <!-- 实验报告 -->
@@ -438,6 +445,7 @@ export default {
   },
   created() {
     this.roleId = localStorage.getItem('roleId');
+    console.log(this.$route.query.id, 'query,id');
     // 教师端
     if (this.roleId === '2') {
       // 查看课程详情
@@ -502,9 +510,6 @@ export default {
       });
       this.data = dataList;
     });
-  },
-  mounted() {
-    // console.log(this.$refs.btnStatus);
   },
   methods: {
     // 树形控件的点击事件
@@ -750,12 +755,28 @@ export default {
       this.currentPage = val;
     },
   },
+  computed: {
+    // 是否是课程中心进入,如果是教师端进入，并且url中没有携带id参数，就是从课程中心进入，返回true，不显示课程的除名称外的信息
+    isTeachCenter() {
+      return this.roleId === '2' && !this.$route.query.id;
+    },
+  },
 };
 </script>
 
 <style scoped>
 .content-height {
-  height: 100vh;
+  min-height: 100vh;
+}
+.info-content-left {
+  display: flex;
+  flex-direction: column;
+}
+.info-content-left .info-name {
+  margin-bottom: 16px;
+}
+.info-des {
+  margin-top: 20px;
 }
 .content {
   margin: 20px auto;
@@ -808,6 +829,9 @@ export default {
 .courseWare {
   display: none;
   width: 100%;
+}
+.iframe {
+  height: 100vh;
 }
 .experiment-title > p {
   font-size: 18px;

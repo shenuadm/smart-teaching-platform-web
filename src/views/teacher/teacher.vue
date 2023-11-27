@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name:'teacherIndex',
+  name: 'teacherIndex',
   data() {
     return {
       navList: [], //侧导航标题
@@ -30,7 +30,7 @@ export default {
   },
   created() {
     // 从本地存储中取值
-    let dataList = JSON.parse(localStorage.getItem("navData"));
+    let dataList = JSON.parse(localStorage.getItem('navData'));
     dataList.map((item) => {
       if (item.children == null) {
         this.navList.push(item.title);
@@ -45,10 +45,15 @@ export default {
   methods: {
     switchNav(index) {
       this.activeIndex = index;
-      const routes = ["personalInfo", "courseCenter", "myTeaching"];
+      const routes = ['personalInfo', 'courseCenter', 'myTeaching'];
       const targetRoute = routes[index];
       if (this.$route.fullPath === `/${targetRoute}`) return; //防止连续点击，路由报错
       this.$router.push({ name: targetRoute });
+    },
+  },
+  computed: {
+    defaultActive() {
+      return this.$route.path;
     },
   },
 };
@@ -57,7 +62,6 @@ export default {
 <style scoped>
 .personalInfo {
   display: flex;
-  min-height: 80vh;
   margin: 30px auto;
 }
 .person-nav {
@@ -68,6 +72,8 @@ export default {
   border-radius: 5px;
   background-color: #fff;
   border: 1px solid #e4ecf3;
+  /* height: calc(100vh - 226px); */
+  height: 60vh;
 }
 .person-nav .person-nav-item {
   padding-left: 30px;

@@ -4,6 +4,7 @@
       <li
         class="list-item zh-pd-10 zh-mgb-20"
         v-for="(item, index) in courseList"
+        :key="item.id"
       >
         <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
         <div class="list-item-info zh-mgl-20">
@@ -42,9 +43,9 @@
 </template>
 
 <script>
-import { getMyCourse, ClickRevokeCourse } from "@/utils/api.js";
-import { selectStatusConvert } from "@/utils/status.js";
-import loading from '@/utils/loading.js'
+import { getMyCourse, ClickRevokeCourse } from '@/utils/api.js';
+import { selectStatusConvert } from '@/utils/status.js';
+import loading from '@/utils/loading.js';
 export default {
   components: {},
   data() {
@@ -55,62 +56,51 @@ export default {
     };
   },
   mounted() {
-    if(this.courseList.length<0){
+    if (this.courseList.length < 0) {
       this.$loading({
         lock: true,
         text: 'Loading',
         spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+        background: 'rgba(0, 0, 0, 0.7)',
       });
     }
     getMyCourse().then((res) => {
-      this.courseList = res.data.map((item)=>{
-        let picture = item.picture.split(",")[1]
-        if(!picture){
-          picture = ''
+      this.courseList = res.data.map((item) => {
+        let picture = item.picture.split(',')[1];
+        if (!picture) {
+          picture = '';
         }
-        return {...item,picture}
-      })
-      this.courseList = selectStatusConvert(this.courseList)
+        return { ...item, picture };
+      });
+      this.courseList = selectStatusConvert(this.courseList);
     });
   },
   methods: {
     // 查看详情
     toCheckDetails(e) {
       console.log(e);
-      localStorage.setItem("hostName", e.hostName); //登录名
-      localStorage.setItem("hostPwd", e.hostPwd); //登录密码
+      localStorage.setItem('hostName', e.hostName); //登录名
+      localStorage.setItem('hostPwd', e.hostPwd); //登录密码
       // 路由跳转
       this.$router.push({
-        path: "/courseDetails",
+        path: '/courseDetails',
         // 这里的name必须与路由index.js的name相同
-        name: "courseDetails",
+        name: 'courseDetails',
         query: {
           teacherCourseId: e.teacherCourseId, //用于渲染课程头部详情
           courseId: e.courseId, //用户渲染树形
-          studentCourseId:e.id,//学生实验
+          studentCourseId: e.id, //学生实验
         },
       });
     },
     // 撤销课程
-    revokeCourse(e) {
+    async revokeCourse(e) {
       let data = {
         id: e.id,
         teacherCourseId: e.teacherCourseId,
       };
-      ClickRevokeCourse(data).then((res) => {
-        if (res.msg != "success") {
-          this.$message({
-            message: res.msg,
-            type: "warning",
-          });
-        } else {
-          this.$message({
-            message: "撤销成功",
-            type: "success",
-          });
-        }
-      });
+      const res = await ClickRevokeCourse(data);
+      if (res) this.$message.success('课程撤销成功');
     },
     // 分页
     // pageSize 改变时会触发
@@ -126,7 +116,7 @@ export default {
 </script>
 
 <style scoped>
-.content{
+.content {
   background-color: #f8f6f6 !important;
 }
 .list {

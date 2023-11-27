@@ -26,11 +26,12 @@ service.interceptors.response.use(
       return response.data;
     } else {
       // 不成功弹出提示消息
-      Message.error(response.data.message);
+      Message.error(response.data.msg);
       // 响应状态码为not——login时表示未登录，跳转登录页
       if (response.data.code == 'not_login') {
         this.$route.push('/');
       }
+      return Promise.reject(response.data);
     }
   },
   (error) => {
