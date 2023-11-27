@@ -5,31 +5,50 @@
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
       <button class="but" @click="search">搜索</button>
       <button class="but" @click="resetting">重置</button>
-      <el-button type="primary" class="exper" @click="addreport">添加实验报告</el-button>
-      <el-button type="primary" class="exper" @click="returnexper">返回实验</el-button>
-      <el-button type="danger" class="exper" @click="delexper">批量删除</el-button>
+      <el-button type="primary" class="exper" @click="addreport"
+        >添加实验报告</el-button
+      >
+      <el-button type="primary" class="exper" @click="returnexper"
+        >返回实验</el-button
+      >
+      <el-button type="danger" class="exper" @click="delexper"
+        >批量删除</el-button
+      >
     </div>
     <el-table
       height="410"
       ref="multipleTable"
-      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      :data="
+        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
+      border="true"
       v-if="dialogtabledata"
     >
-      <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="100"> </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60"> </el-table-column>
+      <el-table-column align="center" type="selection" width="50">
+      </el-table-column>
+      <el-table-column align="center" prop="title" label="实验标题" width="150">
+      </el-table-column>
+      <el-table-column align="center" prop="classHour" label="课时" width="80">
+      </el-table-column>
       <el-table-column
         prop="description"
         label="实验描述"
-        width="260"
+        width="300"
         show-overflow-tooltip
+        align="center"
       >
       </el-table-column>
-      <el-table-column prop="fileUrl" label="实验课件" width="100" show-overflow-tooltip>
+      <el-table-column
+        prop="fileUrl"
+        label="实验课件"
+        width="200"
+        show-overflow-tooltip
+        align="center"
+      >
         <template slot-scope="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
@@ -55,7 +74,9 @@
     <!-- 搜索 -->
     <el-table
       ref="multipleTable"
-      :data="reportdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      :data="
+        reportdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -63,8 +84,10 @@
       v-if="exdialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="100"> </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60"> </el-table-column>
+      <el-table-column prop="title" label="实验标题" width="100">
+      </el-table-column>
+      <el-table-column prop="classHour" label="课时" width="60">
+      </el-table-column>
       <el-table-column
         prop="description"
         label="实验描述"
@@ -72,7 +95,12 @@
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column prop="fileUrl" label="实验课件" width="100" show-overflow-tooltip>
+      <el-table-column
+        prop="fileUrl"
+        label="实验课件"
+        width="100"
+        show-overflow-tooltip
+      >
         <template slot-scope="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
@@ -101,23 +129,33 @@
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="closeAddReport"
+      :close-on-click-modal="false"
     >
       <el-form :model="revise" :rules="rules" ref="formRule">
-        <el-form-item label="实验标题" prop="title">
-          <el-input placeholder="请输入实验标题" v-model="revise.title"></el-input>
-        </el-form-item>
-        <el-form-item label="实验课时" prop="classHour">
-          <el-input placeholder="请输入课时" v-model="revise.classHour"></el-input>
-        </el-form-item>
-        <el-form-item label="实验描述" prop="description">
+        <el-form-item label="实验报告标题" prop="title">
           <el-input
-            placeholder="请输入实验描述"
+            placeholder="请输入实验报告标题"
+            v-model="revise.title"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="实验报告课时" prop="classHour">
+          <el-input
+            placeholder="请输入实验报告课时"
+            v-model="revise.classHour"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="实验报告描述" prop="description">
+          <el-input
+            placeholder="请输入实验报告描述"
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 4 }"
             v-model="revise.description"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="isAddReport ? '上传课件' : '修改课件'" class="upload-file">
+        <el-form-item
+          :label="isAddReport ? '上传课件' : '修改课件'"
+          class="upload-file"
+        >
           <el-upload
             action=""
             :auto-upload="false"
@@ -125,12 +163,18 @@
             :limit="1"
             :on-change="handlePreview"
           >
-            <el-button size="small" type="primary" plain v-if="fileList.length === 0">{{
-              isAddReport ? "点击上传" : "点击修改"
-            }}</el-button>
+            <el-button
+              size="small"
+              type="primary"
+              plain
+              v-if="fileList.length === 0"
+              >{{ isAddReport ? '点击上传' : '点击修改' }}</el-button
+            >
             <div slot="tip" class="el-upload__tip">只能上传单个文件</div>
           </el-upload>
-          <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view">查看课件</a>
+          <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view"
+            >查看课件</a
+          >
         </el-form-item>
         <el-form-item class="form-btn">
           <el-button @click="serve" type="primary">确 定</el-button>
@@ -160,7 +204,7 @@ import {
   reportupdate,
   reportdelete,
   mreportdelete,
-} from "@/utils/api";
+} from '@/utils/api';
 export default {
   data() {
     return {
@@ -172,22 +216,24 @@ export default {
       arr: [],
       currentPage: 1,
       pageSize: 5,
-      input: "",
+      input: '',
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
-      report: "",
-      experimentId: "",
+      report: '',
+      experimentId: '',
       id: 0,
       revise: {
-        title: "",
-        classHour: "",
-        description: "",
+        title: '',
+        classHour: '',
+        description: '',
       },
       rules: {
-        title: [{ required: true, message: "请输入实验标题", trigger: "blur" }],
-        classHour: [{ required: true, message: "请输入课时", trigger: "blur" }],
-        description: [{ required: true, message: "请输入实验描述", trigger: "blur" }],
+        title: [{ required: true, message: '请输入实验标题', trigger: 'blur' }],
+        classHour: [{ required: true, message: '请输入课时', trigger: 'blur' }],
+        description: [
+          { required: true, message: '请输入实验描述', trigger: 'blur' },
+        ],
       },
     };
   },
@@ -195,7 +241,7 @@ export default {
     // 关闭dialog弹框
     closeAddReport() {
       this.dialogVisible = false;
-      this.$refs["formRule"].resetFields();
+      // this.$refs['formRule'].resetFields();
     },
     //添加实验报告
     addreport() {
@@ -210,8 +256,8 @@ export default {
     //跳转至实验步骤
     exreport(e) {
       this.$router.push({
-        path: "/laboratoryStep",
-        name: "laboratoryStep",
+        path: '/laboratoryStep',
+        name: 'laboratoryStep',
         query: {
           id: e.id,
         },
@@ -219,7 +265,7 @@ export default {
     },
     //保存
     serve() {
-      this.$refs["formRule"].validate((valid) => {
+      this.$refs['formRule'].validate((valid) => {
         if (valid) {
           let data = {
             title: this.revise.title,
@@ -228,15 +274,15 @@ export default {
             type: 0,
             status: 0,
             experimentId: this.experimentId,
-            file: "",
+            file: '',
           };
           if (this.isAddReport) {
             reportadd(data).then((res) => {
               if (res.code === 0) {
                 this.break();
                 this.$message({
-                  message: "添加报告成功",
-                  type: "success",
+                  message: '添加报告成功',
+                  type: 'success',
                 });
                 this.dialogVisible = false;
               } else {
@@ -258,7 +304,7 @@ export default {
     },
     //取消
     cancel() {
-      this.$refs["formRule"].resetFields();
+      this.$refs['formRule'].resetFields();
       this.dialogVisible = false;
     },
     //搜索
@@ -274,7 +320,7 @@ export default {
     resetting() {
       this.dialogtabledata = true;
       this.exdialogtabledata = false;
-      this.input = "";
+      this.input = '';
       this.reportdata = [];
     },
     //返回实验
@@ -282,26 +328,25 @@ export default {
       history.back();
     },
     //编辑实验
-    editexrept(e) {
-      const data = JSON.parse(JSON.stringify(e));
-      this.revise = data;
+    editexrept(data) {
+      this.revise = JSON.parse(JSON.stringify(data));
       this.isAddReport = false;
       this.dialogVisible = true;
       this.report = false;
     },
     //删除
     del(e) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           reportdelete(e).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -309,18 +354,18 @@ export default {
     },
     //批量删除
     delexper() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           let data = this.arr;
           mreportdelete(data).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -353,7 +398,7 @@ export default {
     },
     empty(obj) {
       for (const prop of Object.keys(obj)) {
-        obj[prop] = "";
+        obj[prop] = '';
       }
     },
     break() {
@@ -476,7 +521,11 @@ export default {
   width: 100%;
   flex: 1;
 }
-.laboratory-report .el-dialog__body .el-form-item .el-form-item__content .el-input {
+.laboratory-report
+  .el-dialog__body
+  .el-form-item
+  .el-form-item__content
+  .el-input {
   width: 100% !important;
 }
 .laboratory-report .el-dialog__body .upload-file .el-form-item__label {
@@ -486,7 +535,11 @@ export default {
   display: flex;
   text-align: left;
 }
-.laboratory-report .el-dialog__body .upload-file .el-form-item__content .el-upload__tip,
+.laboratory-report
+  .el-dialog__body
+  .upload-file
+  .el-form-item__content
+  .el-upload__tip,
 .laboratory-report
   .el-dialog__body
   .upload-file

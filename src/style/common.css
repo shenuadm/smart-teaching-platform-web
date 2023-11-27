@@ -188,3 +188,9 @@ img {
 .btn-radius-30 {
   border-radius: 30px;
 }
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
