@@ -22,6 +22,7 @@ service.interceptors.response.use(
     // 可在此处对响应进行处理，例如处理错误码、格式化数据等
     // 响应成功返回数据
     if (response.data.code == 0) {
+      // Message.success(response.data.message);
       return response.data;
     } else {
       // 不成功弹出提示消息

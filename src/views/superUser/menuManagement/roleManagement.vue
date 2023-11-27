@@ -239,14 +239,14 @@ export default {
       });
     },
     // 确认授权
-    confirmEmpower() {
-      let data = {
+    async confirmEmpower() {
+      const data = {
         roleId: this.roleId,
         permissionIds: this.checked.join(','),
       };
-      ackEmpower(data).then((res) => {
-        console.log(res);
-      });
+      await ackEmpower(data);
+      this.$message.success('授权成功');
+      this.empowerVisible = false;
     },
     // 取消授权
     cancelEmpower() {

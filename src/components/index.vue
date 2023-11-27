@@ -26,17 +26,20 @@
           </el-col>
           <el-col :span="7">
             <div v-if="this.$store.state.username" class="login-info">
-              <img src="@/assets/tx.jpg" alt="" class="login-img">
-              <div  class="login-name zh-fc-white">
-                <el-menu 
+              <img src="@/assets/tx.jpg" alt="" class="login-img" />
+              <div class="login-name zh-fc-white">
+                <el-menu
                   class="userInfo"
                   background-color="#212121"
                   text-color="#ffffff"
                   active-text-color="#409EFF"
                   mode="horizontal"
-                  router>
+                  router
+                >
                   <el-submenu index="1">
-                    <template slot="title">{{this.$store.state.username}}</template>
+                    <template slot="title">{{
+                      this.$store.state.username
+                    }}</template>
                     <!-- <el-menu-item v-if="roleId == 1" index="/personmsg">修改信息</el-menu-item>
                     <el-menu-item v-if="roleId == 2" index="/personalInfo">修改信息</el-menu-item>
                     <el-menu-item v-if="roleId == 3" index="/personInfo">修改信息</el-menu-item> -->
@@ -60,9 +63,7 @@
         <p class="footer-info-item zh-fc-white">
           技术支持：成都易腾创想智能科技有限公司
         </p>
-        <p class="footer-info-item zh-fc-white">
-          联系方式：028-62539515
-        </p>
+        <p class="footer-info-item zh-fc-white">联系方式：028-62539515</p>
         <p class="footer-info-item zh-fc-white">
           公司地址：四川省成都市温江区海科路东段777号F栋11楼
         </p>
@@ -76,27 +77,25 @@ export default {
   components: {},
   data() {
     return {
-      roleId:0,
-      routes:''
+      roleId: 0,
+      routes: '',
     };
   },
-  computed:{
-  },
-  created() {
-  },
+  computed: {},
+  created() {},
   mounted() {
-    let roleId = localStorage.getItem("roleId")
+    let roleId = localStorage.getItem('roleId');
     console.log(roleId);
-    this.roleId = roleId
+    this.roleId = roleId;
   },
   methods: {
     exitLogin() {
-      sessionStorage.clear()
-      localStorage.clear()
-      this.$store.state.username = ''
+      sessionStorage.clear();
+      localStorage.clear();
+      this.$store.state.username = '';
       this.$router.push({
-        path: "/",
-        name: "login",
+        path: '/',
+        name: 'login',
       });
     },
   },
@@ -115,50 +114,50 @@ export default {
   height: 60px;
   padding: 0 30px;
 }
-.logo {
-  box-sizing: border-box;
+.logo,
+.logo span {
+  display: flex;
+  align-items: center;
 }
 .logo img {
-  display: inline-block;
   height: 30px;
   width: 120px;
 }
 .logo span {
-  display: inline-block;
   height: 60px;
-  line-height: 60px;
   margin-left: 20px;
 }
 .el-input {
   padding: 10px 0;
 }
-.login-info{
+.login-info {
   display: flex;
   flex-direction: row;
   justify-content: right;
 }
-.login-img{
+.login-img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   padding: 10px 0;
   margin-right: 20px;
 }
-.login-name,.ex-name{
+.login-name,
+.ex-name {
   height: 60px;
   line-height: 60px;
   text-align: right;
 }
-.ex-name{
+.ex-name {
   cursor: pointer;
 }
 .el-menu-item:hover {
   background-color: rgb(91, 92, 94) !important;
 }
-.main{
+.main {
   min-height: 582px;
 }
-.footer>p{
+.footer > p {
   margin: 10px 0;
 }
 </style>

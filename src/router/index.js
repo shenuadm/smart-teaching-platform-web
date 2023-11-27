@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 const routes = [
+  // pdf文件
   {
     path: '/pdf',
     component: () => import('@/components/PdfShow.vue'),
