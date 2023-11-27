@@ -72,6 +72,7 @@
       width="30%"
       :title="edit ? '添加实验' : '编辑实验'"
       :before-close="closeDialog"
+      :close-on-click-modal="false"
     >
       <el-form
         :model="revise"
