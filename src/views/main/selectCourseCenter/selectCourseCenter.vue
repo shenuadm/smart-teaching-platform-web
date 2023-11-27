@@ -75,7 +75,6 @@ export default {
       let data = { teacherCourseId: e.id };
       const res = await clickSelectCourse(data);
       // console.log(res, 'res11111');
-      console.log(res, 'res111111111');
       if (res) this.$message.success('选择课程成功');
 
       // 请求接口
