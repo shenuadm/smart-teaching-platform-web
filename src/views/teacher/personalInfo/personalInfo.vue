@@ -45,15 +45,23 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="small" @click="submitForm('ruleForm')"
+            <el-button
+              type="primary"
+              size="small"
+              @click="submitForm('ruleForm')"
               >保存</el-button
             >
-            <el-button type="primary" size="small" @click="resetForm('ruleForm')">重置</el-button>
+            <el-button
+              type="primary"
+              size="small"
+              @click="resetForm('ruleForm')"
+              >重置</el-button
+            >
           </el-form-item>
         </el-form>
         <div class="login-log">
-          <p>上次登录时间：{{personMsg.lastLoginTime}}</p>
-          <p>上次登录IP：{{personMsg.lastLoginIp}}</p>
+          <p>上次登录时间：{{ personMsg.lastLoginTime }}</p>
+          <p>上次登录IP：{{ personMsg.lastLoginIp }}</p>
         </div>
       </div>
     </div>
@@ -61,26 +69,26 @@
 </template>
 
 <script>
-import adapter from "./adapter";
-import { getPersonInfo,savePersonInfo } from "@/utils/api.js";
+import adapter from './adapter';
+import { getPersonInfo, savePersonInfo } from '@/utils/api.js';
 export default {
   data() {
     //正则判断新密码
     let newPass = (rule, value, callback) => {
       const regex = /^[a-zA-Z0-9]\w{5,17}$/;
-      if (value === "") {
-        callback(new Error("请输入您的新密码"));
+      if (value === '') {
+        callback(new Error('请输入您的新密码'));
       } else if (!regex.test(value)) {
-        callback(new Error("请输入6至18位密码，不含有中文字符"));
+        callback(new Error('请输入6至18位密码，不含有中文字符'));
       } else {
         callback();
       }
     };
     //再次验证密码两次是否一致
     let confirmPass = (rule, value, callback) => {
-      if (!value) return callback(new Error("请再次输入您的新密码"));
+      if (!value) return callback(new Error('请再次输入您的新密码'));
       if (value !== this.ruleForm.newPassword) {
-        callback(new Error("两次输入密码不一致！请重新输入"));
+        callback(new Error('两次输入密码不一致！请重新输入'));
       } else {
         callback();
       }
@@ -88,51 +96,51 @@ export default {
     return {
       ...adapter.data,
       ruleForm: {
-        account: "", //账号
-        nickname: "", //昵称
-        OriginPassword: "", //原密码
-        newPassword: "", //新密码
-        confirmPassword: "", //确认密码
+        account: '', //账号
+        nickname: '', //昵称
+        OriginPassword: '', //原密码
+        newPassword: '', //新密码
+        confirmPassword: '', //确认密码
       },
       // 表单校验规则
       rules: {
-        account: [{ required: true, message: "请输您的账号", trigger: "blur" }],
+        account: [{ required: true, message: '请输您的账号', trigger: 'blur' }],
         nickname: [
-          { required: true, message: "请输入您的昵称", trigger: "blur" },
+          { required: true, message: '请输入您的昵称', trigger: 'blur' },
         ],
         OriginPassword: [
           {
             required: true,
-            message: "请输入您的密码",
-            trigger: "blur",
+            message: '请输入您的密码',
+            trigger: 'blur',
           },
         ],
         newPassword: [
           {
             required: true,
             validator: newPass,
-            trigger: "blur",
+            trigger: 'blur',
           },
         ],
         confirmPassword: [
           {
             required: true,
             validator: confirmPass,
-            trigger: "blur",
+            trigger: 'blur',
           },
         ],
       },
       // 接收个人信息
-      personMsg:{}
+      personMsg: {},
     };
   },
   created() {
-    getPersonInfo().then(res=>{
+    getPersonInfo().then((res) => {
       // console.log(res);
-      this.personMsg = res.data
-      this.ruleForm.account = this.personMsg.account
-      this.ruleForm.nickname = this.personMsg.username
-    })
+      this.personMsg = res.data;
+      this.ruleForm.account = this.personMsg.account;
+      this.ruleForm.nickname = this.personMsg.username;
+    });
   },
   mounted() {},
   methods: {
@@ -140,7 +148,7 @@ export default {
     // 保存表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        let oldpwd = localStorage.getItem("oldpwd");
+        let oldpwd = localStorage.getItem('oldpwd');
         let data = {
           oldpwd: this.ruleForm.oldpwd,
           password: this.ruleForm.newpwd,
@@ -153,8 +161,8 @@ export default {
           });
         } else {
           this.$message({
-            message: "信息修改失败",
-            type: "warning",
+            message: '信息修改失败',
+            type: 'warning',
           });
           return false;
         }
@@ -163,8 +171,8 @@ export default {
     // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.ruleForm.account = this.personMsg.account
-      this.ruleForm.nickname = this.personMsg.username
+      this.ruleForm.account = this.personMsg.account;
+      this.ruleForm.nickname = this.personMsg.username;
     },
   },
 };

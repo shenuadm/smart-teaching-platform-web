@@ -14,16 +14,32 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column prop="name" label="章节标题" width="200" show-overflow-tooltip>
+    <el-table-column
+      prop="name"
+      label="章节标题"
+      width="200"
+      show-overflow-tooltip
+    >
     </el-table-column>
-    <el-table-column prop="classHour" label="课时" width="80"> </el-table-column>
+    <el-table-column prop="classHour" label="课时" width="80">
+    </el-table-column>
     <el-table-column prop="sort" label="排序" width="80"> </el-table-column>
-    <el-table-column prop="fileUrl" label="课件" width="100" show-overflow-tooltip>
+    <el-table-column
+      prop="fileUrl"
+      label="课件"
+      width="100"
+      show-overflow-tooltip
+    >
       <template slot-scope="scope">
         <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
       </template>
     </el-table-column>
-    <el-table-column prop="description" label="描述" width="110" show-overflow-tooltip>
+    <el-table-column
+      prop="description"
+      label="描述"
+      width="110"
+      show-overflow-tooltip
+    >
     </el-table-column>
   </el-table>
 </template>
@@ -35,42 +51,51 @@ export default {
       tableData: [
         {
           id: 1,
-          name: "第一章",
+          name: '第一章',
           classHour: 3,
           sort: 1,
-          fileUrl: "http://example.com/file1",
-          description: "介绍第一章",
+          fileUrl: 'http://example.com/file1',
+          description: '介绍第一章',
           children: [
             {
               id: 2,
-              name: "第一节",
+              name: '第一节',
               classHour: 1,
               sort: 1,
-              fileUrl: "http://example.com/file2",
-              description: "介绍第一节",
+              fileUrl: 'http://example.com/file2',
+              description: '介绍第一节',
             },
           ],
         },
         {
           id: 3,
-          name: "第二章",
+          name: '第二章',
           classHour: 4,
           sort: 2,
-          fileUrl: "http://example.com/file3",
-          description: "介绍第二章",
+          fileUrl: 'http://example.com/file3',
+          description: '介绍第二章',
           children: [
             {
               id: 4,
-              name: "第一节",
+              name: '第一节',
               classHour: 2,
               sort: 1,
-              fileUrl: "http://example.com/file4",
-              description: "介绍第一节",
+              fileUrl: 'http://example.com/file4',
+              description: '介绍第一节',
             },
           ],
         },
       ],
     };
+  },
+  mounted() {
+    this.$loading({
+      lock: true,
+      text: '加载中',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)',
+    });
+    // this.$;
   },
 };
 </script>
