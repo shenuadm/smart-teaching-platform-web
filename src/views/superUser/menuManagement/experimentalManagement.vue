@@ -31,6 +31,7 @@
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="title" label="实验标题" width="120">
       </el-table-column>
+      <el-table-column prop="sort" label="排序" width="120"> </el-table-column>
       <el-table-column prop="classHour" label="课时" width="120">
       </el-table-column>
       <el-table-column prop="description" label="实验描述" text-align: center>
@@ -166,7 +167,7 @@ export default {
   methods: {
     // 关闭弹框
     closeDialog() {
-      this.$refs['revise'].resetFields();
+      // this.$refs['revise'].resetFields();
       this.dialogVisible = false;
     },
     //实验报告
@@ -197,8 +198,8 @@ export default {
       this.revise = {};
     },
     //编辑实验
-    editexrept(e) {
-      this.revise = e;
+    editexrept(data) {
+      this.revise = JSON.parse(JSON.stringify(data));
       this.dialogVisible = true;
       this.edit = false;
     },
@@ -215,18 +216,15 @@ export default {
           if (this.edit) {
             // 新增实验
             await experadd(data);
-            this.edit = false;
-            this.dialogVisible = false;
-            this.break();
             this.$message.success('添加实验成功');
           } else {
             // 编辑实验
             await experedit(data);
-            this.edit = false;
-            this.dialogVisible = false;
-            this.break();
             this.$message.success('编辑实验成功');
           }
+          this.edit = false;
+          this.dialogVisible = false;
+          this.break();
         } else {
           return false;
         }
