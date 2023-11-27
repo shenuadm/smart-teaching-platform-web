@@ -149,6 +149,7 @@
       :visible.sync="dialogVisibleji"
       width="40%"
       :before-close="closeAddJoint"
+      :close-on-click-modal="false"
     >
       <el-form :model="revise" :rules="rules" ref="formRule">
         <el-form-item label="章节标题" prop="name">
