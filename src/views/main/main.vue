@@ -30,7 +30,7 @@ export default {
   },
   created() {
     // 从本地存储中取值
-    let dataList = JSON.parse(localStorage.getItem("navData"));
+    let dataList = JSON.parse(localStorage.getItem('navData'));
     dataList.map((item) => {
       if (item.children == null) {
         this.navList.push(item.title);
@@ -46,10 +46,10 @@ export default {
     // 路由跳转
     switchTo(index) {
       this.activeIndex = index;
-      const route = ['personInfo','myCourse','selectCourseCenter']
-      const currentRoute = route[index]
-      if(this.$route.fullPath === `/${currentRoute}`) return;//防止再次点击路由报错
-      this.$router.push({name:currentRoute})
+      const route = ['personInfo', 'myCourse', 'selectCourseCenter'];
+      const currentRoute = route[index];
+      if (this.$route.fullPath === `/${currentRoute}`) return; //防止再次点击路由报错
+      this.$router.push({ name: currentRoute });
     },
   },
 };
@@ -60,8 +60,9 @@ export default {
   width: 1200px;
 }
 .container {
-  min-height: 80vh;
+  /* min-height: 80vh; */
   margin: 30px auto;
+  display: flex;
 }
 .aside-nav {
   float: left;

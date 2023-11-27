@@ -6,7 +6,7 @@
         v-for="item in chooseCourse"
       >
         <!-- <img src="../../../assets/addbg.jpg" alt="" /> -->
-        <img :src="'data:image/png;base64,'+item.picture" alt="加载失败">
+        <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
         <div class="choose-item-info zh-mgl-20">
           <div class="item-info-left">
             <p>
@@ -32,15 +32,21 @@
             </p>
           </div>
         </div>
-        <el-button type="primary" size="small" @click="selectCourse(item)" class="choose">选课</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="selectCourse(item)"
+          class="choose"
+          >选课</el-button
+        >
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { getSelectCourse, clickSelectCourse } from "@/utils/api.js";
-import { selectStatusConvert } from "@/utils/status.js";
+import { getSelectCourse, clickSelectCourse } from '@/utils/api.js';
+import { selectStatusConvert } from '@/utils/status.js';
 export default {
   data() {
     return {
@@ -50,37 +56,43 @@ export default {
   mounted() {
     // 获取接口数据
     getSelectCourse().then((res) => {
-      this.chooseCourse  = res.data.map((item)=>{
-        if(item.picture !== null){
-          var picture = item.picture.split(",")[1]
+      this.chooseCourse = res.data.map((item) => {
+        if (item.picture !== null) {
+          var picture = item.picture.split(',')[1];
         }
-        if(!picture){
-          picture = ''
+        if (!picture) {
+          picture = '';
         }
-        return {...item,picture}
-      })
-      this.chooseCourse = selectStatusConvert(this.chooseCourse)
+        return { ...item, picture };
+      });
+      this.chooseCourse = selectStatusConvert(this.chooseCourse);
     });
   },
   methods: {
     // 选课
-    selectCourse(e) {
-      console.log(e);
+    async selectCourse(e) {
+      // console.log(e);
       let data = { teacherCourseId: e.id };
+      const res = await clickSelectCourse(data);
+      // console.log(res, 'res11111');
+      console.log(res, 'res111111111');
+      if (res) this.$message.success('选择课程成功');
+
       // 请求接口
-      clickSelectCourse(data).then((res) => {
-        if (res.msg != "success") {
-          this.$message({
-            message: "该课程已经选了",
-            type: "warning",
-          });
-        } else {
-          this.$message({
-            message: "课程选择成功",
-            type: "success",
-          });
-        }
-      });
+      // clickSelectCourse(data).then((res) => {
+      //   console.log(res);
+      //   if (2 > 1) {
+      //     this.$message({
+      //       message: '该课程已经选了',
+      //       type: 'warning',
+      //     });
+      //   } else {
+      //     this.$message({
+      //       message: '课程选择成功',
+      //       type: 'success',
+      //     });
+      //   }
+      // });
     },
   },
 };
