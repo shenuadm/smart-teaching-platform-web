@@ -70,7 +70,7 @@
               v-html="experResult.content"
               v-if="experResult.show"
             ></div>
-            <div v-else class="experiment-content">
+            <div v-else class="experiment-content experiment-prompt">
               点击上方按钮显示实验结果
             </div>
           </div>
@@ -88,11 +88,11 @@
                 }}</el-button>
               </div>
               <div
-                class="item-content experiment-content"
+                class="experiment-content"
                 v-html="item.content"
                 v-if="item.show"
               ></div>
-              <div v-else class="experiment-content">
+              <div v-else class="experiment-content experiment-prompt">
                 点击上方按钮显示实验步骤
               </div>
             </div>
@@ -170,7 +170,7 @@
       :before-close="handleCloseReport"
       :close-on-click-modal="false"
     >
-      <div class="stuExperimentReport">
+      <div class="stuExperimentReport" style="text-align: initial">
         <div class="stuInfo zh-fs-16">
           <span>学生姓名:{{ stuForm.username }}</span>
           <span>学生成绩:{{ stuForm.score }}</span>
@@ -213,7 +213,7 @@
       :before-close="handleCloseDetsils"
       :close-on-click-modal="false"
     >
-      <div class="stuScoreDetails">
+      <div class="stuScoreDetails" style="text-align: initial">
         <div class="stuInfo zh-fs-16">
           <span>学生姓名:{{ stuForm.username }}</span>
           <span>成绩:{{ stuForm.score }}</span>
@@ -245,7 +245,7 @@
       :before-close="handleCloseEdit"
       :close-on-click-modal="false"
     >
-      <div class="form">
+      <div class="form" style="text-align: initial">
         <el-form ref="stuForm" :model="stuForm" label-width="80px">
           <el-form-item label="学生姓名">
             <el-input v-model="stuForm.username" disabled></el-input>
@@ -429,9 +429,14 @@ export default {
   gap: 20px;
 }
 /* 不显示实验内容时提示 */
+.experiment-prompt {
+  color: #ddd;
+}
+/* 实验内容区域 */
 .experiment-content {
   padding: 10px 10px;
   margin: 10px 0;
+  min-height: 200px;
   border: 1px solid #ddd;
 }
 .info-content-left {
