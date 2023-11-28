@@ -15,16 +15,18 @@
         id="inputh"
         placeholder="请输入昵称"
       ></el-input>
-      <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
+      <el-button type="primary" size="small" @click="search" class="btn-search"
+        >搜索</el-button
+      >
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="add">添加用户</el-button>
-      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
+      <el-button type="danger" size="small" @click="batchdel"
+        >批量删除</el-button
+      >
     </div>
     <el-table
       ref="multipleTable"
-      :data="
-        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -71,10 +73,7 @@
       </el-table-column>
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="mini"
-            @click="reset(scope.row.userid)"
+          <el-button type="primary" size="mini" @click="reset(scope.row.userid)"
             >重置密码</el-button
           >
           <el-button type="primary" size="mini" @click="reviseuser(scope.row)"
@@ -94,10 +93,9 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[5, 10, 15, 20]"
         :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="this.tableData.length"
+        layout="total, prev, pager, next, jumper"
+        :total="this.count"
       >
       </el-pagination>
     </div>
@@ -201,6 +199,8 @@ export default {
       resetPassword: false,
       currentPage: 1,
       pageSize: 10,
+      jumpPage: "",
+      count: 0,
       serch: {
         account: "",
         username: "",
@@ -357,8 +357,7 @@ export default {
             message: "删除成功",
           });
         })
-        .catch(() => {
-        });
+        .catch(() => {});
     },
     // 修改
     reviseuser(e) {
@@ -405,11 +404,21 @@ export default {
       }
     },
     handleSizeChange(val) {
+      console.log(val);
       this.pageSize = val;
     },
     handleCurrentChange(val) {
       this.currentPage = val;
+      //跳转页数
+      let data = {
+        limit: 10,
+        page: val,
+      };
+      getUserData(data).then((res) => {
+        this.tableData = res.data;
+      });
     },
+
     handleSelectionChange(val) {
       this.multipleSelection = val;
       console.log(val);
@@ -422,9 +431,10 @@ export default {
         })
         .catch((_) => {});
     },
+
     getUserData() {
       getUserData().then((res) => {
-        console.log(res);
+        this.count = res.count;
         this.tableData = res.data;
       });
     },
@@ -458,7 +468,7 @@ export default {
   width: 80px;
   line-height: 30px;
 }
-.btn-search{
+.btn-search {
   margin-left: 10px;
 }
 .block {
@@ -478,7 +488,7 @@ export default {
 .active {
   width: 230px !important;
 }
-.el-table{
+.el-table {
   margin-top: 20px;
 }
 </style>

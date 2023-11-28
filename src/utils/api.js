@@ -74,8 +74,8 @@ export function deldata(id) {
   return http.delete("/menu/delete/" + id)
 }
 //课程请获取数据
-export function course() {
-  return http.get('/course/list?page=1&limit=10')
+export function course(data) {
+  return http.get('/course/list?', data)
 }
 //课程增加数据
 export function addcourse(data) {
@@ -193,8 +193,8 @@ export function upmenuData(u) {
 }
 // 超级管理员用户管理//
 //用户管理数据获取
-export function getUserData(e) {
-  return http.get('/user/list', e)
+export function getUserData(data) {
+  return http.get('/user/list?', data)
 }
 // 添加用户
 export function addUser(a) {
@@ -238,7 +238,7 @@ export function addRole(data) {
 }
 // 修改角色
 export function updateRole(data) {
-  return http.post('/role/update',data)
+  return http.post('/role/update', data)
 }
 // 删除角色
 export function delRole(id) {

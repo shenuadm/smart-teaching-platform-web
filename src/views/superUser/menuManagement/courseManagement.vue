@@ -9,13 +9,15 @@
       ></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
-      <el-button type="primary" size="small" @click="addcourse">添加课程</el-button>
+      <el-button type="primary" size="small" @click="addcourse"
+        >添加课程</el-button
+      >
       <el-button type="primary" size="small" @click="batchdel">删除</el-button>
     </div>
     <el-table
       v-loading="loading"
       ref="multipleTable"
-      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -24,8 +26,10 @@
       border
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
-      <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
+      <el-table-column prop="name" label="课程名称" width="120">
+      </el-table-column>
+      <el-table-column prop="title" label="课程标题" width="160">
+      </el-table-column>
       <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
       <el-table-column
         prop="description"
@@ -67,7 +71,7 @@
     <!-- 搜索页面 -->
     <el-table
       ref="multipleTable"
-      :data="searchdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      :data="searchdata"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -75,8 +79,10 @@
       v-if="dialogtable"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
-      <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
+      <el-table-column prop="name" label="课程名称" width="120">
+      </el-table-column>
+      <el-table-column prop="title" label="课程标题" width="160">
+      </el-table-column>
       <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
       <el-table-column
         prop="description"
@@ -88,7 +94,9 @@
       <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
+          <div v-else-if="scope.row.status === false" class="forbidden">
+            禁用
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="封面图片" width="120" class-name="table-image">
@@ -120,10 +128,9 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[5, 10, 15, 20]"
         :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="this.tableData.length"
+        layout="total, prev, pager, next, jumper"
+        :total="this.count"
       >
       </el-pagination>
     </div>
@@ -137,15 +144,27 @@
     >
       <el-form :model="revise" :rules="rules" ref="ruleForm">
         <el-form-item label="课程名称" prop="name">
-          <el-input class="inputw" placeholder="请输入课程名称" v-model="revise.name">
+          <el-input
+            class="inputw"
+            placeholder="请输入课程名称"
+            v-model="revise.name"
+          >
           </el-input>
         </el-form-item>
         <el-form-item label="课程标题" prop="title">
-          <el-input class="inputw" placeholder="请输入课程标题" v-model="revise.title">
+          <el-input
+            class="inputw"
+            placeholder="请输入课程标题"
+            v-model="revise.title"
+          >
           </el-input>
         </el-form-item>
         <el-form-item label="课程学分" prop="credit">
-          <el-input class="inputw" placeholder="请输入学分" v-model="revise.credit">
+          <el-input
+            class="inputw"
+            placeholder="请输入学分"
+            v-model="revise.credit"
+          >
           </el-input>
         </el-form-item>
         <el-form-item label="课程描述" prop="description">
@@ -186,7 +205,13 @@
 </template>
 
 <script>
-import { course, addcourse, delcourse, delcoursem, updatecourse } from "@/utils/api";
+import {
+  course,
+  addcourse,
+  delcourse,
+  delcoursem,
+  updatecourse,
+} from "@/utils/api";
 import teacherVue from "../../teacher/teacher.vue";
 export default {
   data() {
@@ -197,6 +222,7 @@ export default {
       cour: "",
       currentPage: 1,
       pageSize: 10,
+      count: 0,
       input: "",
       imgSrc: "",
       revise: {
@@ -218,7 +244,9 @@ export default {
         name: [{ required: true, message: "请输入课程名称", trigger: "blur" }],
         title: [{ required: true, message: "请输入课程标题", trigger: "blur" }],
         credit: [{ required: true, message: "请输入学分", trigger: "blur" }],
-        description: [{ required: true, message: "请输入课程描述", trigger: "blur" }],
+        description: [
+          { required: true, message: "请输入课程描述", trigger: "blur" },
+        ],
       },
       loading: true, //load效果
     };
@@ -387,6 +415,13 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val;
+      let data = {
+        limit: 10,
+        page: val,
+      };
+      course(data).then((res) => {
+        this.tableData = res.data;
+      });
     },
     toggleSelection(rows) {
       if (rows) {
@@ -409,6 +444,7 @@ export default {
     },
     break() {
       course().then((res) => {
+        this.count = res.count;
         this.tableData = res.data.map((item) => {
           return { ...item, picture: item.picture.split(",")[1] };
         });

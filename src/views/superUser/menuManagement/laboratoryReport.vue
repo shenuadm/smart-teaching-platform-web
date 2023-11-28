@@ -131,20 +131,34 @@
       :before-close="closeAddReport"
       :close-on-click-modal="false"
     >
-      <el-form :model="revise" :rules="rules" ref="formRule">
-        <el-form-item label="实验报告标题" prop="title">
+      <el-form
+        :model="revise"
+        :rules="rules"
+        label-width="110px"
+        ref="formRule"
+        label-position="right"
+      >
+        <el-form-item label="实验报告标题" prop="title" class="laboratory-from">
           <el-input
             placeholder="请输入实验报告标题"
             v-model="revise.title"
           ></el-input>
         </el-form-item>
-        <el-form-item label="实验报告课时" prop="classHour">
+        <el-form-item
+          label="实验报告课时"
+          prop="classHour"
+          class="laboratory-from"
+        >
           <el-input
             placeholder="请输入实验报告课时"
             v-model="revise.classHour"
           ></el-input>
         </el-form-item>
-        <el-form-item label="实验报告描述" prop="description">
+        <el-form-item
+          label="实验报告描述"
+          prop="description"
+          class="laboratory-from"
+        >
           <el-input
             placeholder="请输入实验报告描述"
             type="textarea"
@@ -154,7 +168,7 @@
         </el-form-item>
         <el-form-item
           :label="isAddReport ? '上传课件' : '修改课件'"
-          class="upload-file"
+          class="upload-file laboratory-from"
         >
           <el-upload
             action=""
@@ -415,6 +429,13 @@ export default {
   },
 };
 </script>
+
+<style>
+/* 弹框表单每项标题与表单内容间的外间距 */
+.laboratory-from > div {
+  margin-left: 0 !important;
+}
+</style>
 
 <style scoped>
 .header {

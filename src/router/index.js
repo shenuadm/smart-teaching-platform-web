@@ -142,6 +142,11 @@ const routes = [
         name: 'courseDetails',
         component: () => import('@/views/courseDetails/courseDetails'),
       },
+      {
+        path: '/teacherCourse',
+        name: 'teacherCourse',
+        component: () => import('@/views/courseDetails/teacherCourse'),
+      },
       // 教师端
       {
         path: '/teacher',

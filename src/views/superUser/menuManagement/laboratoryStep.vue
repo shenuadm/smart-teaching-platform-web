@@ -18,9 +18,7 @@
     <el-table
       height="410"
       ref="multipleTable"
-      :data="
-        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -28,22 +26,27 @@
       v-if="dialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="步骤名称" width="100">
+      <el-table-column prop="name" label="步骤名称" width="140">
       </el-table-column>
       <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
-      <el-table-column prop="updateTime" label="修改时间" width="250">
+      <el-table-column
+        prop="content"
+        label="步骤内容"
+        width="250"
+        show-overflow-tooltip
+      >
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)"
             >编辑</el-button
           >
-          <el-button
+          <!-- <el-button
             type="primary"
             size="small"
             @click="todetails(scope.row.id)"
             >查看详情</el-button
-          >
+          > -->
           <el-button type="danger" size="small" @click="del(scope.row.id)"
             >删除</el-button
           >
@@ -64,23 +67,28 @@
       v-if="exdialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="步骤名称" width="100">
+      <el-table-column prop="name" label="步骤名称" width="140">
       </el-table-column>
 
       <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
-      <el-table-column prop="updateTime" label="修改时间" width="250">
+      <el-table-column
+        prop="content"
+        label="步骤内容"
+        width="250"
+        show-overflow-tooltip
+      >
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)"
             >编辑</el-button
           >
-          <el-button
+          <!-- <el-button
             type="primary"
             size="small"
             @click="todetails(scope.row.id)"
             >查看详情</el-button
-          >
+          > -->
           <el-button type="danger" size="small" @click="del(scope.row.id)"
             >删除</el-button
           >
@@ -113,8 +121,9 @@
           >步骤顺序<span style="color: red">*</span></template
         >
       </el-input>
+      <div class="stepcontent">步骤内容</div>
       <div class="editor">
-        <Editor ref="editor"></Editor>
+        <Editor ref="editor" :style="{ textAlign: 'left' }"></Editor>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -122,7 +131,7 @@
       </span>
     </el-dialog>
     <!-- 实验详情 -->
-    <el-dialog title="实验步骤详情" :visible.sync="dialogTableVisible">
+    <!-- <el-dialog title="实验步骤详情" :visible.sync="dialogTableVisible">
       <div class="box">
         <p>
           步骤名称：
@@ -137,8 +146,8 @@
           <p class="pimg" v-html="this.detailsdata.content"></p>
         </div>
       </div>
-    </el-dialog>
-    <div class="block">
+    </el-dialog> -->
+    <!-- <div class="block">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -149,7 +158,7 @@
         :total="this.tableData.length"
       >
       </el-pagination>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -161,8 +170,8 @@ import {
   mdelstep,
   delstep,
   getdetail,
-} from '@/utils/api';
-import editor from '../../../components/editor.vue';
+} from "@/utils/api";
+import editor from "../../../components/editor.vue";
 export default {
   components: { editor },
   data() {
@@ -175,33 +184,33 @@ export default {
       detailsData: [],
       currentPage: 1,
       pageSize: 5,
-      input: '',
+      input: "",
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
       dialogTableVisible: false,
-      step: '',
-      imgSrc: '',
+      step: "",
+      imgSrc: "",
       id: 0,
       revise: {
-        description: '',
-        name: '',
-        content: '',
-        sort: '',
-        imageStorePath: '',
+        description: "",
+        name: "",
+        content: "",
+        sort: "",
+        imageStorePath: "",
       },
     };
   },
   methods: {
     //查看详情
-    todetails(e) {
-      console.log(e);
-      getdetail(e).then((res) => {
-        this.detailsdata = res.data;
-      });
-      this.detailsdata = e;
-      this.dialogTableVisible = true;
-    },
+    // todetails(e) {
+    //   console.log(e);
+    //   getdetail(e).then((res) => {
+    //     this.detailsdata = res.data;
+    //   });
+    //   this.detailsdata = e;
+    //   this.dialogTableVisible = true;
+    // },
     //保存
     serve() {
       if (this.step == true) {
@@ -212,9 +221,10 @@ export default {
           sort: parseInt(this.revise.sort),
           updateTime: new Date().toISOString(),
         };
+        console.log(data);
         addstep(data).then((res) => {
           this.dialogVisible = false;
-          this.step = '';
+          this.step = "";
           this.break();
         });
       } else {
@@ -228,7 +238,7 @@ export default {
         };
         updatestep(data).then((res) => {
           this.dialogVisible = false;
-          this.step = '';
+          this.step = "";
           this.break();
         });
       }
@@ -237,7 +247,7 @@ export default {
     cancel() {
       this.dialogVisible = false;
       if (this.step == true) {
-        this.$refs.editor.html = '';
+        this.$refs.editor.html = "";
       }
     },
     //返回实验报告
@@ -276,22 +286,22 @@ export default {
     resetting() {
       this.dialogtabledata = true;
       this.exdialogtabledata = false;
-      this.input = '';
+      this.input = "";
       this.stepdata = [];
     },
     //删除
     del(e) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
         .then(() => {
           delstep(e).then((res) => {
             this.break();
             this.$message({
-              type: 'success',
-              message: '删除成功!',
+              type: "success",
+              message: "删除成功!",
             });
           });
         })
@@ -299,18 +309,18 @@ export default {
     },
     //批量删除
     delstep() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
         .then(() => {
           let data = this.arr;
           mdelstep(data).then((res) => {
             this.break();
             this.$message({
-              type: 'success',
-              message: '删除成功!',
+              type: "success",
+              message: "删除成功!",
             });
           });
         })
@@ -407,12 +417,23 @@ span {
 }
 .editor {
   position: relative;
-  width: 450px;
+  width: 444px;
   top: 10px;
-  left: 52px;
+  left: 49px;
 }
 .box > p {
   text-align: left;
+}
+.stepcontent {
+  width: 102px;
+  height: 38px;
+  border: 1px solid #dcdfe6;
+  color: #909399;
+  text-align: center;
+  line-height: 38px;
+  margin-left: 49px;
+  margin-top: 10px;
+  border-radius: 4px;
 }
 </style>
 <style>
