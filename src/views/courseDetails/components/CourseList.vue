@@ -1,5 +1,8 @@
 <template>
-  <div class="course-list content-height theme-bg-white btn-radius-5">
+  <div
+    class="course-list content-height theme-bg-white btn-radius-5"
+    v-loading="loadingGlobal"
+  >
     <!-- 左侧树形结构 -->
     <div class="tree">
       <el-tree
@@ -177,8 +180,7 @@ export default {
         this.form.pwd = pwd === 'null' ? '' : pwd;
         this.$refs.experiment.style.display = 'block';
         // 下载实验模版
-        // this.$refs.downLoadTemplate.href = data.fileUrl;
-        console.log(this.$refs.downLoadTemplate);
+        this.$refs.downLoadTemplate.href = data.fileUrl;
         // 通知父组件的事件
         this.treeEvent && this.treeEvent(data.id);
         this.$refs.experiment.style.display = 'block';
@@ -202,7 +204,6 @@ export default {
   },
   async created() {
     this.roleId = localStorage.getItem('roleId');
-    console.log(this.$route.query.id, 'query,id');
     this.courseId = this.$route.query.courseId;
     // 获取树形数据
     const res = await getTreeData(this.courseId);
@@ -234,6 +235,7 @@ export default {
       return node;
     });
     this.data = dataList;
+    this.loadingGlobal = false;
   },
 };
 </script>

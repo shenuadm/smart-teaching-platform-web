@@ -5,15 +5,24 @@
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
-      <el-button type="primary" size="small" @click="addexper">添加作业</el-button>
-      <el-button type="danger" size="small" @click="delexper">批量删除</el-button>
-      <el-button type="primary" size="small" @click="returnexper">返回</el-button>
+      <el-button type="primary" size="small" @click="addexper"
+        >添加作业</el-button
+      >
+      <el-button type="danger" size="small" @click="delexper"
+        >批量删除</el-button
+      >
+      <el-button type="primary" size="small" @click="returnexper"
+        >返回</el-button
+      >
     </div>
 
     <el-table
       ref="multipleTable"
       height="410"
-      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      v-loading="loadingGlobal"
+      :data="
+        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       tooltip-effect="dark"
       style="width: 100%"
       border
@@ -50,7 +59,9 @@
           <el-button type="primary" size="mini" @click="editexrept(scope.row)"
             >编辑</el-button
           >
-          <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
+          <el-button type="danger" size="mini" @click="del(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -76,14 +87,23 @@
     >
       <el-form :model="revise" :rules="rules" ref="formModel">
         <el-form-item label="作业名称" prop="name">
-          <el-input placeholder="请输入作业名称" v-model="revise.name"> </el-input>
+          <el-input placeholder="请输入作业名称" v-model="revise.name">
+          </el-input>
         </el-form-item>
         <el-form-item label="作业内容" prop="content">
-          <el-input placeholder="请输入作业内容" v-model="revise.content" type="textarea">
+          <el-input
+            placeholder="请输入作业内容"
+            v-model="revise.content"
+            type="textarea"
+          >
           </el-input>
         </el-form-item>
         <el-form-item label="参考答案" prop="answer">
-          <el-input placeholder="请输入参考答案" v-model="revise.answer" type="textarea">
+          <el-input
+            placeholder="请输入参考答案"
+            v-model="revise.answer"
+            type="textarea"
+          >
           </el-input>
         </el-form-item>
         <el-form-item label="状态" class="form-status">
@@ -94,7 +114,7 @@
         </el-form-item>
         <el-form-item class="form-btn">
           <el-button size="small" @click="serve" type="primary">{{
-            edit ? "添加" : "修改"
+            edit ? '添加' : '修改'
           }}</el-button>
           <el-button size="small" @click="closeDialog">取消</el-button>
         </el-form-item>
@@ -110,29 +130,37 @@ import {
   editHomeWork,
   delHomeWork,
   delAllHomeWork,
-} from "@/utils/api";
+} from '@/utils/api';
 export default {
   data() {
     return {
       tableData: [],
       currentPage: 1,
       pageSize: 5,
-      input: "",
+      input: '',
       dialogVisible: false,
       articleId: 0,
       edit: true,
-      id: "",
+      id: '',
       idArr: [],
       revise: {
-        name: "",
-        content: "",
-        answer: "",
+        name: '',
+        content: '',
+        answer: '',
         status: 0,
       },
       rules: {
-        name: { required: true, message: "课程名称不能为空", trigger: "blur" },
-        content: { required: true, message: "课程内容不能为空", trigger: "blur" },
-        answer: { required: true, message: "参考答案不能为空", trigger: "blur" },
+        name: { required: true, message: '课程名称不能为空', trigger: 'blur' },
+        content: {
+          required: true,
+          message: '课程内容不能为空',
+          trigger: 'blur',
+        },
+        answer: {
+          required: true,
+          message: '参考答案不能为空',
+          trigger: 'blur',
+        },
       },
     };
   },
@@ -140,7 +168,7 @@ export default {
     // 关闭弹框
     closeDialog() {
       this.dialogVisible = false;
-      this.$refs["formModel"].resetFields();
+      this.$refs['formModel'].resetFields();
     },
     //搜索
     async search() {
@@ -155,9 +183,9 @@ export default {
     // 添加实验
     addexper() {
       this.revise = {
-        name: "",
-        content: "",
-        answer: "",
+        name: '',
+        content: '',
+        answer: '',
         status: 0,
       };
       this.dialogVisible = true;
@@ -179,7 +207,7 @@ export default {
     },
     // 保存
     serve() {
-      this.$refs["formModel"].validate(async (valid) => {
+      this.$refs['formModel'].validate(async (valid) => {
         if (valid) {
           if (this.edit) {
             // 添加实验
@@ -187,8 +215,8 @@ export default {
             const res = await addHomeWork(data);
             if (res.code === 0) {
               this.$message({
-                message: "作业添加成功",
-                type: "success",
+                message: '作业添加成功',
+                type: 'success',
               });
               this.getDataList();
               this.dialogVisible = false;
@@ -201,8 +229,8 @@ export default {
             const res = await editHomeWork(data);
             if (res.code === 0) {
               this.$message({
-                message: "作业修改成功",
-                type: "success",
+                message: '作业修改成功',
+                type: 'success',
               });
               this.getDataList();
               this.dialogVisible = false;
@@ -217,17 +245,17 @@ export default {
     },
     // 删除
     del(id) {
-      this.$confirm("你确定要删除么?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('你确定要删除么?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(async () => {
           const res = await delHomeWork(id);
           if (res.code === 0) {
             this.$message({
-              message: "作业删除成功",
-              type: "success",
+              message: '作业删除成功',
+              type: 'success',
             });
             this.getDataList();
           } else {
@@ -238,18 +266,18 @@ export default {
     },
     //批量删除
     delexper() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(async () => {
-          const ids = this.idArr.join(",");
+          const ids = this.idArr.join(',');
           const res = await delAllHomeWork(ids);
           if (res.code === 0) {
             this.$message({
-              message: "作业删除成功",
-              type: "success",
+              message: '作业删除成功',
+              type: 'success',
             });
             this.getDataList();
           } else {
@@ -283,6 +311,7 @@ export default {
       this.articleId = id;
       getHomeWorkList(id).then((res) => {
         this.tableData = res.data;
+        this.loadingGlobal = false;
       });
     },
   },

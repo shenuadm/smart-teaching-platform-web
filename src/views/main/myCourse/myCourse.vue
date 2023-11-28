@@ -1,5 +1,5 @@
 <template>
-  <div class="content zh-pdy-15">
+  <div class="content zh-pdy-15 global-container" v-loading="loadingGlobal">
     <ul class="list">
       <li
         class="list-item zh-pd-10 zh-mgb-20"
@@ -63,14 +63,6 @@ export default {
     };
   },
   mounted() {
-    // if (this.courseList.length < 0) {
-    //   this.$loading({
-    //     lock: true,
-    //     text: 'Loading',
-    //     spinner: 'el-icon-loading',
-    //     background: 'rgba(0, 0, 0, 0.7)',
-    //   });
-    // }
     getMyCourse().then((res) => {
       this.courseList = res.data.map((item) => {
         let picture = item.picture.split(',')[1];
@@ -80,7 +72,7 @@ export default {
         return { ...item, picture };
       });
       // this.courseList = selectStatusConvert(this.courseList);
-      console.log(this.courseList);
+      this.loadingGlobal = false;
     });
   },
   methods: {

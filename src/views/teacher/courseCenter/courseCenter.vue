@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="global-container" v-loading="loadingGlobal">
     <!-- 标题 -->
     <div class="person-title">课程中心</div>
     <!-- 内容 -->
@@ -14,7 +14,10 @@
     <div class="course-center">
       <div class="course-center-item" v-for="item in courseList" :key="item.id">
         <!-- <img src="@/assets/169681739455410.jpg" alt="课程logo图片" /> -->
-        <img :src="'data:image/png;base64,' + item.picture" alt="课程logo图片" />
+        <img
+          :src="'data:image/png;base64,' + item.picture"
+          alt="课程logo图片"
+        />
         <div class="course-center-text">
           <div class="course-name">课程名称：{{ item.name }}</div>
           <div class="course-title">课程标题：{{ item.title }}</div>
@@ -31,13 +34,22 @@
           </el-popover>
         </div>
         <div class="course-center-btn">
-          <button class="edit btn-bg-b" @click="toChapterDetails(item)">查看章节</button>
-          <button class="detail btn-bg-b" @click="editCourseClick(item)">选择授课</button>
+          <button class="edit btn-bg-b" @click="toChapterDetails(item)">
+            查看章节
+          </button>
+          <button class="detail btn-bg-b" @click="editCourseClick(item)">
+            选择授课
+          </button>
         </div>
       </div>
       <!-- 编辑框 -->
       <el-dialog title="选择授课" :visible.sync="dialogVisible">
-        <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px">
+        <el-form
+          ref="ruleForm"
+          :model="editCourse"
+          :rules="rules"
+          label-width="100px"
+        >
           <!-- 课程名称 -->
           <el-form-item label="课程名称：" prop="title">
             <el-input
@@ -96,8 +108,15 @@
               ></el-input>
             </el-form-item>
             <!-- 授课地点 -->
-            <el-form-item label="授课地点：" prop="address" class="course-address">
-              <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
+            <el-form-item
+              label="授课地点："
+              prop="address"
+              class="course-address"
+            >
+              <el-input
+                v-model="editCourse.address"
+                placeholder="授课地点"
+              ></el-input>
             </el-form-item>
           </div>
           <!-- 课程状态 -->
@@ -109,7 +128,9 @@
           </el-form-item>
           <!-- 确认/取消 -->
           <el-form-item class="end-date">
-            <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')"
+              >保存</el-button
+            >
             <el-button @click="dialogVisible = false">取消</el-button>
           </el-form-item>
         </el-form>
@@ -119,8 +140,8 @@
 </template>
 
 <script>
-import adapter from "./adapter.js";
-import { courseCenter, saveCourse } from "@/utils/api.js";
+import adapter from './adapter.js';
+import { courseCenter, saveCourse } from '@/utils/api.js';
 export default {
   data() {
     return {
@@ -128,34 +149,59 @@ export default {
       courseList: [],
       // 表单校验
       rules: {
-        name: [{ required: true, message: "请输入您的课程名称", trigger: "blur" }],
+        name: [
+          { required: true, message: '请输入您的课程名称', trigger: 'blur' },
+        ],
         chooseStartDate: [
-          { required: true, message: "请选择您的选课开始日期", trigger: "blur" },
+          {
+            required: true,
+            message: '请选择您的选课开始日期',
+            trigger: 'blur',
+          },
         ],
         chooseEndDate: [
-          { required: true, message: "请选择您的选课结束日期", trigger: "blur" },
+          {
+            required: true,
+            message: '请选择您的选课结束日期',
+            trigger: 'blur',
+          },
         ],
         mostPersonCount: [
-          { required: true, message: "请输入您的最多选课人数", trigger: "blur" },
+          {
+            required: true,
+            message: '请输入您的最多选课人数',
+            trigger: 'blur',
+          },
         ],
-        coursePlace: [{ required: true, message: "请输入您的授课地点", trigger: "blur" }],
+        coursePlace: [
+          { required: true, message: '请输入您的授课地点', trigger: 'blur' },
+        ],
         courseStartDate: [
-          { required: true, message: "请选择您的授课开始日期", trigger: "blur" },
+          {
+            required: true,
+            message: '请选择您的授课开始日期',
+            trigger: 'blur',
+          },
         ],
         courseEndDate: [
-          { required: true, message: "请选择您的授课结束日期", trigger: "blur" },
+          {
+            required: true,
+            message: '请选择您的授课结束日期',
+            trigger: 'blur',
+          },
         ],
       },
-      courseId: "", //选择授课的课程id
+      courseId: '', //选择授课的课程id
     };
   },
   created() {
     courseCenter().then((res) => {
       this.courseList = res.data.map((item) => {
-        let picture = item.picture.split(",")[1];
+        let picture = item.picture.split(',')[1];
         return { ...item, picture };
       });
-      console.log(this.courseList);
+      // console.log(this.courseList);
+      this.loadingGlobal = false;
     });
   },
   methods: {

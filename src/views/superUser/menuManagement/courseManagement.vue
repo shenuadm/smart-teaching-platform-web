@@ -34,11 +34,10 @@
       <el-table-column
         prop="description"
         label="课程描述"
-        width="150"
         show-overflow-tooltip
       >
       </el-table-column>
-      <el-table-column label="状态">
+      <el-table-column label="状态" width="80">
         <template slot-scope="scope">
           <div v-if="scope.row.status" class="user">启用</div>
           <div v-else class="forbidden">禁用</div>
@@ -211,41 +210,41 @@ import {
   delcourse,
   delcoursem,
   updatecourse,
-} from "@/utils/api";
-import teacherVue from "../../teacher/teacher.vue";
+} from '@/utils/api';
+import teacherVue from '../../teacher/teacher.vue';
 export default {
   data() {
     return {
       dialogtabledata: true,
       dialogtable: false,
       dialogVisible: false,
-      cour: "",
+      cour: '',
       currentPage: 1,
       pageSize: 10,
       count: 0,
-      input: "",
-      imgSrc: "",
+      input: '',
+      imgSrc: '',
       revise: {
-        name: "",
-        title: "",
-        credit: "",
-        description: "",
+        name: '',
+        title: '',
+        credit: '',
+        description: '',
         status: false,
-        picture: "",
+        picture: '',
       },
       searchdata: [],
       tableData: [],
       multipleSelection: [],
       arr: [],
-      id: "",
-      imageUrl: "", //图片路径
-      file: "", //图片文件
+      id: '',
+      imageUrl: '', //图片路径
+      file: '', //图片文件
       rules: {
-        name: [{ required: true, message: "请输入课程名称", trigger: "blur" }],
-        title: [{ required: true, message: "请输入课程标题", trigger: "blur" }],
-        credit: [{ required: true, message: "请输入学分", trigger: "blur" }],
+        name: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
+        title: [{ required: true, message: '请输入课程标题', trigger: 'blur' }],
+        credit: [{ required: true, message: '请输入学分', trigger: 'blur' }],
         description: [
-          { required: true, message: "请输入课程描述", trigger: "blur" },
+          { required: true, message: '请输入课程描述', trigger: 'blur' },
         ],
       },
       loading: true, //load效果
@@ -266,14 +265,14 @@ export default {
       const data = JSON.parse(JSON.stringify(e));
       this.revise = data;
       console.log(data);
-      this.imageUrl = "data:image/png;base64," + data.picture;
+      this.imageUrl = 'data:image/png;base64,' + data.picture;
       this.dialogVisible = !this.dialogVisible;
       this.cour = false;
     },
     //添加课程
     addcourse() {
       this.empty(this.revise);
-      this.imageUrl = "";
+      this.imageUrl = '';
       this.dialogVisible = !this.dialogVisible;
       this.revise.status = false;
       this.cour = true;
@@ -290,50 +289,50 @@ export default {
     },
     //保存
     serve() {
-      this.$refs["ruleForm"].validate((valid) => {
+      this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
           this.revise.status = this.revise.status ? 1 : 0;
           const fd = new FormData();
-          fd.append("name", this.revise.name);
-          fd.append("title", this.revise.title);
-          fd.append("credit", this.revise.credit);
-          fd.append("status", this.revise.status);
-          fd.append("description", this.revise.description);
-          fd.append("file", this.file);
+          fd.append('name', this.revise.name);
+          fd.append('title', this.revise.title);
+          fd.append('credit', this.revise.credit);
+          fd.append('status', this.revise.status);
+          fd.append('description', this.revise.description);
+          fd.append('file', this.file);
           console.log(this.revise);
           if (this.cour) {
             addcourse(fd)
               .then((res) => {
                 this.break();
                 this.$message({
-                  message: "添加课程成功",
-                  type: "success",
+                  message: '添加课程成功',
+                  type: 'success',
                 });
               })
               .catch((error) => {
                 // 处理错误
                 // console.error(error);
                 this.$message({
-                  message: "添加课程失败",
-                  type: "warning",
+                  message: '添加课程失败',
+                  type: 'warning',
                 });
               });
           } else {
-            fd.append("id", this.revise.id);
+            fd.append('id', this.revise.id);
             updatecourse(fd)
               .then((res) => {
                 this.break();
                 this.$message({
-                  message: "修改课程成功",
-                  type: "success",
+                  message: '修改课程成功',
+                  type: 'success',
                 });
               })
               .catch((error) => {
                 // 处理错误
                 this.break();
                 this.$message({
-                  message: "修改课程失败",
-                  type: "warning",
+                  message: '修改课程失败',
+                  type: 'warning',
                 });
               });
           }
@@ -345,22 +344,22 @@ export default {
     },
     //取消
     cancel() {
-      this.$refs["ruleForm"].resetFields();
+      this.$refs['ruleForm'].resetFields();
       this.dialogVisible = !this.dialogVisible;
     },
     //删除
     del(e) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           delcourse(e).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -369,18 +368,18 @@ export default {
 
     //批量删除
     batchdel() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           let data = this.arr;
           delcoursem(data).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -388,7 +387,7 @@ export default {
     },
     //重置按钮
     resetting() {
-      this.input = "";
+      this.input = '';
       this.searchdata.length = 0;
       this.dialogtable = false;
       this.dialogtabledata = teacherVue;
@@ -396,8 +395,8 @@ export default {
     //章节管理
     chapter(e) {
       this.$router.push({
-        path: "/chapterManagemet",
-        name: "chapterManagemet",
+        path: '/chapterManagemet',
+        name: 'chapterManagemet',
         query: {
           id: e.id,
           sort: e.sort,
@@ -407,7 +406,7 @@ export default {
     //清空对象
     empty(obj) {
       for (const prop of Object.keys(obj)) {
-        obj[prop] = "";
+        obj[prop] = '';
       }
     },
     handleSizeChange(val) {
@@ -446,7 +445,7 @@ export default {
       course().then((res) => {
         this.count = res.count;
         this.tableData = res.data.map((item) => {
-          return { ...item, picture: item.picture.split(",")[1] };
+          return { ...item, picture: item.picture.split(',')[1] };
         });
         this.loading = false;
       });

@@ -11,6 +11,7 @@
     <!-- 表格数据 -->
     <el-table
       border
+      v-loading="loadingGlobal"
       :data="tableData"
       style="width: 100%; margin-bottom: 20px"
       row-key="id"
@@ -447,6 +448,7 @@ export default {
             });
         });
         this.tableData = res.data;
+        this.loadingGlobal = false;
       });
     },
   },
