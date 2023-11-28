@@ -16,10 +16,12 @@ import './style/common.css';
 // 导入富文本编辑器
 import Editor from '@/components/editor.vue';
 import Aside from '@/components/aside.vue';
+import { loading } from '@/utils/loading';
 Vue.component('Editor', Editor);
 Vue.component('AsideTem', Aside);
 Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
+Vue.mixin(loading);
 //路由拦截
 router.beforeEach((to, from, next) => {
   console.log(to);

@@ -5,15 +5,11 @@
       <el-tree
         :data="data"
         :props="defaultProps"
-        :expand-on-click-node="false"
         accordion
         @node-click="handleNodeClick"
+        :highlight-current="true"
       >
-        <span
-          class="node-title"
-          slot-scope="{ node, data }"
-          :style="{ color: node.data.textColor || 'inherit' }"
-        >
+        <span class="node-title" slot-scope="{ node, data }">
           {{ node.data.index }}{{ node.data.title }}
         </span>
       </el-tree>
@@ -108,7 +104,6 @@
 </template>
 
 <script>
-import { courseStatusConvert } from '@/utils/status.js';
 import {
   getTreeData,
   getExperimentContent,
@@ -161,11 +156,6 @@ export default {
   methods: {
     // 树形控件的点击事件
     handleNodeClick(data) {
-      if (data.textColor == '') {
-        data.textColor = '#409eff';
-      } else {
-        data.textColor = '';
-      }
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = 'block';
@@ -229,21 +219,18 @@ export default {
               if (pcode.children == null) {
                 pcode.index = `实验${index + 1} `;
               }
-              pcode.textColor = '';
               return pcode;
             });
           }
           if (cnode.pid !== '') {
             cnode.index = `第${index + 1}节 `;
           }
-          cnode.textColor = '';
           return cnode;
         });
       }
       if (node.pid == 0) {
         node.index = `第${index + 1}章 `;
       }
-      node.textColor = '';
       return node;
     });
     this.data = dataList;

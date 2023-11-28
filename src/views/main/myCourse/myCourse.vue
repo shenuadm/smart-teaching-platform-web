@@ -13,7 +13,12 @@
             任课教师：<span>{{ item.teacherName }}</span>
           </p>
           <p>
-            选课状态：<span ref="status">{{ item.status }}</span>
+            选课状态：<span>{{ courseStatusConvent(item.status) }}</span>
+          </p>
+          <p>
+            课程状态：<span>{{
+              chooseStatusConvent(item.teacherCourseStatus)
+            }}</span>
           </p>
         </div>
         <div class="btn study">
@@ -21,7 +26,10 @@
             >查看详情</el-button
           >
           <!-- <el-button type="primary">查看成绩</el-button> -->
-          <el-button type="danger" @click="revokeCourse(item)"
+          <el-button
+            :disabled="item.status === 1 || item.teacherCourseStatus !== 2"
+            type="danger"
+            @click="revokeCourse(item)"
             >撤销课程</el-button
           >
         </div>
@@ -44,8 +52,7 @@
 
 <script>
 import { getMyCourse, ClickRevokeCourse } from '@/utils/api.js';
-import { selectStatusConvert } from '@/utils/status.js';
-import loading from '@/utils/loading.js';
+import { courseStatus, teacherCourseStatus } from '@/constant/course.js';
 export default {
   components: {},
   data() {
@@ -56,14 +63,14 @@ export default {
     };
   },
   mounted() {
-    if (this.courseList.length < 0) {
-      this.$loading({
-        lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)',
-      });
-    }
+    // if (this.courseList.length < 0) {
+    //   this.$loading({
+    //     lock: true,
+    //     text: 'Loading',
+    //     spinner: 'el-icon-loading',
+    //     background: 'rgba(0, 0, 0, 0.7)',
+    //   });
+    // }
     getMyCourse().then((res) => {
       this.courseList = res.data.map((item) => {
         let picture = item.picture.split(',')[1];
@@ -72,7 +79,8 @@ export default {
         }
         return { ...item, picture };
       });
-      this.courseList = selectStatusConvert(this.courseList);
+      // this.courseList = selectStatusConvert(this.courseList);
+      console.log(this.courseList);
     });
   },
   methods: {
@@ -95,12 +103,23 @@ export default {
     },
     // 撤销课程
     async revokeCourse(e) {
+      // 如果当前课程状态是已撤回或不是选课中，不能进行撤回
+      const { status, teacherCourseStatus } = e;
+      if (status === 1 || teacherCourseStatus !== 2) return;
       let data = {
         id: e.id,
         teacherCourseId: e.teacherCourseId,
       };
       const res = await ClickRevokeCourse(data);
       if (res) this.$message.success('课程撤销成功');
+    },
+    // 课程状态转换
+    courseStatusConvent(status) {
+      return courseStatus.get(status);
+    },
+    // 选课状态转换
+    chooseStatusConvent(status) {
+      return teacherCourseStatus.get(status);
     },
     // 分页
     // pageSize 改变时会触发
