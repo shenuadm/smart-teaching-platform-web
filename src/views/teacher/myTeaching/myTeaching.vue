@@ -251,8 +251,8 @@ export default {
       localStorage.setItem('hostName', e.hostName); //登录名
       localStorage.setItem('hostPwd', e.hostPwd); //登录密码
       this.$router.push({
-        path: '/courseDetails',
-        name: 'courseDetails',
+        path: '/teacherCourse',
+        name: 'teacherCourse',
         query: {
           courseId: e.courseId,
           id: e.id,

@@ -46,6 +46,9 @@
             授课地点：<span>{{ courseObj.address }}</span>
           </p>
         </div>
+        <div v-if="roleId === '2' && $route.query.id">
+          选课人数：{{ courseObj.selectedNumber }}
+        </div>
       </div>
     </div>
     <div class="course-list content-height theme-bg-white btn-radius-5">
@@ -534,17 +537,11 @@ export default {
         getExperimentContent(this.experimentId).then((res) => {
           this.experimentContent = res.data;
         });
-        // 实验操作
-        if (localStorage.getItem('hostName') === 'null') {
-          this.form.name = '';
-        } else {
-          this.form.name = localStorage.getItem('hostName'); //登录名
-        }
-        if (localStorage.getItem('hostPwd') === 'null') {
-          this.form.pwd = '';
-        } else {
-          this.form.pwd = localStorage.getItem('hostPwd'); //登录密码
-        }
+        // 实验操作 获取登录用户名与密码
+        const name = localStorage.getItem('hostName');
+        this.form.name = name === 'null' ? '' : name;
+        const pwd = localStorage.getItem('hostPwd');
+        this.form.pwd = pwd === 'null' ? '' : pwd;
         if (this.roleId === '3') {
           // 学生端实验结果、实验步骤
           getExperimentStudentData(
@@ -610,6 +607,7 @@ export default {
         }
         if (this.teacherId) {
           // 下载实验模版
+          console.log(this.$refs.downLoadTemplate);
           this.$refs.downLoadTemplate.href = data.fileUrl;
           if (this.roleId === '2') {
             // 成绩表格(教师端)
