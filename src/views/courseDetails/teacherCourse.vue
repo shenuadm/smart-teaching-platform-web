@@ -103,39 +103,24 @@
       <template #experimentAchement>
         <!-- 教师端 -->
         <el-table
-          :data="
-            tableData.slice(
-              (currentPage - 1) * pageSize,
-              currentPage * pageSize,
-            )
-          "
+          :data="tableData"
           height="auto"
           border
-          style="width: 100%"
+          style="width: 100%; min-height: 100vh"
+          @cell-click="test"
         >
           <el-table-column
             align="center"
             prop="username"
             label="学生姓名"
-            width="100"
+            width="120"
           >
           </el-table-column>
-          <el-table-column
-            align="center"
-            prop="title"
-            label="实验标题"
-            width="150"
-          >
-          </el-table-column>
-          <el-table-column prop="result" label="实验结果">
-            <template slot-scope="scope">
-              <div v-html="scope.row.result"></div>
-            </template>
+          <el-table-column align="center" prop="title" label="实验标题">
           </el-table-column>
           <el-table-column prop="score" label="成绩" width="80">
           </el-table-column>
-          <el-table-column prop="comment" label="评语"> </el-table-column>
-          <el-table-column prop="updateTime" label="更新日期" width="100">
+          <el-table-column prop="updateTime" label="更新日期">
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
@@ -163,48 +148,45 @@
       </template>
     </CourseList>
     <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
-    <el-dialog
+    <el-drawer
       title="实验报告"
       :visible.sync="showReportVisible"
-      width="30%"
-      :before-close="handleCloseReport"
-      :close-on-click-modal="false"
+      v-if="showReportVisible"
+      :direction="rtl"
+      size="60%"
     >
-      <div class="stuExperimentReport" style="text-align: initial">
-        <div class="stuInfo zh-fs-16">
-          <span>学生姓名:{{ stuForm.username }}</span>
-          <span>学生成绩:{{ stuForm.score }}</span>
+      <div class="stuExperimentReport mx-20" style="text-align: initial">
+        <div class="stuInfo">
+          <div>
+            <span class="font-bold zh-fs-18">学生姓名：</span
+            >{{ stuForm.result.username }}
+          </div>
+          <div>
+            <span class="font-bold zh-fs-18">学生成绩：</span
+            >{{ stuForm.result.score }}
+          </div>
         </div>
         <div class="stuExperimentContent">
-          <div class="exTitle zh-fs-16">
-            <p class="title zh-fw-m">实验标题：</p>
-            <div>sql注入</div>
+          <div class="exTitle">
+            <p class="title zh-fw-m zh-fs-18">实验标题：</p>
+            <div>{{ stuForm.result.title }}</div>
           </div>
-          <div class="exResult zh-fs-16">
-            <p class="title zh-fw-m">实验结果:</p>
-            <div>111</div>
+          <div class="exResult">
+            <p class="title zh-fw-m zh-fs-18">实验结果:</p>
+            <div v-html="stuForm.result.result"></div>
           </div>
-          <div class="exSteps zh-fs-16">
-            <p class="title zh-fw-m">实验步骤:</p>
+          <div class="exSteps">
+            <p class="title zh-fw-m zh-fs-18">实验步骤:</p>
             <ul>
-              <li>
-                <p>步骤一</p>
-                <div>111</div>
-              </li>
-              <li>
-                <p>步骤二</p>
-                <div>222</div>
+              <li v-for="(item, index) in stuForm.step" :key="item.id">
+                <p class="zh-fs-18">{{ index + 1 }}、{{ item.name }}</p>
+                <div v-html="item.content"></div>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="showReportVisible = false"
-          >关 闭</el-button
-        >
-      </span>
-    </el-dialog>
+    </el-drawer>
     <!-- 教师端，点击查看详情，弹出学生的成绩详情 -->
     <el-dialog
       title="成绩详情"
@@ -215,8 +197,10 @@
     >
       <div class="stuScoreDetails" style="text-align: initial">
         <div class="stuInfo zh-fs-16">
-          <span>学生姓名:{{ stuForm.username }}</span>
-          <span>成绩:{{ stuForm.score }}</span>
+          <div>
+            <span class="font-bold">学生姓名：</span>{{ stuForm.username }}
+          </div>
+          <div><span class="font-bold">成绩：</span>{{ stuForm.score }}</div>
         </div>
         <div class="exTitle zh-fs-16">
           <p class="zh-fw-m">实验标题:</p>
@@ -224,7 +208,7 @@
         </div>
         <div class="exResult zh-fs-16">
           <p class="zh-fw-m">实验结果:</p>
-          <div>{{ stuForm.result }}</div>
+          <div v-html="stuForm.result"></div>
         </div>
         <div class="exComment zh-fs-16">
           <p class="zh-fw-m">评语:</p>
@@ -254,10 +238,14 @@
             <el-input v-model="stuForm.title" disabled></el-input>
           </el-form-item>
           <el-form-item label="学生成绩">
-            <el-input v-model="stuForm.score"></el-input>
+            <el-input type="number" v-model.number="stuForm.score"></el-input>
           </el-form-item>
           <el-form-item label="评语">
-            <el-input type="textarea" v-model="stuForm.comment"></el-input>
+            <el-input
+              type="textarea"
+              v-model="stuForm.comment"
+              :rows="6"
+            ></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -282,6 +270,7 @@ import {
   scoreList,
   saveExperimentReport,
   checkChapter,
+  getStudentExperiment,
 } from '@/utils/api.js';
 import { courseStatusConvert } from '@/utils/status.js';
 import { handleDate } from '@/utils/date.js';
@@ -324,6 +313,9 @@ export default {
     this.courseObj = courseStatusConvert(res.data);
   },
   methods: {
+    test() {
+      console.log(1);
+    },
     // 切换实验步骤的显示与隐藏
     targgleStep(e) {
       let { id } = e.target.dataset;
@@ -352,9 +344,17 @@ export default {
         this.tableData = res.data;
       });
     },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
     // 教师端，成绩表格
     // 查看详情
     checkDetails(row) {
+      console.log(row);
       this.showDetailsVisible = true;
       this.stuForm = row;
     },
@@ -362,9 +362,20 @@ export default {
       this.showDetailsVisible = false;
     },
     // 查看学生实验报告
-    checkReport(row) {
+    async checkReport(row) {
+      console.log(row);
+      const { uid, id } = row;
+      const loading = this.$loading({
+        text: '加载中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0,0,0,0.7)',
+      });
+      const res = await getStudentExperiment(uid, id);
+      loading.close();
+      this.stuForm = { result: row, step: res.data };
+      console.log(this.stuForm);
       this.showReportVisible = true;
-      this.stuForm = row;
+      // this.stuForm = row;
     },
     handleCloseReport() {
       this.showReportVisible = false;
@@ -505,9 +516,9 @@ export default {
   background-color: #4faff0;
   border-color: #4faff0;
 }
-/* #courseDeatils .el-table .el-table__cell {
+#courseDeatils .el-table .el-table__cell {
   text-align: center;
-} */
+}
 #courseDeatils .el-table .cell {
   display: -webkit-box;
   -webkit-line-clamp: 1; /* 指定要显示的行数 */
