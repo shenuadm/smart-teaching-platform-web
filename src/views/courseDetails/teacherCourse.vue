@@ -82,7 +82,7 @@
               @click="targgleStep"
             >
               <div class="step-title">
-                <div>步骤{{ index + 1 }}&nbsp;{{ item.name }}</div>
+                <div class="mb-10">{{ index + 1 }}、&nbsp;{{ item.name }}</div>
                 <el-button type="primary" :data-id="item.id" size="mini">{{
                   item.show ? '隐藏' : '显示'
                 }}</el-button>
@@ -422,7 +422,6 @@ export default {
   padding-left: 10px;
 }
 /* 切换显示按钮 */
-.step-title,
 .res-title {
   display: flex;
   align-items: center;

@@ -129,6 +129,10 @@ img {
   margin-right: 20px;
 }
 
+.mb-10 {
+  margin-bottom: 10px;
+}
+
 /* 内填充 */
 .zh-pd-5 {
   padding: 5px;

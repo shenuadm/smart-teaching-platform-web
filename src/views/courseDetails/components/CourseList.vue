@@ -189,7 +189,8 @@ export default {
         // 下载实验模版
         // this.$refs.downLoadTemplate.href = data.fileUrl;
         console.log(this.$refs.downLoadTemplate);
-        this.treeEvent(data.id);
+        // 通知父组件的事件
+        this.treeEvent && this.treeEvent(data.id);
         this.$refs.experiment.style.display = 'block';
       } else {
         this.$refs.experiment.style.display = 'none';
