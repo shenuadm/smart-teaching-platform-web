@@ -125,6 +125,10 @@ export function experdel(id) {
 export function experedit(data) {
   return http.post('experiment/update', data)
 }
+//编辑实验获取数据
+export function experplan(id) {
+  return http.get('ExperimentReportPlan/' + id)
+}
 //批量删除实验
 export function mexperdel(data) {
   return http.delete('experiment/deletes/' + data)

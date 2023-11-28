@@ -18,14 +18,12 @@
     <el-table
       height="410"
       ref="multipleTable"
-      :data="
-        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      border="true"
+      border:true
       v-if="dialogtabledata"
     >
       <el-table-column align="center" type="selection" width="50">
@@ -182,7 +180,7 @@
               type="primary"
               plain
               v-if="fileList.length === 0"
-              >{{ isAddReport ? '点击上传' : '点击修改' }}</el-button
+              >{{ isAddReport ? "点击上传" : "点击修改" }}</el-button
             >
             <div slot="tip" class="el-upload__tip">只能上传单个文件</div>
           </el-upload>
@@ -196,18 +194,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <div class="block">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="this.tableData.length"
-      >
-      </el-pagination>
-    </div>
   </div>
 </template>
 
@@ -218,7 +204,7 @@ import {
   reportupdate,
   reportdelete,
   mreportdelete,
-} from '@/utils/api';
+} from "@/utils/api";
 export default {
   data() {
     return {
@@ -230,23 +216,23 @@ export default {
       arr: [],
       currentPage: 1,
       pageSize: 5,
-      input: '',
+      input: "",
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
-      report: '',
-      experimentId: '',
+      report: "",
+      experimentId: "",
       id: 0,
       revise: {
-        title: '',
-        classHour: '',
-        description: '',
+        title: "",
+        classHour: "",
+        description: "",
       },
       rules: {
-        title: [{ required: true, message: '请输入实验标题', trigger: 'blur' }],
-        classHour: [{ required: true, message: '请输入课时', trigger: 'blur' }],
+        title: [{ required: true, message: "请输入实验标题", trigger: "blur" }],
+        classHour: [{ required: true, message: "请输入课时", trigger: "blur" }],
         description: [
-          { required: true, message: '请输入实验描述', trigger: 'blur' },
+          { required: true, message: "请输入实验描述", trigger: "blur" },
         ],
       },
     };
@@ -270,8 +256,8 @@ export default {
     //跳转至实验步骤
     exreport(e) {
       this.$router.push({
-        path: '/laboratoryStep',
-        name: 'laboratoryStep',
+        path: "/laboratoryStep",
+        name: "laboratoryStep",
         query: {
           id: e.id,
         },
@@ -279,7 +265,7 @@ export default {
     },
     //保存
     serve() {
-      this.$refs['formRule'].validate((valid) => {
+      this.$refs["formRule"].validate((valid) => {
         if (valid) {
           let data = {
             title: this.revise.title,
@@ -288,15 +274,15 @@ export default {
             type: 0,
             status: 0,
             experimentId: this.experimentId,
-            file: '',
+            file: "",
           };
           if (this.isAddReport) {
             reportadd(data).then((res) => {
               if (res.code === 0) {
                 this.break();
                 this.$message({
-                  message: '添加报告成功',
-                  type: 'success',
+                  message: "添加报告成功",
+                  type: "success",
                 });
                 this.dialogVisible = false;
               } else {
@@ -318,7 +304,7 @@ export default {
     },
     //取消
     cancel() {
-      this.$refs['formRule'].resetFields();
+      this.$refs["formRule"].resetFields();
       this.dialogVisible = false;
     },
     //搜索
@@ -334,7 +320,7 @@ export default {
     resetting() {
       this.dialogtabledata = true;
       this.exdialogtabledata = false;
-      this.input = '';
+      this.input = "";
       this.reportdata = [];
     },
     //返回实验
@@ -350,17 +336,17 @@ export default {
     },
     //删除
     del(e) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
         .then(() => {
           reportdelete(e).then((res) => {
             this.break();
             this.$message({
-              type: 'success',
-              message: '删除成功!',
+              type: "success",
+              message: "删除成功!",
             });
           });
         })
@@ -368,18 +354,18 @@ export default {
     },
     //批量删除
     delexper() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
         .then(() => {
           let data = this.arr;
           mreportdelete(data).then((res) => {
             this.break();
             this.$message({
-              type: 'success',
-              message: '删除成功!',
+              type: "success",
+              message: "删除成功!",
             });
           });
         })
@@ -412,7 +398,7 @@ export default {
     },
     empty(obj) {
       for (const prop of Object.keys(obj)) {
-        obj[prop] = '';
+        obj[prop] = "";
       }
     },
     break() {
