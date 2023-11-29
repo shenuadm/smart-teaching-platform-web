@@ -4,8 +4,6 @@
       <el-menu
         :default-active="$route.path"
         class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
         router
       >
         <el-menu-item index="/personmsg">
@@ -49,14 +47,7 @@ export default {
     };
   },
   mounted() {},
-  methods: {
-    handleOpen(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -83,9 +74,9 @@ export default {
 .el-menu-item:hover {
   background-color: rgb(225, 227, 240) !important;
 }
-.el-menu > li {
+/* .el-menu > li {
   font-weight: 700;
-}
+} */
 /* 二级目录 */
 .second {
   padding: 0 0 0 46px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="content global-container zh-pdy-15" v-loading="loadingGlobal">
+  <div class="content global-container" v-loading="loadingGlobal">
     <div class="choose-list">
       <el-row
         :gutter="20"

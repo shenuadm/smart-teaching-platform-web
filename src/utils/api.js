@@ -146,6 +146,10 @@ export function addNotice({ title, content, status }) {
 export function editNotice({ id, title, content, status }) {
   return http.post('notice/update', { id, title, content, status });
 }
+// 删除通知
+export function deleteNotice(id) {
+  return http.get(`notice/delete/${id}`);
+}
 
 // 作业管理
 // 获取作业管理列表

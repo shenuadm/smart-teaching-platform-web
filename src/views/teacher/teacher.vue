@@ -1,22 +1,24 @@
 <template>
-  <div class="personalInfo warpper">
+  <el-row :gutter="20" class="personalInfo warpper">
     <!-- 侧导航 -->
-    <div class="person-nav">
-      <div
-        v-for="(item, index) in navList"
-        :class="{ 'person-nav-item': true, active: activeIndex === index }"
-        :key="index"
-        @click="switchNav(index)"
-      >
-        {{ item }}
-      </div>
-    </div>
+    <el-col :span="4">
+      <el-menu :default-active="$route.path" router>
+        <el-menu-item
+          v-for="item in navList"
+          :key="item.id"
+          :index="item.funurl"
+        >
+          <i class="iconfont" :class="item.icon"></i>
+          <span slot="title">{{ item.title }}</span>
+        </el-menu-item>
+      </el-menu>
+    </el-col>
     <!-- 信息内容 -->
-    <div class="person-container">
+    <el-col :span="20" class="person-container">
       <!-- 路由出口 -->
       <router-view></router-view>
-    </div>
-  </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -31,12 +33,25 @@ export default {
   created() {
     // 从本地存储中取值
     let dataList = JSON.parse(localStorage.getItem('navData'));
-    dataList.map((item) => {
+    // console.log(dataList, 'dataList');
+    dataList.forEach((item) => {
       if (item.children == null) {
-        this.navList.push(item.title);
+        // this.navList.push(item.title);
+        this.navList.push({
+          icon: item.icon,
+          funurl: item.funurl,
+          title: item.title,
+          id: item.id,
+        });
       } else {
-        item.children.map((i) => {
-          this.navList.push(i.title);
+        item.children.forEach((i) => {
+          // this.navList.push(i.title);
+          this.navList.push({
+            icon: i.icon,
+            funurl: i.funurl,
+            title: i.title,
+            id: i.id,
+          });
         });
       }
     });
@@ -63,30 +78,7 @@ export default {
 .personalInfo {
   display: flex;
   margin: 30px auto;
-}
-.person-nav {
-  padding: 20px 0;
-  width: 150px;
-  margin-right: 10px;
-  margin-bottom: auto;
-  border-radius: 5px;
-  background-color: #fff;
-  border: 1px solid #e4ecf3;
-  /* height: calc(100vh - 226px); */
-  height: 60vh;
-}
-.person-nav .person-nav-item {
-  padding-left: 30px;
-  height: 40px;
-  line-height: 40px;
-  text-align: left;
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: 700;
-}
-.active {
-  color: #43bc60;
-  border-left: 2px solid #43bc60;
+  height: auto;
 }
 .person-container {
   width: 1000px;

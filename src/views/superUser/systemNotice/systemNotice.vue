@@ -30,29 +30,34 @@
             {{ statusConvent(scope.row.status) }}
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button
-              type="primary"
-              size="mini"
-              @click="editNotice(scope.$index, scope.row)"
+            <el-button type="primary" size="mini" @click="editNotice(scope.row)"
               >编辑</el-button
+            >
+            <el-button
+              type="danger"
+              size="mini"
+              @click="deleteNotice(scope.row)"
+              >删除</el-button
             >
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <!-- 编辑弹框 -->
     <EditForm
       v-if="editVisible"
       :editForm="editForm"
       @getData="getData"
     ></EditForm>
+    <!-- 新增弹框 -->
     <NewForm v-if="newVisible" @getData="getData"></NewForm>
   </div>
 </template>
 
 <script>
-import { systemNotice } from '@/utils/api.js';
+import { systemNotice, deleteNotice } from '@/utils/api.js';
 import { noticeStatus } from '@/constant/status.js';
 // import { noticeStatus } from '@/utils/status.js';
 import EditForm from './components/EditForm.vue';
@@ -97,11 +102,21 @@ export default {
       this.newVisible = true;
     },
     // 编辑公告
-    editNotice(index, row) {
+    editNotice(row) {
       this.editVisible = true;
-      console.log(index, 'index111');
       this.editForm = row;
-      console.log(row, 'row111');
+    },
+    // 删除公告
+    deleteNotice({ id }) {
+      this.$confirm('确认删除')
+        .then(async () => {
+          await deleteNotice(id);
+          this.$message.success('删除成功');
+          // 根据id找到索引，并将其从页面数据中删除
+          const index = this.tableData.findIndex((item) => item.id === id);
+          this.tableData.splice(index, 1);
+        })
+        .catch(() => {});
     },
   },
   components: {

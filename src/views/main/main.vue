@@ -1,5 +1,5 @@
 <template>
-  <div class="container warpper">
+  <el-row :gutter="20" class="container warpper">
     <!-- 侧边导航栏 -->
     <el-col :span="4">
       <el-menu :default-active="$route.path" router>
@@ -11,17 +11,13 @@
           <i class="iconfont" :class="item.icon"></i>
           <span slot="title">{{ item.title }}</span>
         </el-menu-item>
-        <el-submenu index="">
-          <el-menu-item index=""></el-menu-item>
-        </el-submenu>
       </el-menu>
     </el-col>
     <!-- 右侧主体内容 -->
-    <div class="main-content">
-      <div class="title">{{ navList[activeIndex] }}</div>
+    <el-col :span="20" class="main-content">
       <router-view></router-view>
-    </div>
-  </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -55,9 +51,7 @@ export default {
         });
       }
     });
-    // console.log(this.navList, 'navList');
-
-    console.log(dataList, 'dataList');
+    console.log(this.navList, 'navList');
   },
   mounted() {},
   methods: {
@@ -80,6 +74,7 @@ export default {
 .container {
   /* min-height: 80vh; */
   margin: 30px auto;
+  height: auto !important;
   display: flex;
 }
 .aside-nav {
@@ -118,19 +113,10 @@ export default {
 }
 .main-content {
   width: 1050px;
-  float: right;
+  /* float: right; */
   flex: 1;
-  border-radius: 5px;
-  background-color: #fff;
+  border-radius: 20px;
+  /* background-color: #fff; */
   box-sizing: border-box;
-}
-.title {
-  height: 60px;
-  line-height: 60px;
-  padding: 0 50px;
-  text-align: left;
-  font-size: 20px;
-  background-color: #fff;
-  border-bottom: 2px solid #efefef;
 }
 </style>

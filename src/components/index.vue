@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <!-- 头部 -->
-      <el-header style="position: fixed">
+      <el-header style="position: fixed" class="header">
         <el-row class="theme-bg-black">
           <el-col :span="8" class="logo">
             <img src="../assets/logo1.png" alt="" />
@@ -106,6 +106,13 @@ export default {
   padding: 0;
   width: 100%;
   z-index: 9;
+}
+.header,
+.footer {
+  width: calc(100vw + 10px);
+}
+.main {
+  width: calc(100vw - 10px);
 }
 .el-row {
   width: 100%;
