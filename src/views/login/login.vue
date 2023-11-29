@@ -168,6 +168,7 @@ export default {
       this.enrolldis = true;
     },
     Login(formName) {
+      console.log(111111, ' 登录');
       let data = {
         account: this.loginForm.logNum,
         password: this.loginForm.logPas,

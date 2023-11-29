@@ -31,7 +31,7 @@ export default {
   created() {
     // 从本地存储中取值
     let dataList = JSON.parse(localStorage.getItem('navData'));
-    dataList.map((item) => {
+    dataList.forEach((item) => {
       if (item.children == null) {
         this.navList.push(item.title);
       } else {
@@ -40,6 +40,8 @@ export default {
         });
       }
     });
+    console.log(this.navList, 'navList');
+    console.log(dataList, 'dataList');
   },
   mounted() {},
   methods: {
@@ -72,8 +74,10 @@ export default {
   width: 188px;
   margin-right: 10px;
   border-radius: 5px;
-  background-color: #fff;
-  border: 1px solid #e4ecf3;
+  /* background-color: #fff; */
+  /* background: #eeeff1; */
+  background: #f8f6f6;
+  /* border: 1px solid #e4ecf3; */
   height: auto;
 }
 .aside-nav .aside-nav-item {
@@ -88,11 +92,13 @@ export default {
   cursor: pointer;
 }
 .aside-nav .aside-nav-item:hover {
-  background: #eee;
+  background: #e0e3eb;
 }
 .active {
-  color: #43bc60;
-  border-left: 2px solid #43bc60;
+  /* color: #43bc60; */
+  /* border-left: 2px solid #43bc60; */
+  color: #1f63f8;
+  border-left: 2px solid #1f63f8;
 }
 .main-content {
   width: 1050px;
