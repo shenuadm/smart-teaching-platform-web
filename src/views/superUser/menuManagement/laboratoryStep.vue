@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="Step">
     <div class="header">
       <div class="title">步骤名称:</div>
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
@@ -351,18 +351,18 @@ export default {
 </script>
 
 <style scoped>
-.header {
+.Step .header {
   position: relative;
   width: 100%;
   height: 30px;
   display: flex;
   top: -10px;
 }
-.title {
+.Step .title {
   width: 80px;
   line-height: 30px;
 }
-.but {
+.Step .but {
   position: relative;
   text-align: center;
   line-height: 30px;
@@ -373,20 +373,20 @@ export default {
   border-radius: 5px;
   color: white;
 }
-.step {
+.Step .step {
   position: relative;
   margin-left: 5px;
   text-align: center;
   line-height: 7px;
 }
-.inputw {
+.Step .inputw {
   width: 445px !important;
   margin-top: 10px;
 }
-.el-input {
+.Step .el-input {
   width: 150px;
 }
-.dec {
+.Step .dec {
   width: 105px;
   height: 40px;
   margin-top: 10px;
@@ -395,20 +395,20 @@ export default {
   line-height: 40px;
   color: #909399;
 }
-span {
+.Step span {
   position: relative;
   left: -100px;
 }
-.editor {
+.Step .editor {
   position: relative;
   width: 444px;
   top: 10px;
   left: 84px;
 }
-.box > p {
+.Step .box > p {
   text-align: left;
 }
-.stepcontent {
+.Step .stepcontent {
   width: 102px;
   height: 38px;
   border: 1px solid #dcdfe6;
@@ -420,34 +420,34 @@ span {
   margin-top: 10px;
   border-radius: 4px;
 }
-.inputshow {
+.Step .inputshow {
   display: none;
 }
 </style>
 <style>
-.edit > p > img {
+.Step .edit > p > img {
   width: 350px !important;
   height: 100px !important;
 }
-#inputh {
+.Step #inputh {
   height: 30px !important;
   width: 150px !important;
 }
-#inputwd {
+.Step #inputwd {
   width: 200px !important;
   margin-left: 155px;
   margin-top: -59px;
   height: 42px !important;
 }
-.el-input-group__prepend {
+.Step .el-input-group__prepend {
   width: 55px;
 }
-.img {
+.Step .img {
   width: 100px;
   height: 80px;
   margin-left: 30px;
 }
-.custom-file-button {
+.Step .custom-file-button {
   position: absolute;
   top: 292px;
   left: 73px;
@@ -457,7 +457,7 @@ span {
   color: #909399;
 }
 
-.pimg > p > img {
+.Step .pimg > p > img {
   width: 100% !important;
   height: 350px !important;
 }
