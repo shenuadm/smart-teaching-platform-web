@@ -29,6 +29,7 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
+      v-loading="loadingGlobal"
       @selection-change="handleSelectionChange"
       class="custom-table"
       v-if="dialogtabledata"
@@ -187,53 +188,53 @@ import {
   resetPass,
   delUser,
   reviseUser,
-} from "@/utils/api";
-import teacherVue from "../../teacher/teacher.vue";
+} from '@/utils/api';
+import teacherVue from '../../teacher/teacher.vue';
 export default {
   data() {
     return {
-      radio: "0",
+      radio: '0',
       dialogtabledata: true,
       dialogtable: false,
       dialogVisible: false,
       resetPassword: false,
       currentPage: 1,
       pageSize: 10,
-      jumpPage: "",
+      jumpPage: '',
       count: 0,
       serch: {
-        account: "",
-        username: "",
+        account: '',
+        username: '',
       },
       revise: {
-        account: "",
-        username: "",
-        roleId: "3",
-        active: "0",
+        account: '',
+        username: '',
+        roleId: '3',
+        active: '0',
       },
       reviseOther: {
-        account: "",
-        username: "",
-        roleId: "",
-        roleName: "",
-        active: "",
+        account: '',
+        username: '',
+        roleId: '',
+        roleName: '',
+        active: '',
       },
       searchdata: [],
       tableData: [],
       multipleSelection: [],
       ids: [],
-      userId: "",
+      userId: '',
       reviseUser: false,
       rules: {
         account: [
-          { required: true, message: "请输入用户账号", trigger: "blur" },
+          { required: true, message: '请输入用户账号', trigger: 'blur' },
         ],
         username: [
-          { required: true, message: "请输入用户姓名", trigger: "blur" },
+          { required: true, message: '请输入用户姓名', trigger: 'blur' },
         ],
-        roleId: [{ required: true, message: "请选择角色", trigger: "change" }],
+        roleId: [{ required: true, message: '请选择角色', trigger: 'change' }],
         active: [
-          { required: true, message: "请选择激活状态", trigger: "change" },
+          { required: true, message: '请选择激活状态', trigger: 'change' },
         ],
       },
     };
@@ -275,8 +276,8 @@ export default {
           });
           this.dialogVisible = false;
           this.$message({
-            message: "恭喜你，添加成功",
-            type: "success",
+            message: '恭喜你，添加成功',
+            type: 'success',
           });
         } else {
           return false;
@@ -293,15 +294,15 @@ export default {
 
     //批量删除
     batchdel() {
-      this.$confirm("是否删除", "删除", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm('是否删除', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
       })
         .then(() => {
           if (this.multipleSelection.length == 0) {
             this.$message({
-              type: "info",
-              message: "未选择用户",
+              type: 'info',
+              message: '未选择用户',
             });
           } else {
             for (let i = 0; i < this.multipleSelection.length; i++) {
@@ -319,9 +320,9 @@ export default {
     //重置密码
     reset(e) {
       this.userId = e;
-      this.$confirm("是否重置", "重置", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm('是否重置', '重置', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
       })
         .then(() => {
           resetPass(this.userId).then((res) => {
@@ -329,13 +330,13 @@ export default {
             console.log(res);
           });
           this.$message({
-            type: "success",
-            message: "重置成功",
+            type: 'success',
+            message: '重置成功',
           });
         })
         .catch(() => {
           this.$message({
-            type: "info",
+            type: 'info',
           });
         });
     },
@@ -343,9 +344,9 @@ export default {
     delUser(e) {
       this.userId = e;
       console.log(this.userId);
-      this.$confirm("是否删除", "删除", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm('是否删除', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
       })
         .then(() => {
           delUser(this.userId).then((res) => {
@@ -353,8 +354,8 @@ export default {
             console.log(res);
           });
           this.$message({
-            type: "success",
-            message: "删除成功",
+            type: 'success',
+            message: '删除成功',
           });
         })
         .catch(() => {});
@@ -384,8 +385,8 @@ export default {
             });
           this.reviseUser = false;
           this.$message({
-            message: "恭喜你，修改成功",
-            type: "success",
+            message: '恭喜你，修改成功',
+            type: 'success',
           });
         } else {
           return false;
@@ -400,7 +401,7 @@ export default {
     //清空对象
     empty: function (obj) {
       for (const prop of Object.keys(obj)) {
-        obj[prop] = "";
+        obj[prop] = '';
       }
     },
     handleSizeChange(val) {
@@ -424,7 +425,7 @@ export default {
       console.log(val);
     },
     handleClose(done) {
-      this.$confirm("确认关闭？")
+      this.$confirm('确认关闭？')
         .then((_) => {
           this.empty(this.revise);
           done();
@@ -436,6 +437,7 @@ export default {
       getUserData().then((res) => {
         this.count = res.count;
         this.tableData = res.data;
+        this.loadingGlobal = false;
       });
     },
   },
@@ -492,7 +494,7 @@ export default {
   margin-top: 20px;
 }
 </style>
-<style >
+<style>
 .el-table th.el-table__cell > .cell,
 .el-table__body td.el-table__cell {
   text-align: center;

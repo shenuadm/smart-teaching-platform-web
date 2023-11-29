@@ -1,6 +1,10 @@
 <template>
-  <div class="menu-management">
-    <el-button type="primary" size="small" class="addRoot" @click="addMenuRootDate"
+  <div class="menu-management" v-loading="loadingGlobal">
+    <el-button
+      type="primary"
+      size="small"
+      class="addRoot"
+      @click="addMenuRootDate"
       >添加根节点</el-button
     >
     <span class="top">
@@ -60,10 +64,18 @@
                   >
                     添加
                   </el-button>
-                  <el-button type="primary" size="mini" @click="reviseFun(node.data)">
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    @click="reviseFun(node.data)"
+                  >
                     修改
                   </el-button>
-                  <el-button type="danger" size="mini" @click="delMenuDate(node.data.id)">
+                  <el-button
+                    type="danger"
+                    size="mini"
+                    @click="delMenuDate(node.data.id)"
+                  >
                     删除
                   </el-button>
                 </span>
@@ -82,13 +94,22 @@
     >
       <el-form ref="form" :model="revise" :rules="rules" label-width="80px">
         <el-form-item label="显示名称" prop="title">
-          <el-input v-model="revise.title" placeholder="请输入显示名称"></el-input>
+          <el-input
+            v-model="revise.title"
+            placeholder="请输入显示名称"
+          ></el-input>
         </el-form-item>
         <el-form-item label="菜单名称" prop="menuName">
-          <el-input v-model="revise.menuName" placeholder="请输入菜单名称"></el-input>
+          <el-input
+            v-model="revise.menuName"
+            placeholder="请输入菜单名称"
+          ></el-input>
         </el-form-item>
         <el-form-item label="菜单路径" prop="funurl">
-          <el-input v-model="revise.funurl" placeholder="请输入菜单路径"></el-input>
+          <el-input
+            v-model="revise.funurl"
+            placeholder="请输入菜单路径"
+          ></el-input>
         </el-form-item>
         <el-form-item label="菜单类型" class="type" prop="type">
           <el-select v-model="revise.type" placeholder="请输入菜单类型">
@@ -105,7 +126,9 @@
           </el-input-number>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button size="small" type="primary" @click="saveRootNode">确 定</el-button>
+          <el-button size="small" type="primary" @click="saveRootNode"
+            >确 定</el-button
+          >
           <el-button size="small" @click="addcancel">取 消</el-button>
         </el-form-item>
       </el-form>
@@ -119,13 +142,22 @@
     >
       <el-form ref="form" :model="revise" label-width="80px" :rules="rules">
         <el-form-item label="显示名称" prop="title">
-          <el-input v-model="revise.title" placeholder="请输入显示名称"></el-input>
+          <el-input
+            v-model="revise.title"
+            placeholder="请输入显示名称"
+          ></el-input>
         </el-form-item>
         <el-form-item label="菜单名称" prop="menuName">
-          <el-input v-model="revise.menuName" placeholder="请输入菜单名称"></el-input>
+          <el-input
+            v-model="revise.menuName"
+            placeholder="请输入菜单名称"
+          ></el-input>
         </el-form-item>
         <el-form-item label="菜单路径" prop="funurl">
-          <el-input v-model="revise.funurl" placeholder="请输入菜单路径"></el-input>
+          <el-input
+            v-model="revise.funurl"
+            placeholder="请输入菜单路径"
+          ></el-input>
         </el-form-item>
         <el-form-item label="菜单类型" class="type" prop="type">
           <el-select v-model="revise.type" placeholder="请输入菜单类型">
@@ -142,7 +174,9 @@
           </el-input-number>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button size="small" type="primary" @click="saveSonNode">确 定</el-button>
+          <el-button size="small" type="primary" @click="saveSonNode"
+            >确 定</el-button
+          >
           <el-button size="small" @click="colseDialog">取 消</el-button>
         </el-form-item>
       </el-form>
@@ -151,7 +185,7 @@
 </template>
 
 <script>
-import { getdata, adddata, deldata, upmenuData } from "@/utils/api";
+import { getdata, adddata, deldata, upmenuData } from '@/utils/api';
 export default {
   components: {},
   data() {
@@ -160,23 +194,29 @@ export default {
       isAddRootNode: true, //是添加根节点/修改
       addsonVisible: false, //子节点弹框显示/隐藏
       isAddSonNode: true, //是否添加子节点/修改
-      updataId: "", //修改时结点ID
+      updataId: '', //修改时结点ID
       tableData: [],
       revise: {
-        title: "",
-        funurl: "",
-        funtype: "",
-        menuName: "",
-        sort: "",
-        funpid: "",
+        title: '',
+        funurl: '',
+        funtype: '',
+        menuName: '',
+        sort: '',
+        funpid: '',
       },
       rules: {
-        title: [{ required: true, message: "请输入显示名称", trigger: "blur" }],
-        menuName: [{ required: true, message: "请输入菜单名称", trigger: "blur" }],
-        icon: [{ required: true, message: "请输入菜单图标", trigger: "blur" }],
-        funurl: [{ required: true, message: "请输入菜单路径", trigger: "blur" }],
-        type: [{ required: true, message: "请选择菜单类型", trigger: "change" }],
-        sort: [{ required: true, message: "请选择菜单排序", trigger: "blur" }],
+        title: [{ required: true, message: '请输入显示名称', trigger: 'blur' }],
+        menuName: [
+          { required: true, message: '请输入菜单名称', trigger: 'blur' },
+        ],
+        icon: [{ required: true, message: '请输入菜单图标', trigger: 'blur' }],
+        funurl: [
+          { required: true, message: '请输入菜单路径', trigger: 'blur' },
+        ],
+        type: [
+          { required: true, message: '请选择菜单类型', trigger: 'change' },
+        ],
+        sort: [{ required: true, message: '请选择菜单排序', trigger: 'blur' }],
       },
     };
   },
@@ -189,6 +229,7 @@ export default {
       getdata().then((res) => {
         this.tableData = res.data;
         console.log(this.tableData);
+        this.loadingGlobal = false;
       });
     },
     // 新增根节点，节点//
@@ -208,7 +249,7 @@ export default {
     },
     // 保存根节点
     saveRootNode() {
-      this.$refs["form"].validate(async (valid) => {
+      this.$refs['form'].validate(async (valid) => {
         if (valid) {
           const data = {
             title: this.revise.title,
@@ -222,8 +263,8 @@ export default {
             const res = await adddata(data);
             if (res.code === 0) {
               this.$message({
-                message: "添加根节点成功",
-                type: "success",
+                message: '添加根节点成功',
+                type: 'success',
               });
               this.getMenuData();
               this.addVisible = false;
@@ -232,14 +273,14 @@ export default {
             }
           } else {
             // 修改根节点
-            data.funtype = data.funtype === "目录" ? 0 : 1;
+            data.funtype = data.funtype === '目录' ? 0 : 1;
             data.id = this.updataId;
             const res = await upmenuData(data);
             console.log(data);
             if (res.code === 0) {
               this.$message({
-                message: "修改根节点成功",
-                type: "success",
+                message: '修改根节点成功',
+                type: 'success',
               });
               this.getMenuData();
               this.addVisible = false;
@@ -254,7 +295,7 @@ export default {
     },
     // 保存子节点
     saveSonNode() {
-      this.$refs["form"].validate(async (valid) => {
+      this.$refs['form'].validate(async (valid) => {
         if (valid) {
           const data = {
             title: this.revise.title,
@@ -265,12 +306,12 @@ export default {
           };
           if (this.isAddSonNode) {
             // 新增子节点
-            data.funpid = this.updataId
+            data.funpid = this.updataId;
             const res = await adddata(data);
             if (res.code === 0) {
               this.$message({
-                message: "添加节点成功",
-                type: "success",
+                message: '添加节点成功',
+                type: 'success',
               });
               this.getMenuData();
               this.addsonVisible = false;
@@ -278,19 +319,19 @@ export default {
               this.$message.error(res.msg);
             }
           } else {
-            data.funtype = data.funtype === "目录" ? 0 : 1;
+            data.funtype = data.funtype === '目录' ? 0 : 1;
             console.log(this.revise);
-            data.funpid = this.revise.funpid
-            data.id = this.revise.id
+            data.funpid = this.revise.funpid;
+            data.id = this.revise.id;
             console.log(data);
             const res = await upmenuData(data);
             if (res.code === 0) {
               this.$message({
-                message: "修改节点成功",
-                type: "success",
+                message: '修改节点成功',
+                type: 'success',
               });
               this.getMenuData();
-              this.addsonVisible = false
+              this.addsonVisible = false;
             } else {
               this.$message.error(res.msg);
             }
@@ -303,12 +344,12 @@ export default {
     // 取消按钮
     addcancel() {
       this.revise = {};
-      this.$refs["form"].resetFields();
+      this.$refs['form'].resetFields();
       this.addVisible = false;
     },
     colseDialog() {
       this.revise = {};
-      this.$refs["form"].resetFields();
+      this.$refs['form'].resetFields();
       this.addsonVisible = false;
     },
     // 修改数据
@@ -328,17 +369,17 @@ export default {
     },
     // 删除
     delMenuDate(e) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           deldata(e).then((res) => {
             if (res.code === 0) {
               this.$message({
-                message: "删除节点成功",
-                type: "success",
+                message: '删除节点成功',
+                type: 'success',
               });
               this.getMenuData();
             } else {

@@ -209,3 +209,7 @@ img {
 .font-bold {
   font-weight: 700;
 }
+
+.global-container {
+  min-height: calc(100vh - 90px);
+}

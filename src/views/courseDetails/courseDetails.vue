@@ -51,15 +51,11 @@
         <el-tree
           :data="data"
           :props="defaultProps"
-          :expand-on-click-node="false"
           accordion
+          :highlight-current="true"
           @node-click="handleNodeClick"
         >
-          <span
-            class="node-title"
-            slot-scope="{ node, data }"
-            :style="{ color: node.data.textColor || 'inherit' }"
-          >
+          <span class="node-title" slot-scope="{ node, data }">
             {{ node.data.index }}{{ node.data.title }}
           </span>
         </el-tree>
@@ -306,31 +302,28 @@ export default {
       let dataList = res.data;
       // 添加每个节点添加index，方便填写序号
       // 一级节点
-      dataList.map((node, index, textColor) => {
+      dataList.map((node, index) => {
         // 二级节点
         if (node.children != null) {
-          node.children.map((cnode, index, textColor) => {
+          node.children.map((cnode, index) => {
             // 三级节点
             if (cnode.children != null) {
-              cnode.children.map((pcode, index, textColor) => {
+              cnode.children.map((pcode, index) => {
                 if (pcode.children == null) {
                   pcode.index = `实验${index + 1} `;
                 }
-                pcode.textColor = '';
                 return pcode;
               });
             }
             if (cnode.pid !== '') {
               cnode.index = `第${index + 1}节 `;
             }
-            cnode.textColor = '';
             return cnode;
           });
         }
         if (node.pid == 0) {
           node.index = `第${index + 1}章 `;
         }
-        node.textColor = '';
         return node;
       });
       this.data = dataList;
@@ -339,11 +332,6 @@ export default {
   methods: {
     // 树形控件的点击事件
     handleNodeClick(data) {
-      if (data.textColor == '') {
-        data.textColor = '#409eff';
-      } else {
-        data.textColor = '';
-      }
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = 'block';

@@ -66,20 +66,29 @@ export default {
 }
 .aside-nav {
   float: left;
-  padding: 20px 0;
-  width: 200px;
+  /* padding: 24px 0; */
+  /* width: 200px; */
+  padding: 16px 0;
+  width: 188px;
   margin-right: 10px;
   border-radius: 5px;
   background-color: #fff;
   border: 1px solid #e4ecf3;
+  height: auto;
 }
 .aside-nav .aside-nav-item {
-  padding-left: 30px;
+  /* margin: 10px 0; */
+  margin-bottom: 16px;
+  /* padding-left: 30px; */
+  padding-left: 24px;
   height: 40px;
   line-height: 40px;
   text-align: left;
-  font-size: 15px;
+  /* font-size: 15px; */
   cursor: pointer;
+}
+.aside-nav .aside-nav-item:hover {
+  background: #eee;
 }
 .active {
   color: #43bc60;

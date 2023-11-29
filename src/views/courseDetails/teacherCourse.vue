@@ -32,6 +32,9 @@
               课程状态：<span ref="status">{{ courseObj.status }}</span>
             </p>
           </div>
+          <div v-if="roleId === '2' && $route.query.id">
+            选课人数：{{ courseObj.selectedNumber }}
+          </div>
         </div>
         <div class="info-content-right" v-if="!isTeachCenter">
           <p>
@@ -46,9 +49,6 @@
           <p>
             授课地点：<span>{{ courseObj.address }}</span>
           </p>
-        </div>
-        <div v-if="roleId === '2' && $route.query.id">
-          选课人数：{{ courseObj.selectedNumber }}
         </div>
       </div>
     </div>
@@ -149,12 +149,14 @@
     </CourseList>
     <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
     <el-drawer
-      title="实验报告"
       :visible.sync="showReportVisible"
       v-if="showReportVisible"
       :direction="rtl"
       size="60%"
     >
+      <template slot="title">
+        <div class="zh-fs-20 font-bold">实验报告</div>
+      </template>
       <div class="stuExperimentReport mx-20" style="text-align: initial">
         <div class="stuInfo">
           <div>
@@ -470,13 +472,9 @@ export default {
   text-align: left;
   padding: 20px;
 }
-
-.course-info {
-  height: 200px;
-}
 .course-info img {
+  height: 174px;
   width: 200px;
-  height: 160px;
 }
 .info-content {
   display: flex;

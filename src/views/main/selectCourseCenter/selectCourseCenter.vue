@@ -1,9 +1,10 @@
 <template>
-  <div class="content zh-pdy-15">
+  <div class="content global-container zh-pdy-15" v-loading="loadingGlobal">
     <ul class="choose-list">
       <li
         class="choose-list-item zh-pd-10 zh-mgb-20"
         v-for="item in chooseCourse"
+        :key="item.id"
       >
         <!-- <img src="../../../assets/addbg.jpg" alt="" /> -->
         <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
@@ -66,6 +67,7 @@ export default {
         return { ...item, picture };
       });
       this.chooseCourse = selectStatusConvert(this.chooseCourse);
+      this.loadingGlobal = false;
     });
   },
   methods: {

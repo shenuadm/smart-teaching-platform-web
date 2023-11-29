@@ -25,6 +25,7 @@
       @selection-change="handleSelectionChange"
       class="custom-table"
       v-if="dialogtabledata"
+      v-loading="loadingGlobal"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="title" label="实验标题" width="120">
@@ -120,7 +121,7 @@
 </template>
 
 <script>
-import { exper, experadd, experdel, experedit, mexperdel } from "@/utils/api";
+import { exper, experadd, experdel, experedit, mexperdel } from '@/utils/api';
 export default {
   data() {
     return {
@@ -130,38 +131,39 @@ export default {
       arr: [],
       currentPage: 1,
       pageSize: 5,
-      input: "",
+      input: '',
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
       articleId: 0,
       id: 0,
-      edit: "",
+      edit: '',
       revise: {
-        title: "",
-        classHour: "",
-        description: "",
-        fileUrl: "",
+        title: '',
+        classHour: '',
+        description: '',
+        fileUrl: '',
         sort: undefined,
       },
       // 表单校验
       rules: {
-        title: [{ required: true, message: "请输入实验标题", trigger: "blur" }],
+        title: [{ required: true, message: '请输入实验标题', trigger: 'blur' }],
         classHour: [
-          { required: true, message: "请输入实验课时", trigger: "blur" },
+          { required: true, message: '请输入实验课时', trigger: 'blur' },
         ],
         description: [
-          { required: true, message: "请输入实验描述", trigger: "blur" },
+          { required: true, message: '请输入实验描述', trigger: 'blur' },
         ],
         sort: [
-          { required: true, message: "请输入实验排序", trigger: "blur" },
-          { type: "number", message: "实验排序应为数字" },
+          { required: true, message: '请输入实验排序', trigger: 'blur' },
+          { type: 'number', message: '实验排序应为数字' },
         ],
       },
     };
   },
   created() {
     this.id = this.$route.query.id;
+    this.loadingGlobal = false;
   },
   methods: {
     // 关闭弹框
@@ -172,7 +174,7 @@ export default {
     //实验报告
     exreport(e) {
       this.$router.push({
-        path: "/laboratoryReport",
+        path: '/laboratoryReport',
         query: {
           id: e.id,
           sort: e.sort,
@@ -187,7 +189,7 @@ export default {
     },
     //重置
     resetting() {
-      this.input = "";
+      this.input = '';
       this.break();
     },
     //添加实验
@@ -209,17 +211,17 @@ export default {
     },
     //保存
     serve() {
-      this.$refs["revise"].validate(async (valid) => {
+      this.$refs['revise'].validate(async (valid) => {
         if (valid) {
           const data = { ...this.revise, articleId: this.articleId };
           if (this.edit) {
             // 新增实验
             await experadd(data);
-            this.$message.success("添加实验成功");
+            this.$message.success('添加实验成功');
           } else {
             // 编辑实验
             await experedit(data);
-            this.$message.success("编辑实验成功");
+            this.$message.success('编辑实验成功');
           }
           this.edit = false;
           this.dialogVisible = false;
@@ -231,17 +233,17 @@ export default {
     },
     //删除
     del(e) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           experdel(e).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -249,25 +251,25 @@ export default {
     },
     //批量删除
     delexper() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           let data = this.arr;
           mexperdel(data).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
+            type: 'info',
+            message: '已取消删除',
           });
         });
     },

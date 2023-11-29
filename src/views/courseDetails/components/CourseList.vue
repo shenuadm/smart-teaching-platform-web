@@ -1,19 +1,18 @@
 <template>
-  <div class="course-list content-height theme-bg-white btn-radius-5">
+  <div
+    class="course-list content-height theme-bg-white btn-radius-5"
+    v-loading="loadingGlobal"
+  >
     <!-- 左侧树形结构 -->
     <div class="tree">
       <el-tree
         :data="data"
         :props="defaultProps"
-        :expand-on-click-node="false"
         accordion
         @node-click="handleNodeClick"
+        :highlight-current="true"
       >
-        <span
-          class="node-title"
-          slot-scope="{ node, data }"
-          :style="{ color: node.data.textColor || 'inherit' }"
-        >
+        <span class="node-title" slot-scope="{ node, data }">
           {{ node.data.index }}{{ node.data.title }}
         </span>
       </el-tree>
@@ -108,7 +107,6 @@
 </template>
 
 <script>
-import { courseStatusConvert } from '@/utils/status.js';
 import {
   getTreeData,
   getExperimentContent,
@@ -161,11 +159,6 @@ export default {
   methods: {
     // 树形控件的点击事件
     handleNodeClick(data) {
-      if (data.textColor == '') {
-        data.textColor = '#409eff';
-      } else {
-        data.textColor = '';
-      }
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = 'block';
@@ -187,8 +180,7 @@ export default {
         this.form.pwd = pwd === 'null' ? '' : pwd;
         this.$refs.experiment.style.display = 'block';
         // 下载实验模版
-        // this.$refs.downLoadTemplate.href = data.fileUrl;
-        console.log(this.$refs.downLoadTemplate);
+        this.$refs.downLoadTemplate.href = data.fileUrl;
         // 通知父组件的事件
         this.treeEvent && this.treeEvent(data.id);
         this.$refs.experiment.style.display = 'block';
@@ -212,7 +204,6 @@ export default {
   },
   async created() {
     this.roleId = localStorage.getItem('roleId');
-    console.log(this.$route.query.id, 'query,id');
     this.courseId = this.$route.query.courseId;
     // 获取树形数据
     const res = await getTreeData(this.courseId);
@@ -229,24 +220,22 @@ export default {
               if (pcode.children == null) {
                 pcode.index = `实验${index + 1} `;
               }
-              pcode.textColor = '';
               return pcode;
             });
           }
           if (cnode.pid !== '') {
             cnode.index = `第${index + 1}节 `;
           }
-          cnode.textColor = '';
           return cnode;
         });
       }
       if (node.pid == 0) {
         node.index = `第${index + 1}章 `;
       }
-      node.textColor = '';
       return node;
     });
     this.data = dataList;
+    this.loadingGlobal = false;
   },
 };
 </script>
