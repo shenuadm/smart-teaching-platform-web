@@ -1,47 +1,40 @@
 <template>
   <div class="content global-container zh-pdy-15" v-loading="loadingGlobal">
-    <ul class="choose-list">
-      <li
+    <div class="choose-list">
+      <el-row
+        :gutter="20"
         class="choose-list-item zh-pd-10 zh-mgb-20"
         v-for="item in chooseCourse"
         :key="item.id"
       >
-        <!-- <img src="../../../assets/addbg.jpg" alt="" /> -->
-        <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
-        <div class="choose-item-info zh-mgl-20">
-          <div class="item-info-left">
-            <p>
-              课程名称：<span>{{ item.name }}</span>
-            </p>
-
-            <p>
-              已选人数：<span>{{ item.selectedNumber }}</span>
-            </p>
-            <p>
-              授课地点：<span>{{ item.address }}</span>
-            </p>
-          </div>
-          <div class="item-info-right zh-mgl-30">
-            <p>
-              授课教师：<span>{{ item.userName }}</span>
-            </p>
-            <p>
-              限制人数：<span>{{ item.maxTaker }}</span>
-            </p>
-            <p>
-              课程状态：<span ref="status">{{ item.status }}</span>
-            </p>
-          </div>
-        </div>
-        <el-button
-          type="primary"
-          size="small"
-          @click="selectCourse(item)"
-          class="choose"
-          >选课</el-button
-        >
-      </li>
-    </ul>
+        <el-col :span="6">
+          <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
+        </el-col>
+        <el-col :span="14" class="choose-item-info zh-mgl-20">
+          <el-row class="info-container" :gutter="20">
+            <el-col :span="12" class="item-info">
+              <div>课程名称：{{ item.name }}</div>
+              <div>已选人数：{{ item.selectedNumber }}</div>
+              <div>授课地点：{{ item.address }}</div>
+            </el-col>
+            <el-col :span="12" class="item-info">
+              <div>授课教师：{{ item.userName }}</div>
+              <div>限制人数：{{ item.maxTaker }}</div>
+              <div>课程状态：{{ item.status }}</div>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :span="4">
+          <el-button
+            type="primary"
+            size="small"
+            @click="selectCourse(item)"
+            class="choose"
+            >选课</el-button
+          >
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -57,6 +50,7 @@ export default {
   mounted() {
     // 获取接口数据
     getSelectCourse().then((res) => {
+      console.log(res, '结果111');
       this.chooseCourse = res.data.map((item) => {
         if (item.picture !== null) {
           var picture = item.picture.split(',')[1];
@@ -113,22 +107,35 @@ export default {
   padding: 0 !important;
 }
 .choose-list-item {
-  height: 150px;
+  border-radius: 20px;
+  height: 190px;
+  padding: 20px 0;
   display: flex;
   flex-direction: row;
   background-color: #fff;
   position: relative;
 }
 .choose-item-info {
-  display: flex;
-  flex-direction: row;
-}
-.choose-item-info > div {
-  display: inline-block;
-}
-.choose-item-info p {
-  margin-top: 0 !important;
   text-align: left;
+}
+
+.info-container,
+.info-container > div {
+  height: 100%;
+}
+
+.item-info > div {
+  margin-top: 0 !important;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+}
+.item-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .choose-list-item img {
   width: 250px;
