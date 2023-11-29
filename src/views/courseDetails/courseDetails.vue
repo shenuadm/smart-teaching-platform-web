@@ -16,11 +16,8 @@
             <div>
               课程名称：<span>{{ courseObj.name }}</span>
             </div>
-            <div v-if="isTeachCenter" class="info-des">
-              {{ courseObj.description }}
-            </div>
           </div>
-          <div v-if="!isTeachCenter">
+          <div>
             <p>
               选课开始日期：<span>{{ courseObj.selectStartDate }}</span>
             </p>
@@ -32,7 +29,7 @@
             </p>
           </div>
         </div>
-        <div class="info-content-right" v-if="!isTeachCenter">
+        <div class="info-content-right">
           <p>
             任课教师：<span>{{ courseObj.userName }}</span>
           </p>
@@ -54,15 +51,11 @@
         <el-tree
           :data="data"
           :props="defaultProps"
-          :expand-on-click-node="false"
           accordion
+          :highlight-current="true"
           @node-click="handleNodeClick"
         >
-          <span
-            class="node-title"
-            slot-scope="{ node, data }"
-            :style="{ color: node.data.textColor || 'inherit' }"
-          >
+          <span class="node-title" slot-scope="{ node, data }">
             {{ node.data.index }}{{ node.data.title }}
           </span>
         </el-tree>
@@ -154,7 +147,7 @@
                   >点击下载实验模板
                 </a>
               </div>
-              <div v-if="roleId === '3'" class="sumbit-status">
+              <div class="sumbit-status">
                 <img src="@/assets/notsubmit.png" alt="" class="status-img" />
                 <div v-if="submitStatus" class="submitStatus">
                   <p class="already-submit">已提交</p>
@@ -185,7 +178,7 @@
                     </li>
                   </ul>
                 </div>
-                <div v-if="roleId === '3'" class="experiment-report-operate">
+                <div class="experiment-report-operate">
                   <el-button type="primary" @click="saveContent" ref="btnStatus"
                     >保存</el-button
                   >
@@ -196,54 +189,6 @@
               </div>
             </el-tab-pane>
             <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
-              <!-- 教师端 -->
-              <el-table
-                :data="
-                  tableData.slice(
-                    (currentPage - 1) * pageSize,
-                    currentPage * pageSize,
-                  )
-                "
-                height="auto"
-                border
-                v-if="roleId === '2'"
-                style="width: 100%"
-              >
-                <el-table-column prop="username" label="学生姓名">
-                </el-table-column>
-                <el-table-column prop="title" label="实验标题" width="120">
-                </el-table-column>
-                <el-table-column prop="result" label="实验结果" width="120">
-                </el-table-column>
-                <el-table-column prop="score" label="成绩" width="80">
-                </el-table-column>
-                <el-table-column prop="comment" label="评语" width="180">
-                </el-table-column>
-                <el-table-column prop="updateTime" label="更新日期" width="100">
-                </el-table-column>
-                <el-table-column fixed="right" label="操作" width="200">
-                  <template slot-scope="scope">
-                    <el-button
-                      @click="checkDetails(scope.row)"
-                      type="text"
-                      size="middle"
-                      >查看详情</el-button
-                    >
-                    <el-button
-                      @click="checkReport(scope.row)"
-                      type="text"
-                      size="middle"
-                      >查看报告</el-button
-                    >
-                    <el-button
-                      @click="editContent(scope.row)"
-                      type="text"
-                      size="middle"
-                      >编辑</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
               <!-- 学生端 -->
               <el-table
                 :data="
@@ -285,107 +230,6 @@
             </el-tab-pane>
           </el-tabs>
         </div>
-        <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
-        <el-dialog
-          title="实验报告"
-          :visible.sync="showReportVisible"
-          width="30%"
-          :before-close="handleCloseReport"
-        >
-          <div class="stuExperimentReport">
-            <div class="stuInfo zh-fs-16">
-              <span>学生姓名:{{ stuForm.username }}</span>
-              <span>学生成绩:{{ stuForm.score }}</span>
-            </div>
-            <div class="stuExperimentContent">
-              <div class="exTitle zh-fs-16">
-                <p class="title zh-fw-m">实验标题：</p>
-                <div>sql注入</div>
-              </div>
-              <div class="exResult zh-fs-16">
-                <p class="title zh-fw-m">实验结果:</p>
-                <div>111</div>
-              </div>
-              <div class="exSteps zh-fs-16">
-                <p class="title zh-fw-m">实验步骤:</p>
-                <ul>
-                  <li>
-                    <p>步骤一</p>
-                    <div>111</div>
-                  </li>
-                  <li>
-                    <p>步骤二</p>
-                    <div>222</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="showReportVisible = false"
-              >关 闭</el-button
-            >
-          </span>
-        </el-dialog>
-        <!-- 教师端，点击查看详情，弹出学生的成绩详情 -->
-        <el-dialog
-          title="成绩详情"
-          :visible.sync="showDetailsVisible"
-          width="30%"
-          :before-close="handleCloseDetsils"
-        >
-          <div class="stuScoreDetails">
-            <div class="stuInfo zh-fs-16">
-              <span>学生姓名:{{ stuForm.username }}</span>
-              <span>成绩:{{ stuForm.score }}</span>
-            </div>
-            <div class="exTitle zh-fs-16">
-              <p class="zh-fw-m">实验标题:</p>
-              <div>{{ stuForm.title }}</div>
-            </div>
-            <div class="exResult zh-fs-16">
-              <p class="zh-fw-m">实验结果:</p>
-              <div>{{ stuForm.result }}</div>
-            </div>
-            <div class="exComment zh-fs-16">
-              <p class="zh-fw-m">评语:</p>
-              <div>{{ stuForm.comment }}</div>
-            </div>
-          </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="showDetailsVisible = false"
-              >关 闭</el-button
-            >
-          </span>
-        </el-dialog>
-        <!-- 教师端，点击编辑，可以编辑学生的成绩以及评语 -->
-        <el-dialog
-          title="编辑学生成绩评语"
-          :visible.sync="showEditVisible"
-          width="30%"
-          :before-close="handleCloseEdit"
-        >
-          <div class="form">
-            <el-form ref="stuForm" :model="stuForm" label-width="80px">
-              <el-form-item label="学生姓名">
-                <el-input v-model="stuForm.username" disabled></el-input>
-              </el-form-item>
-              <el-form-item label="实验标题">
-                <el-input v-model="stuForm.title" disabled></el-input>
-              </el-form-item>
-              <el-form-item label="学生成绩">
-                <el-input v-model="stuForm.score"></el-input>
-              </el-form-item>
-              <el-form-item label="评语">
-                <el-input type="textarea" v-model="stuForm.comment"></el-input>
-              </el-form-item>
-            </el-form>
-          </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="cancel('stuForm')">取 消</el-button>
-            <el-button type="primary" @click="determine">确 定</el-button>
-          </span>
-        </el-dialog>
       </div>
     </div>
   </div>
@@ -435,10 +279,6 @@ export default {
       richTextPlans: [], //存储富文本步骤数据
       currentPage: 1, //当前页
       pageSize: 5, //每页的条数
-      showReportVisible: false, //是否显示实验报告
-      showDetailsVisible: false, //是否显示成绩详情
-      showEditVisible: false, //是否显示编辑框
-      stuForm: {}, //学生成绩详情
       submitStatus: '', //学生实验提交状态
       studentScore: '', //学生实验成绩
     };
@@ -446,25 +286,6 @@ export default {
   created() {
     this.roleId = localStorage.getItem('roleId');
     console.log(this.$route.query.id, 'query,id');
-    // 教师端
-    if (this.roleId === '2') {
-      // 查看课程详情
-      if (this.$route.query.id) {
-        this.path = '/myTeaching';
-        this.teacherId = this.$route.query.id;
-        let courseId = this.$route.query.courseId;
-        teacherCourseDetails(courseId, this.teacherId).then((res) => {
-          this.courseObj = courseStatusConvert(res.data);
-        });
-      } else {
-        // 查看章节
-        this.path = '/courseCenter';
-        let id = this.$route.query.courseId;
-        checkChapter(id).then((res) => {
-          this.courseObj = res.courseInfo;
-        });
-      }
-    }
     if (this.roleId === '3') {
       //学生查看课程详情
       this.path = '/myCourse';
@@ -481,31 +302,28 @@ export default {
       let dataList = res.data;
       // 添加每个节点添加index，方便填写序号
       // 一级节点
-      dataList.map((node, index, textColor) => {
+      dataList.map((node, index) => {
         // 二级节点
         if (node.children != null) {
-          node.children.map((cnode, index, textColor) => {
+          node.children.map((cnode, index) => {
             // 三级节点
             if (cnode.children != null) {
-              cnode.children.map((pcode, index, textColor) => {
+              cnode.children.map((pcode, index) => {
                 if (pcode.children == null) {
                   pcode.index = `实验${index + 1} `;
                 }
-                pcode.textColor = '';
                 return pcode;
               });
             }
             if (cnode.pid !== '') {
               cnode.index = `第${index + 1}节 `;
             }
-            cnode.textColor = '';
             return cnode;
           });
         }
         if (node.pid == 0) {
           node.index = `第${index + 1}章 `;
         }
-        node.textColor = '';
         return node;
       });
       this.data = dataList;
@@ -514,11 +332,6 @@ export default {
   methods: {
     // 树形控件的点击事件
     handleNodeClick(data) {
-      if (data.textColor == '') {
-        data.textColor = '#409eff';
-      } else {
-        data.textColor = '';
-      }
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = 'block';
@@ -534,17 +347,11 @@ export default {
         getExperimentContent(this.experimentId).then((res) => {
           this.experimentContent = res.data;
         });
-        // 实验操作
-        if (localStorage.getItem('hostName') === 'null') {
-          this.form.name = '';
-        } else {
-          this.form.name = localStorage.getItem('hostName'); //登录名
-        }
-        if (localStorage.getItem('hostPwd') === 'null') {
-          this.form.pwd = '';
-        } else {
-          this.form.pwd = localStorage.getItem('hostPwd'); //登录密码
-        }
+        // 实验操作 获取登录用户名与密码
+        const name = localStorage.getItem('hostName');
+        this.form.name = name === 'null' ? '' : name;
+        const pwd = localStorage.getItem('hostPwd');
+        this.form.pwd = pwd === 'null' ? '' : pwd;
         if (this.roleId === '3') {
           // 学生端实验结果、实验步骤
           getExperimentStudentData(
@@ -592,24 +399,9 @@ export default {
             // },1000)
           });
         }
-        // 教师端实验步骤
-        if (this.roleId === '2' && this.teacherId) {
-          getExperimentData(this.experimentId, this.courseId).then((res) => {
-            this.$refs.editor.html = res.experimentReport.result;
-            this.experimentStep = res.experimentReportPlans;
-            setTimeout(() => {
-              res.experimentReportPlans.forEach((ritem, rindex) => {
-                this.$refs.editors.forEach((eitem, eindex) => {
-                  if (rindex === eindex) {
-                    eitem.html = ritem.content;
-                  }
-                });
-              });
-            }, 1000);
-          });
-        }
         if (this.teacherId) {
           // 下载实验模版
+          console.log(this.$refs.downLoadTemplate);
           this.$refs.downLoadTemplate.href = data.fileUrl;
           if (this.roleId === '2') {
             // 成绩表格(教师端)
@@ -710,41 +502,6 @@ export default {
           });
         });
     },
-    // 教师端，成绩表格
-    // 查看详情
-    checkDetails(row) {
-      this.showDetailsVisible = true;
-      this.stuForm = row;
-    },
-    handleCloseDetsils() {
-      this.showDetailsVisible = false;
-    },
-    // 查看学生实验报告
-    checkReport(row) {
-      this.showReportVisible = true;
-      this.stuForm = row;
-    },
-    handleCloseReport() {
-      this.showReportVisible = false;
-    },
-    // 编辑学生成绩、评语
-    editContent(row) {
-      this.showEditVisible = true;
-      this.stuForm = row;
-    },
-    handleCloseEdit() {
-      this.showEditVisible = false;
-    },
-    // 取消编辑
-    cancel(formName) {
-      this.$refs[formName].resetFields();
-      this.showEditVisible = false;
-    },
-    // 确定编辑
-    determine() {
-      this.stuForm = this.stuForm;
-      this.showEditVisible = false;
-    },
     // 分页
     // pageSize 改变时会触发
     handleSizeChange(val) {
@@ -753,12 +510,6 @@ export default {
     // currentPage 改变时会触发
     handleCurrentChange(val) {
       this.currentPage = val;
-    },
-  },
-  computed: {
-    // 是否是课程中心进入,如果是教师端进入，并且url中没有携带id参数，就是从课程中心进入，返回true，不显示课程的除名称外的信息
-    isTeachCenter() {
-      return this.roleId === '2' && !this.$route.query.id;
     },
   },
 };

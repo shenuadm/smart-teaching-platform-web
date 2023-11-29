@@ -6,7 +6,13 @@
       >
     </div>
     <div class="roleTable">
-      <el-table ref="tableData" :data="tableData" border style="width: 100%">
+      <el-table
+        ref="tableData"
+        :data="tableData"
+        border
+        style="width: 100%"
+        v-loading="loadingGlobal"
+      >
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column prop="rolename" label="角色标识" align="center">
         </el-table-column>
@@ -149,6 +155,7 @@ export default {
     async getroleManagement() {
       const res = await roleManagement();
       this.tableData = res.data;
+      this.loadingGlobal = false;
     },
     // 添加角色
     addRole() {

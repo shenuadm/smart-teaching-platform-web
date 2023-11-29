@@ -1,5 +1,5 @@
 <template>
-  <div class="myTeaching">
+  <div class="myTeaching global-container" v-loading="loadingGlobal">
     <!-- 标题 -->
     <div class="person-title">我的授课</div>
     <div class="my-teaching">
@@ -235,6 +235,7 @@ export default {
       this.myTeachList = courseStatusConvert(res.data).map((item) => {
         return { ...item, picture: item.picture.split(',')[1] };
       });
+      this.loadingGlobal = false;
     });
   },
   methods: {
@@ -251,8 +252,8 @@ export default {
       localStorage.setItem('hostName', e.hostName); //登录名
       localStorage.setItem('hostPwd', e.hostPwd); //登录密码
       this.$router.push({
-        path: '/courseDetails',
-        name: 'courseDetails',
+        path: '/teacherCourse',
+        name: 'teacherCourse',
         query: {
           courseId: e.courseId,
           id: e.id,

@@ -14,7 +14,12 @@
       >
     </div>
     <div class="table">
-      <el-table :data="tableData" style="width: 100%" border>
+      <el-table
+        :data="tableData"
+        style="width: 100%"
+        border
+        v-loading="loadingGlobal"
+      >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="content" label="内容"></el-table-column>
@@ -43,18 +48,19 @@
 </template>
 
 <script>
-import { systemNotice } from "@/utils/api.js";
-import { noticeStatus } from "@/utils/status.js";
+import { systemNotice } from '@/utils/api.js';
+import { noticeStatus } from '@/utils/status.js';
 export default {
   data() {
     return {
-      input: "",
+      input: '',
       tableData: [],
     };
   },
   mounted() {
     systemNotice().then((res) => {
       this.tableData = noticeStatus(res.data);
+      this.loadingGlobal = false;
     });
   },
   methods: {
@@ -94,7 +100,7 @@ export default {
   background-color: #7ebbf8;
   border-color: #7ebbf8;
 }
-.table{
+.table {
   margin-top: 20px;
 }
 </style>

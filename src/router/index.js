@@ -142,6 +142,18 @@ const routes = [
         name: 'courseDetails',
         component: () => import('@/views/courseDetails/courseDetails'),
       },
+      // 教师端课程详情
+      {
+        path: '/teacherCourse',
+        name: 'teacherCourse',
+        component: () => import('@/views/courseDetails/teacherCourse'),
+      },
+      // 教师端课程中心的查看章节
+      {
+        path: '/centerCourse',
+        name: 'centerCourse',
+        component: () => import('@/views/courseDetails/centerCourse'),
+      },
       // 教师端
       {
         path: '/teacher',

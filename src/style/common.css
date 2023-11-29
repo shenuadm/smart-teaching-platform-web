@@ -129,6 +129,8 @@ img {
   margin-right: 20px;
 }
 
+
+
 /* 内填充 */
 .zh-pd-5 {
   padding: 5px;
@@ -193,4 +195,21 @@ img {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.mx-20 {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+
+.font-bold {
+  font-weight: 700;
+}
+
+.global-container {
+  min-height: calc(100vh - 90px);
 }
