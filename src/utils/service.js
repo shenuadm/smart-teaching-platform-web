@@ -4,6 +4,7 @@ import { Message } from 'element-ui';
 // 配置基本URL
 const service = axios.create({
   baseURL: window.location.origin + '/api',
+  timeout: 10000,
 });
 // 请求拦截器
 service.interceptors.request.use(
@@ -35,7 +36,7 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    Message.error('服务异常');
+    Message.error('网络错误');
     return Promise.reject(error);
   },
 );

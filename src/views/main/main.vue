@@ -1,16 +1,21 @@
 <template>
   <div class="container warpper">
     <!-- 侧边导航栏 -->
-    <div class="aside-nav">
-      <div
-        v-for="(item, index) in navList"
-        :class="{ 'aside-nav-item': true, active: activeIndex === index }"
-        :key="index"
-        @click="switchTo(index)"
-      >
-        {{ item }}
-      </div>
-    </div>
+    <el-col :span="4">
+      <el-menu :default-active="$route.path" router>
+        <el-menu-item
+          v-for="item in navList"
+          :key="item.id"
+          :index="item.funurl"
+        >
+          <i class="iconfont" :class="item.icon"></i>
+          <span slot="title">{{ item.title }}</span>
+        </el-menu-item>
+        <el-submenu index="">
+          <el-menu-item index=""></el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </el-col>
     <!-- 右侧主体内容 -->
     <div class="main-content">
       <div class="title">{{ navList[activeIndex] }}</div>
@@ -33,14 +38,25 @@ export default {
     let dataList = JSON.parse(localStorage.getItem('navData'));
     dataList.forEach((item) => {
       if (item.children == null) {
-        this.navList.push(item.title);
+        this.navList.push({
+          icon: item.icon,
+          funurl: item.funurl,
+          title: item.title,
+          id: item.id,
+        });
       } else {
-        item.children.map((i) => {
-          this.navList.push(i.title);
+        item.children.forEach((i) => {
+          this.navList.push({
+            icon: i.icon,
+            funurl: i.funurl,
+            title: i.title,
+            id: item.id,
+          });
         });
       }
     });
-    console.log(this.navList, 'navList');
+    // console.log(this.navList, 'navList');
+
     console.log(dataList, 'dataList');
   },
   mounted() {},
