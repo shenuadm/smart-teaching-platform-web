@@ -7,8 +7,8 @@
           <div class="bglog" v-if="enrolldis">登录账号</div>
         </div>
         <div class="enroll-num" @click="toEnroll">
-          注册账号
-          <div class="bgenr" v-if="logindis">注册账号</div>
+          学生注册账号
+          <div class="bgenr" v-if="logindis">学生注册账号</div>
         </div>
       </div>
       <div class="content center">
@@ -65,7 +65,7 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="用户名" prop="username">
+            <el-form-item label="学号" prop="username">
               <el-input
                 v-model="registerForm.username"
                 maxlength="30"
@@ -73,7 +73,7 @@
               >
               </el-input>
             </el-form-item>
-            <el-form-item label="昵称" prop="nikename">
+            <el-form-item label="姓名" prop="nikename">
               <el-input
                 v-model="registerForm.nikename"
                 maxlength="20"

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { Message } from 'element-ui';
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,13 @@ const routes = [
       {
         path: '/test',
         component: () => import('@/views/test.vue'),
+      },
+      // 菜单页面布局
+      {
+        path: '/layout',
+        name: 'layout',
+        component: () => import('@/views/layout/layoutIndex.vue'),
+        children: [],
       },
       // 超级管理员端
       {
@@ -168,7 +176,7 @@ const routes = [
           //     import('@/views/teacher/personalInfo/personalInfo'),
           // },
           {
-            path: '/personInfo',
+            path: '/teach/personInfo',
             name: 'personInfo',
             component: () => import('@/views/main/personInfo/personInfo'),
           },
@@ -206,6 +214,21 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+});
+//路由拦截
+router.beforeEach((to, from, next) => {
+  console.log(to);
+  let isLogin = window.localStorage.getItem('satoken');
+  if (isLogin) {
+    next();
+  } else {
+    if (to.path === '/') {
+      next();
+    } else {
+      Message('没有访问权限或登陆已过期，请重新登陆');
+      next('/');
+    }
+  }
 });
 
 export default router;

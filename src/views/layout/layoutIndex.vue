@@ -8,31 +8,33 @@
         router
       >
         <el-menu-item
-          v-for="item in test"
+          v-for="item in navList"
           :key="item.id"
           v-if="item.type === '菜单'"
           :index="item.funurl"
         >
           <span slot="title"
-            ><i :class="item.icon" class="iconfont"></i>{{ item.title }}</span
+            ><i :class="item.icon" class="iconfont mr-5"></i
+            >{{ item.title }}</span
           >
         </el-menu-item>
 
         <el-submenu
-          index="2"
-          v-for="item in test"
+          v-for="item in navList"
           :key="item.id"
           v-if="item.type === '目录'"
         >
           <span slot="title"
-            ><i :class="item.icon" class="iconfont"></i>{{ item.title }}</span
+            ><i :class="item.icon" class="iconfont mr-5"></i
+            >{{ item.title }}</span
           >
           <el-menu-item
             v-for="i in item.children"
             :index="i.funurl"
             v-if="i.type === '菜单'"
             :key="i.id"
-            ><i class="iconfont" :class="i.icon"></i>{{ i.title }}</el-menu-item
+            ><i class="iconfont mr-5" :class="i.icon"></i
+            >{{ i.title }}</el-menu-item
           >
         </el-submenu>
       </el-menu>
@@ -51,34 +53,11 @@ export default {
   data() {
     return {
       navList: [], //侧导航标题
-      test: [],
     };
   },
   created() {
     // 从本地存储中取值
-    const dataList = JSON.parse(localStorage.getItem('navData'));
-    this.test = dataList;
-    console.log(dataList, 'datalist1111');
-    dataList.forEach((item) => {
-      if (item.children == null) {
-        this.navList.push({
-          icon: item.icon,
-          funurl: item.funurl,
-          title: item.title,
-          id: item.id,
-        });
-      } else {
-        item.children.forEach((i) => {
-          this.navList.push({
-            icon: i.icon,
-            funurl: i.funurl,
-            title: i.title,
-            id: i.id,
-          });
-        });
-      }
-    });
-    console.log(this.navList);
+    this.navList = JSON.parse(localStorage.getItem('navData'));
   },
 };
 </script>
