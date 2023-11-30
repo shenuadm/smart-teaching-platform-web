@@ -6,7 +6,7 @@
         class="el-menu-vertical-demo"
         router
       >
-        <el-menu-item index="/personmsg">
+        <el-menu-item index="/personInfo">
           <span slot="title"><i class="el-icon-user"></i>个人信息</span>
         </el-menu-item>
         <el-submenu index="2">
@@ -74,9 +74,9 @@ export default {
 .el-menu-item:hover {
   background-color: rgb(225, 227, 240) !important;
 }
-/* .el-menu > li {
+.el-menu > li {
   font-weight: 700;
-} */
+}
 /* 二级目录 */
 .second {
   padding: 0 0 0 46px;

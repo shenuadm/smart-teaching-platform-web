@@ -59,7 +59,6 @@
 <script>
 import { systemNotice, deleteNotice } from '@/utils/api.js';
 import { noticeStatus } from '@/constant/status.js';
-// import { noticeStatus } from '@/utils/status.js';
 import EditForm from './components/EditForm.vue';
 import NewForm from './components/NewForm.vue';
 import Bus from '@/utils/eventBus';

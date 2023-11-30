@@ -1,7 +1,7 @@
 <template>
-  <el-row :gutter="20" class="container warpper">
+  <el-container class="container warpper">
     <!-- 侧边导航栏 -->
-    <el-col :span="4">
+    <el-col :span="4" class="mr-20">
       <el-menu :default-active="$route.path" router>
         <el-menu-item
           v-for="item in navList"
@@ -17,7 +17,7 @@
     <el-col :span="20" class="main-content">
       <router-view></router-view>
     </el-col>
-  </el-row>
+  </el-container>
 </template>
 
 <script>
@@ -26,12 +26,11 @@ export default {
   data() {
     return {
       navList: [], //侧边导航栏
-      activeIndex: 0, //选择的下标
     };
   },
   created() {
     // 从本地存储中取值
-    let dataList = JSON.parse(localStorage.getItem('navData'));
+    const dataList = JSON.parse(localStorage.getItem('navData'));
     dataList.forEach((item) => {
       if (item.children == null) {
         this.navList.push({
@@ -51,66 +50,20 @@ export default {
         });
       }
     });
-    console.log(this.navList, 'navList');
-  },
-  mounted() {},
-  methods: {
-    // 路由跳转
-    switchTo(index) {
-      this.activeIndex = index;
-      const route = ['personInfo', 'myCourse', 'selectCourseCenter'];
-      const currentRoute = route[index];
-      if (this.$route.fullPath === `/${currentRoute}`) return; //防止再次点击路由报错
-      this.$router.push({ name: currentRoute });
-    },
   },
 };
 </script>
 
 <style scoped>
-.warp {
-  width: 1200px;
-}
 .container {
-  /* min-height: 80vh; */
   margin: 30px auto;
   height: auto !important;
-  display: flex;
 }
-.aside-nav {
-  float: left;
-  /* padding: 24px 0; */
-  /* width: 200px; */
-  padding: 16px 0;
-  width: 188px;
-  margin-right: 10px;
-  border-radius: 5px;
-  /* background-color: #fff; */
-  /* background: #eeeff1; */
-  background: #f8f6f6;
-  /* border: 1px solid #e4ecf3; */
-  height: auto;
+
+.el-menu > li {
+  font-weight: 700;
 }
-.aside-nav .aside-nav-item {
-  /* margin: 10px 0; */
-  margin-bottom: 16px;
-  /* padding-left: 30px; */
-  padding-left: 24px;
-  height: 40px;
-  line-height: 40px;
-  text-align: left;
-  /* font-size: 15px; */
-  cursor: pointer;
-}
-.aside-nav .aside-nav-item:hover {
-  background: #e0e3eb;
-}
-.active {
-  /* color: #43bc60; */
-  /* border-left: 2px solid #43bc60; */
-  color: #1f63f8;
-  border-left: 2px solid #1f63f8;
-}
+
 .main-content {
   width: 1050px;
   /* float: right; */

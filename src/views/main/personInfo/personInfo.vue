@@ -141,8 +141,8 @@ export default {
     // 保存表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        let oldpwd = localStorage.getItem('oldpwd');
-        let data = {
+        const oldpwd = localStorage.getItem('oldpwd');
+        const data = {
           oldpwd: this.ruleForm.oldpwd,
           password: this.ruleForm.newpwd,
         };
@@ -153,11 +153,7 @@ export default {
             });
           });
         } else {
-          this.$message({
-            message: '信息修改失败',
-            type: 'warning',
-          });
-          return false;
+          return this.$message.warning('信息修改失败');
         }
       });
     },

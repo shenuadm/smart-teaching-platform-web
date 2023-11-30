@@ -168,8 +168,7 @@ export default {
       this.enrolldis = true;
     },
     Login(formName) {
-      console.log(111111, ' 登录');
-      let data = {
+      const data = {
         account: this.loginForm.logNum,
         password: this.loginForm.logPas,
       };
@@ -196,15 +195,13 @@ export default {
                 sessionStorage.setItem('username', res.username);
                 localStorage.setItem('oldpwd', data.password);
                 this.$message.success({ message: '登录成功', duration: 1500 });
-                if (res.roleId === 1) {
-                  this.$router.push({ path: '/personmsg' });
-                }
-                if (res.roleId === 2) {
-                  this.$router.push({ path: '/personalInfo' });
-                }
-                if (res.roleId === 3) {
-                  this.$router.push({ path: '/personInfo' });
-                }
+                // if (res.roleId === 1) {
+                //   this.$router.push({ path: '/personmsg' });
+                // }
+                // if (res.roleId === 2 || res.roleId === 3) {
+                //   this.$router.push({ path: '/personInfo' });
+                // }
+                this.$router.push({ path: '/personInfo' });
               }
             });
           }

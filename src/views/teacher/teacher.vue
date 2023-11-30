@@ -1,7 +1,7 @@
 <template>
-  <el-row :gutter="20" class="personalInfo warpper">
+  <el-container class="personalInfo warpper">
     <!-- 侧导航 -->
-    <el-col :span="4">
+    <el-col :span="4" class="mr-20">
       <el-menu :default-active="$route.path" router>
         <el-menu-item
           v-for="item in navList"
@@ -18,7 +18,7 @@
       <!-- 路由出口 -->
       <router-view></router-view>
     </el-col>
-  </el-row>
+  </el-container>
 </template>
 
 <script>
@@ -27,16 +27,13 @@ export default {
   data() {
     return {
       navList: [], //侧导航标题
-      activeIndex: 0, //高亮的下标
     };
   },
   created() {
     // 从本地存储中取值
-    let dataList = JSON.parse(localStorage.getItem('navData'));
-    // console.log(dataList, 'dataList');
+    const dataList = JSON.parse(localStorage.getItem('navData'));
     dataList.forEach((item) => {
       if (item.children == null) {
-        // this.navList.push(item.title);
         this.navList.push({
           icon: item.icon,
           funurl: item.funurl,
@@ -45,7 +42,6 @@ export default {
         });
       } else {
         item.children.forEach((i) => {
-          // this.navList.push(i.title);
           this.navList.push({
             icon: i.icon,
             funurl: i.funurl,
@@ -57,26 +53,14 @@ export default {
     });
     console.log(this.navList);
   },
-  methods: {
-    switchNav(index) {
-      this.activeIndex = index;
-      const routes = ['personalInfo', 'courseCenter', 'myTeaching'];
-      const targetRoute = routes[index];
-      if (this.$route.fullPath === `/${targetRoute}`) return; //防止连续点击，路由报错
-      this.$router.push({ name: targetRoute });
-    },
-  },
-  computed: {
-    defaultActive() {
-      return this.$route.path;
-    },
-  },
 };
 </script>
 
 <style scoped>
+.el-menu > li {
+  font-weight: 700;
+}
 .personalInfo {
-  display: flex;
   margin: 30px auto;
   height: auto;
 }
