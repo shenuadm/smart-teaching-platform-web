@@ -21,7 +21,7 @@
         <el-table-column prop="description" label="角色描述" align="center">
         </el-table-column>
         <el-table-column label="操作" align="center">
-          <template slot-scope="scope" v-if="scope.row.roleid !== 1">
+          <template slot-scope="scope">
             <el-button
               size="mini"
               type="primary"

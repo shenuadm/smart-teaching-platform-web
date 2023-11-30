@@ -252,6 +252,7 @@ export default {
     goPdf(url) {
       console.log(url);
       window.open(`${window.location.origin}/#/pdf?url=${url}`);
+      // window.open(`${window.location.origin}/#/pdf?url=/static/test.pdf`);
     },
     // 关闭章dilog
     closeAddChapter() {

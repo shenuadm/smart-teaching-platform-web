@@ -22,21 +22,7 @@ Vue.component('AsideTem', Aside);
 Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
 Vue.mixin(loadingMixin);
-//路由拦截
-router.beforeEach((to, from, next) => {
-  console.log(to);
-  let isLogin = window.localStorage.getItem('satoken');
-  if (isLogin) {
-    next();
-  } else {
-    if (to.path === '/') {
-      next();
-    } else {
-      Message('没有访问权限或登陆已过期，请重新登陆');
-      next('/');
-    }
-  }
-});
+
 Vue.config.productionTip = false;
 new Vue({
   router,

@@ -130,9 +130,25 @@ export function experdel(id) {
 export function experedit(data) {
   return http.post('experiment/update', data);
 }
+//编辑实验获取数据
+export function experplan(id) {
+  return http.get('ExperimentReportPlan/' + id);
+}
 //批量删除实验
 export function mexperdel(data) {
   return http.delete('experiment/deletes/' + data);
+}
+// 发布通知
+export function addNotice({ title, content, status }) {
+  return http.post('notice/add', { title, content, status });
+}
+// 修改通知
+export function editNotice({ id, title, content, status }) {
+  return http.post('notice/update', { id, title, content, status });
+}
+// 删除通知
+export function deleteNotice(id) {
+  return http.get(`notice/delete/${id}`);
 }
 
 // 作业管理

@@ -1,5 +1,5 @@
 <template>
-  <div class="content zh-pdy-15 global-container" v-loading="loadingGlobal">
+  <div class="content global-container" v-loading="loadingGlobal">
     <ul class="list">
       <li
         class="list-item zh-pd-10 zh-mgb-20"

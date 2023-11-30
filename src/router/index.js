@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { Message } from 'element-ui';
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,13 @@ const routes = [
         path: '/test',
         component: () => import('@/views/test.vue'),
       },
+      // 菜单页面布局
+      {
+        path: '/layout',
+        name: 'layout',
+        component: () => import('@/views/layout/layoutIndex.vue'),
+        children: [],
+      },
       // 超级管理员端
       {
         path: '/superUser',
@@ -30,9 +38,9 @@ const routes = [
         component: () => import('@/views/superUser/superUser'),
         children: [
           {
-            path: '/personmsg',
-            name: 'personmsg',
-            component: () => import('@/views/superUser/personmsg/personmsg'),
+            path: '/personInfo',
+            name: 'personInfo',
+            component: () => import('@/views/main/personInfo/personInfo'),
           },
           {
             path: '/menuManagement',
@@ -161,11 +169,16 @@ const routes = [
         component: () => import('@/views/teacher/teacher'),
         children: [
           // 个人信息
+          // {
+          //   path: '/personalInfo',
+          //   name: 'personalInfo',
+          //   component: () =>
+          //     import('@/views/teacher/personalInfo/personalInfo'),
+          // },
           {
-            path: '/personalInfo',
-            name: 'personalInfo',
-            component: () =>
-              import('@/views/teacher/personalInfo/personalInfo'),
+            path: '/teach/personInfo',
+            name: 'personInfo',
+            component: () => import('@/views/main/personInfo/personInfo'),
           },
           // 课程中心
           {
@@ -201,6 +214,21 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+});
+//路由拦截
+router.beforeEach((to, from, next) => {
+  console.log(to);
+  let isLogin = window.localStorage.getItem('satoken');
+  if (isLogin) {
+    next();
+  } else {
+    if (to.path === '/') {
+      next();
+    } else {
+      Message('没有访问权限或登陆已过期，请重新登陆');
+      next('/');
+    }
+  }
 });
 
 export default router;

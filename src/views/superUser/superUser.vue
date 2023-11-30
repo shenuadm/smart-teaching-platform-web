@@ -2,14 +2,12 @@
   <el-container class="warpper">
     <el-col :span="4" class="warpper-left">
       <el-menu
-        default-active="/superUser"
+        :default-active="$route.path"
         class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
         router
       >
-        <el-menu-item index="/personmsg">
-          <span slot="title">个人信息</span>
+        <el-menu-item index="/personInfo">
+          <span slot="title"><i class="el-icon-user"></i>个人信息</span>
         </el-menu-item>
         <el-submenu index="2">
           <span slot="title">系统管理</span>
@@ -45,23 +43,16 @@ export default {
   components: {},
   data() {
     return {
-      tabPosition: "left", //侧边标签的位置（左侧）
+      tabPosition: 'left', //侧边标签的位置（左侧）
     };
   },
   mounted() {},
-  methods: {
-    handleOpen(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-  },
+  methods: {},
 };
 </script>
 
 <style scoped>
-.warpper-left{
+.warpper-left {
   position: fixed;
   z-index: inherit;
 }
@@ -83,7 +74,7 @@ export default {
 .el-menu-item:hover {
   background-color: rgb(225, 227, 240) !important;
 }
-.el-menu>li{
+.el-menu > li {
   font-weight: 700;
 }
 /* 二级目录 */

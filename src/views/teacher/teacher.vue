@@ -1,22 +1,48 @@
 <template>
-  <div class="personalInfo warpper">
+  <el-container class="personalInfo warpper">
     <!-- 侧导航 -->
-    <div class="person-nav">
-      <div
-        v-for="(item, index) in navList"
-        :class="{ 'person-nav-item': true, active: activeIndex === index }"
-        :key="index"
-        @click="switchNav(index)"
+    <el-col :span="4" class="mr-20">
+      <el-menu
+        :default-active="$route.path"
+        class="el-menu-vertical-demo"
+        router
       >
-        {{ item }}
-      </div>
-    </div>
+        <el-menu-item
+          v-for="item in test"
+          :key="item.id"
+          v-if="item.type === '菜单'"
+          :index="item.funurl"
+        >
+          <span slot="title"
+            ><i :class="item.icon" class="iconfont"></i>{{ item.title }}</span
+          >
+        </el-menu-item>
+
+        <el-submenu
+          index="2"
+          v-for="item in test"
+          :key="item.id"
+          v-if="item.type === '目录'"
+        >
+          <span slot="title"
+            ><i :class="item.icon" class="iconfont"></i>{{ item.title }}</span
+          >
+          <el-menu-item
+            v-for="i in item.children"
+            :index="i.funurl"
+            v-if="i.type === '菜单'"
+            :key="i.id"
+            ><i class="iconfont" :class="i.icon"></i>{{ i.title }}</el-menu-item
+          >
+        </el-submenu>
+      </el-menu>
+    </el-col>
     <!-- 信息内容 -->
-    <div class="person-container">
+    <el-col :span="20" class="person-container">
       <!-- 路由出口 -->
       <router-view></router-view>
-    </div>
-  </div>
+    </el-col>
+  </el-container>
 </template>
 
 <script>
@@ -25,68 +51,45 @@ export default {
   data() {
     return {
       navList: [], //侧导航标题
-      activeIndex: 0, //高亮的下标
+      test: [],
     };
   },
   created() {
     // 从本地存储中取值
-    let dataList = JSON.parse(localStorage.getItem('navData'));
-    dataList.map((item) => {
+    const dataList = JSON.parse(localStorage.getItem('navData'));
+    this.test = dataList;
+    console.log(dataList, 'datalist1111');
+    dataList.forEach((item) => {
       if (item.children == null) {
-        this.navList.push(item.title);
+        this.navList.push({
+          icon: item.icon,
+          funurl: item.funurl,
+          title: item.title,
+          id: item.id,
+        });
       } else {
-        item.children.map((i) => {
-          this.navList.push(i.title);
+        item.children.forEach((i) => {
+          this.navList.push({
+            icon: i.icon,
+            funurl: i.funurl,
+            title: i.title,
+            id: i.id,
+          });
         });
       }
     });
     console.log(this.navList);
   },
-  methods: {
-    switchNav(index) {
-      this.activeIndex = index;
-      const routes = ['personalInfo', 'courseCenter', 'myTeaching'];
-      const targetRoute = routes[index];
-      if (this.$route.fullPath === `/${targetRoute}`) return; //防止连续点击，路由报错
-      this.$router.push({ name: targetRoute });
-    },
-  },
-  computed: {
-    defaultActive() {
-      return this.$route.path;
-    },
-  },
 };
 </script>
 
 <style scoped>
-.personalInfo {
-  display: flex;
-  margin: 30px auto;
-}
-.person-nav {
-  padding: 20px 0;
-  width: 150px;
-  margin-right: 10px;
-  margin-bottom: auto;
-  border-radius: 5px;
-  background-color: #fff;
-  border: 1px solid #e4ecf3;
-  /* height: calc(100vh - 226px); */
-  height: 60vh;
-}
-.person-nav .person-nav-item {
-  padding-left: 30px;
-  height: 40px;
-  line-height: 40px;
-  text-align: left;
-  font-size: 15px;
-  cursor: pointer;
+.el-menu > li {
   font-weight: 700;
 }
-.active {
-  color: #43bc60;
-  border-left: 2px solid #43bc60;
+.personalInfo {
+  margin: 30px auto;
+  height: auto;
 }
 .person-container {
   width: 1000px;

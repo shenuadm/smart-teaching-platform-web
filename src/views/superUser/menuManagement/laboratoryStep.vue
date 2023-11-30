@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="Step">
     <div class="header">
       <div class="title">步骤名称:</div>
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
@@ -24,29 +24,17 @@
       @selection-change="handleSelectionChange"
       class="custom-table"
       v-if="dialogtabledata"
+      border:true
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="步骤名称" width="140">
+      <el-table-column prop="name" label="步骤名称" width="550">
       </el-table-column>
-      <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
-      <el-table-column
-        prop="content"
-        label="步骤内容"
-        width="250"
-        show-overflow-tooltip
-      >
-      </el-table-column>
+      <el-table-column prop="sort" label="顺序" width="100"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)"
             >编辑</el-button
           >
-          <!-- <el-button
-            type="primary"
-            size="small"
-            @click="todetails(scope.row.id)"
-            >查看详情</el-button
-          > -->
           <el-button type="danger" size="small" @click="del(scope.row.id)"
             >删除</el-button
           >
@@ -83,12 +71,6 @@
           <el-button type="primary" size="small" @click="editstep(scope.row)"
             >编辑</el-button
           >
-          <!-- <el-button
-            type="primary"
-            size="small"
-            @click="todetails(scope.row.id)"
-            >查看详情</el-button
-          > -->
           <el-button type="danger" size="small" @click="del(scope.row.id)"
             >删除</el-button
           >
@@ -129,36 +111,33 @@
         <el-button @click="cancel">取 消</el-button>
         <el-button @click="serve">保 存</el-button>
       </span>
+      <!-- <el-form label-position:left label-width="80px">
+        <el-form-item label="步骤名称" hide-required-asterisk:true>
+          <el-input
+            class="inputw"
+            placeholder="请输入实验名称"
+            v-model="revise.name"
+          >
+            <span style="color: red">*</span>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="步骤顺序">
+          <el-input
+            class="inputw"
+            placeholder="请输入实验顺序"
+            v-model="revise.sort"
+          >
+            <span style="color: red">*</span>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="步骤内容">
+          <Editor
+            ref="editor"
+            :style="{ textAlign: 'left', width: '445px', marginLeft: '8px' }"
+          ></Editor>
+        </el-form-item>
+      </el-form> -->
     </el-dialog>
-    <!-- 实验详情 -->
-    <!-- <el-dialog title="实验步骤详情" :visible.sync="dialogTableVisible">
-      <div class="box">
-        <p>
-          步骤名称：
-          {{ detailsdata.name }}
-        </p>
-        <p>
-          实验顺序：
-          {{ detailsdata.sort }}
-        </p>
-        <div class="box">
-          <p>实验内容：</p>
-          <p class="pimg" v-html="this.detailsdata.content"></p>
-        </div>
-      </div>
-    </el-dialog> -->
-    <!-- <div class="block">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="this.tableData.length"
-      >
-      </el-pagination>
-    </div> -->
   </div>
 </template>
 
@@ -170,6 +149,7 @@ import {
   mdelstep,
   delstep,
   getdetail,
+  experplan,
 } from "@/utils/api";
 import editor from "../../../components/editor.vue";
 export default {
@@ -221,7 +201,6 @@ export default {
           sort: parseInt(this.revise.sort),
           updateTime: new Date().toISOString(),
         };
-        console.log(data);
         addstep(data).then((res) => {
           this.dialogVisible = false;
           this.step = "";
@@ -246,9 +225,12 @@ export default {
     //取消
     cancel() {
       this.dialogVisible = false;
-      if (this.step == true) {
-        this.$refs.editor.html = "";
-      }
+      this.revise.name = "";
+      this.revise.description = "";
+      this.revise.content = "";
+      this.revise.sort = "";
+      this.revise.imageStorePath = "";
+      this.$refs.editor.html = "";
     },
     //返回实验报告
     returnstep() {
@@ -261,17 +243,19 @@ export default {
     },
     //编辑实验
     editstep(e) {
-      this.revise = e;
-      console.log(this.revise);
+      experplan(e.id).then((res) => {
+        this.revise = res.data;
+        this.$refs.editor.html = res.data.content;
+      });
+      // if (this.revise.content !== null) {
+      //   setTimeout(() => {
+      //     this.$nextTick(() => {
+      //       this.$refs.editor.html = this.revise.content;
+      //     });
+      //   });
+      // }
       this.dialogVisible = true;
       this.step = false;
-      if (this.revise.content !== null) {
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$refs.editor.html = this.revise.content;
-          });
-        });
-      }
     },
     //搜索
     search() {
@@ -367,18 +351,18 @@ export default {
 </script>
 
 <style scoped>
-.header {
+.Step .header {
   position: relative;
   width: 100%;
   height: 30px;
   display: flex;
   top: -10px;
 }
-.title {
+.Step .title {
   width: 80px;
   line-height: 30px;
 }
-.but {
+.Step .but {
   position: relative;
   text-align: center;
   line-height: 30px;
@@ -389,20 +373,20 @@ export default {
   border-radius: 5px;
   color: white;
 }
-.step {
+.Step .step {
   position: relative;
   margin-left: 5px;
   text-align: center;
   line-height: 7px;
 }
-.inputw {
+.Step .inputw {
   width: 445px !important;
   margin-top: 10px;
 }
-.el-input {
+.Step .el-input {
   width: 150px;
 }
-.dec {
+.Step .dec {
   width: 105px;
   height: 40px;
   margin-top: 10px;
@@ -411,55 +395,59 @@ export default {
   line-height: 40px;
   color: #909399;
 }
-span {
+.Step span {
   position: relative;
   left: -100px;
 }
-.editor {
+.Step .editor {
   position: relative;
   width: 444px;
   top: 10px;
-  left: 49px;
+  left: 84px;
 }
-.box > p {
+.Step .box > p {
   text-align: left;
 }
-.stepcontent {
+.Step .stepcontent {
   width: 102px;
   height: 38px;
   border: 1px solid #dcdfe6;
   color: #909399;
+  background-color: #f5f7fa;
   text-align: center;
   line-height: 38px;
-  margin-left: 49px;
+  margin-left: 84px;
   margin-top: 10px;
   border-radius: 4px;
 }
+.Step .inputshow {
+  display: none;
+}
 </style>
 <style>
-.edit > p > img {
+.Step .edit > p > img {
   width: 350px !important;
   height: 100px !important;
 }
-#inputh {
+.Step #inputh {
   height: 30px !important;
   width: 150px !important;
 }
-#inputwd {
+.Step #inputwd {
   width: 200px !important;
   margin-left: 155px;
   margin-top: -59px;
   height: 42px !important;
 }
-.el-input-group__prepend {
+.Step .el-input-group__prepend {
   width: 55px;
 }
-.img {
+.Step .img {
   width: 100px;
   height: 80px;
   margin-left: 30px;
 }
-.custom-file-button {
+.Step .custom-file-button {
   position: absolute;
   top: 292px;
   left: 73px;
@@ -469,7 +457,7 @@ span {
   color: #909399;
 }
 
-.pimg > p > img {
+.Step .pimg > p > img {
   width: 100% !important;
   height: 350px !important;
 }

@@ -125,6 +125,12 @@
           >
           </el-input-number>
         </el-form-item>
+        <el-form-item label="菜单图标" prop="icon">
+          <el-input
+            placeholder="请输入菜单图标的名称"
+            v-model="revise.icon"
+          ></el-input>
+        </el-form-item>
         <el-form-item class="form-btn">
           <el-button size="small" type="primary" @click="saveRootNode"
             >确 定</el-button
@@ -173,6 +179,12 @@
           >
           </el-input-number>
         </el-form-item>
+        <el-form-item label="菜单图标" prop="icon">
+          <el-input
+            placeholder="请输入菜单图标的名称"
+            v-model="revise.icon"
+          ></el-input>
+        </el-form-item>
         <el-form-item class="form-btn">
           <el-button size="small" type="primary" @click="saveSonNode"
             >确 定</el-button
@@ -209,7 +221,7 @@ export default {
         menuName: [
           { required: true, message: '请输入菜单名称', trigger: 'blur' },
         ],
-        icon: [{ required: true, message: '请输入菜单图标', trigger: 'blur' }],
+        icon: [{ required: false, message: '请输入菜单图标', trigger: 'blur' }],
         funurl: [
           { required: true, message: '请输入菜单路径', trigger: 'blur' },
         ],
@@ -257,6 +269,7 @@ export default {
             funurl: this.revise.funurl,
             funtype: this.revise.type,
             sort: this.revise.sort,
+            icon: this.revise.icon,
           };
           if (this.isAddRootNode) {
             // 新增根节点
@@ -303,6 +316,7 @@ export default {
             funurl: this.revise.funurl,
             funtype: this.revise.type,
             sort: this.revise.sort,
+            icon: this.revise.icon,
           };
           if (this.isAddSonNode) {
             // 新增子节点

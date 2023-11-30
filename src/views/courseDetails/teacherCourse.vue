@@ -13,42 +13,20 @@
       <img src="@/assets/addbg.jpg" alt="" />
       <div class="info-content zh-mgl-30">
         <div class="info-content-left">
-          <div class="info-name">
-            <div>
-              课程名称：<span>{{ courseObj.name }}</span>
-            </div>
-            <div v-if="isTeachCenter" class="info-des">
-              {{ courseObj.description }}
-            </div>
-          </div>
-          <div v-if="!isTeachCenter">
-            <p>
-              选课开始日期：<span>{{ courseObj.selectStartDate }}</span>
-            </p>
-            <p>
-              授课开始日期：<span>{{ courseObj.startDate }}</span>
-            </p>
-            <p>
-              课程状态：<span ref="status">{{ courseObj.status }}</span>
-            </p>
-          </div>
-          <div v-if="roleId === '2' && $route.query.id">
-            选课人数：{{ courseObj.selectedNumber }}
-          </div>
+          <div>课程名称：{{ courseObj.name }}</div>
+          <div>选课开始日期：{{ courseObj.selectStartDate }}</div>
+          <div>授课开始日期：{{ courseObj.startDate }}</div>
+          <div>课程状态：{{ courseObj.status }}</div>
+          <div>选课人数：{{ courseObj.selectedNumber }}</div>
         </div>
-        <div class="info-content-right" v-if="!isTeachCenter">
-          <p>
-            任课教师：<span>{{ courseObj.userName }}</span>
-          </p>
-          <p>
-            选课结束日期：<span>{{ courseObj.selectEndDate }}</span>
-          </p>
-          <p>
-            授课结束日期：<span>{{ courseObj.endDate }}</span>
-          </p>
-          <p>
-            授课地点：<span>{{ courseObj.address }}</span>
-          </p>
+        <div class="info-content-right">
+          <div>任课教师：{{ courseObj.userName }}</div>
+          <div>选课结束日期：{{ courseObj.selectEndDate }}</div>
+          <div>授课结束日期：{{ courseObj.endDate }}</div>
+          <div>授课地点：{{ courseObj.address }}</div>
+          <div>
+            <el-button size="mini">查看实验机</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -107,7 +85,6 @@
           height="auto"
           border
           style="width: 100%; min-height: 100vh"
-          @cell-click="test"
         >
           <el-table-column
             align="center"
@@ -315,9 +292,6 @@ export default {
     this.courseObj = courseStatusConvert(res.data);
   },
   methods: {
-    test() {
-      console.log(1);
-    },
     // 切换实验步骤的显示与隐藏
     targgleStep(e) {
       let { id } = e.target.dataset;
@@ -346,13 +320,6 @@ export default {
         this.tableData = res.data;
       });
     },
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then((_) => {
-          done();
-        })
-        .catch((_) => {});
-    },
     // 教师端，成绩表格
     // 查看详情
     checkDetails(row) {
@@ -375,7 +342,6 @@ export default {
       const res = await getStudentExperiment(uid, id);
       loading.close();
       this.stuForm = { result: row, step: res.data };
-      console.log(this.stuForm);
       this.showReportVisible = true;
       // this.stuForm = row;
     },
@@ -451,16 +417,12 @@ export default {
   min-height: 200px;
   border: 1px solid #ddd;
 }
-.info-content-left {
+.info-content > div {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
-.info-content-left .info-name {
-  margin-bottom: 16px;
-}
-.info-des {
-  margin-top: 20px;
-}
+
 .content {
   margin: 20px auto;
 }
@@ -480,7 +442,7 @@ export default {
   display: flex;
   flex-direction: row;
 }
-.info-content p {
+.info-content div {
   margin-top: 0 !important;
 }
 .info-content-right {
