@@ -187,7 +187,24 @@ export default {
               } else {
                 let tokenValue = res.tokenValue;
                 localStorage.setItem('satoken', tokenValue);
-                let navData = JSON.stringify(res.menuVoList);
+                const navData = JSON.stringify(res.menuVoList);
+                console.log(res.menuVoList, 'login-navData');
+                const getRoleUrl = (data) => {
+                  const res = [];
+                  function arrange(arr) {
+                    arr.forEach((item) => {
+                      item.type === '菜单' && res.push(item.funurl);
+                      // item.type === '目录' && arrange(item.children);
+                      item.children !== null && arrange(item.children);
+                    });
+                  }
+                  arrange(data);
+                  return res;
+                };
+                const roleUrl = getRoleUrl(res.menuVoList);
+                console.log(roleUrl);
+                // getRoleUrl(res.menuVoList);
+                // localStorage.setItem;
                 localStorage.setItem('navData', navData);
                 localStorage.setItem('roleId', res.roleId);
                 this.$store.commit('updateUsername', res.username);
@@ -201,7 +218,7 @@ export default {
                 // if (res.roleId === 2 || res.roleId === 3) {
                 //   this.$router.push({ path: '/personInfo' });
                 // }
-                this.$router.push({ path: '/personInfo' });
+                // this.$router.push({ path: '/personInfo' });
               }
             });
           }
@@ -213,7 +230,7 @@ export default {
       this.logindis = false;
     },
     Enroll(formName) {
-      let data = {
+      const data = {
         account: this.registerForm.username,
         username: this.registerForm.nikename,
         password: this.registerForm.password,
@@ -227,14 +244,12 @@ export default {
                 type: 'success',
               });
               this.registerForm = {};
+            } else {
+              return this.$message.info('注册失败');
             }
           });
         } else {
-          this.$message({
-            message: '注册失败',
-            type: 'info',
-          });
-          return false;
+          return this.$message.warning('请输入正确的账号密码');
         }
       });
     },
