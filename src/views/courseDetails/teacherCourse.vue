@@ -3,9 +3,7 @@
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }">课程详情</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{
-          courseObj.name
-        }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 课程信息 -->
@@ -33,11 +31,7 @@
       </div>
     </div>
     <!-- 实验内容 -->
-    <CourseList
-      v-if="pageShow"
-      :treeEvent="handleNodeClick"
-      :teacherId="teacherId"
-    >
+    <CourseList v-if="pageShow" :treeEvent="handleNodeClick" :teacherId="teacherId">
       <!-- 实验报告插槽 -->
       <template #experiment>
         <div class="experiment-title">
@@ -49,36 +43,18 @@
                 >{{ experResult.show ? '隐藏' : '显示' }}实验结果</el-button
               >
             </div>
-            <div
-              class="experiment-content"
-              v-html="experResult.content"
-              v-if="experResult.show"
-            ></div>
-            <div v-else class="experiment-content experiment-prompt">
-              点击上方按钮显示实验结果
-            </div>
+            <div class="experiment-content" v-html="experResult.content" v-if="experResult.show"></div>
+            <div v-else class="experiment-content experiment-prompt">点击上方按钮显示实验结果</div>
           </div>
           <div class="step-all">
             <p class="zh-fs-16 zh-fw-m">实验步骤：</p>
-            <div
-              v-for="(item, index) in experimentStep"
-              :key="item.id"
-              @click="targgleStep"
-            >
+            <div v-for="(item, index) in experimentStep" :key="item.id" @click="targgleStep">
               <div class="step-title">
                 <div class="mb-10">{{ index + 1 }}、&nbsp;{{ item.name }}</div>
-                <el-button type="primary" :data-id="item.id" size="mini">{{
-                  item.show ? '隐藏' : '显示'
-                }}</el-button>
+                <el-button type="primary" :data-id="item.id" size="mini">{{ item.show ? '隐藏' : '显示' }}</el-button>
               </div>
-              <div
-                class="experiment-content"
-                v-html="item.content"
-                v-if="item.show"
-              ></div>
-              <div v-else class="experiment-content experiment-prompt">
-                点击上方按钮显示实验步骤
-              </div>
+              <div class="experiment-content" v-html="item.content" v-if="item.show"></div>
+              <div v-else class="experiment-content experiment-prompt">点击上方按钮显示实验步骤</div>
             </div>
           </div>
         </div>
@@ -86,45 +62,16 @@
       <!-- 实验成绩插槽 -->
       <template #experimentAchement>
         <!-- 教师端 -->
-        <el-table
-          :data="tableData"
-          height="auto"
-          border
-          style="width: 100%; min-height: 100vh"
-        >
-          <el-table-column
-            align="center"
-            prop="username"
-            label="学生姓名"
-            width="120"
-          >
-          </el-table-column>
-          <el-table-column align="center" prop="title" label="实验标题">
-          </el-table-column>
-          <el-table-column prop="score" label="成绩" width="80">
-          </el-table-column>
-          <el-table-column prop="updateTime" label="更新日期">
-          </el-table-column>
+        <el-table :data="tableData" height="auto" border style="width: 100%; min-height: 100vh">
+          <el-table-column align="center" prop="username" label="学生姓名" width="120"> </el-table-column>
+          <el-table-column align="center" prop="title" label="实验标题"> </el-table-column>
+          <el-table-column prop="score" label="成绩" width="80"> </el-table-column>
+          <el-table-column prop="updateTime" label="更新日期"> </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-button
-                @click="checkDetails(scope.row)"
-                type="text"
-                size="middle"
-                >查看详情</el-button
-              >
-              <el-button
-                @click="checkReport(scope.row)"
-                type="text"
-                size="middle"
-                >查看报告</el-button
-              >
-              <el-button
-                @click="editContent(scope.row)"
-                type="text"
-                size="middle"
-                >编辑</el-button
-              >
+              <el-button @click="checkDetails(scope.row)" type="text" size="middle">查看详情</el-button>
+              <el-button @click="checkReport(scope.row)" type="text" size="middle">查看报告</el-button>
+              <el-button @click="editContent(scope.row)" type="text" size="middle">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -133,13 +80,9 @@
     <!-- 学生虚拟机列表 -->
     <div v-else class="vms-container" v-loading="loadingGlobal">
       <div class="vms-title">
-        <el-button type="primary" size="mini" @click="updateStudentVms"
-          >更新学生虚拟机</el-button
-        >
+        <el-button type="primary" size="mini" @click="updateStudentVms">更新学生虚拟机</el-button>
         <i class="el-icon-info ml-20"></i>
-        <span style="font-size: 0.75rem; color: grey"
-          >如果学生没有分配虚拟机，请点击该按钮更新学生分配机。</span
-        >
+        <span style="font-size: 0.75rem; color: grey">如果学生没有分配虚拟机，请点击该按钮更新学生分配机。</span>
       </div>
       <div class="vms-list">
         <div v-for="item in vmsData" :key="item.id" class="vms-item">
@@ -159,25 +102,14 @@
       </div>
     </div>
     <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
-    <el-drawer
-      :visible.sync="showReportVisible"
-      v-if="showReportVisible"
-      :direction="rtl"
-      size="60%"
-    >
+    <el-drawer :visible.sync="showReportVisible" v-if="showReportVisible" :direction="rtl" size="60%">
       <template slot="title">
         <div class="zh-fs-20 font-bold">实验报告</div>
       </template>
       <div class="stuExperimentReport mx-20" style="text-align: initial">
         <div class="stuInfo">
-          <div>
-            <span class="font-bold zh-fs-18">学生姓名：</span
-            >{{ stuForm.result.username }}
-          </div>
-          <div>
-            <span class="font-bold zh-fs-18">学生成绩：</span
-            >{{ stuForm.result.score }}
-          </div>
+          <div><span class="font-bold zh-fs-18">学生姓名：</span>{{ stuForm.result.username }}</div>
+          <div><span class="font-bold zh-fs-18">学生成绩：</span>{{ stuForm.result.score }}</div>
         </div>
         <div class="stuExperimentContent">
           <div class="exTitle">
@@ -210,9 +142,7 @@
     >
       <div class="stuScoreDetails" style="text-align: initial">
         <div class="stuInfo zh-fs-16">
-          <div>
-            <span class="font-bold">学生姓名：</span>{{ stuForm.username }}
-          </div>
+          <div><span class="font-bold">学生姓名：</span>{{ stuForm.username }}</div>
           <div><span class="font-bold">成绩：</span>{{ stuForm.score }}</div>
         </div>
         <div class="exTitle zh-fs-16">
@@ -229,9 +159,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="showDetailsVisible = false"
-          >关 闭</el-button
-        >
+        <el-button type="primary" @click="showDetailsVisible = false">关 闭</el-button>
       </span>
     </el-dialog>
     <!-- 教师端，点击编辑，可以编辑学生的成绩以及评语 -->
@@ -254,11 +182,7 @@
             <el-input type="number" v-model.number="stuForm.score"></el-input>
           </el-form-item>
           <el-form-item label="评语">
-            <el-input
-              type="textarea"
-              v-model="stuForm.comment"
-              :rows="6"
-            ></el-input>
+            <el-input type="textarea" v-model="stuForm.comment" :rows="6"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -503,6 +427,9 @@ export default {
   flex-direction: column;
   justify-content: space-between;
 }
+.info-content-left {
+  min-width: 200px;
+}
 
 .content {
   margin: 20px auto;
@@ -528,6 +455,7 @@ export default {
 }
 .info-content-right {
   margin-left: 50px;
+  min-width: 200px;
 }
 #vt100 #scrollable {
   overflow-y: hidden !important;
