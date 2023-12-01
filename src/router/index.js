@@ -204,13 +204,14 @@ const router = new VueRouter({
 });
 //路由拦截
 router.beforeEach((to, from, next) => {
-  console.log(to);
+  // console.log(to);
+  // console.log(from);
+  const roleUrl = JSON.parse(localStorage.getItem('roleUrl'));
   const isLogin = window.localStorage.getItem('satoken');
-  if (isLogin) {
-    // const userName = sessionStorage.getItem('username')
-    // const roleUrl = router.app.$store.state.roleUrl;
+  if (isLogin && roleUrl) {
+    // 如果前往的网页没有权限，就终止此次前进
     // if (!roleUrl.includes(to.path)) {
-    //   next('/');
+    //   return next(false);
     // }
     next();
   } else {

@@ -154,8 +154,9 @@ export default {
             arrange(data);
             return res;
           };
-          // 将可以访问的路径存入仓库
-          this.$store.commit('setRoleUrl', getRoleUrl(res.menuVoList));
+          // 存入可访问的路径
+          localStorage.setItem('roleUrl', JSON.stringify(getRoleUrl(res.menuVoList)));
+          // this.$store.commit('setRoleUrl', getRoleUrl(res.menuVoList));
           this.$message.success({ message: '登录成功', duration: 1500 });
         }
       });
