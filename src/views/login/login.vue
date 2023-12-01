@@ -14,46 +14,21 @@
       <div class="content center">
         <!-- 登录 -->
         <div class="content-login" v-if="logindis">
-          <el-form
-            :model="loginForm"
-            :rules="loginRules"
-            ref="loginForm"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
+          <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="账号" prop="logNum">
-              <el-input
-                type="text"
-                v-model="loginForm.logNum"
-                autocomplete="off"
-                placeholder="请输入用户名"
-              >
+              <el-input type="text" v-model="loginForm.logNum" autocomplete="off" placeholder="请输入用户名">
               </el-input>
             </el-form-item>
             <el-form-item label="密码" prop="logPas">
-              <el-input
-                type="password"
-                v-model="loginForm.logPas"
-                autocomplete="off"
-                placeholder="请输入密码"
-              >
+              <el-input type="password" v-model="loginForm.logPas" autocomplete="off" placeholder="请输入密码">
               </el-input>
             </el-form-item>
             <el-form-item class="login-btn">
-              <el-button type="primary" @click="Login('loginForm')"
-                >登录</el-button
-              >
+              <el-button type="primary" @click="Login('loginForm')">登录</el-button>
             </el-form-item>
           </el-form>
           <div>
-            <p>
-              还没有账号？<a
-                href="javascript:void(0)"
-                class="zh-fc-blue"
-                @click="toRegister"
-                >去注册</a
-              >
-            </p>
+            <p>还没有账号？<a href="javascript:void(0)" class="zh-fc-blue" @click="toRegister">去注册</a></p>
           </div>
         </div>
         <!-- 注册 -->
@@ -66,37 +41,22 @@
             class="demo-ruleForm"
           >
             <el-form-item label="学号" prop="username">
-              <el-input
-                v-model="registerForm.username"
-                maxlength="30"
-                placeholder="请输入用户名，最长30个字符"
-              >
+              <el-input v-model="registerForm.username" maxlength="30" placeholder="请输入用户名，最长30个字符">
               </el-input>
             </el-form-item>
             <el-form-item label="姓名" prop="nikename">
-              <el-input
-                v-model="registerForm.nikename"
-                maxlength="20"
-                placeholder="请输入昵称，最长20个字符"
-              >
+              <el-input v-model="registerForm.nikename" maxlength="20" placeholder="请输入昵称，最长20个字符">
               </el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input
-                v-model="registerForm.password"
-                maxlength="18"
-                placeholder="请输入3-18位英文、数字组成的密码"
-              >
+              <el-input v-model="registerForm.password" maxlength="18" placeholder="请输入3-18位英文、数字组成的密码">
               </el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="enrPast">
-              <el-input v-model="registerForm.enrPast" placeholder="请确认密码">
-              </el-input>
+              <el-input v-model="registerForm.enrPast" placeholder="请确认密码"> </el-input>
             </el-form-item>
             <el-form-item class="register-btn">
-              <el-button type="primary" @click="Enroll('registerForm')"
-                >注册</el-button
-              >
+              <el-button type="primary" @click="Enroll('registerForm')">注册</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -148,9 +108,7 @@ export default {
         enrPast: '',
       },
       registerRules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-        ],
+        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         nikename: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
         password: [{ required: true, validator: pwd, trigger: 'blur' }],
         enrPast: [{ required: true, validator: repwd, trigger: 'blur' }],
@@ -172,58 +130,35 @@ export default {
         account: this.loginForm.logNum,
         password: this.loginForm.logPas,
       };
-      if (this.loginForm.logNum === '' || this.loginForm.logPas === '') {
-        this.$message({
-          message: '用户名或者密码不可为空',
-          type: 'error',
-        });
-      } else {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            // 登录
-            toLogin(data).then((res) => {
-              if (res.msg != 'success') {
-                this.$message.error(res.msg);
-              } else {
-                let tokenValue = res.tokenValue;
-                localStorage.setItem('satoken', tokenValue);
-                const navData = JSON.stringify(res.menuVoList);
-                console.log(res.menuVoList, 'login-navData');
-                const getRoleUrl = (data) => {
-                  const res = [];
-                  function arrange(arr) {
-                    arr.forEach((item) => {
-                      item.type === '菜单' && res.push(item.funurl);
-                      // item.type === '目录' && arrange(item.children);
-                      item.children !== null && arrange(item.children);
-                    });
-                  }
-                  arrange(data);
-                  return res;
-                };
-                const roleUrl = getRoleUrl(res.menuVoList);
-                console.log(roleUrl);
-                // getRoleUrl(res.menuVoList);
-                // localStorage.setItem;
-                localStorage.setItem('navData', navData);
-                localStorage.setItem('roleId', res.roleId);
-                this.$store.commit('updateUsername', res.username);
-                // this.$store.commit("updateRoleId",res.roleId)
-                sessionStorage.setItem('username', res.username);
-                localStorage.setItem('oldpwd', data.password);
-                this.$message.success({ message: '登录成功', duration: 1500 });
-                // if (res.roleId === 1) {
-                //   this.$router.push({ path: '/personmsg' });
-                // }
-                // if (res.roleId === 2 || res.roleId === 3) {
-                //   this.$router.push({ path: '/personInfo' });
-                // }
-                // this.$router.push({ path: '/personInfo' });
-              }
-            });
-          }
-        });
-      }
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          // 登录
+          const res = await toLogin(data);
+          localStorage.setItem('satoken', res.tokenValue); // 存token
+          localStorage.setItem('navData', JSON.stringify(res.menuVoList)); // 存导航信息
+          localStorage.setItem('roleId', res.roleId); // 存角色权限id
+          this.$store.commit('updateUsername', res.username);
+          sessionStorage.setItem('username', res.username);
+          localStorage.setItem('oldpwd', data.password);
+          // 获取可访问的路径
+          const getRoleUrl = (data) => {
+            const res = [];
+            function arrange(arr) {
+              arr.forEach((item) => {
+                // 如果funtype是1表示是菜单，是可以访问的路径
+                item.funtype === 1 && res.push(item.funurl);
+                // 有children就递归遍历children
+                item.children !== null && arrange(item.children);
+              });
+            }
+            arrange(data);
+            return res;
+          };
+          // 将可以访问的路径存入仓库
+          this.$store.commit('setRoleUrl', getRoleUrl(res.menuVoList));
+          this.$message.success({ message: '登录成功', duration: 1500 });
+        }
+      });
     },
     toRegister() {
       this.enrolldis = true;
