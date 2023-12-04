@@ -439,7 +439,7 @@ export default {
     // 新窗口打开
     openNewWindow() {
       // this.$refs.newWindow.href = 'https://123.60.85.111:4200/';
-      window.open('https://ovirt.yt.com/ovirt-engine/web-ui/?locale=zh_CN');
+      window.open('https://engine443.com/ovirt-engine/web-ui/?locale=zh_CN');
     },
     // 保存富文本内容
     saveContent() {
