@@ -1,61 +1,28 @@
 <template>
   <div class="role-management">
     <div class="addRole zh-mgb-20">
-      <el-button type="primary" size="small" @click="addRole"
-        >添加角色</el-button
-      >
+      <el-button type="primary" size="small" @click="addRole">添加角色</el-button>
     </div>
     <div class="roleTable">
-      <el-table
-        ref="tableData"
-        :data="tableData"
-        border
-        style="width: 100%"
-        v-loading="loadingGlobal"
-      >
+      <el-table ref="tableData" :data="tableData" border style="width: 100%" v-loading="loadingGlobal">
         <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column prop="rolename" label="角色标识" align="center">
-        </el-table-column>
-        <el-table-column prop="nickname" label="角色名称" align="center">
-        </el-table-column>
-        <el-table-column prop="description" label="角色描述" align="center">
-        </el-table-column>
+        <el-table-column prop="rolename" label="角色标识" align="center"> </el-table-column>
+        <el-table-column prop="nickname" label="角色名称" align="center"> </el-table-column>
+        <el-table-column prop="description" label="角色描述" align="center"> </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="empower(scope.$index, scope.row)"
-              >授权</el-button
-            >
-            <el-button
-              size="mini"
-              type="primary"
-              @click="edit(scope.$index, scope.row)"
-              >编辑</el-button
-            >
-            <el-button
-              size="mini"
-              type="danger"
-              @click="del(scope.$index, scope.row)"
-              >删除</el-button
-            >
+            <el-button size="mini" type="primary" @click="empower(scope.$index, scope.row)">授权</el-button>
+            <el-button size="mini" type="primary" @click="edit(scope.$index, scope.row)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="del(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 添加角色 -->
-    <el-dialog
-      :title="isAddRole ? '添加角色' : '修改角色'"
-      :visible.sync="aeditVisible"
-      :before-close="cancal"
-    >
+    <el-dialog :title="isAddRole ? '添加角色' : '修改角色'" :visible.sync="aeditVisible" :before-close="cancal">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="角色标识" prop="rolename">
-          <el-input
-            v-model="form.rolename"
-            :disabled="form.roleid < 5"
-          ></el-input>
+          <el-input v-model="form.rolename" :disabled="form.roleid < 5"></el-input>
         </el-form-item>
         <el-form-item label="角色名称" prop="nickname">
           <el-input v-model="form.nickname"></el-input>
@@ -64,16 +31,14 @@
           <el-input v-model="form.description"></el-input>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button type="primary" size="small" @click="submit"
-            >提交</el-button
-          >
+          <el-button type="primary" size="small" @click="submit">提交</el-button>
           <el-button size="small" @click="cancal">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
     <!-- 授权树 -->
     <div class="empowerTree">
-      <el-dialog title="授权" :visible.sync="empowerVisible">
+      <el-dialog title="授权" :visible.sync="empowerVisible" :before-close="cancelEmpower">
         <el-tree
           :data="treeData"
           ref="tree"
@@ -82,15 +47,12 @@
           :props="defaultProps"
           :default-checked-keys="checked"
           @check="check"
+          v-loading="dialogLoading"
         >
         </el-tree>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" size="small" @click="confirmEmpower"
-            >确认授权</el-button
-          >
-          <el-button type="success" size="small" @click="cancelEmpower"
-            >取消授权</el-button
-          >
+          <el-button type="primary" size="small" @click="confirmEmpower">确认授权</el-button>
+          <el-button type="success" size="small" @click="cancelEmpower">取消授权</el-button>
         </div>
       </el-dialog>
     </div>
@@ -98,14 +60,7 @@
 </template>
 
 <script>
-import {
-  roleManagement,
-  empowerTree,
-  ackEmpower,
-  delRole,
-  updateRole,
-  addRole,
-} from '@/utils/api.js';
+import { roleManagement, empowerTree, ackEmpower, delRole, updateRole, addRole } from '@/utils/api.js';
 export default {
   data() {
     return {
@@ -119,15 +74,9 @@ export default {
       },
       // 表单校验
       rules: {
-        rolename: [
-          { required: true, message: '角色标识不能为空', trigger: 'blur' },
-        ],
-        nickname: [
-          { required: true, message: '角色名称不能为空', trigger: 'blur' },
-        ],
-        description: [
-          { required: true, message: '角色描述不能为空', trigger: 'blur' },
-        ],
+        rolename: [{ required: true, message: '角色标识不能为空', trigger: 'blur' }],
+        nickname: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
+        description: [{ required: true, message: '角色描述不能为空', trigger: 'blur' }],
       },
       aeditVisible: false, // 是否显示表单
       empowerVisible: false, //是否显示授权树
@@ -140,6 +89,7 @@ export default {
       checked: [], //授权树默认勾选的节点
       roleId: '',
       isAddRole: true, //是否添加角色
+      dialogLoading: true,
     };
   },
   created() {
@@ -215,6 +165,7 @@ export default {
     },
     // 授权
     empower(index, row) {
+      this.dialogLoading = true;
       this.empowerVisible = true;
       this.roleId = row.roleid;
       empowerTree(this.roleId).then((res) => {
@@ -243,6 +194,7 @@ export default {
             });
           }
         });
+        this.dialogLoading = false;
       });
     },
     // 确认授权
