@@ -158,6 +158,7 @@ export default {
           localStorage.setItem('roleUrl', JSON.stringify(getRoleUrl(res.menuVoList)));
           // this.$store.commit('setRoleUrl', getRoleUrl(res.menuVoList));
           this.$message.success({ message: '登录成功', duration: 1500 });
+          this.$router.push('/personInfo');
         }
       });
     },
