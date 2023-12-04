@@ -1,12 +1,6 @@
 <template>
   <div>
-    <pdf
-      @progress="loadedRatio"
-      v-for="i in numPages"
-      :key="i"
-      :src="src"
-      :page="i"
-    ></pdf>
+    <pdf @progress="loadedRatio" v-for="i in numPages" :key="i" :src="src" :page="i"></pdf>
   </div>
 </template>
 
@@ -59,9 +53,8 @@ export default {
     // this.src = pdf.createLoadingTask(
     //   `${window.location.origin}/static/test.pdf`,
     // );
-    this.src = pdf.createLoadingTask(
-      `${window.location.origin}/${this.$route.query.url}`,
-    );
+    this.prohibit();
+    this.src = pdf.createLoadingTask(`${window.location.origin}/${this.$route.query.url}`);
 
     this.src.promise.then((pdf) => {
       this.numPages = pdf.numPages;
