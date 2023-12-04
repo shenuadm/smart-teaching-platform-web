@@ -99,6 +99,11 @@ const routes = [
             name: 'systemNotice',
             component: () => import('@/views/superUser/systemNotice/systemNotice'),
           },
+          {
+            path: '/vmsManagement',
+            name: 'vmsManagement',
+            component: () => import('@/views/superUser/vmsManagement/vmsManagement'),
+          },
         ],
       },
       // 学生端

@@ -17,6 +17,9 @@
         <el-menu-item index="/systemNotice">
           <span slot="title">系统通知管理</span>
         </el-menu-item>
+        <el-menu-item index="/vmsManagement">
+          <span slot="title">虚拟机管理</span>
+        </el-menu-item>
         <el-menu-item index="/aboutUS">
           <span slot="title"><i class="icon-guanyuwomen iconfont mr-5"></i>关于我们</span>
         </el-menu-item>
