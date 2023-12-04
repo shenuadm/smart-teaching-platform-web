@@ -14,7 +14,7 @@
         <el-table-column align="center" label="名称" prop="name"></el-table-column>
         <el-table-column align="center" label="登录账号" prop="username"></el-table-column>
         <el-table-column align="center" label="密码" prop="pwd"></el-table-column>
-        <el-table-column align="center" label="操作">
+        <el-table-column align="center" label="操作" width="250">
           <template slot-scope="{ row }">
             <el-button size="small" type="primary" @click="editVm(row)">编辑</el-button>
             <el-button size="small" type="danger" @click="delVm(row)">删除</el-button>
@@ -39,11 +39,13 @@
 import Bus from '@/utils/eventBus';
 import EditVm from './components/EditVm.vue';
 import NewVm from './components/NewVm.vue';
+import { getVmDataService, deleteVmService } from '@/api/vm.js';
 
 export default {
   data() {
     return {
-      tableData: [{ id: 1, name: '127.0.0.1', username: '张阿三', pwd: '123321' }], // 渲染数据
+      // tableData: [{ id: 1, name: '127.0.0.1', username: '张阿三', pwd: '123321' }], // 渲染数据
+      tableData: [],
       searchInfo: '', // 搜索条件
       total: 0, // 总数
       currentPage: 1, // 当前页
@@ -57,20 +59,27 @@ export default {
     // 搜索
     search() {},
     // 重置搜索
-    reset() {},
+    reset() {
+      this.handleCurrentChange();
+    },
     addVm() {
       this.newVisible = true;
     },
     // 页数改变，获取数据
-    handleCurrentChange() {
+    async handleCurrentChange() {
       this.loadingGlobal = true;
+      const res = await getVmDataService({ page: this.currentPage });
+      // console.log(res);
+      this.tableData = res.data.data;
+      this.total = res.data.count;
       this.loadingGlobal = false;
     },
     // 删除虚拟机
     delVm({ id }) {
       this.$confirm('您确认要删除该虚拟机吗', '删除')
-        .then(() => {
-          console.log(id);
+        .then(async () => {
+          await deleteVmService(id);
+          this.$message.success('删除虚拟机成功');
         })
         .catch(() => {});
     },
@@ -100,6 +109,9 @@ export default {
 .search {
   width: 200px;
   margin-right: 10px;
+}
+.title {
+  width: 50px;
 }
 .table {
   margin-top: 20px;

@@ -5,6 +5,7 @@
 <script>
 import Bus from '@/utils/eventBus';
 import VmForm from './VmForm.vue';
+import { updateVmService } from '@/api/vm.js';
 export default {
   data() {
     return { loading: false };
@@ -15,7 +16,8 @@ export default {
     async editVm(data) {
       this.loading = true;
       console.log(data, '编辑');
-      await this.$message.success('编辑虚拟机成功');
+      await updateVmService(data);
+      this.$message.success('编辑虚拟机成功');
       this.loading = false;
       Bus.$emit('vmClear');
       this.$emit('getData');

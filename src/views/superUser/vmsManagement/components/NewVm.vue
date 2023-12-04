@@ -5,6 +5,7 @@
 <script>
 import Bus from '@/utils/eventBus';
 import VmForm from './VmForm.vue';
+import { addVmService } from '@/api/vm.js';
 export default {
   data() {
     return { loading: false };
@@ -14,7 +15,8 @@ export default {
     async addVm(data) {
       this.loading = true;
       console.log(data);
-      await this.$message.success('添加虚拟机成功');
+      await addVmService(data);
+      this.$message.success('添加虚拟机成功');
       this.loading = false;
       Bus.$emit('vmClear');
       this.$emit('getData');
