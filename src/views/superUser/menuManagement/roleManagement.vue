@@ -84,7 +84,7 @@ export default {
       treeData: [],
       defaultProps: {
         children: 'children',
-        label: 'title',
+        label: 'menuName',
       },
       checked: [], //授权树默认勾选的节点
       roleId: '',
@@ -171,21 +171,21 @@ export default {
       empowerTree(this.roleId).then((res) => {
         this.treeData = res.data;
         // 一级
-        this.treeData.map((item) => {
+        this.treeData.forEach((item) => {
           if (item.checked === true) {
             this.checked.push(item.id);
           }
           // 二级
           let secondChildren = item.children;
           if (secondChildren != null) {
-            secondChildren.map((items) => {
+            secondChildren.forEach((items) => {
               if (items.checked === true) {
                 this.checked.push(items.id);
               }
               // 三级
               let thirdChildren = items.children;
               if (thirdChildren != null) {
-                thirdChildren.map((k) => {
+                thirdChildren.forEach((k) => {
                   if (k.checked === true) {
                     this.checked.push(k.id);
                   }
@@ -195,6 +195,7 @@ export default {
           }
         });
         this.dialogLoading = false;
+        console.log(this.treeData);
       });
     },
     // 确认授权
