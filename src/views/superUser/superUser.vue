@@ -1,25 +1,15 @@
 <template>
   <el-container class="warpper">
     <el-col :span="4" class="warpper-left">
-      <el-menu
-        :default-active="$route.path"
-        class="el-menu-vertical-demo"
-        router
-      >
+      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" router>
         <el-menu-item index="/personInfo">
           <span slot="title"><i class="el-icon-user"></i>个人信息</span>
         </el-menu-item>
         <el-submenu index="2">
           <span slot="title">系统管理</span>
-          <el-menu-item index="/menuManagement" class="second"
-            >菜单管理</el-menu-item
-          >
-          <el-menu-item index="/courseManagement" class="second"
-            >课程管理</el-menu-item
-          >
-          <el-menu-item index="/roleManagement" class="second"
-            >角色管理</el-menu-item
-          >
+          <el-menu-item index="/menuManagement" class="second">菜单管理</el-menu-item>
+          <el-menu-item index="/courseManagement" class="second">课程管理</el-menu-item>
+          <el-menu-item index="/roleManagement" class="second">角色管理</el-menu-item>
         </el-submenu>
         <el-menu-item index="/UserManagement">
           <span slot="title">用户管理</span>
@@ -28,7 +18,7 @@
           <span slot="title">系统通知管理</span>
         </el-menu-item>
         <el-menu-item index="/aboutUS">
-          <span slot="title">关于我们</span>
+          <span slot="title"><i class="icon-guanyuwomen iconfont mr-5"></i>关于我们</span>
         </el-menu-item>
       </el-menu>
     </el-col>

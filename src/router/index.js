@@ -45,50 +45,42 @@ const routes = [
           {
             path: '/menuManagement',
             name: 'menuManagement',
-            component: () =>
-              import('@/views/superUser/menuManagement/menuManagement'),
+            component: () => import('@/views/superUser/menuManagement/menuManagement'),
           },
           {
             path: '/UserManagement',
             name: 'UserManagement',
-            component: () =>
-              import('@/views/superUser/UserManagement/UserManagement'),
+            component: () => import('@/views/superUser/UserManagement/UserManagement'),
           },
           {
             path: '/courseManagement',
             name: 'courseManagement',
-            component: () =>
-              import('@/views/superUser/menuManagement/courseManagement'),
+            component: () => import('@/views/superUser/menuManagement/courseManagement'),
           },
           {
             path: '/chapterManagemet',
             name: 'chapterManagemet',
-            component: () =>
-              import('@/views/superUser/menuManagement/chapterManagemet'),
+            component: () => import('@/views/superUser/menuManagement/chapterManagemet'),
           },
           {
             path: '/homeworkManagement',
             name: 'homeworkManagement',
-            component: () =>
-              import('@/views/superUser/menuManagement/homeworkManagement'),
+            component: () => import('@/views/superUser/menuManagement/homeworkManagement'),
           },
           {
             path: '/experManagemet',
             name: 'experManagemet',
-            component: () =>
-              import('@/views/superUser/menuManagement/experimentalManagement'),
+            component: () => import('@/views/superUser/menuManagement/experimentalManagement'),
           },
           {
             path: '/laboratoryReport',
             name: 'laboratoryReport',
-            component: () =>
-              import('@/views/superUser/menuManagement/laboratoryReport'),
+            component: () => import('@/views/superUser/menuManagement/laboratoryReport'),
           },
           {
             path: '/laboratoryStep',
             name: 'laboratoryStep',
-            component: () =>
-              import('@/views/superUser/menuManagement/laboratoryStep'),
+            component: () => import('@/views/superUser/menuManagement/laboratoryStep'),
           },
           {
             path: '/aboutUS',
@@ -99,15 +91,13 @@ const routes = [
           {
             path: '/roleManagement',
             name: 'roleManagement',
-            component: () =>
-              import('@/views/superUser/menuManagement/roleManagement'),
+            component: () => import('@/views/superUser/menuManagement/roleManagement'),
           },
           // 系统通知管理
           {
             path: '/systemNotice',
             name: 'systemNotice',
-            component: () =>
-              import('@/views/superUser/systemNotice/systemNotice'),
+            component: () => import('@/views/superUser/systemNotice/systemNotice'),
           },
         ],
       },
@@ -133,8 +123,7 @@ const routes = [
           {
             path: '/selectCourseCenter',
             name: 'selectCourseCenter',
-            component: () =>
-              import('@/views/main/selectCourseCenter/selectCourseCenter'),
+            component: () => import('@/views/main/selectCourseCenter/selectCourseCenter'),
           },
           // 我的课程
           {
@@ -184,8 +173,7 @@ const routes = [
           {
             path: '/courseCenter',
             name: 'courseCenter',
-            component: () =>
-              import('@/views/teacher/courseCenter/courseCenter'),
+            component: () => import('@/views/teacher/courseCenter/courseCenter'),
           },
           // 我的授课
           {
@@ -199,8 +187,7 @@ const routes = [
       {
         path: '/chapterDetails',
         name: 'chapterDetails',
-        component: () =>
-          import('@/views/teacher/chapterDetails/chapterDetails'),
+        component: () => import('@/views/teacher/chapterDetails/chapterDetails'),
       },
       // 公司介绍
       {
@@ -217,9 +204,15 @@ const router = new VueRouter({
 });
 //路由拦截
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  let isLogin = window.localStorage.getItem('satoken');
-  if (isLogin) {
+  // console.log(to);
+  // console.log(from);
+  const roleUrl = JSON.parse(localStorage.getItem('roleUrl'));
+  const isLogin = window.localStorage.getItem('satoken');
+  if (isLogin && roleUrl) {
+    // 如果前往的网页没有权限，就终止此次前进
+    // if (!roleUrl.includes(to.path)) {
+    //   return next(false);
+    // }
     next();
   } else {
     if (to.path === '/') {

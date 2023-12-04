@@ -35,9 +35,7 @@
                   router
                 >
                   <el-submenu index="1">
-                    <template slot="title">{{
-                      this.$store.state.username
-                    }}</template>
+                    <template slot="title">{{ this.$store.state.username }}</template>
                     <!-- <el-menu-item v-if="roleId == 1" index="/personmsg">修改信息</el-menu-item>
                     <el-menu-item v-if="roleId == 2" index="/personalInfo">修改信息</el-menu-item>
                     <el-menu-item v-if="roleId == 3" index="/personInfo">修改信息</el-menu-item> -->
@@ -58,13 +56,9 @@
       </div>
       <!-- 底部 -->
       <div class="footer theme-bg-black">
-        <p class="footer-info-item zh-fc-white">
-          技术支持：成都易腾创想智能科技有限公司
-        </p>
+        <p class="footer-info-item zh-fc-white">技术支持：成都易腾创想智能科技有限公司</p>
         <p class="footer-info-item zh-fc-white">联系方式：028-62539515</p>
-        <p class="footer-info-item zh-fc-white">
-          公司地址：四川省成都市温江区海科路东段777号F栋11楼
-        </p>
+        <p class="footer-info-item zh-fc-white">公司地址：四川省成都市温江区海科路东段777号F栋11楼</p>
       </div>
     </el-container>
   </div>
@@ -112,7 +106,7 @@ export default {
   width: calc(100vw + 10px);
 }
 .main {
-  width: calc(100vw - 10px);
+  min-width: calc(100vw - 10px);
 }
 .el-row {
   width: 100%;

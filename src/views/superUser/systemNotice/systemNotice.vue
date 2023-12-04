@@ -2,24 +2,13 @@
   <div class="content">
     <div class="header">
       <div class="title">标题:</div>
-      <el-input
-        v-model="input"
-        placeholder="请输入标题"
-        class="zh-mgl-10 zh-mgr-10"
-      ></el-input>
+      <el-input v-model="input" placeholder="请输入标题" class="zh-mgl-10 zh-mgr-10"></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="reset">重置</el-button>
-      <el-button type="primary" size="small" @click="addNotice"
-        >添加公告</el-button
-      >
+      <el-button type="primary" size="small" @click="addNotice">添加公告</el-button>
     </div>
     <div class="table">
-      <el-table
-        :data="tableData"
-        style="width: 100%"
-        border
-        v-loading="loadingGlobal"
-      >
+      <el-table :data="tableData" style="width: 100%" border v-loading="loadingGlobal">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="content" label="内容"></el-table-column>
@@ -32,25 +21,14 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="editNotice(scope.row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="danger"
-              size="mini"
-              @click="deleteNotice(scope.row)"
-              >删除</el-button
-            >
+            <el-button type="primary" size="mini" @click="editNotice(scope.row)">编辑</el-button>
+            <el-button type="danger" size="mini" @click="deleteNotice(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 编辑弹框 -->
-    <EditForm
-      v-if="editVisible"
-      :editForm="editForm"
-      @getData="getData"
-    ></EditForm>
+    <EditForm v-if="editVisible" :editForm="editForm" @getData="getData"></EditForm>
     <!-- 新增弹框 -->
     <NewForm v-if="newVisible" @getData="getData"></NewForm>
   </div>
@@ -107,7 +85,7 @@ export default {
     },
     // 删除公告
     deleteNotice({ id }) {
-      this.$confirm('确认删除')
+      this.$confirm('您确认要删除该公告吗？')
         .then(async () => {
           await deleteNotice(id);
           this.$message.success('删除成功');
