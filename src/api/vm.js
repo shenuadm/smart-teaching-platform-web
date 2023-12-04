@@ -15,7 +15,7 @@ export const addVmService = ({ name, username, pwd }) => {
 
 /**
  * 修改虚拟机
- * @param {{ id, username, pwd }} param0
+ * @param {{ id, name, username, pwd }} param0
  * @returns
  */
 export const updateVmService = ({ id, name, username, pwd }) => {

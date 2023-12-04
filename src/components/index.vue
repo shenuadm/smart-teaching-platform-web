@@ -2,29 +2,14 @@
   <div>
     <el-container>
       <!-- 头部 -->
-      <el-header style="position: fixed" class="header">
-        <el-row class="theme-bg-black">
-          <el-col :span="8" class="logo">
-            <img src="../assets/logo1.png" alt="" />
-            <span class="zh-fc-white zh-fs-20">树蕙元智慧教学平台</span>
-          </el-col>
-          <el-col :span="9">
-            <el-menu
-              default-active="1"
-              class="el-menu-demo"
-              mode="horizontal"
-              active-text-color="#409EFF"
-              text-color="#fff"
-              background-color="#212121"
-              router
-            >
-              <!-- <el-menu-item>首页</el-menu-item> -->
-            </el-menu>
-            <div class="line"></div>
-          </el-col>
-          <el-col :span="7">
+      <el-header style="position: fixed" class="header theme-bg-black">
+        <div class="heder-container">
+          <div class="logo">
+            <img src="@/assets/logo2.png" alt="网络错误" />
+          </div>
+          <div>
             <div v-if="this.$store.state.username" class="login-info">
-              <img src="@/assets/tx.jpg" alt="" class="login-img" />
+              <img src="@/assets/avatar.jpg" alt="网络错误" class="login-img" />
               <div class="login-name zh-fc-white">
                 <el-menu
                   class="userInfo"
@@ -45,8 +30,8 @@
               </div>
             </div>
             <div v-else></div>
-          </el-col>
-        </el-row>
+          </div>
+        </div>
       </el-header>
       <div class="main" style="padding: 60px 0 0 0">
         <!-- 侧导航 -->
@@ -102,16 +87,20 @@ export default {
   z-index: 9;
 }
 .header,
+.heder-container {
+  height: 60px;
+}
+.heder-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 20px;
+}
+.header,
 .footer {
   width: calc(100vw + 10px);
 }
 .main {
   min-width: calc(100vw - 10px);
-}
-.el-row {
-  width: 100%;
-  height: 60px;
-  padding: 0 30px;
 }
 .logo,
 .logo span {
@@ -119,8 +108,7 @@ export default {
   align-items: center;
 }
 .logo img {
-  height: 30px;
-  width: 120px;
+  height: 50px;
 }
 .logo span {
   height: 60px;
