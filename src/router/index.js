@@ -190,8 +190,9 @@ router.beforeEach((to, from, next) => {
   // console.log(from);
   // const roleUrl = JSON.parse(localStorage.getItem('roleUrl'));
   const isLogin = window.localStorage.getItem('satoken');
+  const username = window.sessionStorage.getItem('username');
   // if (isLogin && roleUrl) {
-  if (isLogin) {
+  if (isLogin && username) {
     // 如果前往的网页没有权限，就终止此次前进
     // if (!roleUrl.includes(to.path)) {
     //   return next(false);

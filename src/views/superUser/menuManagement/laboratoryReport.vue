@@ -17,7 +17,7 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      border:true
+      border
       v-loading="$store.state.isLoading"
       v-if="dialogtabledata"
     >
@@ -26,12 +26,13 @@
       <el-table-column align="center" prop="classHour" label="课时" width="80"> </el-table-column>
       <el-table-column prop="description" label="实验描述" width="300" show-overflow-tooltip align="center">
       </el-table-column>
-      <el-table-column prop="fileUrl" label="实验课件" width="200" show-overflow-tooltip align="center">
+      <!-- <el-table-column prop="fileUrl" label="实验课件" width="200" show-overflow-tooltip align="center">
         <template slot-scope="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
-      </el-table-column>
-      <el-table-column label="操作">
+      </el-table-column> -->
+      <el-table-column prop="result" label="实验结果" show-overflow-tooltip></el-table-column>
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="small" class="opertea" @click="exreport(scope.row)">实验步骤</el-button>
           <el-button type="primary" size="small" @click="editexrept(scope.row)">编辑</el-button>
@@ -53,12 +54,13 @@
       <el-table-column prop="title" label="实验标题" width="100"> </el-table-column>
       <el-table-column prop="classHour" label="课时" width="60"> </el-table-column>
       <el-table-column prop="description" label="实验描述" width="260" show-overflow-tooltip> </el-table-column>
-      <el-table-column prop="fileUrl" label="实验课件" width="100" show-overflow-tooltip>
+      <!-- <el-table-column prop="fileUrl" label="实验课件" width="100" show-overflow-tooltip>
         <template slot-scope="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
-      </el-table-column>
-      <el-table-column label="操作">
+      </el-table-column> -->
+      <el-table-column prop="result" label="实验结果" show-overflow-tooltip></el-table-column>
+      <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="primary" size="small" class="opertea" @click="exreport(scope.row)">实验步骤</el-button>
           <el-button type="primary" size="small" @click="editexrept(scope.row)">编辑</el-button>

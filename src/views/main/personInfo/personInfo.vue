@@ -106,7 +106,6 @@ export default {
           await savePersonInfo(data);
           await this.getUserInfo();
           this.$message.success('修改名称成功');
-          //   console.log('校验成功');
         }
       });
     },

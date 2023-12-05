@@ -167,8 +167,8 @@ export function reportadd(data) {
   return http.post('experimentReport/add', data);
 }
 //修改实验报告
-export function reportupdate({ description, experimentId, result, title, classHour }) {
-  return http.post('experimentReport/update', { description, experimentId, result, title, classHour });
+export function reportupdate({ description, experimentId, result, title, classHour, id }) {
+  return http.post('experimentReport/update', { description, experimentId, result, title, classHour, id });
 }
 //删除实验报告
 export function reportdelete(id) {
