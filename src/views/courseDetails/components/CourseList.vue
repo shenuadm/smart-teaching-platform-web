@@ -1,30 +1,14 @@
 <template>
-  <div
-    class="course-list content-height theme-bg-white btn-radius-5"
-    v-loading="loadingGlobal"
-  >
+  <div class="course-list content-height theme-bg-white btn-radius-5" v-loading="loadingGlobal">
     <!-- 左侧树形结构 -->
     <div class="tree">
-      <el-tree
-        :data="data"
-        :props="defaultProps"
-        accordion
-        @node-click="handleNodeClick"
-        :highlight-current="true"
-      >
-        <span class="node-title" slot-scope="{ node, data }">
-          {{ node.data.index }}{{ node.data.title }}
-        </span>
+      <el-tree :data="data" :props="defaultProps" accordion @node-click="handleNodeClick" :highlight-current="true">
+        <span class="node-title" slot-scope="{ node, data }"> {{ node.data.index }}{{ node.data.title }} </span>
       </el-tree>
     </div>
     <div class="tree-content">
       <!-- 课件 -->
-      <iframe
-        src=""
-        frameborder="0"
-        class="courseWare iframe"
-        ref="courseWare"
-      ></iframe>
+      <iframe src="" frameborder="0" class="courseWare iframe" ref="courseWare"></iframe>
       <!-- 实验报告 -->
       <div class="experimentReport" ref="experiment">
         <el-tabs v-model="activeName">
@@ -59,27 +43,13 @@
               <img src="@/assets/eye.png" alt="" @click="toShow" />
             </div>
             <div class="openWindow">
-              <a
-                href="javascript:void(0)"
-                ref="newWindow"
-                class="btn-bg-b"
-                @click="openNewWindow"
-                >访问实验机</a
-              >
+              <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">访问实验机</a>
             </div>
           </el-tab-pane>
-          <el-tab-pane
-            v-if="teacherId"
-            label="实验报告"
-            name="third"
-            class="experiment-report"
-          >
+          <el-tab-pane v-if="teacherId" label="实验报告" name="third" class="experiment-report">
             <div class="experiment-title">
               <p>【实验模板】</p>
-              <a
-                href="javascript:void(0)"
-                ref="downLoadTemplate"
-                class="experiment-link zh-fc-blue"
+              <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
                 >点击下载实验模板
               </a>
             </div>
@@ -200,7 +170,7 @@ export default {
     openNewWindow() {
       // this.$refs.newWindow.href = 'https://123.60.85.111:4200/';
       // window.open('https://ovirt.yt.com/ovirt-engine/web-ui/?locale=zh_CN');
-      window.open('https://engine443.com/ovirt-engine/web-ui/?locale=zh_CN')
+      window.open('https://engine443.com/ovirt-engine/web-ui/?locale=zh_CN');
     },
   },
   async created() {

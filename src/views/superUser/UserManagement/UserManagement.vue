@@ -337,11 +337,11 @@ export default {
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
-        .then((_) => {
+        .then(() => {
           this.empty(this.revise);
           done();
         })
-        .catch((_) => {});
+        .catch(() => {});
     },
 
     getUserData() {

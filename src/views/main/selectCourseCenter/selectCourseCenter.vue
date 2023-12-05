@@ -39,7 +39,6 @@ export default {
   mounted() {
     // 获取接口数据
     getSelectCourse().then((res) => {
-      console.log(res, '结果111');
       this.chooseCourse = res.data.map((item) => {
         if (item.picture !== null) {
           var picture = item.picture.split(',')[1];
@@ -78,8 +77,8 @@ export default {
 }
 .choose-list-item {
   border-radius: 20px;
-  height: 190px;
-  padding: 20px 0;
+  height: 170px;
+  padding: 10px 0;
   display: flex;
   flex-direction: row;
   background-color: #fff;
@@ -105,7 +104,8 @@ export default {
 .item-info {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 15px;
 }
 .choose-list-item img {
   width: 250px;
