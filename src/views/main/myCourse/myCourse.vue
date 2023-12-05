@@ -1,5 +1,5 @@
 <template>
-  <div class="content global-container" v-loading="loadingGlobal">
+  <div class="content global-container" v-loading="$store.state.isLoading">
     <ul class="list">
       <li class="list-item zh-pd-10 zh-mgb-20" v-for="item in courseList" :key="item.id">
         <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
@@ -20,7 +20,13 @@
             >查看详情</el-button
           >
           <!-- <el-button type="primary">查看成绩</el-button> -->
-          <el-button type="primary" v-if="item.status === 1 && item.teacherCourseStatus === 2"> 恢复选课 </el-button>
+          <el-button
+            type="primary"
+            v-if="item.status === 1 && item.teacherCourseStatus === 2"
+            @click="recoverCourse(item.id)"
+          >
+            恢复选课
+          </el-button>
           <el-button
             type="danger"
             v-if="item.status === 0 && item.teacherCourseStatus === 2"
@@ -49,6 +55,7 @@
 import dayjs from 'dayjs';
 import { getMyCourse, ClickRevokeCourse } from '@/utils/api.js';
 import { courseStatus, teacherCourseStatus } from '@/constant/course.js';
+import { recoverCourseService } from '@/api/student.js';
 export default {
   components: {},
   data() {
@@ -59,17 +66,17 @@ export default {
     };
   },
   mounted() {
-    getMyCourse().then((res) => {
-      this.courseList = res.data.map((item) => {
-        let picture = item.picture.split(',')[1];
-        if (!picture) {
-          picture = '';
-        }
-        return { ...item, picture };
-      });
-      // this.courseList = selectStatusConvert(this.courseList);
-      this.loadingGlobal = false;
-    });
+    // getMyCourse().then((res) => {
+    //   this.courseList = res.data.map((item) => {
+    //     let picture = item.picture.split(',')[1];
+    //     if (!picture) {
+    //       picture = '';
+    //     }
+    //     return { ...item, picture };
+    //   });
+    //   // this.courseList = selectStatusConvert(this.courseList);
+    // });
+    this.getCourse();
   },
   methods: {
     // 查看详情
@@ -90,21 +97,34 @@ export default {
         },
       });
     },
+    async getCourse() {
+      const res = await getMyCourse();
+      this.courseList = res.data.map((item) => {
+        let picture = item.picture.split(',')[1];
+        if (!picture) {
+          picture = '';
+        }
+        return { ...item, picture };
+      });
+    },
     // 撤销课程
     async revokeCourse(e) {
       // 如果当前课程状态是已撤回或不是选课中，不能进行撤回
       const { status, teacherCourseStatus } = e;
       if (status === 1 || teacherCourseStatus !== 2) return;
-      let data = {
+      const data = {
         id: e.id,
         teacherCourseId: e.teacherCourseId,
       };
-      const res = await ClickRevokeCourse(data);
-      if (res) this.$message.success('课程撤销成功');
+      await ClickRevokeCourse(data);
+      await this.getCourse();
+      this.$message.success('课程撤销成功');
     },
     // 恢复选课
-    async resetCourse(data) {
-      console.log(data);
+    async recoverCourse(id) {
+      await recoverCourseService(id);
+      await this.getCourse();
+      this.$message.success('重新选课成功');
     },
     // 课程状态数据转换
     courseStatusConvent(status) {
