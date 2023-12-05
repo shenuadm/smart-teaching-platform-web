@@ -2,16 +2,10 @@
   <div class="course-manage">
     <div class="header-course">
       <div class="title">课程名称:</div>
-      <el-input
-        v-model="input"
-        class="zh-mgl-10 zh-mgr-10 input-content"
-        placeholder="请输入内容"
-      ></el-input>
+      <el-input v-model="input" class="zh-mgl-10 zh-mgr-10 input-content" placeholder="请输入内容"></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
-      <el-button type="primary" size="small" @click="addcourse"
-        >添加课程</el-button
-      >
+      <el-button type="primary" size="small" @click="addcourse">添加课程</el-button>
       <el-button type="primary" size="small" @click="batchdel">删除</el-button>
     </div>
     <el-table
@@ -26,17 +20,10 @@
       border
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="课程名称" width="120">
-      </el-table-column>
-      <el-table-column prop="title" label="课程标题" width="160">
-      </el-table-column>
+      <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
+      <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
       <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
-      <el-table-column
-        prop="description"
-        label="课程描述"
-        show-overflow-tooltip
-      >
-      </el-table-column>
+      <el-table-column prop="description" label="课程描述" show-overflow-tooltip> </el-table-column>
       <el-table-column label="状态" width="80">
         <template slot-scope="scope">
           <div v-if="scope.row.status" class="user">启用</div>
@@ -45,25 +32,15 @@
       </el-table-column>
       <el-table-column label="封面图片" width="120" class-name="table-image">
         <template slot-scope="scope">
-          <el-image
-            v-if="scope.row.picture"
-            :src="'data:image/png;base64,' + scope.row.picture"
-            alt="图片未找到"
-          />
+          <el-image v-if="scope.row.picture" :src="'data:image/png;base64,' + scope.row.picture" alt="图片未找到" />
           <el-image v-else alt="图片未找到" />
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="chapter(scope.row)"
-            >章节管理</el-button
-          >
-          <el-button type="primary" size="mini" @click="updatacour(scope.row)"
-            >修改</el-button
-          >
-          <el-button type="danger" size="mini" @click="del(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button type="primary" size="mini" @click="chapter(scope.row)">章节管理</el-button>
+          <el-button type="primary" size="mini" @click="updatacour(scope.row)">修改</el-button>
+          <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,47 +55,27 @@
       v-if="dialogtable"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="课程名称" width="120">
-      </el-table-column>
-      <el-table-column prop="title" label="课程标题" width="160">
-      </el-table-column>
+      <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
+      <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
       <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
-      <el-table-column
-        prop="description"
-        label="课程描述"
-        width="150"
-        show-overflow-tooltip
-      >
-      </el-table-column>
+      <el-table-column prop="description" label="课程描述" width="150" show-overflow-tooltip> </el-table-column>
       <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">
-            禁用
-          </div>
+          <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column label="封面图片" width="120" class-name="table-image">
         <template slot-scope="scope">
-          <el-image
-            v-if="scope.row.picture"
-            :src="'data:image/png;base64,' + scope.row.picture"
-            alt="图片未找到"
-          />
+          <el-image v-if="scope.row.picture" :src="'data:image/png;base64,' + scope.row.picture" alt="图片未找到" />
           <el-image v-else alt="图片未找到" />
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="chapter(scope.row)"
-            >章节管理</el-button
-          >
-          <el-button type="primary" size="small" @click="updatacour(scope.row)"
-            >修改</el-button
-          >
-          <el-button type="danger" size="small" @click="del(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button type="primary" size="small" @click="chapter(scope.row)">章节管理</el-button>
+          <el-button type="primary" size="small" @click="updatacour(scope.row)">修改</el-button>
+          <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -143,28 +100,13 @@
     >
       <el-form :model="revise" :rules="rules" ref="ruleForm">
         <el-form-item label="课程名称" prop="name">
-          <el-input
-            class="inputw"
-            placeholder="请输入课程名称"
-            v-model="revise.name"
-          >
-          </el-input>
+          <el-input class="inputw" placeholder="请输入课程名称" v-model="revise.name"> </el-input>
         </el-form-item>
         <el-form-item label="课程标题" prop="title">
-          <el-input
-            class="inputw"
-            placeholder="请输入课程标题"
-            v-model="revise.title"
-          >
-          </el-input>
+          <el-input class="inputw" placeholder="请输入课程标题" v-model="revise.title"> </el-input>
         </el-form-item>
         <el-form-item label="课程学分" prop="credit">
-          <el-input
-            class="inputw"
-            placeholder="请输入学分"
-            v-model="revise.credit"
-          >
-          </el-input>
+          <el-input class="inputw" placeholder="请输入学分" v-model="revise.credit"> </el-input>
         </el-form-item>
         <el-form-item label="课程描述" prop="description">
           <el-input
@@ -204,14 +146,7 @@
 </template>
 
 <script>
-import {
-  course,
-  addcourse,
-  delcourse,
-  delcoursem,
-  updatecourse,
-} from '@/utils/api';
-import teacherVue from '../../teacher/teacher.vue';
+import { course, addcourse, delcourse, delcoursem, updatecourse } from '@/utils/api';
 export default {
   data() {
     return {
@@ -243,9 +178,7 @@ export default {
         name: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
         title: [{ required: true, message: '请输入课程标题', trigger: 'blur' }],
         credit: [{ required: true, message: '请输入学分', trigger: 'blur' }],
-        description: [
-          { required: true, message: '请输入课程描述', trigger: 'blur' },
-        ],
+        description: [{ required: true, message: '请输入课程描述', trigger: 'blur' }],
       },
       loading: true, //load效果
     };
@@ -390,7 +323,6 @@ export default {
       this.input = '';
       this.searchdata.length = 0;
       this.dialogtable = false;
-      this.dialogtabledata = teacherVue;
     },
     //章节管理
     chapter(e) {

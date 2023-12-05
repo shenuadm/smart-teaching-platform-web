@@ -2,27 +2,13 @@
   <div>
     <div class="header">
       <div class="title">账号:</div>
-      <el-input
-        class="inputTop"
-        v-model="serch.account"
-        id="inputh"
-        placeholder="请输入账号"
-      ></el-input>
+      <el-input class="inputTop" v-model="serch.account" id="inputh" placeholder="请输入账号"></el-input>
       <div class="title">昵称:</div>
-      <el-input
-        class="inputTop"
-        v-model="serch.username"
-        id="inputh"
-        placeholder="请输入昵称"
-      ></el-input>
-      <el-button type="primary" size="small" @click="search" class="btn-search"
-        >搜索</el-button
-      >
+      <el-input class="inputTop" v-model="serch.username" id="inputh" placeholder="请输入昵称"></el-input>
+      <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="add">添加用户</el-button>
-      <el-button type="danger" size="small" @click="batchdel"
-        >批量删除</el-button
-      >
+      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
     </div>
     <el-table
       ref="multipleTable"
@@ -36,36 +22,12 @@
       border
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column
-        prop="account"
-        label="账号"
-        width="120"
-      ></el-table-column>
-      <el-table-column
-        prop="username"
-        label="昵称"
-        width="160"
-      ></el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="160">
-      </el-table-column>
-      <el-table-column
-        prop="lastLoginTime"
-        label="最近登录时间"
-        width="160"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="lastLoginIp"
-        label="最近登录IP"
-        width="150"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="roleName"
-        label="用户类型"
-        width="210"
-        show-overflow-tooltip
-      ></el-table-column>
+      <el-table-column prop="account" label="账号" width="120"></el-table-column>
+      <el-table-column prop="username" label="昵称" width="160"></el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="160"> </el-table-column>
+      <el-table-column prop="lastLoginTime" label="最近登录时间" width="160" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="lastLoginIp" label="最近登录IP" width="150" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="roleName" label="用户类型" width="210" show-overflow-tooltip></el-table-column>
       <el-table-column prop="active" label="是否激活" width="80">
         <template slot-scope="scope">
           <div v-if="scope.row.active === 0" class="user">激活</div>
@@ -74,18 +36,9 @@
       </el-table-column>
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="reset(scope.row.userid)"
-            >重置密码</el-button
-          >
-          <el-button type="primary" size="mini" @click="reviseuser(scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            type="danger"
-            size="mini"
-            @click="delUser(scope.row.userid)"
-            >删除</el-button
-          >
+          <el-button type="primary" size="mini" @click="reset(scope.row.userid)">重置密码</el-button>
+          <el-button type="primary" size="mini" @click="reviseuser(scope.row)">编辑</el-button>
+          <el-button type="danger" size="mini" @click="delUser(scope.row.userid)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -104,16 +57,10 @@
     <el-dialog title="请输入用户信息" :visible.sync="dialogVisible" width="30%">
       <el-form ref="form" :model="revise" label-width="80px" :rules="rules">
         <el-form-item label="用户账号" prop="account">
-          <el-input
-            v-model="revise.account"
-            placeholder="请输入用户账号"
-          ></el-input>
+          <el-input v-model="revise.account" placeholder="请输入用户账号"></el-input>
         </el-form-item>
         <el-form-item label="用户姓名" prop="username">
-          <el-input
-            v-model="revise.username"
-            placeholder="请输入用户姓名"
-          ></el-input>
+          <el-input v-model="revise.username" placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="角色" prop="roleId" class="roles">
           <el-select v-model="revise.roleId" placeholder="请选择角色">
@@ -136,30 +83,15 @@
     </el-dialog>
     <!-- 修改 -->
     <el-dialog title="请输入用户信息" :visible.sync="reviseUser" width="30%">
-      <el-form
-        ref="form"
-        :model="reviseOther"
-        label-width="80px"
-        :rules="rules"
-      >
+      <el-form ref="form" :model="reviseOther" label-width="80px" :rules="rules">
         <el-form-item label="用户账号" prop="account">
-          <el-input
-            v-model="reviseOther.account"
-            placeholder="请输入用户账号"
-          ></el-input>
+          <el-input v-model="reviseOther.account" placeholder="请输入用户账号"></el-input>
         </el-form-item>
         <el-form-item label="用户姓名" prop="username">
-          <el-input
-            v-model="reviseOther.username"
-            placeholder="请输入用户姓名"
-          ></el-input>
+          <el-input v-model="reviseOther.username" placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="角色" prop="roleName" class="roles">
-          <el-select
-            v-model="reviseOther.roleName"
-            placeholder="请选择角色"
-            @change="change"
-          >
+          <el-select v-model="reviseOther.roleName" placeholder="请选择角色" @change="change">
             <el-option label="教师" value="2"></el-option>
             <el-option label="学生" value="3"></el-option>
             <el-option label="管理员" value="4"></el-option>
@@ -181,15 +113,7 @@
 </template>
 
 <script>
-import {
-  delUsers,
-  addUser,
-  getUserData,
-  resetPass,
-  delUser,
-  reviseUser,
-} from '@/utils/api';
-import teacherVue from '../../teacher/teacher.vue';
+import { delUsers, addUser, getUserData, resetPass, delUser, reviseUser } from '@/utils/api';
 export default {
   data() {
     return {
@@ -226,16 +150,10 @@ export default {
       userId: '',
       reviseUser: false,
       rules: {
-        account: [
-          { required: true, message: '请输入用户账号', trigger: 'blur' },
-        ],
-        username: [
-          { required: true, message: '请输入用户姓名', trigger: 'blur' },
-        ],
+        account: [{ required: true, message: '请输入用户账号', trigger: 'blur' }],
+        username: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
         roleId: [{ required: true, message: '请选择角色', trigger: 'change' }],
-        active: [
-          { required: true, message: '请选择激活状态', trigger: 'change' },
-        ],
+        active: [{ required: true, message: '请选择激活状态', trigger: 'change' }],
       },
     };
   },
@@ -264,7 +182,6 @@ export default {
       this.serch = {};
       this.searchdata.length = 0;
       this.dialogtable = false;
-      this.dialogtabledata = teacherVue;
     },
     //保存
     serve() {
