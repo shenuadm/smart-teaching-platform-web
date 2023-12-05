@@ -4,7 +4,7 @@
       <el-form-item label="账号" prop="name">
         <el-input disabled v-model="ruleForm.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="昵称" prop="nickname">
+      <el-form-item label="姓名" prop="nickname">
         <el-input v-model="ruleForm.nickname" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="原密码" prop="oldpwd">
