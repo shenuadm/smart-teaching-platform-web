@@ -30,7 +30,7 @@ service.interceptors.response.use(
       Message.error(response.data.msg);
       // 响应状态码为not——login时表示未登录，跳转登录页
       if (response.data.code == 'not_login') {
-        this.$route.push('/');
+        window.location.href = '/';
       }
       return Promise.reject(response.data);
     }
