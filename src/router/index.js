@@ -32,36 +32,41 @@ const routes = [
         children: [
           // 用户信息
           {
-            path: '/personInfo',
+            path: '/user/getInfo',
             name: 'personInfo',
             component: () => import('@/views/main/personInfo/personInfo'),
           },
           // 管理员
           {
-            path: '/menuManagement',
+            path: '/menu/list',
             name: 'menuManagement',
             component: () => import('@/views/superUser/menuManagement/menuManagement'),
           },
+          // 用户管理
           {
             path: '/UserManagement',
             name: 'UserManagement',
             component: () => import('@/views/superUser/UserManagement/UserManagement'),
           },
+          // 课程管理
           {
-            path: '/courseManagement',
-            name: 'courseManagement',
+            path: '/course/list',
+            name: 'courseList',
             component: () => import('@/views/superUser/menuManagement/courseManagement'),
           },
+          // 章节管理
           {
             path: '/chapterManagemet',
             name: 'chapterManagemet',
             component: () => import('@/views/superUser/menuManagement/chapterManagemet'),
           },
+          // 作业管理
           {
             path: '/homeworkManagement',
             name: 'homeworkManagement',
             component: () => import('@/views/superUser/menuManagement/homeworkManagement'),
           },
+          // 实验管理
           {
             path: '/experManagemet',
             name: 'experManagemet',
@@ -72,11 +77,13 @@ const routes = [
             name: 'laboratoryReport',
             component: () => import('@/views/superUser/menuManagement/laboratoryReport'),
           },
+          // 实验步骤
           {
             path: '/laboratoryStep',
             name: 'laboratoryStep',
             component: () => import('@/views/superUser/menuManagement/laboratoryStep'),
           },
+          // 关于我们
           {
             path: '/aboutUS',
             name: 'aboutUS',
@@ -90,13 +97,14 @@ const routes = [
           },
           // 系统通知管理
           {
-            path: '/systemNotice',
-            name: 'systemNotice',
+            path: '/notice/list',
+            name: 'noticeList',
             component: () => import('@/views/superUser/systemNotice/systemNotice'),
           },
+          // 虚拟机管理
           {
-            path: '/vmsManagement',
-            name: 'vmsManagement',
+            path: '/sysvm/list',
+            name: 'svsvmList',
             component: () => import('@/views/superUser/vmsManagement/vmsManagement'),
           },
           // 学生
@@ -318,13 +326,14 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // console.log(to);
   // console.log(from);
-  const roleUrl = JSON.parse(localStorage.getItem('roleUrl'));
+  // const roleUrl = JSON.parse(localStorage.getItem('roleUrl'));
   const isLogin = window.localStorage.getItem('satoken');
-  if (isLogin && roleUrl) {
+  // if (isLogin && roleUrl) {
+    if(isLogin) {
     // 如果前往的网页没有权限，就终止此次前进
-    if (!roleUrl.includes(to.path)) {
-      return next(false);
-    }
+    // if (!roleUrl.includes(to.path)) {
+    //   return next(false);
+    // }
     next();
   } else {
     if (to.path === '/') {
