@@ -273,8 +273,11 @@ export function saveCourse(data) {
   return http.post('/teacherCourse/add', data);
 }
 // 我的授课
-export function myTeaching() {
-  return http.get('/teacherCourse/teacherOwnCourseList');
+// export function myTeaching(status, page) {
+//   return http.get(`/teacherCourse/teacherOwnCourseList?status=${status}&page=${page}`);
+// }
+export function myTeaching({ status, page }) {
+  return http.get(`/teacherCourse/teacherOwnCourseList?`, { status, page });
 }
 // 查看章节
 export function checkChapter(id) {

@@ -9,14 +9,13 @@
       <el-button type="primary" size="small" @click="batchdel">删除</el-button>
     </div>
     <el-table
-      v-loading="loading"
+      v-loading="$store.state.isLoading"
       ref="multipleTable"
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      v-if="dialogtabledata"
       border
     >
       <el-table-column type="selection" width="50"> </el-table-column>
@@ -44,41 +43,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 搜索页面 -->
-    <el-table
-      ref="multipleTable"
-      :data="searchdata"
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-      class="custom-table"
-      v-if="dialogtable"
-    >
-      <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
-      <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
-      <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
-      <el-table-column prop="description" label="课程描述" width="150" show-overflow-tooltip> </el-table-column>
-      <el-table-column prop="status" label="状态">
-        <template slot-scope="scope">
-          <div v-if="scope.row.status === true" class="user">启用</div>
-          <div v-else-if="scope.row.status === false" class="forbidden">禁用</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="封面图片" width="120" class-name="table-image">
-        <template slot-scope="scope">
-          <el-image v-if="scope.row.picture" :src="'data:image/png;base64,' + scope.row.picture" alt="图片未找到" />
-          <el-image v-else alt="图片未找到" />
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="250">
-        <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="chapter(scope.row)">章节管理</el-button>
-          <el-button type="primary" size="small" @click="updatacour(scope.row)">修改</el-button>
-          <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
     <div class="block">
       <el-pagination
         @size-change="handleSizeChange"
@@ -96,9 +60,9 @@
       width="40%"
       center
       :before-close="cancel"
-      :title="cour ? '添加课程' : '修改课程'"
+      :title="revise.id ? '修改课程' : '添加课程'"
     >
-      <el-form :model="revise" :rules="rules" ref="ruleForm">
+      <el-form :model="revise" :rules="rules" ref="ruleForm" v-loading="$store.state.isLoading">
         <el-form-item label="课程名称" prop="name">
           <el-input class="inputw" placeholder="请输入课程名称" v-model="revise.name"> </el-input>
         </el-form-item>
@@ -150,10 +114,7 @@ import { course, addcourse, delcourse, delcoursem, updatecourse } from '@/utils/
 export default {
   data() {
     return {
-      dialogtabledata: true,
-      dialogtable: false,
       dialogVisible: false,
-      cour: '',
       currentPage: 1,
       pageSize: 10,
       count: 0,
@@ -180,7 +141,6 @@ export default {
         credit: [{ required: true, message: '请输入学分', trigger: 'blur' }],
         description: [{ required: true, message: '请输入课程描述', trigger: 'blur' }],
       },
-      loading: true, //load效果
     };
   },
   methods: {
@@ -195,12 +155,9 @@ export default {
     },
     //修改课程
     updatacour(e) {
-      const data = JSON.parse(JSON.stringify(e));
-      this.revise = data;
-      console.log(data);
-      this.imageUrl = 'data:image/png;base64,' + data.picture;
+      this.revise = JSON.parse(JSON.stringify(e));
+      this.imageUrl = 'data:image/png;base64,' + this.revise.picture;
       this.dialogVisible = !this.dialogVisible;
-      this.cour = false;
     },
     //添加课程
     addcourse() {
@@ -208,13 +165,10 @@ export default {
       this.imageUrl = '';
       this.dialogVisible = !this.dialogVisible;
       this.revise.status = false;
-      this.cour = true;
     },
     //课程搜索
     search() {
       if (!this.input) return;
-      this.dialogtable = true;
-      this.dialogtabledata = false;
       this.searchdata = this.tableData.filter((item) => {
         // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
         return item.title.includes(this.input);
@@ -222,7 +176,7 @@ export default {
     },
     //保存
     serve() {
-      this.$refs['ruleForm'].validate((valid) => {
+      this.$refs['ruleForm'].validate(async (valid) => {
         if (valid) {
           this.revise.status = this.revise.status ? 1 : 0;
           const fd = new FormData();
@@ -233,45 +187,22 @@ export default {
           fd.append('description', this.revise.description);
           fd.append('file', this.file);
           console.log(this.revise);
-          if (this.cour) {
-            addcourse(fd)
-              .then((res) => {
-                this.break();
-                this.$message({
-                  message: '添加课程成功',
-                  type: 'success',
-                });
-              })
-              .catch((error) => {
-                // 处理错误
-                // console.error(error);
-                this.$message({
-                  message: '添加课程失败',
-                  type: 'warning',
-                });
-              });
+          if (!this.revise.id) {
+            await addcourse(fd);
+            await this.break();
+            this.$message.success('添加课程成功');
+            this.$message.success('添加课程成功');
           } else {
             fd.append('id', this.revise.id);
-            updatecourse(fd)
-              .then((res) => {
-                this.break();
-                this.$message({
-                  message: '修改课程成功',
-                  type: 'success',
-                });
-              })
-              .catch((error) => {
-                // 处理错误
-                this.break();
-                this.$message({
-                  message: '修改课程失败',
-                  type: 'warning',
-                });
+            updatecourse(fd).then(() => {
+              this.break();
+              this.$message({
+                message: '修改课程成功',
+                type: 'success',
               });
+            });
           }
           this.dialogVisible = false;
-        } else {
-          return false;
         }
       });
     },
@@ -288,7 +219,7 @@ export default {
         type: 'warning',
       })
         .then(() => {
-          delcourse(e).then((res) => {
+          delcourse(e).then(() => {
             this.break();
             this.$message({
               type: 'success',
@@ -322,7 +253,6 @@ export default {
     resetting() {
       this.input = '';
       this.searchdata.length = 0;
-      this.dialogtable = false;
     },
     //章节管理
     chapter(e) {
@@ -373,13 +303,11 @@ export default {
         console.log(arrdel);
       });
     },
-    break() {
-      course().then((res) => {
-        this.count = res.count;
-        this.tableData = res.data.map((item) => {
-          return { ...item, picture: item.picture.split(',')[1] };
-        });
-        this.loading = false;
+    async break() {
+      const res = await course();
+      this.count = res.count;
+      this.tableData = res.data.map((item) => {
+        return { ...item, picture: item.picture.split(',')[1] };
       });
     },
   },

@@ -19,48 +19,18 @@
       class="custom-table"
       border
       v-loading="$store.state.isLoading"
-      v-if="dialogtabledata"
     >
       <el-table-column align="center" type="selection" width="50"> </el-table-column>
       <el-table-column align="center" prop="title" label="实验标题" width="150"> </el-table-column>
       <el-table-column align="center" prop="classHour" label="课时" width="80"> </el-table-column>
-      <el-table-column prop="description" label="实验描述" width="300" show-overflow-tooltip align="center">
-      </el-table-column>
-      <!-- <el-table-column prop="fileUrl" label="实验课件" width="200" show-overflow-tooltip align="center">
+      <el-table-column prop="description" label="实验描述" width="300" align="center"> </el-table-column>
+      <!-- <el-table-column prop="fileUrl" label="实验课件" width="200"  align="center">
         <template slot-scope="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
       </el-table-column> -->
-      <el-table-column prop="result" label="实验结果" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="result" label="实验结果"></el-table-column>
       <el-table-column label="操作" width="250">
-        <template slot-scope="scope">
-          <el-button type="primary" size="small" class="opertea" @click="exreport(scope.row)">实验步骤</el-button>
-          <el-button type="primary" size="small" @click="editexrept(scope.row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 搜索 -->
-    <el-table
-      ref="multipleTable"
-      :data="reportdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-      class="custom-table"
-      v-if="exdialogtabledata"
-    >
-      <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="100"> </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="60"> </el-table-column>
-      <el-table-column prop="description" label="实验描述" width="260" show-overflow-tooltip> </el-table-column>
-      <!-- <el-table-column prop="fileUrl" label="实验课件" width="100" show-overflow-tooltip>
-        <template slot-scope="scope">
-          <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
-        </template>
-      </el-table-column> -->
-      <el-table-column prop="result" label="实验结果" show-overflow-tooltip></el-table-column>
-      <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="primary" size="small" class="opertea" @click="exreport(scope.row)">实验步骤</el-button>
           <el-button type="primary" size="small" @click="editexrept(scope.row)">编辑</el-button>
@@ -137,7 +107,6 @@ export default {
       currentPage: 1,
       pageSize: 5,
       input: '',
-      dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
       report: '',
@@ -185,19 +154,14 @@ export default {
       this.$refs['formRule'].validate(async (valid) => {
         if (valid) {
           if (!this.revise.id) {
-            reportadd({ ...this.revise, experimentId: this.id }).then(() => {
-              this.break();
-              this.$message.success('添加实验报告成功');
-              this.dialogVisible = false;
-            });
+            await reportadd({ ...this.revise, experimentId: this.id });
+            this.$message.success('添加实验报告成功');
           } else {
-            console.log(this.revise);
-            reportupdate(this.revise).then((res) => {
-              console.log(res);
-              this.break();
-              this.dialogVisible = false;
-            });
+            await reportupdate(this.revise);
+            this.$message.success('修改实验报告成功');
           }
+          await this.break();
+          this.dialogVisible = false;
         }
       });
     },
@@ -208,7 +172,6 @@ export default {
     },
     //搜索
     search() {
-      this.dialogtabledata = false;
       this.exdialogtabledata = true;
       this.reportdata = this.tableData.filter((item) => {
         // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
@@ -217,7 +180,6 @@ export default {
     },
     //重置
     resetting() {
-      this.dialogtabledata = true;
       this.exdialogtabledata = false;
       this.input = '';
       this.reportdata = [];
@@ -234,32 +196,29 @@ export default {
     },
     //删除
     del(e) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该实验报告, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
-        .then(() => {
-          reportdelete(e).then((res) => {
-            this.break();
-            this.$message.success('删除成功');
-          });
+        .then(async () => {
+          await reportdelete(e);
+          await this.break();
+          this.$message.success('删除成功');
         })
         .catch(() => {});
     },
     //批量删除
     delexper() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除这些实验报告, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
-        .then(() => {
-          let data = this.arr;
-          mreportdelete(data).then((res) => {
-            this.break();
-            this.$message.success('删除成功');
-          });
+        .then(async () => {
+          await mreportdelete(this.arr);
+          await this.break();
+          this.$message.success('删除成功');
         })
         .catch(() => {});
     },
@@ -293,11 +252,9 @@ export default {
         obj[prop] = '';
       }
     },
-    break() {
-      report(this.id).then((res) => {
-        this.tableData = res.data;
-        console.log(this.tableData);
-      });
+    async break() {
+      const res = await report(this.id);
+      this.tableData = res.data;
     },
   },
   mounted() {

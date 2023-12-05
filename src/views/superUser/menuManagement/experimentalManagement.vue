@@ -5,15 +5,9 @@
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
       <el-button size="small" type="primary" @click="search">搜索</el-button>
       <el-button size="small" type="primary" @click="resetting">重置</el-button>
-      <el-button size="small" type="primary" @click="addexper"
-        >添加实验</el-button
-      >
-      <el-button size="small" type="danger" @click="delexper"
-        >批量删除</el-button
-      >
-      <el-button size="small" type="primary" @click="returnexper"
-        >返回章节</el-button
-      >
+      <el-button size="small" type="primary" @click="addexper">添加实验</el-button>
+      <el-button size="small" type="danger" @click="delexper">批量删除</el-button>
+      <el-button size="small" type="primary" @click="returnexper">返回章节</el-button>
     </div>
     <el-table
       ref="multipleTable"
@@ -24,95 +18,44 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      v-if="dialogtabledata"
-      v-loading="loadingGlobal"
+      v-loading="$store.state.isLoading"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="title" label="实验标题" width="120">
-      </el-table-column>
+      <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
       <el-table-column prop="sort" label="排序" width="120"> </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="120">
-      </el-table-column>
-      <el-table-column prop="description" label="实验描述" text-align: center>
-      </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="classHour" label="课时" width="120"> </el-table-column>
+      <el-table-column prop="description" label="实验描述" text-align: center> </el-table-column>
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="mini"
-            class="opertea"
-            @click="exreport(scope.row)"
-            >实验报告</el-button
-          >
-          <el-button type="primary" size="mini" @click="editexrept(scope.row)"
-            >编辑</el-button
-          >
-          <el-button type="danger" size="mini" @click="del(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button type="primary" size="mini" class="opertea" @click="exreport(scope.row)">实验报告</el-button>
+          <el-button type="primary" size="mini" @click="editexrept(scope.row)">编辑</el-button>
+          <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div class="block">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="this.tableData.length"
-      >
-      </el-pagination>
-    </div> -->
-    <!-- 添加/编辑实验 -->
     <el-dialog
       :visible.sync="dialogVisible"
       width="30%"
       :title="edit ? '添加实验' : '编辑实验'"
       :before-close="closeDialog"
       :close-on-click-modal="false"
+      v-loading="$store.state.isLoading"
     >
-      <el-form
-        :model="revise"
-        :rules="rules"
-        ref="revise"
-        label-width="80px"
-        class="demo-ruleForm"
-      >
+      <el-form :model="revise" :rules="rules" ref="revise" label-width="80px" class="demo-ruleForm">
         <el-form-item label="实验标题" prop="title">
-          <el-input
-            v-model="revise.title"
-            placeholder="请输入实验标题"
-          ></el-input>
+          <el-input v-model="revise.title" placeholder="请输入实验标题"></el-input>
         </el-form-item>
         <el-form-item label="实验排序" prop="sort">
-          <el-input
-            placeholder="请输入序号"
-            type="number"
-            v-model.number="revise.sort"
-          >
-          </el-input>
+          <el-input placeholder="请输入序号" type="number" v-model.number="revise.sort"> </el-input>
         </el-form-item>
         <el-form-item label="实验课时" prop="classHour">
-          <el-input
-            v-model.number="revise.classHour"
-            placeholder="请输入实验课时"
-            type="number"
-          ></el-input>
+          <el-input v-model.number="revise.classHour" placeholder="请输入实验课时" type="number"></el-input>
         </el-form-item>
         <el-form-item label="实验描述" prop="description">
-          <el-input
-            type="textarea"
-            v-model="revise.description"
-            placeholder="请输入实验描述"
-            :rows="8"
-          ></el-input>
+          <el-input type="textarea" v-model="revise.description" placeholder="请输入实验描述" :rows="8"></el-input>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button size="small" type="primary" @click="serve"
-            >保 存</el-button
-          >
+          <el-button size="small" type="primary" @click="serve">保 存</el-button>
           <el-button size="small" @click="closeDialog">取 消</el-button>
         </el-form-item>
       </el-form>
@@ -132,8 +75,6 @@ export default {
       currentPage: 1,
       pageSize: 5,
       input: '',
-      dialogtabledata: true,
-      exdialogtabledata: false,
       dialogVisible: false,
       articleId: 0,
       id: 0,
@@ -148,12 +89,8 @@ export default {
       // 表单校验
       rules: {
         title: [{ required: true, message: '请输入实验标题', trigger: 'blur' }],
-        classHour: [
-          { required: true, message: '请输入实验课时', trigger: 'blur' },
-        ],
-        description: [
-          { required: true, message: '请输入实验描述', trigger: 'blur' },
-        ],
+        classHour: [{ required: true, message: '请输入实验课时', trigger: 'blur' }],
+        description: [{ required: true, message: '请输入实验描述', trigger: 'blur' }],
         sort: [
           { required: true, message: '请输入实验排序', trigger: 'blur' },
           { type: 'number', message: '实验排序应为数字' },
@@ -163,7 +100,6 @@ export default {
   },
   created() {
     this.id = this.$route.query.id;
-    this.loadingGlobal = false;
   },
   methods: {
     // 关闭弹框
@@ -204,10 +140,9 @@ export default {
       this.dialogVisible = true;
       this.edit = false;
     },
-    break() {
-      exper(this.id).then((res) => {
-        this.tableData = res.data;
-      });
+    async break() {
+      const res = await exper(this.id);
+      this.tableData = res.data;
     },
     //保存
     serve() {
@@ -217,17 +152,16 @@ export default {
           if (this.edit) {
             // 新增实验
             await experadd(data);
+            await this.break();
             this.$message.success('添加实验成功');
           } else {
             // 编辑实验
             await experedit(data);
+            await this.break();
             this.$message.success('编辑实验成功');
           }
           this.edit = false;
           this.dialogVisible = false;
-          this.break();
-        } else {
-          return false;
         }
       });
     },
@@ -238,14 +172,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       })
-        .then(() => {
-          experdel(e).then((res) => {
-            this.break();
-            this.$message({
-              type: 'success',
-              message: '删除成功!',
-            });
-          });
+        .then(async () => {
+          await experdel(e);
+          await this.break();
+          this.$message.success('删除成功');
         })
         .catch(() => {});
     },
@@ -256,22 +186,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       })
-        .then(() => {
-          let data = this.arr;
-          mexperdel(data).then((res) => {
-            this.break();
-            this.$message({
-              type: 'success',
-              message: '删除成功!',
-            });
-          });
+        .then(async () => {
+          await mexperdel(this.arr);
+          await this.break();
+          this.$message.success('删除成功');
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除',
-          });
-        });
+        .catch(() => {});
     },
     //返回章节
     returnexper() {

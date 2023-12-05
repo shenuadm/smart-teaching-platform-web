@@ -1,6 +1,7 @@
 <template>
   <div class="content global-container" v-loading="$store.state.isLoading">
-    <div class="choose-list">
+    <div class="person-title">我的授课</div>
+    <div class="choose-list mt-20">
       <el-row :gutter="20" class="choose-list-item zh-pd-10 zh-mgb-20" v-for="item in chooseCourse" :key="item.id">
         <el-col :span="6">
           <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
@@ -63,6 +64,15 @@ export default {
 </script>
 
 <style scoped>
+.person-title {
+  height: 60px;
+  line-height: 60px;
+  padding: 0 50px;
+  text-align: left;
+  font-size: 20px;
+  border-bottom: 2px solid #efefef;
+  background-color: #fff;
+}
 .content {
   background-color: #f8f6f6 !important;
 }

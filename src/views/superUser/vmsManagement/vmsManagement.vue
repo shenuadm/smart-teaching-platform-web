@@ -10,7 +10,7 @@
       <el-button type="primary" size="small" @click="addVm">添加</el-button>
     </div>
     <div class="table">
-      <el-table :data="tableData" border v-loading="loadingGlobal">
+      <el-table :data="tableData" border v-loading="$store.state.isLoading">
         <el-table-column align="center" label="名称" prop="name"></el-table-column>
         <el-table-column align="center" label="登录账号" prop="username"></el-table-column>
         <el-table-column align="center" label="密码" prop="pwd"></el-table-column>
@@ -50,9 +50,9 @@ export default {
       total: 0, // 总数
       currentPage: 1, // 当前页
       pageSize: 10, // 每页数量
-      editVisible: false,
-      newVisible: false,
-      editForm: {},
+      editVisible: false, // 编辑弹框
+      newVisible: false, // 新增弹框
+      editForm: {}, // 修改的数据
     };
   },
   methods: {
@@ -67,20 +67,17 @@ export default {
     },
     // 页数改变，获取数据
     async handleCurrentChange() {
-      this.loadingGlobal = true;
       const res = await getVmDataService({ page: this.currentPage });
-      // console.log(res);
       this.tableData = res.data.data;
       this.total = res.data.count;
-      this.loadingGlobal = false;
     },
     // 删除虚拟机
     delVm({ id }) {
       this.$confirm('您确认要删除该虚拟机吗', '删除')
         .then(async () => {
           await deleteVmService(id);
+          await this.handleCurrentChange();
           this.$message.success('删除虚拟机成功');
-          this.handleCurrentChange();
         })
         .catch(() => {});
     },
@@ -88,7 +85,6 @@ export default {
     editVm(row) {
       this.editForm = row;
       this.editVisible = true;
-      console.log(row);
     },
   },
   mounted() {
