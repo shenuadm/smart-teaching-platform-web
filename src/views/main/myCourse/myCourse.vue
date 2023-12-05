@@ -66,16 +66,6 @@ export default {
     };
   },
   mounted() {
-    // getMyCourse().then((res) => {
-    //   this.courseList = res.data.map((item) => {
-    //     let picture = item.picture.split(',')[1];
-    //     if (!picture) {
-    //       picture = '';
-    //     }
-    //     return { ...item, picture };
-    //   });
-    //   // this.courseList = selectStatusConvert(this.courseList);
-    // });
     this.getCourse();
   },
   methods: {

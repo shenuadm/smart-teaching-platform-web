@@ -35,7 +35,7 @@
       <el-table-column prop="lastLoginTime" label="最近登录时间" width="160" show-overflow-tooltip></el-table-column>
       <el-table-column prop="lastLoginIp" label="最近登录IP" width="150" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" width="300">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.roleName !== '超级管理员'">
           <el-button type="primary" size="mini" @click="reset(scope.row.userid)">重置密码</el-button>
           <el-button type="primary" size="mini" @click="reviseuser(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="delUser(scope.row.userid)">删除</el-button>
@@ -64,9 +64,7 @@
         </el-form-item>
         <el-form-item label="角色" prop="roleId" class="roles">
           <el-select v-model="revise.roleId" placeholder="请选择角色">
-            <el-option label="教师" value="2"></el-option>
-            <el-option label="学生" value="3"></el-option>
-            <el-option label="管理员" value="4"></el-option>
+            <el-option v-for="item in userRole" :key="item[0]" :label="item[1]" :value="item[0]"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否激活" prop="active" class="active">
@@ -90,11 +88,9 @@
         <el-form-item label="姓名" prop="username">
           <el-input v-model="reviseOther.username" placeholder="请输入用户姓名"></el-input>
         </el-form-item>
-        <el-form-item label="角色" prop="roleName" class="roles">
-          <el-select v-model="reviseOther.roleName" placeholder="请选择角色" @change="change">
-            <el-option label="教师" value="2"></el-option>
-            <el-option label="学生" value="3"></el-option>
-            <el-option label="管理员" value="4"></el-option>
+        <el-form-item label="角色" prop="roleId" class="roles">
+          <el-select v-model="reviseOther.roleId" placeholder="请选择角色" @change="change">
+            <el-option v-for="item in userRole" :key="item[0]" :label="item[1]" :value="item[0]"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否激活" prop="active" class="active">
@@ -113,6 +109,7 @@
 </template>
 
 <script>
+import { userRole } from '@/constant/superUser.js';
 import { delUsers, addUser, getUserData, resetPass, delUser, reviseUser } from '@/utils/api';
 export default {
   data() {
@@ -126,6 +123,7 @@ export default {
       pageSize: 10,
       jumpPage: '',
       count: 0,
+      userRole,
       serch: {
         account: '',
         username: '',
@@ -133,7 +131,7 @@ export default {
       revise: {
         account: '',
         username: '',
-        roleId: '3',
+        roleId: 3,
         active: '0',
       },
       reviseOther: {
@@ -190,14 +188,9 @@ export default {
           addUser(this.revise).then((res) => {
             this.getUserData();
             console.log(res);
+            this.$message.success('添加用户成功');
+            this.dialogVisible = false;
           });
-          this.dialogVisible = false;
-          this.$message({
-            message: '恭喜你，添加成功',
-            type: 'success',
-          });
-        } else {
-          return false;
         }
       });
     },
@@ -294,20 +287,15 @@ export default {
           reviseUser(this.reviseOther).then((res) => {
             this.getUserData();
             console.log(res);
+            this.$message.success('修改成功');
+            this.reviseUser = false;
           });
-          this.reviseUser = false;
-          // this.$message({
-          //   message: '恭喜你，修改成功',
-          //   type: 'success',
-          // });
-          this.$message.success('修改成功');
         }
       });
     },
     reviseNo(from) {
       this.reviseUser = false;
       this.$refs[from].resetFields();
-      this.getUserData();
     },
     //清空对象
     empty: function (obj) {
