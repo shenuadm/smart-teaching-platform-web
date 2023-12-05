@@ -23,17 +23,17 @@
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="account" label="账号" width="120"></el-table-column>
-      <el-table-column prop="username" label="昵称" width="160"></el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="160"> </el-table-column>
-      <el-table-column prop="lastLoginTime" label="最近登录时间" width="160" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="lastLoginIp" label="最近登录IP" width="150" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="roleName" label="用户类型" width="210" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="username" label="姓名" width="160"></el-table-column>
+      <el-table-column prop="roleName" label="角色" width="120" show-overflow-tooltip></el-table-column>
       <el-table-column prop="active" label="是否激活" width="80">
         <template slot-scope="scope">
           <div v-if="scope.row.active === 0" class="user">激活</div>
           <div v-else-if="scope.row.active === 1" class="forbidden">未激活</div>
         </template>
       </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="160"> </el-table-column>
+      <el-table-column prop="lastLoginTime" label="最近登录时间" width="160" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="lastLoginIp" label="最近登录IP" width="150" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="reset(scope.row.userid)">重置密码</el-button>
@@ -56,10 +56,10 @@
     <!-- 新增用户-->
     <el-dialog title="请输入用户信息" :visible.sync="dialogVisible" width="30%">
       <el-form ref="form" :model="revise" label-width="80px" :rules="rules">
-        <el-form-item label="用户账号" prop="account">
+        <el-form-item label="账号" prop="account">
           <el-input v-model="revise.account" placeholder="请输入用户账号"></el-input>
         </el-form-item>
-        <el-form-item label="用户姓名" prop="username">
+        <el-form-item label="姓名" prop="username">
           <el-input v-model="revise.username" placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="角色" prop="roleId" class="roles">
@@ -84,10 +84,10 @@
     <!-- 修改 -->
     <el-dialog title="请输入用户信息" :visible.sync="reviseUser" width="30%">
       <el-form ref="form" :model="reviseOther" label-width="80px" :rules="rules">
-        <el-form-item label="用户账号" prop="account">
+        <el-form-item label="账号" prop="account">
           <el-input v-model="reviseOther.account" placeholder="请输入用户账号"></el-input>
         </el-form-item>
-        <el-form-item label="用户姓名" prop="username">
+        <el-form-item label="姓名" prop="username">
           <el-input v-model="reviseOther.username" placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="角色" prop="roleName" class="roles">
@@ -237,7 +237,7 @@ export default {
     //重置密码
     reset(e) {
       this.userId = e;
-      this.$confirm('是否重置', '重置', {
+      this.$confirm('是否重置选中的用户密码？', '重置密码', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       })
