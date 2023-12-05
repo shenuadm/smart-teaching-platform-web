@@ -3,9 +3,7 @@
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }">课程详情</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{
-          courseObj.name
-        }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="course-info theme-bg-white btn-radius-5 zh-mgb-20 zh-pd-10">
@@ -48,27 +46,14 @@
     <div class="course-list content-height theme-bg-white btn-radius-5">
       <!-- 左侧树形结构 -->
       <div class="tree">
-        <el-tree
-          :data="data"
-          :props="defaultProps"
-          accordion
-          :highlight-current="true"
-          @node-click="handleNodeClick"
-        >
-          <span class="node-title" slot-scope="{ node, data }">
-            {{ node.data.index }}{{ node.data.title }}
-          </span>
+        <el-tree :data="data" :props="defaultProps" accordion :highlight-current="true" @node-click="handleNodeClick">
+          <span class="node-title" slot-scope="{ node, data }"> {{ node.data.index }}{{ node.data.title }} </span>
         </el-tree>
       </div>
       <div class="tree-content">
         <!-- 课件 -->
         <!-- <div class="courseWare" ref="courseWare">课件</div> -->
-        <iframe
-          src=""
-          frameborder="0"
-          class="courseWare iframe"
-          ref="courseWare"
-        ></iframe>
+        <iframe src="" frameborder="0" class="courseWare iframe" ref="courseWare"></iframe>
         <!-- 实验报告 -->
         <div class="experimentReport" ref="experiment">
           <el-tabs v-model="activeName">
@@ -123,27 +108,13 @@
                   @click="openNewWindow"
                   >新窗口打开</a
                 > -->
-                <a
-                  href="javascript:void(0)"
-                  ref="newWindow"
-                  class="btn-bg-b"
-                  @click="openNewWindow"
-                  >访问实验机</a
-                >
+                <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">访问实验机</a>
               </div>
             </el-tab-pane>
-            <el-tab-pane
-              v-if="teacherId"
-              label="实验报告"
-              name="third"
-              class="experiment-report"
-            >
+            <el-tab-pane v-if="teacherId" label="实验报告" name="third" class="experiment-report">
               <div class="experiment-title">
                 <p>【实验模板】</p>
-                <a
-                  href="javascript:void(0)"
-                  ref="downLoadTemplate"
-                  class="experiment-link zh-fc-blue"
+                <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
                   >点击下载实验模板
                 </a>
               </div>
@@ -158,62 +129,39 @@
               <div class="experiment-title">
                 <p>【实验报告】</p>
                 <div class="experiment-report-result">
-                  <p class="experiment-report-title zh-fs-16 zh-fw-m">
-                    实验结果:
-                  </p>
+                  <p class="experiment-report-title zh-fs-16 zh-fw-m">实验结果:</p>
                   <Editor ref="editor"></Editor>
                 </div>
                 <div class="experiment-report-step">
-                  <p class="experiment-report-title zh-fs-16 zh-fw-m">
-                    实验步骤:
-                  </p>
+                  <p class="experiment-report-title zh-fs-16 zh-fw-m">实验步骤:</p>
                   <ul class="step-all">
-                    <li
-                      class="step-item"
-                      v-for="(item, index) in experimentStep"
-                      :key="index"
-                    >
+                    <li class="step-item" v-for="(item, index) in experimentStep" :key="index">
                       <p>步骤{{ index + 1 }} {{ item.name }}</p>
                       <Editor ref="editors"></Editor>
                     </li>
                   </ul>
                 </div>
                 <div class="experiment-report-operate">
-                  <el-button type="primary" @click="saveContent" ref="btnStatus"
-                    >保存</el-button
-                  >
-                  <el-button type="primary" @click="submit" ref="btnStatus"
-                    >提交</el-button
-                  >
+                  <el-button type="primary" @click="saveContent" ref="btnStatus">保存</el-button>
+                  <el-button type="primary" @click="submit" ref="btnStatus">提交</el-button>
                 </div>
               </div>
             </el-tab-pane>
             <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
               <!-- 学生端 -->
               <el-table
-                :data="
-                  tableData.slice(
-                    (currentPage - 1) * pageSize,
-                    currentPage * pageSize,
-                  )
-                "
+                :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
                 height="auto"
                 border
                 v-if="roleId === '3'"
                 style="width: 100%"
               >
-                <el-table-column prop="updateTime" label="提交时间">
-                </el-table-column>
-                <el-table-column prop="title" label="实验标题" width="120">
-                </el-table-column>
-                <el-table-column prop="expResult" label="实验结果" width="120">
-                </el-table-column>
-                <el-table-column prop="stuGrade" label="学生成绩">
-                </el-table-column>
-                <el-table-column prop="comment" label="评语" width="200">
-                </el-table-column>
-                <el-table-column prop="createTime" label="创建时间">
-                </el-table-column>
+                <el-table-column prop="updateTime" label="提交时间"> </el-table-column>
+                <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
+                <el-table-column prop="expResult" label="实验结果" width="120"> </el-table-column>
+                <el-table-column prop="stuGrade" label="学生成绩"> </el-table-column>
+                <el-table-column prop="comment" label="评语" width="200"> </el-table-column>
+                <el-table-column prop="createTime" label="创建时间"> </el-table-column>
               </el-table>
               <div class="block zh-mgt-20">
                 <el-pagination
@@ -354,15 +302,9 @@ export default {
         this.form.pwd = pwd === 'null' ? '' : pwd;
         if (this.roleId === '3') {
           // 学生端实验结果、实验步骤
-          getExperimentStudentData(
-            this.experimentId,
-            this.studentCourseId,
-          ).then((res) => {
+          getExperimentStudentData(this.experimentId, this.studentCourseId).then((res) => {
             // console.log(res);
-            if (
-              res.experimentReport.type === 2 &&
-              res.experimentReport.status != 0
-            ) {
+            if (res.experimentReport.type === 2 && res.experimentReport.status != 0) {
               //学生已提交实验
               this.submitStatus = true;
               this.studentScore = res.experimentReport.score;
@@ -464,15 +406,11 @@ export default {
     },
     // 提交实验报告
     submit() {
-      this.$confirm(
-        '实验只能提交一次，不可重复提交，确定提交吗？',
-        '提交实验',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        },
-      )
+      this.$confirm('实验只能提交一次，不可重复提交，确定提交吗？', '提交实验', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
         .then(() => {
           // 获取富文本框的内容
           this.richTextResult = this.$refs.editor.html;

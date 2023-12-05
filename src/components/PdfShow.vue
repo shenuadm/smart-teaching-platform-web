@@ -7,10 +7,6 @@
 <script>
 import pdf from 'vue-pdf';
 
-// var loadingTask = pdf.createLoadingTask(
-//   `${window.location.origin}/static/resume.pdf`,
-// );
-
 export default {
   components: {
     pdf,
@@ -49,16 +45,19 @@ export default {
       };
     },
   },
-  mounted() {
+  async mounted() {
     // this.src = pdf.createLoadingTask(
     //   `${window.location.origin}/static/test.pdf`,
     // );
     this.prohibit();
     this.src = pdf.createLoadingTask(`${window.location.origin}/${this.$route.query.url}`);
+    // console.log(this.src, 'src');
 
     this.src.promise.then((pdf) => {
       this.numPages = pdf.numPages;
+      console.log(this.numPages, '1');
     });
+    console.log(this.numPages, '2');
   },
 };
 </script>

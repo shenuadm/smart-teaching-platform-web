@@ -35,7 +35,7 @@
       </el-header>
       <div class="main" style="padding: 60px 0 0 0">
         <!-- 侧导航 -->
-        <AsideTem></AsideTem>
+        <!-- <AsideTem></AsideTem> -->
         <!-- 路由出口 -->
         <router-view></router-view>
       </div>
