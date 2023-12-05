@@ -35,14 +35,14 @@ service.interceptors.response.use(
         sessionStorage.clear();
         localStorage.clear();
         store.commit('setLoading', false);
-        window.location.href = '/';
+        setTimeout( function (){window.location.href = '/'},2000)
       }
       store.commit('setLoading', false);
       return Promise.reject(response.data);
     }
   },
   (error) => {
-    Message.error('网络错误');
+    Message.error('服务器已经关闭，请稍后在连接！');
     return Promise.reject(error);
   },
 );
