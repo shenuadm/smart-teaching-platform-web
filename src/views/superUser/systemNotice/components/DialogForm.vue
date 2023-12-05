@@ -1,46 +1,19 @@
 <template>
-  <el-dialog
-    :title="title + '通知'"
-    :visible="true"
-    width="30%"
-    :close-on-click-modal="false"
-    :before-close="cancel"
-  >
-    <el-form
-      :model="formData"
-      :rules="rules"
-      ref="noticeForm"
-      v-loading="loading"
-      label-width="100px"
-    >
+  <el-dialog :title="title + '通知'" :visible="true" width="30%" :close-on-click-modal="false" :before-close="cancel">
+    <el-form :model="formData" :rules="rules" ref="noticeForm" v-loading="$store.state.isLoading" label-width="100px">
       <el-form-item label="通知标题" prop="title">
-        <el-input
-          v-model="formData.title"
-          placeholder="请输入通知的标题"
-        ></el-input>
+        <el-input v-model="formData.title" placeholder="请输入通知的标题"></el-input>
       </el-form-item>
       <el-form-item label="通知状态" prop="status" class="notice-select">
         <el-select v-model="formData.status" placeholder="请选择该通知的状态">
-          <el-option
-            v-for="item in noticeStatus"
-            :key="item[0]"
-            :label="item[1]"
-            :value="item[0]"
-          ></el-option>
+          <el-option v-for="item in noticeStatus" :key="item[0]" :label="item[1]" :value="item[0]"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="通知内容" prop="content">
-        <el-input
-          type="textarea"
-          :rows="6"
-          v-model="formData.content"
-          placeholder="请输入通知内容"
-        ></el-input>
+        <el-input type="textarea" :rows="6" v-model="formData.content" placeholder="请输入通知内容"></el-input>
       </el-form-item>
       <el-form-item class="flex justify-around">
-        <el-button size="small" type="primary" @click="confirm"
-          >确 定</el-button
-        >
+        <el-button size="small" type="primary" @click="confirm">确 定</el-button>
         <el-button size="small" @click="cancel">取 消</el-button>
       </el-form-item>
     </el-form>
@@ -71,9 +44,7 @@ export default {
           { required: true, message: '请输入通知标题', trigger: 'blur' },
           { min: 1, max: 3000, message: '您输入的内容过长', trigger: 'blur' },
         ],
-        status: [
-          { required: true, message: '请选择该通知的状态', trigger: 'blur' },
-        ],
+        status: [{ required: true, message: '请选择该通知的状态', trigger: 'blur' }],
       },
     };
   },
@@ -96,12 +67,10 @@ export default {
   props: {
     title: String,
     editFrom: Object || null,
-    loading: Boolean,
   },
   mounted() {
     // 如果传入了值就表示是修改
-    this.editFrom &&
-      (this.formData = JSON.parse(JSON.stringify(this.editFrom)));
+    this.editFrom && (this.formData = JSON.parse(JSON.stringify(this.editFrom)));
   },
 };
 </script>

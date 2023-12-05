@@ -117,7 +117,7 @@ const routes = [
           },
           // 选课中心
           {
-            path: '/selectCourseCenter',
+            path: '/studentCourse/courseCenterList',
             name: 'selectCourseCenter',
             component: () => import('@/views/main/selectCourseCenter/selectCourseCenter'),
           },

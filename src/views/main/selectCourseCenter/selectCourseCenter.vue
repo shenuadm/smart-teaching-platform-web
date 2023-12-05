@@ -1,12 +1,7 @@
 <template>
-  <div class="content global-container" v-loading="loadingGlobal">
+  <div class="content global-container" v-loading="$store.state.isLoading">
     <div class="choose-list">
-      <el-row
-        :gutter="20"
-        class="choose-list-item zh-pd-10 zh-mgb-20"
-        v-for="item in chooseCourse"
-        :key="item.id"
-      >
+      <el-row :gutter="20" class="choose-list-item zh-pd-10 zh-mgb-20" v-for="item in chooseCourse" :key="item.id">
         <el-col :span="6">
           <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
         </el-col>
@@ -25,13 +20,7 @@
           </el-row>
         </el-col>
         <el-col :span="4">
-          <el-button
-            type="primary"
-            size="small"
-            @click="selectCourse(item)"
-            class="choose"
-            >选课</el-button
-          >
+          <el-button type="primary" size="small" @click="selectCourse(item)" class="choose">选课</el-button>
         </el-col>
       </el-row>
     </div>
@@ -61,33 +50,14 @@ export default {
         return { ...item, picture };
       });
       this.chooseCourse = selectStatusConvert(this.chooseCourse);
-      this.loadingGlobal = false;
     });
   },
   methods: {
     // 选课
     async selectCourse(e) {
-      // console.log(e);
       let data = { teacherCourseId: e.id };
       const res = await clickSelectCourse(data);
-      // console.log(res, 'res11111');
       if (res) this.$message.success('选择课程成功');
-
-      // 请求接口
-      // clickSelectCourse(data).then((res) => {
-      //   console.log(res);
-      //   if (2 > 1) {
-      //     this.$message({
-      //       message: '该课程已经选了',
-      //       type: 'warning',
-      //     });
-      //   } else {
-      //     this.$message({
-      //       message: '课程选择成功',
-      //       type: 'success',
-      //     });
-      //   }
-      // });
     },
   },
 };

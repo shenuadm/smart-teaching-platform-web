@@ -15,7 +15,7 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
-      v-loading="loadingGlobal"
+      v-loading="$store.state.isLoading"
       @selection-change="handleSelectionChange"
       class="custom-table"
       v-if="dialogtabledata"
@@ -291,22 +291,16 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           console.log(this.reviseOther);
-          reviseUser(this.reviseOther)
-            .then((res) => {
-              this.getUserData();
-              console.log(res);
-            })
-            .catch((error) => {
-              // 处理错误
-              console.error(error);
-            });
-          this.reviseUser = false;
-          this.$message({
-            message: '恭喜你，修改成功',
-            type: 'success',
+          reviseUser(this.reviseOther).then((res) => {
+            this.getUserData();
+            console.log(res);
           });
-        } else {
-          return false;
+          this.reviseUser = false;
+          // this.$message({
+          //   message: '恭喜你，修改成功',
+          //   type: 'success',
+          // });
+          this.$message.success('修改成功');
         }
       });
     },
@@ -354,7 +348,6 @@ export default {
       getUserData().then((res) => {
         this.count = res.count;
         this.tableData = res.data;
-        this.loadingGlobal = false;
       });
     },
   },

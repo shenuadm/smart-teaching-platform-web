@@ -1,29 +1,20 @@
 <template>
-  <div class="myTeaching global-container" v-loading="loadingGlobal">
+  <div class="myTeaching global-container" v-loading="$store.state.isLoading">
     <!-- 标题 -->
     <div class="person-title">我的授课</div>
     <div class="my-teaching">
       <div v-for="item in myTeachList" :key="item.id">
         <div class="my-teaching-item zh-pd-10 zh-mgt-20 zh-mgb-20">
-          <img
-            :src="'data:image/png;base64,' + item.picture"
-            alt="图片加载失败"
-          />
+          <img :src="'data:image/png;base64,' + item.picture" alt="图片加载失败" />
           <div class="my-teaching-text">
             <div class="title">{{ item.name }}</div>
             <div class="status">课程状态：{{ item.status }}</div>
             <div class="created-date">创建日期：{{ item.createTime }}</div>
           </div>
           <div class="my-teaching-btn">
-            <el-button type="primary" @click="editCourseClick(item)"
-              >编辑课程</el-button
-            >
-            <el-button type="primary" @click="lookDetails(item)"
-              >查看详情</el-button
-            >
-            <el-button type="primary" @click="lookScore(item)"
-              >查看成绩</el-button
-            >
+            <el-button type="primary" @click="editCourseClick(item)">编辑课程</el-button>
+            <el-button type="primary" @click="lookDetails(item)">查看详情</el-button>
+            <el-button type="primary" @click="lookScore(item)">查看成绩</el-button>
           </div>
         </div>
         <!-- 学生成绩列表 -->
@@ -32,38 +23,27 @@
             <el-button type="primary" class="zh-mgb-20">下载成绩列表</el-button>
           </div>
           <el-table :data="scoreTable" border style="width: 100%">
-            <el-table-column prop="stuName" label="学生姓名" width="120">
-            </el-table-column>
-            <el-table-column prop="stuScoreFirst" label="实验一">
-            </el-table-column>
-            <el-table-column prop="stuScoreSecond" label="实验二">
-            </el-table-column>
-            <el-table-column prop="stuScoreThird" label="实验三">
-            </el-table-column>
+            <el-table-column prop="stuName" label="学生姓名" width="120"> </el-table-column>
+            <el-table-column prop="stuScoreFirst" label="实验一"> </el-table-column>
+            <el-table-column prop="stuScoreSecond" label="实验二"> </el-table-column>
+            <el-table-column prop="stuScoreThird" label="实验三"> </el-table-column>
             <el-table-column prop="totalScore" label="总分"> </el-table-column>
-            <el-table-column prop="averageScore" label="平均分">
-            </el-table-column>
+            <el-table-column prop="averageScore" label="平均分"> </el-table-column>
           </el-table>
         </div>
       </div>
       <!-- 编辑框 -->
-      <el-dialog
-        title="编辑课程"
-        :visible.sync="dialogVisible"
-        :before-close="closeDialog"
-      >
+      <el-dialog title="编辑课程" :visible.sync="dialogVisible" :before-close="closeDialog">
         <el-form
           ref="ruleForm"
           :model="editCourse"
           :rules="rules"
           label-width="150px"
+          v-loading="$store.state.isLoading"
         >
           <!-- 课程名称 -->
           <el-form-item label="课程名称：" prop="name">
-            <el-input
-              v-model="editCourse.name"
-              placeholder="课程名称"
-            ></el-input>
+            <el-input v-model="editCourse.name" placeholder="课程名称"></el-input>
           </el-form-item>
           <!-- 选课日期 -->
           <div class="choose-date">
@@ -85,45 +65,22 @@
           </div>
           <div class="input-small">
             <!-- 最多选课人数 -->
-            <el-form-item
-              label="最多选课人数："
-              prop="maxTaker"
-              class="more-person"
-              label-width="150px"
-            >
-              <el-input
-                v-model="editCourse.maxTaker"
-                placeholder="课程最大人数"
-              ></el-input>
+            <el-form-item label="最多选课人数：" prop="maxTaker" class="more-person" label-width="150px">
+              <el-input v-model="editCourse.maxTaker" placeholder="课程最大人数"></el-input>
             </el-form-item>
             <!-- 授课地点 -->
-            <el-form-item
-              label="授课地点："
-              prop="address"
-              class="course-address"
-            >
-              <el-input
-                v-model="editCourse.address"
-                placeholder="授课地点"
-              ></el-input>
+            <el-form-item label="授课地点：" prop="address" class="course-address">
+              <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
             </el-form-item>
           </div>
           <!-- 授课日期 -->
           <div class="choose-date">
             <el-form-item label="授课日期：" prop="startDate">
-              <el-date-picker
-                type="date"
-                placeholder="授课开始日期"
-                v-model="editCourse.startDate"
-              ></el-date-picker>
+              <el-date-picker type="date" placeholder="授课开始日期" v-model="editCourse.startDate"></el-date-picker>
             </el-form-item>
             <span>至</span>
             <el-form-item prop="endDate" class="end-date">
-              <el-date-picker
-                type="date"
-                placeholder="授课结束日期"
-                v-model="editCourse.endDate"
-              ></el-date-picker>
+              <el-date-picker type="date" placeholder="授课结束日期" v-model="editCourse.endDate"></el-date-picker>
             </el-form-item>
           </div>
           <!-- 课程状态 -->
@@ -141,9 +98,7 @@
           </el-form-item>
           <!-- 确认/取消 -->
           <el-form-item class="end-date">
-            <el-button type="primary" @click="submitForm('ruleForm')"
-              >修改</el-button
-            >
+            <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
             <el-button @click="closeDialog">取消</el-button>
           </el-form-item>
         </el-form>
@@ -162,9 +117,7 @@ export default {
       ...adapter.data,
       // 表单校验
       rules: {
-        name: [
-          { required: true, message: '请输入您的课程名称', trigger: 'blur' },
-        ],
+        name: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
         selectStartDate: [
           {
             required: true,
@@ -186,9 +139,7 @@ export default {
             trigger: 'blur',
           },
         ],
-        address: [
-          { required: true, message: '请输入您的授课地点', trigger: 'blur' },
-        ],
+        address: [{ required: true, message: '请输入您的授课地点', trigger: 'blur' }],
         startDate: [
           {
             required: true,
@@ -235,7 +186,6 @@ export default {
       this.myTeachList = courseStatusConvert(res.data).map((item) => {
         return { ...item, picture: item.picture.split(',')[1] };
       });
-      this.loadingGlobal = false;
     });
   },
   methods: {

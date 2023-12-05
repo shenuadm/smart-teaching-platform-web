@@ -1,10 +1,5 @@
 <template>
-  <DialogForm
-    :title="'编辑'"
-    :editFrom="editForm"
-    @formEvent="editNotice"
-    :loading="loading"
-  ></DialogForm>
+  <DialogForm :title="'编辑'" :editFrom="editForm" @formEvent="editNotice"></DialogForm>
 </template>
 
 <script>
@@ -12,9 +7,6 @@ import DialogForm from './DialogForm.vue';
 import { editNotice } from '@/utils/api.js';
 import Bus from '@/utils/eventBus';
 export default {
-  data() {
-    return { loading: false };
-  },
   components: {
     DialogForm,
   },
@@ -24,10 +16,8 @@ export default {
   methods: {
     // 编辑通知
     async editNotice(form) {
-      this.loading = true;
       await editNotice(form);
       this.$message.success('编辑通知成功');
-      this.loading = false;
       Bus.$emit('clearDialog');
     },
   },

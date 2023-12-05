@@ -1,5 +1,5 @@
 <template>
-  <div class="global-container" v-loading="loadingGlobal">
+  <div class="global-container" v-loading="$store.state.isLoading">
     <!-- 标题 -->
     <div class="person-title">课程中心</div>
     <!-- 内容 -->
@@ -14,49 +14,26 @@
     <div class="course-center">
       <div class="course-center-item" v-for="item in courseList" :key="item.id">
         <!-- <img src="@/assets/169681739455410.jpg" alt="课程logo图片" /> -->
-        <img
-          :src="'data:image/png;base64,' + item.picture"
-          alt="课程logo图片"
-        />
+        <img :src="'data:image/png;base64,' + item.picture" alt="课程logo图片" />
         <div class="course-center-text">
           <div class="course-name">课程名称：{{ item.name }}</div>
           <div class="course-title">课程标题：{{ item.title }}</div>
           <div class="course-score">学分：{{ item.credit }}</div>
-          <el-popover
-            placement="bottom"
-            width="400"
-            trigger="hover"
-            :content="item.description"
-          >
-            <p slot="reference" class="course-describe">
-              课程描述：{{ item.description }}
-            </p>
+          <el-popover placement="bottom" width="400" trigger="hover" :content="item.description">
+            <p slot="reference" class="course-describe">课程描述：{{ item.description }}</p>
           </el-popover>
         </div>
         <div class="course-center-btn">
-          <button class="edit btn-bg-b" @click="toChapterDetails(item)">
-            查看章节
-          </button>
-          <button class="detail btn-bg-b" @click="editCourseClick(item)">
-            选择授课
-          </button>
+          <button class="edit btn-bg-b" @click="toChapterDetails(item)">查看章节</button>
+          <button class="detail btn-bg-b" @click="editCourseClick(item)">选择授课</button>
         </div>
       </div>
       <!-- 编辑框 -->
       <el-dialog title="选择授课" :visible.sync="dialogVisible">
-        <el-form
-          ref="ruleForm"
-          :model="editCourse"
-          :rules="rules"
-          label-width="100px"
-        >
+        <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px">
           <!-- 课程名称 -->
           <el-form-item label="课程名称：" prop="title">
-            <el-input
-              v-model="editCourse.title"
-              placeholder="课程名称"
-              disabled
-            ></el-input>
+            <el-input v-model="editCourse.title" placeholder="课程名称" disabled></el-input>
           </el-form-item>
           <!-- 选课日期 -->
           <div class="choose-date">
@@ -79,44 +56,21 @@
           <!-- 授课日期 -->
           <div class="choose-date">
             <el-form-item label="授课日期：" prop="startDate">
-              <el-date-picker
-                type="date"
-                placeholder="授课开始日期"
-                v-model="editCourse.startDate"
-              ></el-date-picker>
+              <el-date-picker type="date" placeholder="授课开始日期" v-model="editCourse.startDate"></el-date-picker>
             </el-form-item>
             <span>——</span>
             <el-form-item prop="endDate" class="end-date">
-              <el-date-picker
-                type="date"
-                placeholder="授课结束日期"
-                v-model="editCourse.endDate"
-              ></el-date-picker>
+              <el-date-picker type="date" placeholder="授课结束日期" v-model="editCourse.endDate"></el-date-picker>
             </el-form-item>
           </div>
           <div class="input-small">
             <!-- 最多选课人数 -->
-            <el-form-item
-              label="最多选课人数："
-              prop="maxTaker"
-              class="more-person"
-              label-width="127px"
-            >
-              <el-input
-                v-model="editCourse.maxTaker"
-                placeholder="课程最大人数"
-              ></el-input>
+            <el-form-item label="最多选课人数：" prop="maxTaker" class="more-person" label-width="127px">
+              <el-input v-model="editCourse.maxTaker" placeholder="课程最大人数"></el-input>
             </el-form-item>
             <!-- 授课地点 -->
-            <el-form-item
-              label="授课地点："
-              prop="address"
-              class="course-address"
-            >
-              <el-input
-                v-model="editCourse.address"
-                placeholder="授课地点"
-              ></el-input>
+            <el-form-item label="授课地点：" prop="address" class="course-address">
+              <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
             </el-form-item>
           </div>
           <!-- 课程状态 -->
@@ -128,9 +82,7 @@
           </el-form-item>
           <!-- 确认/取消 -->
           <el-form-item class="end-date">
-            <el-button type="primary" @click="submitForm('ruleForm')"
-              >保存</el-button
-            >
+            <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
             <el-button @click="dialogVisible = false">取消</el-button>
           </el-form-item>
         </el-form>
@@ -149,9 +101,7 @@ export default {
       courseList: [],
       // 表单校验
       rules: {
-        name: [
-          { required: true, message: '请输入您的课程名称', trigger: 'blur' },
-        ],
+        name: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
         chooseStartDate: [
           {
             required: true,
@@ -173,9 +123,7 @@ export default {
             trigger: 'blur',
           },
         ],
-        coursePlace: [
-          { required: true, message: '请输入您的授课地点', trigger: 'blur' },
-        ],
+        coursePlace: [{ required: true, message: '请输入您的授课地点', trigger: 'blur' }],
         courseStartDate: [
           {
             required: true,
@@ -200,8 +148,6 @@ export default {
         let picture = item.picture.split(',')[1];
         return { ...item, picture };
       });
-      // console.log(this.courseList);
-      this.loadingGlobal = false;
     });
   },
   methods: {
