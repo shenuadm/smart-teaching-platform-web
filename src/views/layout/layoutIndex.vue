@@ -3,22 +3,24 @@
     <!-- 侧导航 -->
     <el-col :span="4" class="mr-20">
       <el-menu :default-active="$route.path" class="el-menu-vertical-demo" router :collapse="false">
-        <el-menu-item v-for="item in navList" :key="item.id" v-if="item.type === '菜单'" :index="item.funurl">
-          <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
-        </el-menu-item>
-
-        <el-submenu v-for="item in navList" :key="item.id" v-if="item.type === '目录'">
-          <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
-          <el-menu-item
-            v-for="i in item.children"
-            :index="i.funurl"
-            v-if="i.type === '菜单'"
-            :key="i.id"
-            class="second"
-          >
-            <i class="iconfont mr-5" :class="i.icon"></i>{{ i.title }}
+        <div v-for="item in navList" :key="item.id">
+          <el-menu-item v-if="item.type === '菜单'" :index="item.funurl">
+            <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
           </el-menu-item>
-        </el-submenu>
+          <el-submenu v-if="item.type === '目录'">
+            <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
+            <div v-for="i in item.children" :key="i.id">
+              <el-menu-item :index="i.funurl" v-if="i.type === '菜单'" class="second">
+                <i class="iconfont mr-5" :class="i.icon"></i>{{ i.title }}
+              </el-menu-item>
+            </div>
+          </el-submenu>
+        </div>
+        <div v-if="roleId === 1">
+          <el-menu-item index="/aboutUS">
+            <span slot="title"><i class="icon-guanyuwomen iconfont mr-5"></i>关于我们</span>
+          </el-menu-item>
+        </div>
       </el-menu>
     </el-col>
     <!-- 信息内容 -->
@@ -35,19 +37,23 @@ export default {
   data() {
     return {
       navList: [], //侧导航标题
+      roleId: '',
     };
   },
   created() {
     // 从本地存储中取值
     this.navList = JSON.parse(localStorage.getItem('navData'));
+    this.roleId = JSON.parse(localStorage.getItem('roleId'));
   },
 };
 </script>
 
 <style scoped>
-.el-menu > li {
+.el-menu > li,
+.el-menu > div > li {
   font-weight: 700;
 }
+
 .personalInfo {
   margin: 30px auto;
   height: auto;

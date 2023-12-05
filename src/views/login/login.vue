@@ -156,10 +156,8 @@ export default {
           };
           // 存入可访问的路径
           localStorage.setItem('roleUrl', JSON.stringify(getRoleUrl(res.menuVoList)));
-          // this.$store.commit('setRoleUrl', getRoleUrl(res.menuVoList));
           this.$message.success({ message: '登录成功', duration: 1500 });
-          // this.$router.push('/personInfo');
-          this.$router.push('/menu/list');
+          this.$router.push('/user/getInfo');
         }
       });
     },
