@@ -32,9 +32,9 @@
           <el-button v-if="!scope.row.pid" type="primary" @click="addchapterji(scope.row.id)" size="mini"
             >添加节</el-button
           >
-          <el-button v-if="scope.row.pid" type="primary" @click="homework(scope.row.id)" size="mini"
+          <!-- <el-button v-if="scope.row.pid" type="primary" @click="homework(scope.row.id)" size="mini"
             >作业管理</el-button
-          >
+          > -->
           <el-button v-if="scope.row.pid" type="primary" @click="exper(scope.row.id)" size="mini">实验管理</el-button>
           <el-button type="primary" size="mini" @click="revisechapter(scope, scope.row)">修改</el-button>
           <el-button type="danger" size="mini" @click="deletechapter(scope.row.id)">删除</el-button>
