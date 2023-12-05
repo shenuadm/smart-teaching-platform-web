@@ -1,51 +1,24 @@
 <template>
   <div class="person-content">
-    <el-form
-      ref="ruleForm"
-      :model="ruleForm"
-      :rules="rules"
-      status-icon
-      label-width="100px"
-      class="form-list"
-    >
+    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" status-icon label-width="100px" class="form-list">
       <el-form-item label="账号" prop="name">
-        <el-input
-          disabled
-          v-model="ruleForm.name"
-          autocomplete="off"
-        ></el-input>
+        <el-input disabled v-model="ruleForm.name" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="昵称" prop="nickname">
         <el-input v-model="ruleForm.nickname" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="原密码" prop="oldpwd">
-        <el-input
-          v-model="ruleForm.oldpwd"
-          autocomplete="off"
-          type="password"
-        ></el-input>
+        <el-input v-model="ruleForm.oldpwd" autocomplete="off" type="password"></el-input>
       </el-form-item>
       <el-form-item label="新密码" prop="newpwd">
-        <el-input
-          v-model="ruleForm.newpwd"
-          autocomplete="off"
-          type="password"
-        ></el-input>
+        <el-input v-model="ruleForm.newpwd" autocomplete="off" type="password"></el-input>
       </el-form-item>
       <el-form-item label="确认新密码" prop="renewpwd">
-        <el-input
-          v-model="ruleForm.renewpwd"
-          autocomplete="off"
-          type="password"
-        ></el-input>
+        <el-input v-model="ruleForm.renewpwd" autocomplete="off" type="password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="small" @click="submitForm('ruleForm')"
-          >保存</el-button
-        >
-        <el-button type="primary" size="small" @click="resetForm('ruleForm')"
-          >重置</el-button
-        >
+        <el-button type="primary" size="small" @click="submitForm('ruleForm')">保存</el-button>
+        <el-button type="primary" size="small" @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
     <div class="login-log">
@@ -59,19 +32,11 @@
 import { getPersonInfo, savePersonInfo } from '@/utils/api.js';
 export default {
   data() {
-    // 判断旧密码是否正确
-    let oldpwd = (rule, value, callback) => {
-      if (value != localStorage.getItem('oldpwd')) {
-        callback(new Error('原密码输入错误，请重新输入'));
-      } else {
-        callback();
-      }
-    };
     //正则判断新密码
     let newpwd = (rule, value, callback) => {
       const regex = /^[a-zA-Z0-9]\w{5,17}$/;
       if (value === '') {
-        callback(new Error('请输入您的新密码'));
+        callback();
       } else if (!regex.test(value)) {
         callback(new Error('请输入6至18位密码，不含有中文字符'));
       } else {
@@ -80,7 +45,6 @@ export default {
     };
     //再次验证密码两次是否一致
     let renewpwd = (rule, value, callback) => {
-      if (!value) return callback(new Error('请再次输入您的新密码'));
       if (value !== this.ruleForm.newpwd) {
         callback(new Error('两次输入密码不一致！请重新输入'));
       } else {
@@ -100,25 +64,15 @@ export default {
       rules: {
         name: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
-        oldpwd: [
-          {
-            required: true,
-            validator: oldpwd,
-            message: '请输入原密码',
-            trigger: 'blur',
-          },
-        ],
         newpwd: [
           {
-            required: true,
             validator: newpwd,
-            message: '请输入新密码',
+            message: '请输入6至18位密码，不含有中文字符',
             trigger: 'blur',
           },
         ],
         renewpwd: [
           {
-            required: true,
             validator: renewpwd,
             message: '再次输入新密码',
             trigger: 'blur',
@@ -141,19 +95,15 @@ export default {
     // 保存表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        const oldpwd = localStorage.getItem('oldpwd');
-        const data = {
-          oldpwd: this.ruleForm.oldpwd,
-          password: this.ruleForm.newpwd,
-        };
-        if (valid && this.ruleForm.oldpwd === oldpwd) {
+        if (valid) {
+          const data = {
+            oldpwd: this.ruleForm.oldpwd,
+            password: this.ruleForm.newpwd,
+            account: this.ruleForm.nickname,
+          };
           savePersonInfo(data).then((res) => {
-            this.$message({
-              message: res.msg,
-            });
+            this.$message.success(res.msg);
           });
-        } else {
-          return this.$message.warning('信息修改失败');
         }
       });
     },

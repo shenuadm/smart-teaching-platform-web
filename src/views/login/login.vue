@@ -139,7 +139,7 @@ export default {
           localStorage.setItem('roleId', res.roleId); // 存角色权限id
           this.$store.commit('updateUsername', res.username);
           sessionStorage.setItem('username', res.username);
-          localStorage.setItem('oldpwd', data.password);
+          console.log(data.password, '');
           // 获取可访问的路径
           const getRoleUrl = (data) => {
             const res = [];

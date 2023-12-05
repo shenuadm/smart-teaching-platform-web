@@ -4,7 +4,7 @@
       <el-button type="primary" size="small" @click="addRole">添加角色</el-button>
     </div>
     <div class="roleTable">
-      <el-table ref="tableData" :data="tableData" border style="width: 100%" v-loading="loadingGlobal">
+      <el-table ref="tableData" :data="tableData" border style="width: 100%" v-loading="$store.state.isLoading">
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column prop="rolename" label="角色标识" align="center"> </el-table-column>
         <el-table-column prop="nickname" label="角色名称" align="center"> </el-table-column>
@@ -32,7 +32,7 @@
     </div>
     <!-- 添加角色 -->
     <el-dialog :title="isAddRole ? '添加角色' : '修改角色'" :visible.sync="aeditVisible" :before-close="cancal">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px" v-loading="$store.state.isLoading">
         <el-form-item label="角色标识" prop="rolename">
           <el-input v-model="form.rolename" :disabled="form.roleid < 5"></el-input>
         </el-form-item>
@@ -59,7 +59,7 @@
           :props="defaultProps"
           :default-checked-keys="checked"
           @check="check"
-          v-loading="dialogLoading"
+          v-loading="$store.state.isLoading"
         >
         </el-tree>
         <div slot="footer" class="dialog-footer">
@@ -117,7 +117,6 @@ export default {
     async getroleManagement() {
       const res = await roleManagement();
       this.tableData = res.data;
-      this.loadingGlobal = false;
     },
     // 添加角色
     addRole() {
@@ -145,39 +144,23 @@ export default {
         if (valid) {
           if (this.isAddRole) {
             // 添加角色
-            const res = await addRole(this.form);
-            if (res.code === 0) {
-              this.$message({
-                type: 'success',
-                message: '添加角色成功',
-              });
-            } else {
-              this.$message.error(res.msg);
-            }
-            this.getroleManagement();
+            await addRole(this.form);
             this.aeditVisible = false;
+            this.$message.success('添加角色成功');
+            this.getroleManagement();
           } else {
             // 编辑角色
-            const res = await updateRole(this.form);
-            if (res.code === 0) {
-              this.$message({
-                type: 'success',
-                message: '修改角色成功',
-              });
-            } else {
-              this.$message.error(res.msg);
-            }
-            this.getroleManagement();
+            await updateRole(this.form);
             this.aeditVisible = false;
+            this.$message.success('修改角色成功');
+            this.getroleManagement();
           }
-        } else {
-          return false;
         }
       });
     },
     // 授权
     empower(index, row) {
-      this.dialogLoading = true;
+      // this.dialogLoading = true;
       this.empowerVisible = true;
       this.roleId = row.roleid;
       empowerTree(this.roleId).then((res) => {
@@ -206,8 +189,7 @@ export default {
             });
           }
         });
-        this.dialogLoading = false;
-        console.log(this.treeData);
+        // this.dialogLoading = false;
       });
     },
     // 确认授权
