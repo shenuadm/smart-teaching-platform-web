@@ -9,6 +9,7 @@ export default new Vuex.Store({
     username: sessionStorage.getItem('username'),
     roleId: localStorage.getItem('roleId'),
     roleUrl: [],
+    isLoading: true,
   },
   getters: {},
   mutations: {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     setRoleUrl(state, newData) {
       state.roleUrl = newData;
+    },
+    setLoading(state, value) {
+      state.isLoading = value;
     },
   },
   actions: {},

@@ -80,6 +80,7 @@ export default {
         .then(async () => {
           await deleteVmService(id);
           this.$message.success('删除虚拟机成功');
+          this.handleCurrentChange();
         })
         .catch(() => {});
     },

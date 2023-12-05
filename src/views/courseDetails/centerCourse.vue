@@ -2,10 +2,8 @@
   <div class="content warpper" id="courseDeatils">
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: path }">课程详情</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{
-          courseObj.name
-        }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 课程信息 -->
@@ -47,9 +45,7 @@
             授课地点：<span>{{ courseObj.address }}</span>
           </p>
         </div>
-        <div v-if="roleId === '2' && $route.query.id">
-          选课人数：{{ courseObj.selectedNumber }}
-        </div>
+        <div v-if="roleId === '2' && $route.query.id">选课人数：{{ courseObj.selectedNumber }}</div>
       </div>
     </div>
     <!-- 实验内容 -->

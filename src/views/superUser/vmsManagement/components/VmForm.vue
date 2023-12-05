@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="title + '虚拟机'" :visible="true" width="30%" :close-on-click-modal="false" :before-close="cancel">
-    <el-form :model="formData" :rules="rules" ref="vmForm" v-loading="loading" label-width="100px">
+    <el-form :model="formData" :rules="rules" ref="vmForm" v-loading="$store.state.isLoading" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input :disabled="title === '编辑'" v-model="formData.name" placeholder="请输入虚拟机名称"></el-input>
       </el-form-item>
@@ -31,7 +31,7 @@ export default {
       },
     };
   },
-  props: ['title', 'editForm', 'loading'],
+  props: ['title', 'editForm'],
   methods: {
     cancel() {
       Bus.$emit('vmClear');

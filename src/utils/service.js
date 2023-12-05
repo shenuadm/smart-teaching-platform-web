@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
+import store from '@/store';
 
 // 配置基本URL
 const service = axios.create({
@@ -9,6 +10,7 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
+    store.commit('setLoading', true);
     // 可在此处对请求进行处理，例如添加请求头、设置认证信息等
     return config;
   },
@@ -23,15 +25,19 @@ service.interceptors.response.use(
     // 可在此处对响应进行处理，例如处理错误码、格式化数据等
     // 响应成功返回数据
     if (response.data.code == 0) {
-      // Message.success(response.data.message);
+      store.commit('setLoading', false);
       return response.data;
     } else {
       // 不成功弹出提示消息
       Message.error(response.data.msg);
       // 响应状态码为not——login时表示未登录，跳转登录页
       if (response.data.code == 'not_login') {
+        sessionStorage.clear();
+        localStorage.clear();
+        store.commit('setLoading', false);
         window.location.href = '/';
       }
+      store.commit('setLoading', false);
       return Promise.reject(response.data);
     }
   },
