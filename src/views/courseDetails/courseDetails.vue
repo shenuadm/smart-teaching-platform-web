@@ -1,5 +1,5 @@
 <template>
-  <div class="content warpper" id="courseDeatils">
+  <div class="content warpper" id="courseDeatils" v-loading="$store.state.isLoading">
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }">课程详情</el-breadcrumb-item>
@@ -47,7 +47,7 @@
       <!-- 左侧树形结构 -->
       <div class="tree">
         <el-tree :data="data" :props="defaultProps" accordion :highlight-current="true" @node-click="handleNodeClick">
-          <span class="node-title" slot-scope="{ node, data }"> {{ node.data.index }}{{ node.data.title }} </span>
+          <span class="node-title" slot-scope="{ node }"> {{ node.data.index }}{{ node.data.title }} </span>
         </el-tree>
       </div>
       <div class="tree-content">
@@ -88,43 +88,23 @@
                 <img src="@/assets/eye.png" alt="" @click="toShow" />
               </div>
               <div class="openWindow">
-                <!-- <a
-                  href="javascript:void(0)"
-                  ref="currentWindow"
-                  class="btn-bg-b"
-                  @click="openCurrentWindow"
-                  >当前窗口打开</a
-                >
-                <iframe
-                  src=""
-                  frameborder="0"
-                  class="iframeMain"
-                  ref="iframeMain"
-                ></iframe> -->
-                <!-- <a
-                  href="javascript:void(0)"
-                  ref="newWindow"
-                  class="btn-bg-b"
-                  @click="openNewWindow"
-                  >新窗口打开</a
-                > -->
                 <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">访问实验机</a>
               </div>
             </el-tab-pane>
             <el-tab-pane v-if="teacherId" label="实验报告" name="third" class="experiment-report">
-              <div class="experiment-title">
+              <!-- <div class="experiment-title">
                 <p>【实验模板】</p>
                 <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
                   >点击下载实验模板
                 </a>
-              </div>
+              </div> -->
               <div class="sumbit-status">
                 <img src="@/assets/notsubmit.png" alt="" class="status-img" />
                 <div v-if="submitStatus" class="submitStatus">
                   <p class="already-submit">已提交</p>
                   <p class="already-submit">{{ studentScore }}</p>
                 </div>
-                <div class="submitStatus">未提交</div>
+                <div v-else class="submitStatus">未提交</div>
               </div>
               <div class="experiment-title">
                 <p>【实验报告】</p>
@@ -187,18 +167,12 @@
 import {
   getTreeData,
   getExperimentContent,
-  getExperimentData,
   getExperimentStudentData,
   courseDetails,
-  teacherCourseDetails,
-  getExperimentResult,
   getStudentScore,
-  scoreList,
   saveExperimentReport,
-  checkChapter,
 } from '@/utils/api.js';
 import { courseStatusConvert } from '@/utils/status.js';
-import { handleDate } from '@/utils/date.js';
 export default {
   data() {
     return {
@@ -233,17 +207,14 @@ export default {
   },
   created() {
     this.roleId = localStorage.getItem('roleId');
-    console.log(this.$route.query.id, 'query,id');
-    if (this.roleId === '3') {
-      //学生查看课程详情
-      this.path = '/myCourse';
-      this.teacherId = this.$route.query.teacherCourseId;
-      this.studentCourseId = this.$route.query.studentCourseId;
-      // 课程详情
-      courseDetails(this.teacherId).then((res) => {
-        this.courseObj = courseStatusConvert(res.course);
-      });
-    }
+    //学生查看课程详情
+    this.path = '/myCourse';
+    this.teacherId = this.$route.query.teacherCourseId;
+    this.studentCourseId = this.$route.query.studentCourseId;
+    // 课程详情
+    courseDetails(this.teacherId).then((res) => {
+      this.courseObj = courseStatusConvert(res.course);
+    });
     this.courseId = this.$route.query.courseId;
     // 获取树形数据
     getTreeData(this.courseId).then((res) => {
@@ -279,7 +250,7 @@ export default {
   },
   methods: {
     // 树形控件的点击事件
-    handleNodeClick(data) {
+    async handleNodeClick(data) {
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = 'block';
@@ -300,68 +271,77 @@ export default {
         this.form.name = name === 'null' ? '' : name;
         const pwd = localStorage.getItem('hostPwd');
         this.form.pwd = pwd === 'null' ? '' : pwd;
-        if (this.roleId === '3') {
-          // 学生端实验结果、实验步骤
-          getExperimentStudentData(this.experimentId, this.studentCourseId).then((res) => {
-            // console.log(res);
-            if (res.experimentReport.type === 2 && res.experimentReport.status != 0) {
-              //学生已提交实验
-              this.submitStatus = true;
-              this.studentScore = res.experimentReport.score;
-              this.$refs.btnStatus.disabled = true;
-              this.$refs.btnStatus.type = '';
-            }
-            // 实验结果
-            if (res.experimentReport.result !== null) {
-              this.$refs.editor.html = res.experimentReport.result;
-            }
-            // this.$refs.editor.html = res.experimentReport.result
-            // 实验步骤
-            if (res.experimentReportPlans !== null) {
-              this.experimentStep = res.experimentReportPlans;
-              setTimeout(() => {
-                res.experimentReportPlans.forEach((ritem, rindex) => {
-                  this.$refs.editors.forEach((eitem, eindex) => {
-                    if (rindex === eindex) {
-                      eitem.html = ritem.content;
-                    }
-                  });
-                });
-              }, 1000);
-            }
-            // this.experimentStep = res.experimentReportPlans
-            // setTimeout(()=>{
-            //   res.experimentReportPlans.forEach((ritem,rindex)=>{
-            //     this.$refs.editors.forEach((eitem,eindex)=>{
-            //       if(rindex === eindex){
-            //         eitem.html = ritem.content
-            //       }
-            //     })
-            //   })
-            // },1000)
-          });
-        }
+        // 学生端实验结果、实验步骤
+        // getExperimentStudentData(this.experimentId, this.studentCourseId).then((res) => {
+        //   console.log(res, 'res11111111111');
+        //   if (res.experimentReport.type === 2 && res.experimentReport.status != 0) {
+        //     //学生已提交实验
+        //     this.submitStatus = true;
+        //     this.studentScore = res.experimentReport.score;
+        //     this.$refs.btnStatus.disabled = true;
+        //     this.$refs.btnStatus.type = '';
+        //   }
+        //   // 实验结果
+        //   if (res.experimentReport.result !== null) {
+        //     this.$refs.editor.html = res.experimentReport.result;
+        //   }
+        //   // this.$refs.editor.html = res.experimentReport.result
+        //   // 实验步骤
+        //   if (res.experimentReportPlans !== null) {
+        //     this.experimentStep = res.experimentReportPlans;
+        //     setTimeout(() => {
+        //       res.experimentReportPlans.forEach((ritem, rindex) => {
+        //         this.$refs.editors.forEach((eitem, eindex) => {
+        //           if (rindex === eindex) {
+        //             eitem.html = ritem.content;
+        //           }
+        //         });
+        //       });
+        //     }, 1000);
+        //   }
+        // });
+        await this.getExperimentData();
         if (this.teacherId) {
           // 下载实验模版
-          console.log(this.$refs.downLoadTemplate);
-          this.$refs.downLoadTemplate.href = data.fileUrl;
-          if (this.roleId === '2') {
-            // 成绩表格(教师端)
-            scoreList(this.experimentId, this.teacherId).then((res) => {
-              // this.tableData = handleDate(res.data)
-              this.tableData = res.data;
-            });
-          }
-          if (this.roleId === '3') {
-            // 学生的实验成绩
-            getStudentScore(this.teacherId).then((res) => {
-              this.tableData = res.data;
-            });
-          }
+          // console.log(this.$refs.downLoadTemplate);
+          // this.$refs.downLoadTemplate.href = data.fileUrl;
+          // 学生的实验成绩
+          getStudentScore(this.teacherId).then((res) => {
+            this.tableData = res.data;
+          });
         }
         this.$refs.experiment.style.display = 'block';
       } else {
         this.$refs.experiment.style.display = 'none';
+      }
+    },
+    // 获取实验结果，实验步骤
+    async getExperimentData() {
+      const res = await getExperimentStudentData(this.experimentId, this.studentCourseId);
+      console.log(res, 'res111111111');
+      if (res.experimentReport.type === 2 && res.experimentReport.status != 0) {
+        //学生已提交实验
+        this.submitStatus = true;
+        this.studentScore = res.experimentReport.score;
+        this.$refs.btnStatus.disabled = true;
+        this.$refs.btnStatus.type = '';
+      }
+      // 实验结果
+      if (res.experimentReport.result !== null) {
+        this.$refs.editor.html = res.experimentReport.result;
+      }
+      // 实验步骤
+      if (res.experimentReportPlans !== null) {
+        this.experimentStep = res.experimentReportPlans;
+        setTimeout(() => {
+          res.experimentReportPlans.forEach((ritem, rindex) => {
+            this.$refs.editors.forEach((eitem, eindex) => {
+              if (rindex === eindex) {
+                eitem.html = ritem.content;
+              }
+            });
+          });
+        }, 1000);
       }
     },
     // 点击眼睛，显示密码，再次点击，隐藏密码
@@ -371,12 +351,6 @@ export default {
       } else {
         this.inputType = 'password';
       }
-    },
-    // 当前窗口打开
-    openCurrentWindow(e) {
-      e.preventDefault();
-      this.$refs.currentWindow.href = 'https://123.60.85.111:4200/';
-      this.$refs.iframeMain.src = this.$refs.currentWindow.href;
     },
     // 新窗口打开
     openNewWindow() {
@@ -602,8 +576,9 @@ export default {
 }
 .sumbit-status {
   position: absolute;
-  top: 5px;
+  top: -39px;
   right: 140px;
+  transform: scale(0.8);
 }
 .status-img {
   display: inline-block;

@@ -15,11 +15,8 @@
             <div>
               课程名称：<span>{{ courseObj.name }}</span>
             </div>
-            <div v-if="isTeachCenter" class="info-des">
-              {{ courseObj.description }}
-            </div>
           </div>
-          <div v-if="!isTeachCenter">
+          <div>
             <p>
               选课开始日期：<span>{{ courseObj.selectStartDate }}</span>
             </p>
@@ -31,7 +28,7 @@
             </p>
           </div>
         </div>
-        <div class="info-content-right" v-if="!isTeachCenter">
+        <div class="info-content-right">
           <p>
             任课教师：<span>{{ courseObj.userName }}</span>
           </p>
@@ -45,7 +42,6 @@
             授课地点：<span>{{ courseObj.address }}</span>
           </p>
         </div>
-        <div v-if="roleId === '2' && $route.query.id">选课人数：{{ courseObj.selectedNumber }}</div>
       </div>
     </div>
     <!-- 实验内容 -->
@@ -73,12 +69,6 @@ export default {
     const id = this.$route.query.courseId;
     const res = await checkChapter(id);
     this.courseObj = res.courseInfo;
-  },
-  computed: {
-    // 是否是课程中心进入,如果是教师端进入，并且url中没有携带id参数，就是从课程中心进入，返回true，不显示课程的除名称外的信息
-    isTeachCenter() {
-      return !this.$route.query.id;
-    },
   },
   components: {
     CourseList,

@@ -8,7 +8,7 @@ export default new Vuex.Store({
     username: sessionStorage.getItem('username'),
     roleId: localStorage.getItem('roleId'),
     roleUrl: [],
-    isLoading: true,
+    isLoading: false,
   },
   getters: {},
   mutations: {

@@ -78,7 +78,7 @@
       </template>
     </CourseList>
     <!-- 学生虚拟机列表 -->
-    <div v-else class="vms-container" v-loading="loadingGlobal">
+    <div v-else class="vms-container" v-loading="$store.state.isLoading">
       <div class="vms-title">
         <el-button type="primary" size="mini" @click="updateStudentVms">更新学生虚拟机</el-button>
         <i class="el-icon-info ml-20"></i>
@@ -195,23 +195,9 @@
 </template>
 
 <script>
-import {
-  getTreeData,
-  getExperimentContent,
-  getExperimentData,
-  getExperimentStudentData,
-  courseDetails,
-  teacherCourseDetails,
-  getExperimentResult,
-  getStudentScore,
-  scoreList,
-  saveExperimentReport,
-  checkChapter,
-  getStudentExperiment,
-} from '@/utils/api.js';
+import { getExperimentData, teacherCourseDetails, scoreList, getStudentExperiment } from '@/utils/api.js';
 import { getStudentVms, shareStudentVms } from '@/api/teacher.js';
 import { courseStatusConvert } from '@/utils/status.js';
-import { handleDate } from '@/utils/date.js';
 import CourseList from './components/CourseList.vue';
 export default {
   data() {
@@ -283,10 +269,8 @@ export default {
     },
     // 获取学生虚拟机信息
     async getStudentVmsData() {
-      this.loadingGlobal = true;
       const res = await getStudentVms(this.teacherId);
       this.vmsData = res.data;
-      this.loadingGlobal = false;
     },
     // 查看学生虚拟机
     async queryVms() {
