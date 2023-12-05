@@ -1,12 +1,8 @@
 <template>
   <div class="chapter-managemet">
     <div class="header">
-      <el-button type="primary" size="small" @click="addchapter"
-        >添加章</el-button
-      >
-      <el-button type="primary" size="small" @click="returncourse"
-        >返回课程</el-button
-      >
+      <el-button type="primary" size="small" @click="addchapter">添加章</el-button>
+      <el-button type="primary" size="small" @click="returncourse">返回课程</el-button>
     </div>
     <!-- 表格数据 -->
     <el-table
@@ -17,85 +13,31 @@
       row-key="id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
     >
-      <el-table-column
-        prop="name"
-        label="章节标题"
-        width="200"
-        show-overflow-tooltip
-      >
+      <el-table-column prop="name" label="章节标题" width="200" show-overflow-tooltip>
         <template slot-scope="scope">
-          <div class="ellipsis">
-            {{ scope.row.order }}：{{ scope.row.name }}
-          </div>
+          <div class="ellipsis">{{ scope.row.order }}：{{ scope.row.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="classHour"
-        label="课时"
-        width="50"
-        show-overflow-tooltip
-      >
-      </el-table-column>
-      <el-table-column
-        prop="sort"
-        label="排序"
-        width="50"
-        show-overflow-tooltip
-      >
-      </el-table-column>
-      <el-table-column
-        prop="fileUrl"
-        label="课件"
-        width="100"
-        show-overflow-tooltip
-      >
+      <el-table-column prop="classHour" label="课时" width="50" show-overflow-tooltip> </el-table-column>
+      <el-table-column prop="sort" label="排序" width="50" show-overflow-tooltip> </el-table-column>
+      <el-table-column prop="fileUrl" label="课件" width="100" show-overflow-tooltip>
         <template slot-scope="scope">
           <!-- <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a> -->
-          <a
-            href="javascript:void(0);"
-            @click="goPdf(scope.row.fileUrl)"
-            v-if="scope.row.fileUrl"
-            >查看课件</a
-          >
+          <a href="javascript:void(0);" @click="goPdf(scope.row.fileUrl)" v-if="scope.row.fileUrl">查看课件</a>
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述" show-overflow-tooltip>
-      </el-table-column>
+      <el-table-column prop="description" label="描述" show-overflow-tooltip> </el-table-column>
       <el-table-column label="操作" width="350">
         <template slot-scope="scope">
-          <el-button
-            v-if="!scope.row.pid"
-            type="primary"
-            @click="addchapterji(scope.row.id)"
-            size="mini"
+          <el-button v-if="!scope.row.pid" type="primary" @click="addchapterji(scope.row.id)" size="mini"
             >添加节</el-button
           >
-          <el-button
-            v-if="scope.row.pid"
-            type="primary"
-            @click="homework(scope.row.id)"
-            size="mini"
+          <el-button v-if="scope.row.pid" type="primary" @click="homework(scope.row.id)" size="mini"
             >作业管理</el-button
           >
-          <el-button
-            v-if="scope.row.pid"
-            type="primary"
-            @click="exper(scope.row.id)"
-            size="mini"
-            >实验管理</el-button
-          >
-          <el-button
-            type="primary"
-            size="mini"
-            @click="revisechapter(scope, scope.row)"
-            >修改</el-button
-          >
-          <el-button
-            type="danger"
-            size="mini"
-            @click="deletechapter(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button v-if="scope.row.pid" type="primary" @click="exper(scope.row.id)" size="mini">实验管理</el-button>
+          <el-button type="primary" size="mini" @click="revisechapter(scope, scope.row)">修改</el-button>
+          <el-button type="danger" size="mini" @click="deletechapter(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -108,24 +50,13 @@
     >
       <el-form :model="revise" :rules="rules" ref="formRule">
         <el-form-item label="章节标题" prop="name">
-          <el-input placeholder="请输入章节标题" v-model="revise.name">
-          </el-input>
+          <el-input placeholder="请输入章节标题" v-model="revise.name"> </el-input>
         </el-form-item>
         <el-form-item label="章节课时" prop="classHour">
-          <el-input
-            placeholder="请输入课时"
-            v-model="revise.classHour"
-            type="number"
-          >
-          </el-input>
+          <el-input placeholder="请输入课时" v-model="revise.classHour" type="number"> </el-input>
         </el-form-item>
         <el-form-item label="章节排序" prop="sort">
-          <el-input
-            placeholder="请输入序号"
-            v-model="revise.sort"
-            type="number"
-          >
-          </el-input>
+          <el-input placeholder="请输入序号" v-model="revise.sort" type="number"> </el-input>
         </el-form-item>
         <el-form-item label="章节描述" prop="description">
           <el-input
@@ -137,9 +68,7 @@
           </el-input>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button size="small" @click="serve" type="primary"
-            >确 定</el-button
-          >
+          <el-button size="small" @click="serve" type="primary">确 定</el-button>
           <el-button size="small" @click="closeAddChapter">取 消</el-button>
         </el-form-item>
       </el-form>
@@ -152,16 +81,12 @@
       :before-close="closeAddJoint"
       :close-on-click-modal="false"
     >
-      <el-form :model="revise" :rules="rules" ref="formRule">
+      <el-form :model="revise" :rules="rules" ref="formRule" label-width="100px" class="chapter-dialog-form">
         <el-form-item label="章节标题" prop="name">
-          <el-input
-            placeholder="请输入章节标题"
-            v-model="revise.name"
-          ></el-input>
+          <el-input placeholder="请输入章节标题" v-model="revise.name"></el-input>
         </el-form-item>
         <el-form-item label="章节课时" prop="classHour">
-          <el-input placeholder="请输入课时" v-model="revise.classHour">
-          </el-input>
+          <el-input placeholder="请输入课时" v-model="revise.classHour"> </el-input>
         </el-form-item>
         <el-form-item label="章节排序" prop="sort">
           <el-input placeholder="请输入序号" v-model="revise.sort"> </el-input>
@@ -175,37 +100,18 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item
-          :label="isAddJoint ? '上传课件' : '修改课件'"
-          class="upload-file"
-        >
-          <el-upload
-            action=""
-            :auto-upload="false"
-            :file-list="fileList"
-            :limit="1"
-            :on-change="handlePreview"
-          >
-            <el-button
-              size="mini"
-              type="primary"
-              plain
-              v-if="fileList.length === 0"
-              >{{ isAddJoint ? '点击上传' : '点击修改' }}</el-button
-            >
+        <el-form-item :label="isAddJoint ? '上传课件' : '修改课件'" class="upload-file">
+          <el-upload action="" :auto-upload="false" :file-list="fileList" :limit="1" :on-change="handlePreview">
+            <el-button size="mini" type="primary" plain v-if="fileList.length === 0">{{
+              isAddJoint ? '点击上传' : '点击修改'
+            }}</el-button>
             <div slot="tip" class="el-upload__tip">只能上传单个文件</div>
           </el-upload>
-          <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view"
-            >查看课件</a
-          >
+          <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view">查看课件</a>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button size="small" @click="serveji" type="primary"
-            >确 定</el-button
-          >
-          <el-button size="small" @click="dialogVisibleji = false"
-            >取 消</el-button
-          >
+          <el-button size="small" @click="serveji" type="primary">确 定</el-button>
+          <el-button size="small" @click="dialogVisibleji = false">取 消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -235,13 +141,9 @@ export default {
       fileList: [],
       rules: {
         name: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
-        classHour: [
-          { required: true, message: '请输入课程名称', trigger: 'blur' },
-        ],
+        classHour: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
         sort: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
-        description: [
-          { required: true, message: '请输入课程名称', trigger: 'blur' },
-        ],
+        description: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
       },
       chapterId: '', //修改的章节id变量
       file: '', //上传pdf文件
@@ -465,18 +367,9 @@ export default {
 .chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell {
   text-align: center;
 }
-.chapter-managemet
-  .el-table__header-wrapper
-  .el-table__header
-  .el-table__cell:first-child,
-.chapter-managemet
-  .el-table__body-wrapper
-  .el-table__row
-  .el-table__cell:first-child,
-.chapter-managemet
-  .el-table__body-wrapper
-  .el-table__row
-  .el-table__cell:last-child {
+.chapter-managemet .el-table__header-wrapper .el-table__header .el-table__cell:first-child,
+.chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell:first-child,
+.chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell:last-child {
   text-align: left;
 }
 .chapter-managemet .el-form .is-required {
@@ -505,20 +398,11 @@ export default {
   display: flex;
   text-align: left;
 }
-.chapter-managemet
-  .el-form
-  .upload-file
-  .el-form-item__content
-  .el-upload__tip {
+.chapter-managemet .el-form .upload-file .el-form-item__content .el-upload__tip {
   margin: 0;
   height: 30px;
 }
-.chapter-managemet
-  .el-form
-  .upload-file
-  .el-form-item__content
-  .el-upload__tip
-  .el-upload-list__item {
+.chapter-managemet .el-form .upload-file .el-form-item__content .el-upload__tip .el-upload-list__item {
   margin-top: 0 !important;
 }
 .el-input-group__prepend {
@@ -530,10 +414,14 @@ export default {
   margin-top: -89px;
   height: 72px !important;
 }
+/* 修改节弹框中表单项左侧间隙 */
+.chapter-dialog-form .el-form-item__content {
+  margin-left: 0 !important;
+}
 </style>
 <style scoped>
 .pdf-view {
-  margin-left: 50px;
+  /* margin-left: 50px; */
   color: #409eff;
 }
 .dec {

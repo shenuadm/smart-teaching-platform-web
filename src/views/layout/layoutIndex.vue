@@ -7,7 +7,7 @@
           <el-menu-item v-if="item.type === '菜单'" :index="item.funurl">
             <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
           </el-menu-item>
-          <el-submenu v-if="item.type === '目录'">
+          <el-submenu v-if="item.type === '目录'" :index="item.funurl">
             <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
             <div v-for="i in item.children" :key="i.id">
               <el-menu-item :index="i.funurl" v-if="i.type === '菜单'" class="second">

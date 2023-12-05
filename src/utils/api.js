@@ -54,12 +54,7 @@ export function getExperimentContent(id) {
 }
 // 获取实验步骤
 export function getExperimentStudentData(id, studentCourseId) {
-  return http.get(
-    '/ExperimentReportPlan/student/getExperimentPlanId/' +
-      id +
-      '/' +
-      studentCourseId,
-  );
+  return http.get('/ExperimentReportPlan/student/getExperimentPlanId/' + id + '/' + studentCourseId);
 }
 // 获取实验结果
 export function getExperimentResult(id, studentCourseId) {
@@ -153,8 +148,7 @@ export function deleteNotice(id) {
 
 // 作业管理
 // 获取作业管理列表
-export const getHomeWorkList = (id, params) =>
-  http.get('assignments/list/' + id, params);
+export const getHomeWorkList = (id, params) => http.get('assignments/list/' + id, params);
 // 添加作业
 export const addHomeWork = (data) => http.post('assignments/add', data);
 // 修改作业
@@ -162,8 +156,7 @@ export const editHomeWork = (data) => http.put('assignments/update', data);
 // 删除作业
 export const delHomeWork = (id) => http.delete('assignments/delete/' + id);
 // 批量删除作业
-export const delAllHomeWork = (ids) =>
-  http.delete('assignments/deletes/' + ids);
+export const delAllHomeWork = (ids) => http.delete('assignments/deletes/' + ids);
 
 //实验报告数据
 export function report(id) {
@@ -174,8 +167,8 @@ export function reportadd(data) {
   return http.post('experimentReport/add', data);
 }
 //修改实验报告
-export function reportupdate(data) {
-  return http.post('experimentReport/update', data);
+export function reportupdate({ description, experimentId, result, title, classHour }) {
+  return http.post('experimentReport/update', { description, experimentId, result, title, classHour });
 }
 //删除实验报告
 export function reportdelete(id) {
@@ -298,16 +291,11 @@ export function getExperimentData(id) {
 // 成绩列表
 export function scoreList(experimentId, teacherCourseId) {
   return http.get(
-    '/experimentReport/listByTeacher?experimentId=' +
-      experimentId +
-      '&teacherCourseId=' +
-      teacherCourseId,
+    '/experimentReport/listByTeacher?experimentId=' + experimentId + '&teacherCourseId=' + teacherCourseId,
   );
 }
 
 // 获取学生实验步骤
 export function getStudentExperiment(uid, id) {
-  return http.get(
-    `/ExperimentReportPlan/getStudentExperimentPlanId/${uid}/${id}`,
-  );
+  return http.get(`/ExperimentReportPlan/getStudentExperimentPlanId/${uid}/${id}`);
 }

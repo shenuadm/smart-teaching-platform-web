@@ -1,6 +1,14 @@
 <template>
   <div class="person-content">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" status-icon label-width="100px" class="form-list">
+    <el-form
+      ref="ruleForm"
+      :model="ruleForm"
+      :rules="rules"
+      status-icon
+      label-width="100px"
+      v-loading="$store.state.isLoading"
+      class="form-list"
+    >
       <el-form-item label="账号" prop="name">
         <el-input disabled v-model="ruleForm.name" autocomplete="off"></el-input>
       </el-form-item>
@@ -33,9 +41,9 @@ import { getPersonInfo, savePersonInfo } from '@/utils/api.js';
 export default {
   data() {
     //正则判断新密码
-    let newpwd = (rule, value, callback) => {
+    const newpwd = (rule, value, callback) => {
       const regex = /^[a-zA-Z0-9]\w{5,17}$/;
-      if (value === '') {
+      if (value === '' && this.ruleForm.oldpwd === '') {
         callback();
       } else if (!regex.test(value)) {
         callback(new Error('请输入6至18位密码，不含有中文字符'));
@@ -44,9 +52,18 @@ export default {
       }
     };
     //再次验证密码两次是否一致
-    let renewpwd = (rule, value, callback) => {
+    const renewpwd = (rule, value, callback) => {
       if (value !== this.ruleForm.newpwd) {
         callback(new Error('两次输入密码不一致！请重新输入'));
+      } else {
+        callback();
+      }
+    };
+    const oldPWd = (rule, value, callback) => {
+      const regex = /^[a-zA-Z0-9]\w{5,17}$/;
+      if (this.ruleForm.newpwd === '') return callback();
+      else if (!regex.test(value)) {
+        callback(new Error('请输入6至18位密码，不含有中文字符'));
       } else {
         callback();
       }
@@ -64,48 +81,41 @@ export default {
       rules: {
         name: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
-        newpwd: [
-          {
-            validator: newpwd,
-            message: '请输入6至18位密码，不含有中文字符',
-            trigger: 'blur',
-          },
-        ],
-        renewpwd: [
-          {
-            validator: renewpwd,
-            message: '再次输入新密码',
-            trigger: 'blur',
-          },
-        ],
+        oldpwd: [{ validator: oldPWd, trigger: 'blur' }],
+        newpwd: [{ validator: newpwd, trigger: 'blur' }],
+        renewpwd: [{ validator: renewpwd, trigger: 'blur' }],
       },
       // 接收个人信息
       personMsg: {},
     };
   },
   created() {
-    getPersonInfo().then((res) => {
-      this.personMsg = res.data;
-      this.ruleForm.name = this.personMsg.account;
-      this.ruleForm.nickname = this.personMsg.username;
-    });
+    this.getUserInfo();
   },
   mounted() {},
   methods: {
     // 保存表单
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
           const data = {
             oldpwd: this.ruleForm.oldpwd,
             password: this.ruleForm.newpwd,
             account: this.ruleForm.nickname,
           };
-          savePersonInfo(data).then((res) => {
-            this.$message.success(res.msg);
-          });
+          const res = await savePersonInfo(data);
+          await this.getUserInfo();
+          this.$message.success(res.msg);
+          //   console.log('校验成功');
         }
       });
+    },
+    // 获取用户信息
+    async getUserInfo() {
+      const res = await getPersonInfo();
+      this.personMsg = res.data;
+      this.ruleForm.name = res.data.account;
+      this.ruleForm.nickname = res.data.username;
     },
     // 重置表单
     resetForm(formName) {
