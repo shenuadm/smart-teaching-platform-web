@@ -3,6 +3,9 @@ module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false, //关闭lint语法检查
   devServer: {
+    client: {
+      overlay: false,
+    },
     // 配置代理服务器
     proxy: {
       // 跨域配置

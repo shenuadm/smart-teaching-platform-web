@@ -12,8 +12,20 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="empower(scope.$index, scope.row)">授权</el-button>
-            <el-button size="mini" type="primary" @click="edit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="del(scope.$index, scope.row)">删除</el-button>
+            <el-button
+              size="mini"
+              :disabled="isClick(scope.row.rolename)"
+              :type="isClick(scope.row.rolename) ? 'info' : 'primary'"
+              @click="edit(scope.$index, scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              :disabled="isClick(scope.row.rolename)"
+              :type="isClick(scope.row.rolename) ? 'info' : 'danger'"
+              @click="del(scope.$index, scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -212,6 +224,10 @@ export default {
     cancelEmpower() {
       this.empowerVisible = false;
       this.checked = [];
+    },
+    // 判断该用户是否可以编辑与删除信息,可以返回false，不可以返回true
+    isClick(rolename) {
+      return ['supper_admin', 'teacher', 'student', 'admin'].includes(rolename);
     },
     // 删除
     del(index, row) {
