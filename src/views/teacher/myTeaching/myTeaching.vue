@@ -2,19 +2,25 @@
   <div class="myTeaching global-container" v-loading="$store.state.isLoading">
     <!-- 标题 -->
     <div class="person-title">我的授课</div>
+    <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
+      <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
+      <el-tab-pane label="选课中" name="2"></el-tab-pane>
+      <el-tab-pane label="授课中" name="4"></el-tab-pane>
+      <el-tab-pane label="已结束" name="6"></el-tab-pane>
+    </el-tabs>
     <div class="my-teaching">
       <div v-for="item in myTeachList" :key="item.id">
         <div class="my-teaching-item zh-pd-10 zh-mgt-20 zh-mgb-20">
           <img :src="'data:image/png;base64,' + item.picture" alt="图片加载失败" />
           <div class="my-teaching-text">
             <div class="title">{{ item.name }}</div>
-            <div class="status">课程状态：{{ item.status }}</div>
+            <div class="status">课程状态：{{ courseStatusConvert(item.status) }}</div>
             <div class="created-date">创建日期：{{ item.createTime }}</div>
           </div>
           <div class="my-teaching-btn">
             <el-button type="primary" @click="editCourseClick(item)">编辑课程</el-button>
             <el-button type="primary" @click="lookDetails(item)">查看详情</el-button>
-            <el-button type="primary" @click="lookScore(item)">查看成绩</el-button>
+            <!-- <el-button type="primary" @click="lookScore(item)">查看成绩</el-button> -->
           </div>
         </div>
         <!-- 学生成绩列表 -->
@@ -104,13 +110,21 @@
         </el-form>
       </el-dialog>
     </div>
+    <el-pagination
+      @current-change="getCourseData"
+      :current-page="page"
+      :page-size="10"
+      layout="total, prev, pager, next, jumper"
+      :total="total"
+    >
+    </el-pagination>
   </div>
 </template>
 
 <script>
 import { myTeaching } from '@/utils/api.js';
 import adapter from './adapter.js';
-import { courseStatusConvert } from '@/utils/status.js';
+import { teacherCourseStatus } from '@/constant/course.js';
 export default {
   data() {
     return {
@@ -155,6 +169,9 @@ export default {
           },
         ],
       },
+      page: 1, // 页数
+      total: 0, // 总数
+      activeCourseType: '-1',
       myTeachList: [], //我的授课的全部课程
       courseForm: {}, //课程的详细信息
       showScore: false, //是否显示成绩列表
@@ -182,13 +199,24 @@ export default {
     };
   },
   created() {
-    myTeaching().then((res) => {
-      this.myTeachList = courseStatusConvert(res.data).map((item) => {
-        return { ...item, picture: item.picture.split(',')[1] };
-      });
-    });
+    this.getCourseData();
   },
   methods: {
+    // 选择课程类型变化
+    courseTypeChange() {
+      console.log(1, this.activeCourseType, typeof this.activeCourseType);
+      this.page = 1;
+      this.getCourseData();
+    },
+    async getCourseData() {
+      const data = { page: this.page };
+      this.activeCourseType !== '-1' && Object.assign(data, { status: this.activeCourseType });
+      const res = await myTeaching(data);
+      this.total = res.count;
+      this.myTeachList = res.data.map((item) => {
+        return { ...item, picture: item.picture.split(',')[1] };
+      });
+    },
     ...adapter.methods,
     // 编辑课程
     editCourseClick(item) {
@@ -198,7 +226,6 @@ export default {
     },
     // 查看课程详情
     lookDetails(e) {
-      console.log(e);
       localStorage.setItem('hostName', e.hostName); //登录名
       localStorage.setItem('hostPwd', e.hostPwd); //登录密码
       this.$router.push({
@@ -219,6 +246,9 @@ export default {
     },
     handleClose() {
       this.showScoreVisible = false;
+    },
+    courseStatusConvert(status) {
+      return teacherCourseStatus.get(status);
     },
   },
 };
@@ -309,5 +339,31 @@ export default {
 }
 .myTeaching .el-table .cell {
   text-align: center !important;
+}
+
+/* tab切换栏 */
+.myTeaching .el-tabs__item {
+  background-color: #b2d5f1 !important;
+  color: #000 !important;
+  padding: 0 20px !important;
+  border-right: 1px solid #fff;
+}
+.myTeaching .el-tabs__item.is-active {
+  background-color: #409eff !important;
+  color: #fff !important;
+}
+.myTeaching .el-button--primary {
+  background-color: #4faff0;
+  border-color: #4faff0;
+}
+.myTeaching .el-table .el-table__cell {
+  text-align: center;
+}
+.myTeaching .el-table .cell {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* 指定要显示的行数 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

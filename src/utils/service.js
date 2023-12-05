@@ -35,7 +35,9 @@ service.interceptors.response.use(
         sessionStorage.clear();
         localStorage.clear();
         store.commit('setLoading', false);
-        setTimeout( function (){window.location.href = '/'},2000)
+        setTimeout(function () {
+          window.location.href = '/';
+        }, 2000);
       }
       store.commit('setLoading', false);
       return Promise.reject(response.data);

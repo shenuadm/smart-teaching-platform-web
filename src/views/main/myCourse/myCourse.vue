@@ -1,6 +1,7 @@
 <template>
   <div class="content global-container" v-loading="$store.state.isLoading">
-    <ul class="list">
+    <div class="person-title">我的课程</div>
+    <ul class="list mt-20">
       <li class="list-item zh-pd-10 zh-mgb-20" v-for="item in courseList" :key="item.id">
         <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
         <div class="list-item-info zh-mgl-20 flex">
@@ -36,18 +37,14 @@
         </div>
       </li>
     </ul>
-    <div class="block">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5, 10, 20]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="courseList.length"
-      >
-      </el-pagination>
-    </div>
+    <el-pagination
+      @current-change="getCourse"
+      :current-page="page"
+      :page-size="10"
+      layout="total, prev, pager, next, jumper"
+      :total="total"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -61,8 +58,8 @@ export default {
   data() {
     return {
       courseList: [], //课程列表
-      currentPage: 1, //当前页
-      pageSize: 5, //每页的条数
+      page: 1, //当前页
+      total: 0,
     };
   },
   mounted() {
@@ -128,10 +125,6 @@ export default {
       return dayjs(date).format('YYYY年MM月DD日HH时mm分ss秒');
     },
     // 分页
-    // pageSize 改变时会触发
-    handleSizeChange(val) {
-      this.pageSize = val;
-    },
     // currentPage 改变时会触发
     handleCurrentChange(val) {
       this.currentPage = val;
@@ -145,7 +138,6 @@ export default {
   background-color: #f8f6f6 !important;
 }
 .list {
-  margin: 0 !important;
   padding: 0 !important;
 }
 .course-info {
@@ -180,5 +172,15 @@ export default {
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
+}
+
+.person-title {
+  height: 60px;
+  line-height: 60px;
+  padding: 0 50px;
+  text-align: left;
+  font-size: 20px;
+  border-bottom: 2px solid #efefef;
+  background-color: #fff;
 }
 </style>

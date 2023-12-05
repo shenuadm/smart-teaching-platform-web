@@ -49,4 +49,10 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+/* element表格组件单行超出部门省略号显示 */
+.el-table__cell .cell {
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
 </style>
