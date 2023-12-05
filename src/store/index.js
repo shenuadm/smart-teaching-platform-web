@@ -13,6 +13,10 @@ export default new Vuex.Store({
   },
   getters: {},
   mutations: {
+    getUsername(state) {
+      const username = sessionStorage.getItem('username');
+      state.username = username;
+    },
     updateUsername(state, newusername) {
       state.username = newusername;
     },

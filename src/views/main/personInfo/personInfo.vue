@@ -103,9 +103,9 @@ export default {
             password: this.ruleForm.newpwd,
             account: this.ruleForm.nickname,
           };
-          const res = await savePersonInfo(data);
+          await savePersonInfo(data);
           await this.getUserInfo();
-          this.$message.success(res.msg);
+          this.$message.success('修改名称成功');
           //   console.log('校验成功');
         }
       });
@@ -113,6 +113,8 @@ export default {
     // 获取用户信息
     async getUserInfo() {
       const res = await getPersonInfo();
+      sessionStorage.setItem('username', res.data.username);
+      this.$store.commit('getUsername');
       this.personMsg = res.data;
       this.ruleForm.name = res.data.account;
       this.ruleForm.nickname = res.data.username;
