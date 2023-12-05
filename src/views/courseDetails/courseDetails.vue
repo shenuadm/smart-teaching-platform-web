@@ -159,7 +159,7 @@
                 <el-table-column prop="updateTime" label="提交时间"> </el-table-column>
                 <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
                 <el-table-column prop="expResult" label="实验结果" width="120"> </el-table-column>
-                <el-table-column prop="stuGrade" label="学生成绩"> </el-table-column>
+                <el-table-column prop="stuGrade" label="成绩"> </el-table-column>
                 <el-table-column prop="comment" label="评语" width="200"> </el-table-column>
                 <el-table-column prop="createTime" label="创建时间"> </el-table-column>
               </el-table>
@@ -354,7 +354,7 @@ export default {
           }
           if (this.roleId === '3') {
             // 学生的实验成绩
-            getStudentScore(this.teacherId).then((res) => {
+            getStudentScore(this.studentCourseId).then((res) => {
               this.tableData = res.data;
             });
           }
@@ -406,7 +406,7 @@ export default {
     },
     // 提交实验报告
     submit() {
-      this.$confirm('实验只能提交一次，不可重复提交，确定提交吗？', '提交实验', {
+      this.$confirm('实验报告提交后不能修改，确定提交吗？', '提交实验', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

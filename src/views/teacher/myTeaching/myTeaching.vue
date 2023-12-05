@@ -14,7 +14,7 @@
           <div class="my-teaching-btn">
             <el-button type="primary" @click="editCourseClick(item)">编辑课程</el-button>
             <el-button type="primary" @click="lookDetails(item)">查看详情</el-button>
-            <el-button type="primary" @click="lookScore(item)">查看成绩</el-button>
+<!--            <el-button type="primary" @click="lookScore(item)">查看成绩</el-button>-->
           </div>
         </div>
         <!-- 学生成绩列表 -->

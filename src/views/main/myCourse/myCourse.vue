@@ -108,13 +108,13 @@ export default {
       };
       await ClickRevokeCourse(data);
       await this.getCourse();
-      this.$message.success('课程撤销成功');
+      this.$message.success('课程撤销成功！');
     },
     // 恢复选课
     async recoverCourse(id) {
       await recoverCourseService(id);
       await this.getCourse();
-      this.$message.success('重新选课成功');
+      this.$message.success('恢复选课成功！');
     },
     // 课程状态数据转换
     courseStatusConvent(status) {
