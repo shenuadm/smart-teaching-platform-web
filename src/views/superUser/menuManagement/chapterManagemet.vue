@@ -426,6 +426,14 @@ export default {
 .chapter-dialog-form .el-form-item__content {
   margin-left: 0 !important;
 }
+/* 文件上传表单左侧标题不缩小 */
+.upload-file .el-form-item__label {
+  flex-shrink: 0;
+}
+/* 限制文件上传的文件名显示长度 */
+.upload-file .el-upload-list__item {
+  width: 20vw;
+}
 </style>
 <style scoped>
 .pdf-view {
