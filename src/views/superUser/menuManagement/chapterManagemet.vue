@@ -47,6 +47,7 @@
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="closeAddChapter"
+      :close-on-click-modal="false"
     >
       <el-form :model="revise" :rules="rules" ref="formRule">
         <el-form-item label="章节标题" prop="name">
@@ -101,7 +102,14 @@
           </el-input>
         </el-form-item>
         <el-form-item :label="isAddJoint ? '上传课件' : '修改课件'" class="upload-file">
-          <el-upload action="" :auto-upload="false" :file-list="fileList" :limit="1" :on-change="handlePreview">
+          <el-upload
+            action=""
+            class="teststst"
+            :auto-upload="false"
+            :file-list="fileList"
+            :limit="1"
+            :on-change="handlePreview"
+          >
             <el-button size="mini" type="primary" plain v-if="fileList.length === 0">{{
               isAddJoint ? '点击上传' : '点击修改'
             }}</el-button>

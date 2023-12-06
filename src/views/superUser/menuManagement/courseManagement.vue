@@ -60,6 +60,7 @@
       center
       :before-close="cancel"
       :title="revise.id ? '修改课程' : '添加课程'"
+      :close-on-click-modal="false"
     >
       <el-form :model="revise" :rules="rules" ref="ruleForm" v-loading="$store.state.isLoading">
         <el-form-item label="课程名称" prop="name">

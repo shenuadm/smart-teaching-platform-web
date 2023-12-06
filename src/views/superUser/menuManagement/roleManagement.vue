@@ -31,7 +31,12 @@
       </el-table>
     </div>
     <!-- 添加角色 -->
-    <el-dialog :title="isAddRole ? '添加角色' : '修改角色'" :visible.sync="aeditVisible" :before-close="cancal">
+    <el-dialog
+      :title="isAddRole ? '添加角色' : '修改角色'"
+      :visible.sync="aeditVisible"
+      :before-close="cancal"
+      :close-on-click-modal="false"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" v-loading="$store.state.isLoading">
         <el-form-item label="角色标识" prop="rolename">
           <el-input v-model="form.rolename" :disabled="form.roleid < 5"></el-input>
@@ -50,7 +55,12 @@
     </el-dialog>
     <!-- 授权树 -->
     <div class="empowerTree">
-      <el-dialog title="授权" :visible.sync="empowerVisible" :before-close="cancelEmpower">
+      <el-dialog
+        title="授权"
+        :visible.sync="empowerVisible"
+        :before-close="cancelEmpower"
+        :close-on-click-modal="false"
+      >
         <el-tree
           :data="treeData"
           ref="tree"

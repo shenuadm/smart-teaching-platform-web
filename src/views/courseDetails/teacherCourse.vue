@@ -180,7 +180,7 @@
       :close-on-click-modal="false"
     >
       <div class="form" style="text-align: initial">
-        <el-form ref="stuForm" :rules="editRule" :model="stuForm" label-width="80px">
+        <el-form ref="stuForm" :rules="editRule" :model="stuForm" label-width="80px" v-loading="$store.state.isLoading">
           <el-form-item label="学生姓名">
             <el-input v-model="stuForm.username" disabled></el-input>
           </el-form-item>
@@ -191,7 +191,7 @@
             <el-input type="number" v-model.number="stuForm.score"></el-input>
           </el-form-item>
           <el-form-item label="评语" prop="comment">
-            <el-input type="textarea" v-model="stuForm.comment" :rows="6"></el-input>
+            <el-input type="textarea" v-model="stuForm.comment" :rows="6" maxlength="200" show-word-limit></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -237,7 +237,7 @@ export default {
       vmsData: [], // 学生实验机列表
       pageShow: true,
       editRule: {
-        comment: [{ required: true, message: '实验评语不能为空', trigger: 'blur' }],
+        comment: [{ min: 0, max: 200, message: '实验评语长度最多为200个文字', trigger: 'blur' }],
         score: [{ required: true, message: '实验成绩不能为空', trigger: 'blur' }],
       },
     };
@@ -337,7 +337,6 @@ export default {
     },
     // 确定编辑
     determine() {
-      // this.stuForm = this.stuForm;
       this.$refs['stuForm'].validate(async (validate) => {
         if (validate) {
           await teachEditExperimentService(this.stuForm);
@@ -348,10 +347,6 @@ export default {
       });
     },
     // 分页
-    // pageSize 改变时会触发
-    handleSizeChange(val) {
-      this.pageSize = val;
-    },
     // currentPage 改变时会触发
     handleCurrentChange(val) {
       this.currentPage = val;
