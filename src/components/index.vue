@@ -90,6 +90,9 @@ export default {
 .heder-container {
   height: 60px;
 }
+.header {
+  z-index: 9999;
+}
 .heder-container {
   display: flex;
   justify-content: space-between;

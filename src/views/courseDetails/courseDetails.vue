@@ -122,20 +122,18 @@
                   </ul>
                 </div>
                 <div class="experiment-report-operate">
-                  <el-button type="primary" @click="saveContent" ref="btnStatus">保存</el-button>
-                  <el-button type="primary" @click="submit" ref="btnStatus">提交</el-button>
+                  <el-button :disabled="submitStatus" :type="submitStatus ? 'info' : 'primary'" @click="saveContent"
+                    >保存</el-button
+                  >
+                  <el-button :disabled="submitStatus" :type="submitStatus ? 'info' : 'primary'" @click="submit"
+                    >提交</el-button
+                  >
                 </div>
               </div>
             </el-tab-pane>
             <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
               <!-- 学生端 -->
-              <el-table
-                :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-                height="auto"
-                border
-                v-if="roleId === '3'"
-                style="width: 100%"
-              >
+              <el-table :data="tableData" height="auto" border style="width: 100%">
                 <el-table-column prop="updateTime" label="提交时间"> </el-table-column>
                 <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
                 <el-table-column prop="expResult" label="实验结果" width="120"> </el-table-column>
@@ -145,13 +143,11 @@
               </el-table>
               <div class="block zh-mgt-20">
                 <el-pagination
-                  @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
-                  :page-sizes="[5, 10, 20]"
                   :page-size="pageSize"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="tableData.length"
+                  layout="total, prev, pager, next, jumper"
+                  :total="total"
                 >
                 </el-pagination>
               </div>
@@ -203,6 +199,7 @@ export default {
       pageSize: 5, //每页的条数
       submitStatus: '', //学生实验提交状态
       studentScore: '', //学生实验成绩
+      total: 1,
     };
   },
   created() {
@@ -278,8 +275,6 @@ export default {
         //     //学生已提交实验
         //     this.submitStatus = true;
         //     this.studentScore = res.experimentReport.score;
-        //     this.$refs.btnStatus.disabled = true;
-        //     this.$refs.btnStatus.type = '';
         //   }
         //   // 实验结果
         //   if (res.experimentReport.result !== null) {
@@ -307,6 +302,7 @@ export default {
           // this.$refs.downLoadTemplate.href = data.fileUrl;
           // 学生的实验成绩
           getStudentScore(this.teacherId).then((res) => {
+            console.log(res, '实验成绩');
             this.tableData = res.data;
           });
         }
@@ -319,12 +315,10 @@ export default {
     async getExperimentData() {
       const res = await getExperimentStudentData(this.experimentId, this.studentCourseId);
       console.log(res, 'res111111111');
-      if (res.experimentReport.type === 2 && res.experimentReport.status != 0) {
+      if (res.experimentReport.type === 2 && res.experimentReport.status !== 0) {
         //学生已提交实验
         this.submitStatus = true;
         this.studentScore = res.experimentReport.score;
-        this.$refs.btnStatus.disabled = true;
-        this.$refs.btnStatus.type = '';
       }
       // 实验结果
       if (res.experimentReport.result !== null) {
@@ -370,8 +364,7 @@ export default {
         experimentContent: this.richTextResult, //实验结果
         planContent: planContent, //实验步骤
       };
-      saveExperimentReport(data).then((res) => {
-        console.log(res);
+      saveExperimentReport(data).then(() => {
         this.$message({
           message: '保存成功',
           type: 'success',
@@ -392,7 +385,7 @@ export default {
             this.richTextPlans.push(item.html);
           });
           const planContent = this.richTextPlans;
-          let data = {
+          const data = {
             experimentId: this.experimentId, //实验id
             teacherCourseId: this.teacherId, //课程id
             experimentContent: this.richTextResult, //实验结果
@@ -401,10 +394,8 @@ export default {
           };
           saveExperimentReport(data).then((res) => {
             console.log(res);
-            this.$message({
-              type: 'success',
-              message: '提交成功!',
-            });
+            this.$message.success('提交成功');
+            this.getExperimentData();
           });
         })
         .catch(() => {
