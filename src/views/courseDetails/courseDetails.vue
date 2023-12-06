@@ -296,12 +296,12 @@ export default {
         //   }
         // });
         await this.getExperimentData();
-        if (this.teacherId) {
+        if (this.studentCourseId) {
           // 下载实验模版
           // console.log(this.$refs.downLoadTemplate);
           // this.$refs.downLoadTemplate.href = data.fileUrl;
-          // 学生的实验成绩
-          getStudentScore(this.teacherId).then((res) => {
+          // 查询学生的实验成绩列表
+          getStudentScore(this.studentCourseId).then((res) => {
             console.log(res, '实验成绩');
             this.tableData = res.data;
           });
