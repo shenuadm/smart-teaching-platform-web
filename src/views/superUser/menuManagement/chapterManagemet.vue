@@ -7,26 +7,26 @@
     <!-- 表格数据 -->
     <el-table
       border
-      v-loading="loadingGlobal"
+      v-loading="$store.state.isLoading"
       :data="tableData"
       style="width: 100%; margin-bottom: 20px"
       row-key="id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
     >
-      <el-table-column prop="name" label="章节标题" width="200" show-overflow-tooltip>
+      <el-table-column prop="name" label="章节标题" width="200">
         <template slot-scope="scope">
           <div class="ellipsis">{{ scope.row.order }}：{{ scope.row.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="classHour" label="课时" width="50" show-overflow-tooltip> </el-table-column>
-      <el-table-column prop="sort" label="排序" width="50" show-overflow-tooltip> </el-table-column>
-      <el-table-column prop="fileUrl" label="课件" width="100" show-overflow-tooltip>
+      <el-table-column prop="classHour" label="课时" width="50"> </el-table-column>
+      <el-table-column prop="sort" label="排序" width="50"> </el-table-column>
+      <el-table-column prop="fileUrl" label="课件" width="100">
         <template slot-scope="scope">
           <!-- <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a> -->
           <a href="javascript:void(0);" @click="goPdf(scope.row.fileUrl)" v-if="scope.row.fileUrl">查看课件</a>
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述" show-overflow-tooltip> </el-table-column>
+      <el-table-column prop="description" label="描述"> </el-table-column>
       <el-table-column label="操作" width="350">
         <template slot-scope="scope">
           <el-button v-if="!scope.row.pid" type="primary" @click="addchapterji(scope.row.id)" size="mini"
@@ -49,15 +49,15 @@
       :before-close="closeAddChapter"
       :close-on-click-modal="false"
     >
-      <el-form :model="revise" :rules="rules" ref="formRule">
+      <el-form :model="revise" :rules="rules" ref="formRule" v-loading="$store.state.isLoading">
         <el-form-item label="章节标题" prop="name">
           <el-input placeholder="请输入章节标题" v-model="revise.name"> </el-input>
         </el-form-item>
         <el-form-item label="章节课时" prop="classHour">
-          <el-input placeholder="请输入课时" v-model="revise.classHour" type="number"> </el-input>
+          <el-input placeholder="请输入课时" v-model.number="revise.classHour" type="number"> </el-input>
         </el-form-item>
         <el-form-item label="章节排序" prop="sort">
-          <el-input placeholder="请输入序号" v-model="revise.sort" type="number"> </el-input>
+          <el-input placeholder="请输入序号" v-model.number="revise.sort" type="number"> </el-input>
         </el-form-item>
         <el-form-item label="章节描述" prop="description">
           <el-input
@@ -87,10 +87,10 @@
           <el-input placeholder="请输入章节标题" v-model="revise.name"></el-input>
         </el-form-item>
         <el-form-item label="章节课时" prop="classHour">
-          <el-input placeholder="请输入课时" v-model="revise.classHour"> </el-input>
+          <el-input placeholder="请输入课时" type="number" v-model.number="revise.classHour"> </el-input>
         </el-form-item>
         <el-form-item label="章节排序" prop="sort">
-          <el-input placeholder="请输入序号" v-model="revise.sort"> </el-input>
+          <el-input placeholder="请输入序号" type="number" v-model.number="revise.sort"> </el-input>
         </el-form-item>
         <el-form-item label="章节描述" prop="description">
           <el-input
@@ -433,6 +433,9 @@ export default {
 /* 限制文件上传的文件名显示长度 */
 .upload-file .el-upload-list__item {
   width: 20vw;
+}
+.chapter-managemet .cell {
+  display: flex;
 }
 </style>
 <style scoped>

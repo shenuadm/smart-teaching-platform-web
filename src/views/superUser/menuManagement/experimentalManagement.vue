@@ -1,8 +1,8 @@
 <template>
   <div class="experimentManagement">
     <div class="header">
-      <div class="title">课程名称:</div>
-      <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
+      <div class="title">实验标题:</div>
+      <el-input v-model="input" id="inputh" placeholder="请输入实验标题"></el-input>
       <el-button size="small" type="primary" @click="search">搜索</el-button>
       <el-button size="small" type="primary" @click="resetting">重置</el-button>
       <el-button size="small" type="primary" @click="addexper">添加实验</el-button>

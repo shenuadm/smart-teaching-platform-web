@@ -2,18 +2,17 @@
   <div class="Step">
     <div class="header">
       <div class="title">步骤名称:</div>
-      <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
-      <button class="but" @click="search">搜索</button>
-      <button class="but" @click="resetting">重置</button>
-      <el-button type="primary" class="step" @click="addstep"
-        >添加步骤</el-button
-      >
-      <el-button type="primary" class="step" @click="returnstep"
-        >返回实验报告</el-button
-      >
-      <el-button type="danger" class="step" @click="delstep"
-        >批量删除</el-button
-      >
+      <el-input
+        style="display: initial; width: initial"
+        v-model="input"
+        id="inputh"
+        placeholder="请输入步骤名称"
+      ></el-input>
+      <el-button type="primary" class="step" @click="search">搜索</el-button>
+      <el-button type="primary" class="step" @click="resetting">重置</el-button>
+      <el-button type="primary" class="step" @click="addstep">添加步骤</el-button>
+      <el-button type="primary" class="step" @click="returnstep">返回实验报告</el-button>
+      <el-button type="danger" class="step" @click="delstep">批量删除</el-button>
     </div>
     <el-table
       height="410"
@@ -27,17 +26,12 @@
       border:true
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="步骤名称" width="550">
-      </el-table-column>
+      <el-table-column prop="name" label="步骤名称" width="550"> </el-table-column>
       <el-table-column prop="sort" label="顺序" width="100"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="editstep(scope.row)"
-            >编辑</el-button
-          >
-          <el-button type="danger" size="small" @click="del(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button type="primary" size="small" @click="editstep(scope.row)">编辑</el-button>
+          <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -45,9 +39,7 @@
     <el-table
       height="410"
       ref="multipleTable"
-      :data="
-        stepdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="stepdata.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -55,25 +47,14 @@
       v-if="exdialogtabledata"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="步骤名称" width="140">
-      </el-table-column>
+      <el-table-column prop="name" label="步骤名称" width="140"> </el-table-column>
 
       <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
-      <el-table-column
-        prop="content"
-        label="步骤内容"
-        width="250"
-        show-overflow-tooltip
-      >
-      </el-table-column>
+      <el-table-column prop="content" label="步骤内容" width="250" show-overflow-tooltip> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="editstep(scope.row)"
-            >编辑</el-button
-          >
-          <el-button type="danger" size="small" @click="del(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button type="primary" size="small" @click="editstep(scope.row)">编辑</el-button>
+          <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -85,73 +66,38 @@
       <template v-else>
         <span slot="title">修改实验步骤</span>
       </template>
-      <el-input
-        class="inputw"
-        placeholder="请输入实验名称"
-        v-model="revise.name"
-      >
-        <template slot="prepend"
-          >步骤名称<span style="color: red">*</span></template
-        >
+      <el-form :model="revise" class="step-form" label-width="100px">
+        <el-form-item label="步骤名称">
+          <el-input v-model="revise.name" placeholder="请输入实验步骤名称"></el-input>
+        </el-form-item>
+        <el-form-item label="步骤顺序">
+          <el-input type="number" v-model.number="revise.sort" placeholder="请输入实验顺序"></el-input>
+        </el-form-item>
+        <el-form-item label="步骤内容">
+          <Editor ref="editor"></Editor>
+        </el-form-item>
+      </el-form>
+      <!-- <el-input class="inputw" placeholder="请输入实验名称" v-model="revise.name">
+        <template slot="prepend">步骤名称<span style="color: red">*</span></template>
       </el-input>
-      <el-input
-        class="inputw"
-        placeholder="请输入实验顺序"
-        v-model="revise.sort"
-      >
-        <template slot="prepend"
-          >步骤顺序<span style="color: red">*</span></template
-        >
-      </el-input>
-      <div class="stepcontent">步骤内容</div>
+      <el-input class="inputw" placeholder="请输入实验顺序" v-model="revise.sort">
+        <template slot="prepend">步骤顺序<span style="color: red">*</span></template>
+      </el-input> -->
+      <!-- <div class="stepcontent">步骤内容</div>
       <div class="editor">
         <Editor ref="editor" :style="{ textAlign: 'left' }"></Editor>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
         <el-button @click="serve">保 存</el-button>
-      </span>
-      <!-- <el-form label-position:left label-width="80px">
-        <el-form-item label="步骤名称" hide-required-asterisk:true>
-          <el-input
-            class="inputw"
-            placeholder="请输入实验名称"
-            v-model="revise.name"
-          >
-            <span style="color: red">*</span>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="步骤顺序">
-          <el-input
-            class="inputw"
-            placeholder="请输入实验顺序"
-            v-model="revise.sort"
-          >
-            <span style="color: red">*</span>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="步骤内容">
-          <Editor
-            ref="editor"
-            :style="{ textAlign: 'left', width: '445px', marginLeft: '8px' }"
-          ></Editor>
-        </el-form-item>
-      </el-form> -->
+      </span> -->
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {
-  step,
-  addstep,
-  updatestep,
-  mdelstep,
-  delstep,
-  getdetail,
-  experplan,
-} from "@/utils/api";
-import editor from "../../../components/editor.vue";
+import { step, addstep, updatestep, mdelstep, delstep, getdetail, experplan } from '@/utils/api';
+import editor from '../../../components/editor.vue';
 export default {
   components: { editor },
   data() {
@@ -164,20 +110,20 @@ export default {
       detailsData: [],
       currentPage: 1,
       pageSize: 5,
-      input: "",
+      input: '',
       dialogtabledata: true,
       exdialogtabledata: false,
       dialogVisible: false,
       dialogTableVisible: false,
-      step: "",
-      imgSrc: "",
+      step: '',
+      imgSrc: '',
       id: 0,
       revise: {
-        description: "",
-        name: "",
-        content: "",
-        sort: "",
-        imageStorePath: "",
+        description: '',
+        name: '',
+        content: '',
+        sort: '',
+        imageStorePath: '',
       },
     };
   },
@@ -203,7 +149,7 @@ export default {
         };
         addstep(data).then((res) => {
           this.dialogVisible = false;
-          this.step = "";
+          this.step = '';
           this.break();
         });
       } else {
@@ -217,7 +163,7 @@ export default {
         };
         updatestep(data).then((res) => {
           this.dialogVisible = false;
-          this.step = "";
+          this.step = '';
           this.break();
         });
       }
@@ -225,12 +171,12 @@ export default {
     //取消
     cancel() {
       this.dialogVisible = false;
-      this.revise.name = "";
-      this.revise.description = "";
-      this.revise.content = "";
-      this.revise.sort = "";
-      this.revise.imageStorePath = "";
-      this.$refs.editor.html = "";
+      this.revise.name = '';
+      this.revise.description = '';
+      this.revise.content = '';
+      this.revise.sort = '';
+      this.revise.imageStorePath = '';
+      this.$refs.editor.html = '';
     },
     //返回实验报告
     returnstep() {
@@ -270,22 +216,22 @@ export default {
     resetting() {
       this.dialogtabledata = true;
       this.exdialogtabledata = false;
-      this.input = "";
+      this.input = '';
       this.stepdata = [];
     },
     //删除
     del(e) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           delstep(e).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -293,18 +239,18 @@ export default {
     },
     //批量删除
     delstep() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           let data = this.arr;
           mdelstep(data).then((res) => {
             this.break();
             this.$message({
-              type: "success",
-              message: "删除成功!",
+              type: 'success',
+              message: '删除成功!',
             });
           });
         })
@@ -351,18 +297,30 @@ export default {
 </script>
 
 <style scoped>
-.Step .header {
+/* .Step .header {
   position: relative;
   width: 100%;
   height: 30px;
   display: flex;
   top: -10px;
-}
-.Step .title {
+} */
+
+/* .Step .title {
   width: 80px;
   line-height: 30px;
+} */
+.header {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  display: flex;
+  top: -10px;
+  align-items: center;
 }
-.Step .but {
+.title {
+  width: 110px;
+}
+/* .Step .but {
   position: relative;
   text-align: center;
   line-height: 30px;
@@ -372,19 +330,12 @@ export default {
   margin-left: 5px;
   border-radius: 5px;
   color: white;
-}
+} */
 .Step .step {
   position: relative;
   margin-left: 5px;
   text-align: center;
   line-height: 7px;
-}
-.Step .inputw {
-  width: 445px !important;
-  margin-top: 10px;
-}
-.Step .el-input {
-  width: 150px;
 }
 .Step .dec {
   width: 105px;
@@ -425,40 +376,11 @@ export default {
 }
 </style>
 <style>
-.Step .edit > p > img {
-  width: 350px !important;
-  height: 100px !important;
+/* 修改节弹框中表单项左侧间隙 */
+.step-form .el-form-item__content {
+  margin-left: 0 !important;
 }
 .Step #inputh {
   height: 30px !important;
-  width: 150px !important;
-}
-.Step #inputwd {
-  width: 200px !important;
-  margin-left: 155px;
-  margin-top: -59px;
-  height: 42px !important;
-}
-.Step .el-input-group__prepend {
-  width: 55px;
-}
-.Step .img {
-  width: 100px;
-  height: 80px;
-  margin-left: 30px;
-}
-.Step .custom-file-button {
-  position: absolute;
-  top: 292px;
-  left: 73px;
-  width: 103px;
-  height: 40px;
-  border: 1px solid #dcdfe6;
-  color: #909399;
-}
-
-.Step .pimg > p > img {
-  width: 100% !important;
-  height: 350px !important;
 }
 </style>

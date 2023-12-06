@@ -24,7 +24,7 @@
           <div>授课地点：{{ courseObj.address }}</div>
           <div>
             <el-button type="primary" size="mini" @click="queryVms">{{
-              pageShow ? '查看学生虚拟机' : '查看课程章节'
+              pageShow ? '查看虚拟机' : '查看课程章节'
             }}</el-button>
           </div>
         </div>
@@ -89,7 +89,7 @@
     <!-- 学生虚拟机列表 -->
     <div v-else class="vms-container" v-loading="$store.state.isLoading">
       <div class="vms-title">
-        <el-button type="primary" size="mini" @click="updateStudentVms">更新学生虚拟机</el-button>
+        <el-button type="primary" size="mini" @click="updateStudentVms">更新虚拟机</el-button>
         <i class="el-icon-info ml-20"></i>
         <span style="font-size: 0.75rem; color: grey">如果学生没有分配虚拟机，请点击该按钮更新学生分配机。</span>
       </div>
@@ -100,11 +100,11 @@
             <div>{{ item.userName }}</div>
           </div>
           <div>
-            <div>虚拟机IP：</div>
+            <div>虚拟机名称：</div>
             <div>{{ item.host }}</div>
           </div>
           <div>
-            <div>虚拟机用户名：</div>
+            <div>虚拟机账户：</div>
             <div>{{ item.hostName }}</div>
           </div>
         </div>
@@ -371,7 +371,7 @@ export default {
 }
 .vms-list {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   column-gap: 20px;
   row-gap: 20px;
 }

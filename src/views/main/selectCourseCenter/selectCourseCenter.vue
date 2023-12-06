@@ -49,6 +49,7 @@ export default {
     },
     async getData() {
       const res = await getSelectCourse();
+      console.log(res);
       this.chooseCourse = res.data.map((item) => {
         if (item.picture !== null) {
           var picture = item.picture.split(',')[1];

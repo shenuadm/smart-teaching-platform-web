@@ -1,8 +1,8 @@
 <template>
   <div class="laboratory-report">
     <div class="header">
-      <div class="title">实验名称:</div>
-      <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
+      <div class="title">实验报告标题:</div>
+      <el-input v-model="input" id="inputh" placeholder="请输入实验报告标题"></el-input>
       <button class="but" @click="search">搜索</button>
       <button class="but" @click="resetting">重置</button>
       <el-button type="primary" class="exper" @click="addreport">添加实验报告</el-button>
@@ -21,7 +21,7 @@
       v-loading="$store.state.isLoading"
     >
       <el-table-column align="center" type="selection" width="50"> </el-table-column>
-      <el-table-column align="center" prop="title" label="实验标题" width="150"> </el-table-column>
+      <el-table-column align="center" prop="title" label="实验报告标题" width="150"> </el-table-column>
       <el-table-column align="center" prop="classHour" label="课时" width="80"> </el-table-column>
       <el-table-column prop="description" label="实验描述" width="300" align="center"> </el-table-column>
       <!-- <el-table-column prop="fileUrl" label="实验课件" width="200"  align="center">
@@ -280,7 +280,7 @@ export default {
   top: -10px;
 }
 .title {
-  width: 80px;
+  width: 120px;
   line-height: 30px;
 }
 .but {
@@ -306,7 +306,7 @@ export default {
   margin-top: 10px;
 }
 .el-input {
-  width: 150px;
+  width: 200px;
 }
 .dec {
   position: relative;
@@ -400,7 +400,7 @@ export default {
 }
 .laboratory-report #inputh {
   height: 30px !important;
-  width: 150px !important;
+  width: 200px !important;
 }
 .laboratory-report #inputwd {
   position: relative;
