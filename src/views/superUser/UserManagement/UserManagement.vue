@@ -9,6 +9,8 @@
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="add">添加用户</el-button>
       <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
+      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
+      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
     </div>
     <el-table
       ref="multipleTable"
@@ -18,43 +20,47 @@
       v-loading="$store.state.isLoading"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      v-if="dialogtabledata"
       border
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="account" label="账号" width="120"></el-table-column>
       <el-table-column prop="username" label="姓名" width="160"></el-table-column>
-      <el-table-column prop="roleName" label="角色" width="120" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="roleName" label="角色" width="120"></el-table-column>
       <el-table-column prop="active" label="是否激活" width="80">
         <template slot-scope="scope">
           <div v-if="scope.row.active === 0" class="user">激活</div>
           <div v-else-if="scope.row.active === 1" class="forbidden">未激活</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="160"> </el-table-column>
-      <el-table-column prop="lastLoginTime" label="最近登录时间" width="160" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="lastLoginIp" label="最近登录IP" width="150" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="createTime" label="专业" width="200"> </el-table-column>
+      <el-table-column prop="lastLoginTime" label="年级" width="100"></el-table-column>
+      <el-table-column prop="lastLoginIp" label="班级" width="150"></el-table-column>
       <el-table-column label="操作" width="300">
-        <template slot-scope="scope" v-if="scope.row.roleName !== '超级管理员'">
-          <el-button type="primary" size="mini" @click="reset(scope.row.userid)">重置密码</el-button>
-          <el-button type="primary" size="mini" @click="reviseuser(scope.row)">编辑</el-button>
-          <el-button type="danger" size="mini" @click="delUser(scope.row.userid)">删除</el-button>
+        <template slot-scope="{ row }" v-if="row.roleName !== '超级管理员'">
+          <el-button type="primary" size="mini" @click="reset(row)">重置密码</el-button>
+          <el-button type="primary" size="mini" @click="reviseuser(row)">编辑</el-button>
+          <el-button type="danger" size="mini" @click="deleteUser(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div class="block">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-size="pageSize"
+        @current-change="getData"
+        :current-page.sync="page"
+        :page-size="10"
         layout="total, prev, pager, next, jumper"
-        :total="this.count"
+        :total="count"
       >
       </el-pagination>
     </div>
     <!-- 新增用户-->
-    <el-dialog title="请输入用户信息" :visible.sync="dialogVisible" width="30%">
+    <el-dialog
+      :close-on-click-modal="false"
+      :title="(revise.userid ? '编辑' : '新增') + '用户'"
+      :visible.sync="dialogVisible"
+      :before-close="cancel"
+      width="30%"
+    >
       <el-form ref="form" :model="revise" label-width="80px" :rules="rules">
         <el-form-item label="账号" prop="account">
           <el-input v-model="revise.account" placeholder="请输入用户账号"></el-input>
@@ -69,40 +75,14 @@
         </el-form-item>
         <el-form-item label="是否激活" prop="active" class="active">
           <el-radio-group v-model="revise.active">
-            <el-radio label="0">激活</el-radio>
-            <el-radio label="1">不激活</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel('form')">取 消</el-button>
-        <el-button type="primary" @click="serve">确 定</el-button>
-      </span>
-    </el-dialog>
-    <!-- 修改 -->
-    <el-dialog title="请输入用户信息" :visible.sync="reviseUser" width="30%">
-      <el-form ref="form" :model="reviseOther" label-width="80px" :rules="rules">
-        <el-form-item label="账号" prop="account">
-          <el-input v-model="reviseOther.account" placeholder="请输入用户账号"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" prop="username">
-          <el-input v-model="reviseOther.username" placeholder="请输入用户姓名"></el-input>
-        </el-form-item>
-        <el-form-item label="角色" prop="roleId" class="roles">
-          <el-select v-model="reviseOther.roleId" placeholder="请选择角色" @change="change">
-            <el-option v-for="item in userRole" :key="item[0]" :label="item[1]" :value="item[0]"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="是否激活" prop="active" class="active">
-          <el-radio-group v-model="reviseOther.active">
             <el-radio :label="0">激活</el-radio>
             <el-radio :label="1">不激活</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="reviseNo('form')">取 消</el-button>
-        <el-button type="primary" @click="reviseOk">确 定</el-button>
+      <span slot="footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="serve">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -114,39 +94,25 @@ import { delUsers, addUser, getUserData, resetPass, delUser, reviseUser } from '
 export default {
   data() {
     return {
-      radio: '0',
-      dialogtabledata: true,
-      dialogtable: false,
-      dialogVisible: false,
-      resetPassword: false,
-      currentPage: 1,
-      pageSize: 10,
-      jumpPage: '',
+      dialogVisible: false, // 弹框状态
+      page: 1,
       count: 0,
       userRole,
       serch: {
         account: '',
         username: '',
-      },
-      revise: {
+      }, // 搜索显示内容
+      searchInfo: {}, // 实际搜索信息
+      revise: {},
+      defaultData: {
         account: '',
         username: '',
         roleId: 3,
-        active: '0',
+        active: 0,
+        userid: '',
       },
-      reviseOther: {
-        account: '',
-        username: '',
-        roleId: '',
-        roleName: '',
-        active: '',
-      },
-      searchdata: [],
       tableData: [],
       multipleSelection: [],
-      ids: [],
-      userId: '',
-      reviseUser: false,
       rules: {
         account: [{ required: true, message: '请输入用户账号', trigger: 'blur' }],
         username: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
@@ -156,187 +122,102 @@ export default {
     };
   },
   mounted() {
-    this.getUserData();
+    this.getData();
   },
   methods: {
     //添加用户表
     add() {
-      this.dialogVisible = !this.dialogVisible;
+      this.dialogVisible = true;
+      this.revise = JSON.parse(JSON.stringify(this.defaultData));
     },
     //搜索
-    search() {
-      getUserData(this.serch).then((res) => {
-        console.log(res.data);
-        for (let i = 0; i < res.data.length; i++) {
-          const item = res.data[i];
-          this.searchdata.push(item);
-        }
-        this.dialogtable = true;
-        this.dialogtabledata = false;
-      });
+    async search() {
+      if (Object.values(this.serch).every((item) => item === '')) return this.$message.error('请输入查询信息后再查询');
+      this.page = 1;
+      this.searchInfo = JSON.parse(JSON.stringify(this.serch));
+      this.getData();
     },
-    //重置按钮
+    // 重置表格数据
     resetting() {
       this.serch = {};
-      this.searchdata.length = 0;
-      this.dialogtable = false;
+      this.searchInfo = {};
+      this.getData();
     },
     //保存
     serve() {
-      this.$refs.form.validate((valid) => {
+      this.$refs.form.validate(async (valid) => {
         if (valid) {
-          addUser(this.revise).then((res) => {
-            this.getUserData();
-            console.log(res);
+          if (this.revise.userid) {
+            await reviseUser(this.revise);
+            this.$message.success('修改用户成功');
+          } else {
+            await addUser(this.revise);
             this.$message.success('添加用户成功');
-            this.dialogVisible = false;
-          });
+          }
+          this.dialogVisible = false;
+          this.getData();
         }
       });
     },
     //取消
-    cancel(from) {
-      this.empty(this.revise);
-      this.dialogVisible = !this.dialogVisible;
-      this.$refs[from].resetFields();
-      this.addVisible = false;
+    cancel() {
+      this.dialogVisible = false;
+      this.$refs['form'].resetFields();
+      this.revise.userid = '';
     },
-
     //批量删除
     batchdel() {
-      this.$confirm('是否删除', '删除', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-      })
-        .then(() => {
-          if (this.multipleSelection.length == 0) {
-            this.$message({
-              type: 'info',
-              message: '未选择用户',
-            });
-          } else {
-            for (let i = 0; i < this.multipleSelection.length; i++) {
-              this.ids = this.multipleSelection[i].userid;
-              console.log(this.ids);
-              delUsers(this.ids).then((res) => {
-                this.getUserData();
-                console.log(res);
-              });
-            }
+      if (this.multipleSelection.length === 0) return this.$message.info('请选择用户再提交');
+      this.$confirm('是否删除选中的用户', '删除')
+        .then(async () => {
+          for (let i = 0, count = this.multipleSelection.length - 1; i < count; i++) {
+            await delUser(this.multipleSelection[i].userid);
           }
+          this.$message.success('删除用户成功');
         })
         .catch(() => {});
     },
     //重置密码
-    reset(e) {
-      this.userId = e;
-      this.$confirm('是否重置选中的用户密码？', '重置密码', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-      })
-        .then(() => {
-          resetPass(this.userId).then((res) => {
-            this.getUserData();
-            console.log(res);
-          });
-          this.$message({
-            type: 'success',
-            message: '重置成功',
-          });
+    reset({ userid }) {
+      this.$confirm('是否重置选中的用户密码？', '重置密码')
+        .then(async () => {
+          await resetPass(userid);
+          this.$message.success('重置用户密码成功');
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-          });
-        });
+        .catch(() => {});
     },
     // 删除
-    delUser(e) {
-      this.userId = e;
-      console.log(this.userId);
-      this.$confirm('是否删除', '删除', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-      })
-        .then(() => {
-          delUser(this.userId).then((res) => {
-            this.getUserData();
-            console.log(res);
-          });
-          this.$message({
-            type: 'success',
-            message: '删除成功',
-          });
+    deleteUser({ userid }) {
+      this.$confirm('是否删除该用户', '删除')
+        .then(async () => {
+          await delUser(userid);
+          this.$message.success('删除用户成功');
+          this.getData();
         })
         .catch(() => {});
     },
     // 修改
-    reviseuser(e) {
-      this.reviseUser = true;
-      this.reviseOther = e;
-      this.reviseOther.active = e.active;
+    reviseuser(row) {
+      this.revise = JSON.parse(JSON.stringify(row));
+      this.dialogVisible = true;
     },
-    change(roleId) {
-      this.reviseOther.roleId = roleId;
-      console.log(roleId);
-    },
-    reviseOk() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          console.log(this.reviseOther);
-          reviseUser(this.reviseOther).then((res) => {
-            this.getUserData();
-            console.log(res);
-            this.$message.success('修改成功');
-            this.reviseUser = false;
-          });
-        }
-      });
-    },
-    reviseNo(from) {
-      this.reviseUser = false;
-      this.$refs[from].resetFields();
-    },
-    //清空对象
-    empty: function (obj) {
-      for (const prop of Object.keys(obj)) {
-        obj[prop] = '';
-      }
-    },
-    handleSizeChange(val) {
-      console.log(val);
-      this.pageSize = val;
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      //跳转页数
-      let data = {
-        limit: 10,
-        page: val,
-      };
-      getUserData(data).then((res) => {
-        this.tableData = res.data;
-      });
-    },
-
     handleSelectionChange(val) {
-      this.multipleSelection = val;
       console.log(val);
-    },
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(() => {
-          this.empty(this.revise);
-          done();
-        })
-        .catch(() => {});
-    },
-
-    getUserData() {
-      getUserData().then((res) => {
-        this.count = res.count;
-        this.tableData = res.data;
+      this.multipleSelection = val.map((item) => {
+        return item.userid;
       });
+      console.log(this.multipleSelection);
+    },
+    // 获取数据
+    async getData() {
+      let res;
+      if (Object.values(this.searchInfo).every((item) => item === '')) {
+        res = await getUserData({ page: this.page });
+      } else {
+        res = await getUserData({ ...this.searchInfo, page: this.page });
+      }
+      this.count = res.count;
+      this.tableData = res.data;
     },
   },
 };

@@ -10,7 +10,7 @@
           <div class="info-container">
             <div>课程名称：{{ item.name }}</div>
             <div>已选人数：{{ item.selectedNumber }}</div>
-            <div>授课地点：{{ item.address }}</div>
+            <div style="height: 42px">授课地点：{{ item.address }}</div>
             <div>授课教师：{{ item.userName }}</div>
             <div>限制人数：{{ item.maxTaker }}</div>
           </div>
@@ -65,6 +65,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
+  column-gap: 10px;
 }
 .person-title {
   height: 60px;
@@ -99,25 +100,18 @@ export default {
   text-align: left;
 }
 
-.info-container,
-.info-container > div {
+.info-container {
   height: 100%;
 }
 
-.item-info > div {
-  margin-top: 0 !important;
+.info-container > div {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
 }
-.item-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 15px;
-}
+
 .choose-list-item img {
   width: 250px;
   height: 150px;

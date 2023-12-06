@@ -38,77 +38,6 @@
           </el-table>
         </div>
       </div>
-      <!-- 编辑框 -->
-      <el-dialog title="编辑课程" :visible.sync="dialogVisible" :before-close="closeDialog">
-        <el-form
-          ref="ruleForm"
-          :model="editCourse"
-          :rules="rules"
-          label-width="150px"
-          v-loading="$store.state.isLoading"
-        >
-          <!-- 课程名称 -->
-          <el-form-item label="课程名称：" prop="name">
-            <el-input v-model="editCourse.name" placeholder="课程名称"></el-input>
-          </el-form-item>
-          <!-- 选课日期 -->
-          <div class="choose-date">
-            <el-form-item label="选课日期：" prop="selectStartDate">
-              <el-date-picker
-                type="date"
-                placeholder="选课开始日期"
-                v-model="editCourse.selectStartDate"
-              ></el-date-picker>
-            </el-form-item>
-            <span>至</span>
-            <el-form-item prop="selectEndDate" class="end-date">
-              <el-date-picker
-                type="date"
-                placeholder="选课结束日期"
-                v-model="editCourse.selectEndDate"
-              ></el-date-picker>
-            </el-form-item>
-          </div>
-          <div class="input-small">
-            <!-- 最多选课人数 -->
-            <el-form-item label="最多选课人数：" prop="maxTaker" class="more-person" label-width="150px">
-              <el-input v-model="editCourse.maxTaker" placeholder="课程最大人数"></el-input>
-            </el-form-item>
-            <!-- 授课地点 -->
-            <el-form-item label="授课地点：" prop="address" class="course-address">
-              <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
-            </el-form-item>
-          </div>
-          <!-- 授课日期 -->
-          <div class="choose-date">
-            <el-form-item label="授课日期：" prop="startDate">
-              <el-date-picker type="date" placeholder="授课开始日期" v-model="editCourse.startDate"></el-date-picker>
-            </el-form-item>
-            <span>至</span>
-            <el-form-item prop="endDate" class="end-date">
-              <el-date-picker type="date" placeholder="授课结束日期" v-model="editCourse.endDate"></el-date-picker>
-            </el-form-item>
-          </div>
-          <!-- 课程状态 -->
-          <el-form-item label="课程状态：">
-            <el-radio-group v-model="editCourse.status">
-              <el-radio disabled label="选课中">选课中</el-radio>
-              <el-radio disabled label="选课结束">选课结束</el-radio>
-              <el-radio disabled label="授课中">授课中</el-radio>
-              <el-radio disabled label="评阅中">评阅中</el-radio>
-              <el-radio label="未启用">未启用</el-radio>
-              <el-radio label="启用">启用</el-radio>
-              <el-radio label="已结束">已结束</el-radio>
-              <el-radio label="已关闭">已关闭</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <!-- 确认/取消 -->
-          <el-form-item class="end-date">
-            <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
-            <el-button @click="closeDialog">取消</el-button>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
     </div>
     <el-pagination
       @current-change="getCourseData"
@@ -118,6 +47,87 @@
       :total="total"
     >
     </el-pagination>
+    <!-- 编辑框 -->
+    <el-dialog :close-on-click-modal="false" title="编辑课程" :visible.sync="dialogVisible" :before-close="closeDialog">
+      <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px" v-loading="$store.state.isLoading">
+        <!-- 课程名称 -->
+        <el-form-item label="课程名称：" prop="name">
+          <el-input v-model="editCourse.name" placeholder="课程名称"></el-input>
+        </el-form-item>
+        <!-- 选课日期 -->
+        <!-- <div class="choose-date">
+          <el-form-item label="选课日期：" prop="selectStartDate">
+            <el-date-picker
+              type="date"
+              placeholder="选课开始日期"
+              v-model="editCourse.selectStartDate"
+            ></el-date-picker>
+          </el-form-item>
+          <span>至</span>
+          <el-form-item prop="selectEndDate" class="end-date">
+            <el-date-picker type="date" placeholder="选课结束日期" v-model="editCourse.selectEndDate"></el-date-picker>
+          </el-form-item>
+        </div> -->
+        <el-form-item label="选课日期">
+          <el-date-picker
+            v-model="chooseDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <!-- <div class="input-small"> -->
+        <!-- 最多选课人数 -->
+        <el-form-item label="选课人数：" prop="maxTaker" class="more-person">
+          <el-input v-model="editCourse.maxTaker" placeholder="课程最大人数"></el-input>
+        </el-form-item>
+        <!-- 授课地点 -->
+        <el-form-item label="授课地点：" prop="address" class="course-address">
+          <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
+        </el-form-item>
+        <!-- </div> -->
+        <!-- 授课日期 -->
+        <!-- <div class="choose-date"> -->
+        <!-- <el-form-item label="授课日期：" prop="startDate">
+            <el-date-picker type="date" placeholder="授课开始日期" v-model="editCourse.startDate"></el-date-picker>
+          </el-form-item>
+          <span>至</span>
+          <el-form-item prop="endDate" class="end-date">
+            <el-date-picker type="date" placeholder="授课结束日期" v-model="editCourse.endDate"></el-date-picker>
+          </el-form-item> -->
+        <el-form-item label="授课日期">
+          <el-date-picker
+            v-model="teachDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <!-- </div> -->
+        <!-- 课程状态 -->
+        <el-form-item label="课程状态：">
+          <el-radio-group v-model="editCourse.status">
+            <el-radio disabled label="选课中">选课中</el-radio>
+            <el-radio disabled label="选课结束">选课结束</el-radio>
+            <el-radio disabled label="授课中">授课中</el-radio>
+            <el-radio disabled label="评阅中">评阅中</el-radio>
+            <el-radio label="未启用">未启用</el-radio>
+            <el-radio label="启用">启用</el-radio>
+            <el-radio label="已结束">已结束</el-radio>
+            <el-radio label="已关闭">已关闭</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <!-- 确认/取消 -->
+        <el-form-item class="end-date">
+          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
+          <el-button @click="closeDialog">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -175,6 +185,8 @@ export default {
       myTeachList: [], //我的授课的全部课程
       courseForm: {}, //课程的详细信息
       showScore: false, //是否显示成绩列表
+      chooseDate: [], // 课程选课日期
+      teachDate: [], // 课程授课日期
       scoreTable: [
         //成绩列表
         {
@@ -308,7 +320,6 @@ export default {
 }
 .choose-date {
   display: flex;
-  /* justify-content: space-between; */
   gap: 10px;
 }
 .choose-date span {
@@ -316,7 +327,6 @@ export default {
 }
 .input-small {
   display: flex;
-  /* justify-content: space-between; */
 }
 .more-person {
   width: 320px;

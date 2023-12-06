@@ -196,7 +196,7 @@ export default {
       richTextResult: '', //存储富文本结果数据
       richTextPlans: [], //存储富文本步骤数据
       currentPage: 1, //当前页
-      submitStatus: '', //学生实验提交状态
+      submitStatus: false, //学生实验提交状态
       studentScore: '', //学生实验成绩
       total: 1,
     };
@@ -288,6 +288,8 @@ export default {
     async getExperimentData() {
       const res = await getExperimentStudentData(this.experimentId, this.studentCourseId);
       console.log(res, 'res111111111');
+      console.log(res.experimentReport.type === 2, 'type');
+      console.log(res.experimentReport.status !== 0, 'status');
       if (res.experimentReport.type === 2 && res.experimentReport.status !== 0) {
         //学生已提交实验
         this.submitStatus = true;

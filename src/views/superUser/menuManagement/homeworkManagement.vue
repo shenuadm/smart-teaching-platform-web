@@ -5,24 +5,16 @@
       <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
-      <el-button type="primary" size="small" @click="addexper"
-        >添加作业</el-button
-      >
-      <el-button type="danger" size="small" @click="delexper"
-        >批量删除</el-button
-      >
-      <el-button type="primary" size="small" @click="returnexper"
-        >返回</el-button
-      >
+      <el-button type="primary" size="small" @click="addexper">添加作业</el-button>
+      <el-button type="danger" size="small" @click="delexper">批量删除</el-button>
+      <el-button type="primary" size="small" @click="returnexper">返回</el-button>
     </div>
 
     <el-table
       ref="multipleTable"
       height="410"
       v-loading="loadingGlobal"
-      :data="
-        tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       tooltip-effect="dark"
       style="width: 100%"
       border
@@ -30,24 +22,9 @@
       class="custom-table"
     >
       <el-table-column type="selection" width="50"></el-table-column>
-      <el-table-column
-        prop="name"
-        label="作业名称"
-        width="80"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="content"
-        label="作业内容"
-        align="center"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="answer"
-        label="参考答案"
-        align="center"
-        show-overflow-tooltip
-      ></el-table-column>
+      <el-table-column prop="name" label="作业名称" width="80" align="center"></el-table-column>
+      <el-table-column prop="content" label="作业内容" align="center" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="answer" label="参考答案" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column prop="status" label="状态" width="80" align="center">
         <template slot-scope="scope">
           <div v-if="scope.row.status" class="user">启用</div>
@@ -56,23 +33,17 @@
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="editexrept(scope.row)"
-            >编辑</el-button
-          >
-          <el-button type="danger" size="mini" @click="del(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button type="primary" size="mini" @click="editexrept(scope.row)">编辑</el-button>
+          <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="block">
       <el-pagination
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="pageSize"
+        :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.length"
       ></el-pagination>
@@ -84,27 +55,17 @@
       width="30%"
       :title="edit ? '添加作业' : '修改作业'"
       :before-close="closeDialog"
+      :close-on-click-modal="false"
     >
       <el-form :model="revise" :rules="rules" ref="formModel">
         <el-form-item label="作业名称" prop="name">
-          <el-input placeholder="请输入作业名称" v-model="revise.name">
-          </el-input>
+          <el-input placeholder="请输入作业名称" v-model="revise.name"> </el-input>
         </el-form-item>
         <el-form-item label="作业内容" prop="content">
-          <el-input
-            placeholder="请输入作业内容"
-            v-model="revise.content"
-            type="textarea"
-          >
-          </el-input>
+          <el-input placeholder="请输入作业内容" v-model="revise.content" type="textarea"> </el-input>
         </el-form-item>
         <el-form-item label="参考答案" prop="answer">
-          <el-input
-            placeholder="请输入参考答案"
-            v-model="revise.answer"
-            type="textarea"
-          >
-          </el-input>
+          <el-input placeholder="请输入参考答案" v-model="revise.answer" type="textarea"> </el-input>
         </el-form-item>
         <el-form-item label="状态" class="form-status">
           <el-radio-group v-model="revise.status">
@@ -113,9 +74,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item class="form-btn">
-          <el-button size="small" @click="serve" type="primary">{{
-            edit ? '添加' : '修改'
-          }}</el-button>
+          <el-button size="small" @click="serve" type="primary">{{ edit ? '添加' : '修改' }}</el-button>
           <el-button size="small" @click="closeDialog">取消</el-button>
         </el-form-item>
       </el-form>
@@ -124,13 +83,7 @@
 </template>
 
 <script>
-import {
-  getHomeWorkList,
-  addHomeWork,
-  editHomeWork,
-  delHomeWork,
-  delAllHomeWork,
-} from '@/utils/api';
+import { getHomeWorkList, addHomeWork, editHomeWork, delHomeWork, delAllHomeWork } from '@/utils/api';
 export default {
   data() {
     return {
@@ -291,9 +244,6 @@ export default {
       history.back();
     },
     // 分页
-    handleSizeChange(val) {
-      this.pageSize = val;
-    },
     handleCurrentChange(val) {
       this.currentPage = val;
     },

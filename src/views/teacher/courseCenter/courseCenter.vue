@@ -29,7 +29,7 @@
         </div>
       </div>
       <!-- 编辑框 -->
-      <el-dialog title="选择授课" :visible.sync="dialogVisible">
+      <el-dialog title="选择授课" :visible.sync="dialogVisible" :close-on-click-modal="false">
         <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px">
           <!-- 课程名称 -->
           <el-form-item label="课程名称：" prop="title">

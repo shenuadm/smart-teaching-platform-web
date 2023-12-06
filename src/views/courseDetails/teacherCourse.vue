@@ -12,20 +12,21 @@
       <div class="info-content zh-mgl-30">
         <div class="info-content-left">
           <div>课程名称：{{ courseObj.name }}</div>
-          <div>选课开始日期：{{ courseObj.selectStartDate }}</div>
+          <!-- <div>选课开始日期：{{ courseObj.selectStartDate }}</div> -->
           <div>授课开始日期：{{ courseObj.startDate }}</div>
           <div>课程状态：{{ courseObj.status }}</div>
           <div>选课人数：{{ courseObj.selectedNumber }}</div>
         </div>
         <div class="info-content-right">
           <div>任课教师：{{ courseObj.userName }}</div>
-          <div>选课结束日期：{{ courseObj.selectEndDate }}</div>
+          <!-- <div>选课结束日期：{{ courseObj.selectEndDate }}</div> -->
           <div>授课结束日期：{{ courseObj.endDate }}</div>
           <div>授课地点：{{ courseObj.address }}</div>
           <div>
             <el-button type="primary" size="mini" @click="queryVms">{{
               pageShow ? '查看虚拟机' : '查看课程章节'
             }}</el-button>
+            <!-- <el-button type="info" size="mini" @click=""></el-button> -->
           </div>
         </div>
       </div>
