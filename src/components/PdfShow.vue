@@ -1,6 +1,6 @@
 <template>
   <div>
-    <pdf @progress="loadedRatio" v-for="i in numPages" :key="i" :src="src" :page="i"></pdf>
+    <pdf @progress="loadedRatio" v-for="i in numPages" :key="i" :src="src" :page="i" class="pdf"></pdf>
   </div>
 </template>
 
@@ -61,3 +61,12 @@ export default {
   },
 };
 </script>
+<style >
+.pdf{
+  width: 52%;
+  left: 50%;
+  box-shadow: 0px 5px 20px #999999;
+  transform: translateX(-50%);
+}
+
+</style>
