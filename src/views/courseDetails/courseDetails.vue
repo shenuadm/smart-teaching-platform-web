@@ -2,7 +2,7 @@
   <div class="content warpper" id="courseDeatils" v-loading="$store.state.isLoading">
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: path }">课程详情</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -145,9 +145,9 @@
                 <el-pagination
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
-                  :page-size="pageSize"
+                  :page-size="10"
                   layout="total, prev, pager, next, jumper"
-                  :total="total"
+                  :total="tableData.length"
                 >
                 </el-pagination>
               </div>
@@ -196,7 +196,6 @@ export default {
       richTextResult: '', //存储富文本结果数据
       richTextPlans: [], //存储富文本步骤数据
       currentPage: 1, //当前页
-      pageSize: 5, //每页的条数
       submitStatus: '', //学生实验提交状态
       studentScore: '', //学生实验成绩
       total: 1,

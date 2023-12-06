@@ -2,7 +2,7 @@
   <div class="content warpper" id="courseDeatils">
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: path }">课程详情</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -62,7 +62,7 @@
       <!-- 实验成绩插槽 -->
       <template #experimentAchement>
         <!-- 教师端 -->
-        <el-table :data="tableData" height="auto" border style="width: 100%; min-height: 100vh">
+        <el-table :data="tableData" height="auto" border style="width: 100%">
           <el-table-column align="center" prop="username" label="学生姓名" width="120"> </el-table-column>
           <el-table-column align="center" prop="title" label="实验标题"> </el-table-column>
           <el-table-column prop="score" label="成绩" width="80"> </el-table-column>
@@ -75,6 +75,15 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="text-center">
+          <el-pagination
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="tableData.length"
+          >
+          </el-pagination>
+        </div>
       </template>
     </CourseList>
     <!-- 学生虚拟机列表 -->
@@ -102,29 +111,29 @@
       </div>
     </div>
     <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
-    <el-drawer :visible.sync="showReportVisible" v-if="showReportVisible" :direction="rtl" size="60%">
+    <el-drawer :visible.sync="showReportVisible" v-if="showReportVisible" direction="rtl" size="60%">
       <template slot="title">
         <div class="zh-fs-20 font-bold">实验报告</div>
       </template>
       <div class="stuExperimentReport mx-20" style="text-align: initial">
         <div class="stuInfo">
-          <div><span class="font-bold zh-fs-18">学生姓名：</span>{{ stuForm.result.username }}</div>
-          <div><span class="font-bold zh-fs-18">学生成绩：</span>{{ stuForm.result.score }}</div>
+          <div><span class="font-bold">学生姓名：</span>{{ stuForm.result.username }}</div>
+          <div><span class="font-bold">学生成绩：</span>{{ stuForm.result.score }}</div>
         </div>
         <div class="stuExperimentContent">
           <div class="exTitle">
-            <p class="title zh-fw-m zh-fs-18">实验标题：</p>
+            <p class="title text-bold">实验标题：</p>
             <div>{{ stuForm.result.title }}</div>
           </div>
           <div class="exResult">
-            <p class="title zh-fw-m zh-fs-18">实验结果:</p>
+            <p class="title text-bold">实验结果:</p>
             <div v-html="stuForm.result.result"></div>
           </div>
           <div class="exSteps">
-            <p class="title zh-fw-m zh-fs-18">实验步骤:</p>
+            <p class="title text-bold">实验步骤:</p>
             <ul>
               <li v-for="(item, index) in stuForm.step" :key="item.id">
-                <p class="zh-fs-18">{{ index + 1 }}、{{ item.name }}</p>
+                <p>{{ index + 1 }}、{{ item.name }}</p>
                 <div v-html="item.content"></div>
               </li>
             </ul>
@@ -171,17 +180,17 @@
       :close-on-click-modal="false"
     >
       <div class="form" style="text-align: initial">
-        <el-form ref="stuForm" :model="stuForm" label-width="80px">
+        <el-form ref="stuForm" :rules="editRule" :model="stuForm" label-width="80px">
           <el-form-item label="学生姓名">
             <el-input v-model="stuForm.username" disabled></el-input>
           </el-form-item>
           <el-form-item label="实验标题">
             <el-input v-model="stuForm.title" disabled></el-input>
           </el-form-item>
-          <el-form-item label="学生成绩">
+          <el-form-item label="学生成绩" prop="score">
             <el-input type="number" v-model.number="stuForm.score"></el-input>
           </el-form-item>
-          <el-form-item label="评语">
+          <el-form-item label="评语" prop="comment">
             <el-input type="textarea" v-model="stuForm.comment" :rows="6"></el-input>
           </el-form-item>
         </el-form>
@@ -196,7 +205,8 @@
 
 <script>
 import { getExperimentData, teacherCourseDetails, scoreList, getStudentExperiment } from '@/utils/api.js';
-import { getStudentVms, shareStudentVms } from '@/api/teacher.js';
+import { getStudentVms, shareStudentVms } from '@/api/vm.js';
+import { teachEditExperimentService } from '@/api/experiment.js';
 import { courseStatusConvert } from '@/utils/status.js';
 import CourseList from './components/CourseList.vue';
 export default {
@@ -215,7 +225,6 @@ export default {
       experimentStep: [], //实验步骤
       tableData: [], //学生成绩
       currentPage: 1, //当前页
-      pageSize: 5, //每页的条数
       showReportVisible: false, //是否显示实验报告
       showDetailsVisible: false, //是否显示成绩详情
       showEditVisible: false, //是否显示编辑框
@@ -227,6 +236,10 @@ export default {
       },
       vmsData: [], // 学生实验机列表
       pageShow: true,
+      editRule: {
+        comment: [{ required: true, message: '实验评语不能为空', trigger: 'blur' }],
+        score: [{ required: true, message: '实验成绩不能为空', trigger: 'blur' }],
+      },
     };
   },
   async created() {
@@ -262,10 +275,15 @@ export default {
       // 实验结果
       this.experResult.content = res.experimentReport.result;
       // 成绩表格(教师端)
-      scoreList(this.experimentId, this.teacherId).then((res) => {
-        // this.tableData = handleDate(res.data)
-        this.tableData = res.data;
-      });
+      // scoreList(this.experimentId, this.teacherId).then((res) => {
+      //   this.tableData = res.data;
+      // });
+      this.getScroeData();
+    },
+    // 获取成绩表格
+    async getScroeData() {
+      const res = await scoreList(this.experimentId, this.teacherId);
+      this.tableData = res.data;
     },
     // 获取学生虚拟机信息
     async getStudentVmsData() {
@@ -295,18 +313,10 @@ export default {
     },
     // 查看学生实验报告
     async checkReport(row) {
-      console.log(row);
       const { uid, id } = row;
-      const loading = this.$loading({
-        text: '加载中',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0,0,0,0.7)',
-      });
       const res = await getStudentExperiment(uid, id);
-      loading.close();
       this.stuForm = { result: row, step: res.data };
       this.showReportVisible = true;
-      // this.stuForm = row;
     },
     handleCloseReport() {
       this.showReportVisible = false;
@@ -315,6 +325,7 @@ export default {
     editContent(row) {
       this.showEditVisible = true;
       this.stuForm = row;
+      console.log(row);
     },
     handleCloseEdit() {
       this.showEditVisible = false;
@@ -327,7 +338,14 @@ export default {
     // 确定编辑
     determine() {
       // this.stuForm = this.stuForm;
-      this.showEditVisible = false;
+      this.$refs['stuForm'].validate(async (validate) => {
+        if (validate) {
+          await teachEditExperimentService(this.stuForm);
+          await this.getScroeData();
+          this.showEditVisible = false;
+          this.$message.success('修改学生成绩评语成功');
+        }
+      });
     },
     // 分页
     // pageSize 改变时会触发

@@ -59,16 +59,6 @@
           <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
             <!-- 实验成绩插槽 -->
             <slot name="experimentAchement"></slot>
-            <div class="block zh-mgt-20">
-              <el-pagination
-                :current-page="currentPage"
-                :page-sizes="[5, 10, 20]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="tableData.length"
-              >
-              </el-pagination>
-            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -101,11 +91,8 @@ export default {
       studentCourseId: '', //学生实验id
       experimentContent: {}, //实验内容
       experimentStep: [], //实验步骤
-      tableData: [], //学生成绩
       richTextResult: '', //存储富文本结果数据
       richTextPlans: [], //存储富文本步骤数据
-      currentPage: 1, //当前页
-      pageSize: 5, //每页的条数
       showReportVisible: false, //是否显示实验报告
       showDetailsVisible: false, //是否显示成绩详情
       showEditVisible: false, //是否显示编辑框

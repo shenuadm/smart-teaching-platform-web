@@ -11,8 +11,8 @@
       <el-button type="primary" size="small">重置</el-button>
     </div>
     <!-- 每一项数据 -->
-    <div class="course-center">
-      <div class="course-center-item" v-for="item in courseList" :key="item.id">
+    <div class="course-center mt-20">
+      <div class="course-center-item mt-20" v-for="item in courseList" :key="item.id">
         <!-- <img src="@/assets/169681739455410.jpg" alt="课程logo图片" /> -->
         <img :src="'data:image/png;base64,' + item.picture" alt="课程logo图片" />
         <div class="course-center-text">
@@ -198,6 +198,7 @@ export default {
   align-items: center;
   border: 1px solid #ededed;
   background-color: #fff;
+  border-radius: 15px;
 }
 .course-center-item img {
   padding: 10px;

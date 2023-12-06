@@ -22,7 +22,7 @@
       <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
       <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
       <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
-      <el-table-column prop="description" label="课程描述" show-overflow-tooltip> </el-table-column>
+      <el-table-column prop="description" label="课程描述"> </el-table-column>
       <el-table-column label="状态" width="80">
         <template slot-scope="scope">
           <div v-if="scope.row.status" class="user">启用</div>
@@ -45,12 +45,11 @@
     </el-table>
     <div class="block">
       <el-pagination
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-size="pageSize"
         layout="total, prev, pager, next, jumper"
-        :total="this.count"
+        :total="count"
       >
       </el-pagination>
     </div>
@@ -270,9 +269,6 @@ export default {
       for (const prop of Object.keys(obj)) {
         obj[prop] = '';
       }
-    },
-    handleSizeChange(val) {
-      this.pageSize = val;
     },
     handleCurrentChange(val) {
       this.currentPage = val;

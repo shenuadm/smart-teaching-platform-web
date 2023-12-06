@@ -91,7 +91,7 @@ export default {
   height: 60px;
 }
 .header {
-  z-index: 9999;
+  z-index: 2001;
 }
 .heder-container {
   display: flex;
