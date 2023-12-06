@@ -23,7 +23,8 @@
       @selection-change="handleSelectionChange"
       class="custom-table"
       v-if="dialogtabledata"
-      border:true
+      border
+      v-loading="$store.state.isLoading"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="name" label="步骤名称" width="550"> </el-table-column>
@@ -65,7 +66,14 @@
       width="40%"
       :title="(revise.id ? '编辑' : '添加') + '实验步骤'"
     >
-      <el-form :model="revise" class="step-form" label-width="100px" ref="stepForm" :rules="stepRule">
+      <el-form
+        :model="revise"
+        class="step-form"
+        label-width="100px"
+        ref="stepForm"
+        :rules="stepRule"
+        v-loading="$store.state.isLoading"
+      >
         <el-form-item label="步骤名称" prop="name">
           <el-input v-model="revise.name" placeholder="请输入实验步骤名称"></el-input>
         </el-form-item>
