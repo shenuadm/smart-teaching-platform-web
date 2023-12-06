@@ -90,6 +90,14 @@ import Editor from '../../../components/editor.vue';
 export default {
   components: { Editor },
   data() {
+    const editContent = (rule, value, callback) => {
+      console.log(value, 'value', typeof value);
+      if (value === '<p><br></p>' || value == '') {
+        callback(new Error('请输入实验步骤内容'));
+      } else {
+        callback();
+      }
+    };
     return {
       multipleSelection: [],
       tableData: [],
@@ -113,9 +121,9 @@ export default {
         imageStorePath: '',
       },
       stepRule: {
-        name: [{ required: true, message: '请输入实验步骤名称' }],
-        content: [{ required: true, message: '请输入实验步骤内容' }],
-        sort: [{ required: true, message: '请输入实验步骤顺序' }],
+        name: [{ required: true, message: '请输入实验步骤名称', trigger: 'blur' }],
+        sort: [{ required: true, message: '请输入实验步骤顺序', trigger: 'blur' }],
+        content: [{ validator: editContent, trigger: 'blur' }],
       },
     };
   },
