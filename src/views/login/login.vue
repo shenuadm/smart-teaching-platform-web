@@ -1,6 +1,6 @@
 <template>
   <div class="bg" id="loginRegister">
-    <div class="login center">
+    <div class="login center" v-loading="$store.state.isLoading">
       <div class="login-tab">
         <div class="login-num" @click="toLogin">
           登录账号
@@ -67,7 +67,6 @@
 <script>
 import { toLogin, toRegister } from '@/utils/api.js';
 export default {
-  components: {},
   data() {
     // 密码
     let pwd = (rule, value, callback) => {
@@ -173,16 +172,9 @@ export default {
       };
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          toRegister(data).then((res) => {
-            if (res.msg === 'success') {
-              this.$message({
-                message: '注册成功',
-                type: 'success',
-              });
-              this.registerForm = {};
-            } else {
-              return this.$message.info('注册失败');
-            }
+          toRegister(data).then(() => {
+            this.$message.success('注册成功');
+            this.registerForm = {};
           });
         } else {
           return this.$message.warning('请输入正确的账号密码');
@@ -190,6 +182,7 @@ export default {
       });
     },
   },
+  name: 'loginIndex',
 };
 </script>
 

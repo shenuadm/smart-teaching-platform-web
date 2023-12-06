@@ -1,6 +1,12 @@
 <template>
-  <div class="content global-container" v-loading="$store.state.isLoading">
+  <div class="my-course global-container" v-loading="$store.state.isLoading">
     <div class="person-title">我的课程</div>
+    <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
+      <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
+      <el-tab-pane label="选课中" name="2"></el-tab-pane>
+      <el-tab-pane label="授课中" name="4"></el-tab-pane>
+      <el-tab-pane label="已结束" name="6"></el-tab-pane>
+    </el-tabs>
     <ul class="list mt-20">
       <li class="list-item zh-pd-10 zh-mgb-20" v-for="item in courseList" :key="item.id">
         <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
@@ -60,6 +66,7 @@ export default {
       courseList: [], //课程列表
       page: 1, //当前页
       total: 0,
+      activeCourseType: '-1',
     };
   },
   mounted() {
@@ -113,6 +120,8 @@ export default {
       await this.getCourse();
       this.$message.success('恢复选课成功！');
     },
+    // 课程类型变化
+    courseTypeChange() {},
     // 课程状态数据转换
     courseStatusConvent(status) {
       return courseStatus.get(status);
@@ -134,7 +143,7 @@ export default {
 </script>
 
 <style scoped>
-.content {
+.my-course {
   background-color: #f8f6f6 !important;
 }
 .list {
@@ -182,5 +191,33 @@ export default {
   font-size: 20px;
   border-bottom: 2px solid #efefef;
   background-color: #fff;
+}
+</style>
+
+<style>
+/* tab切换栏 */
+.my-course .el-tabs__item {
+  background-color: #b2d5f1 !important;
+  color: #000 !important;
+  padding: 0 20px !important;
+  border-right: 1px solid #fff;
+}
+.my-course .el-tabs__item.is-active {
+  background-color: #409eff !important;
+  color: #fff !important;
+}
+.my-course .el-button--primary {
+  background-color: #4faff0;
+  border-color: #4faff0;
+}
+.my-course .el-table .el-table__cell {
+  text-align: center;
+}
+.my-course .el-table .cell {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* 指定要显示的行数 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div class="content global-container" v-loading="$store.state.isLoading">
-    <div class="person-title">我的授课</div>
+    <div class="person-title">选课中心</div>
     <div class="choose-list mt-20">
-      <el-row :gutter="20" class="choose-list-item zh-pd-10 zh-mgb-20" v-for="item in chooseCourse" :key="item.id">
+      <el-row class="choose-list-item zh-pd-10 zh-mgb-20" v-for="item in chooseCourse" :key="item.id">
         <el-col :span="6">
           <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
         </el-col>
@@ -38,8 +38,17 @@ export default {
     };
   },
   mounted() {
-    // 获取接口数据
-    getSelectCourse().then((res) => {
+    this.getData();
+  },
+  methods: {
+    // 选课
+    async selectCourse(e) {
+      await clickSelectCourse({ teacherCourseId: e.id });
+      this.$message.success('选择课程成功');
+      this.getData();
+    },
+    async getData() {
+      const res = await getSelectCourse();
       this.chooseCourse = res.data.map((item) => {
         if (item.picture !== null) {
           var picture = item.picture.split(',')[1];
@@ -50,14 +59,6 @@ export default {
         return { ...item, picture };
       });
       this.chooseCourse = selectStatusConvert(this.chooseCourse);
-    });
-  },
-  methods: {
-    // 选课
-    async selectCourse(e) {
-      let data = { teacherCourseId: e.id };
-      const res = await clickSelectCourse(data);
-      if (res) this.$message.success('选择课程成功');
     },
   },
 };
@@ -82,7 +83,6 @@ export default {
   padding-bottom: 20px;
 }
 .choose-list {
-  margin: 0 !important;
   padding: 0 !important;
 }
 .choose-list-item {

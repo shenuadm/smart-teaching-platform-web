@@ -1,5 +1,5 @@
 <template>
-  <div class="content warpper" id="courseDeatils">
+  <div class="content warpper" id="courseDeatils" v-loading="$store.state.isLoading">
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }">课程详情</el-breadcrumb-item>
@@ -47,7 +47,7 @@
       <!-- 左侧树形结构 -->
       <div class="tree">
         <el-tree :data="data" :props="defaultProps" accordion :highlight-current="true" @node-click="handleNodeClick">
-          <span class="node-title" slot-scope="{ node, data }"> {{ node.data.index }}{{ node.data.title }} </span>
+          <span class="node-title" slot-scope="{ node }"> {{ node.data.index }}{{ node.data.title }} </span>
         </el-tree>
       </div>
       <div class="tree-content">
@@ -88,43 +88,23 @@
                 <img src="@/assets/eye.png" alt="" @click="toShow" />
               </div>
               <div class="openWindow">
-                <!-- <a
-                  href="javascript:void(0)"
-                  ref="currentWindow"
-                  class="btn-bg-b"
-                  @click="openCurrentWindow"
-                  >当前窗口打开</a
-                >
-                <iframe
-                  src=""
-                  frameborder="0"
-                  class="iframeMain"
-                  ref="iframeMain"
-                ></iframe> -->
-                <!-- <a
-                  href="javascript:void(0)"
-                  ref="newWindow"
-                  class="btn-bg-b"
-                  @click="openNewWindow"
-                  >新窗口打开</a
-                > -->
                 <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">访问实验机</a>
               </div>
             </el-tab-pane>
             <el-tab-pane v-if="teacherId" label="实验报告" name="third" class="experiment-report">
-              <div class="experiment-title">
+              <!-- <div class="experiment-title">
                 <p>【实验模板】</p>
                 <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
                   >点击下载实验模板
                 </a>
-              </div>
+              </div> -->
               <div class="sumbit-status">
                 <img src="@/assets/notsubmit.png" alt="" class="status-img" />
                 <div v-if="submitStatus" class="submitStatus">
                   <p class="already-submit">已提交</p>
                   <p class="already-submit">{{ studentScore }}</p>
                 </div>
-                <div class="submitStatus">未提交</div>
+                <div v-else class="submitStatus">未提交</div>
               </div>
               <div class="experiment-title">
                 <p>【实验报告】</p>
@@ -142,36 +122,32 @@
                   </ul>
                 </div>
                 <div class="experiment-report-operate">
-                  <el-button type="primary" @click="saveContent" ref="btnStatus">保存</el-button>
-                  <el-button type="primary" @click="submit" ref="btnStatus">提交</el-button>
+                  <el-button :disabled="submitStatus" :type="submitStatus ? 'info' : 'primary'" @click="saveContent"
+                    >保存</el-button
+                  >
+                  <el-button :disabled="submitStatus" :type="submitStatus ? 'info' : 'primary'" @click="submit"
+                    >提交</el-button
+                  >
                 </div>
               </div>
             </el-tab-pane>
             <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
               <!-- 学生端 -->
-              <el-table
-                :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-                height="auto"
-                border
-                v-if="roleId === '3'"
-                style="width: 100%"
-              >
+              <el-table :data="tableData" height="auto" border style="width: 100%">
                 <el-table-column prop="updateTime" label="提交时间"> </el-table-column>
                 <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
                 <el-table-column prop="expResult" label="实验结果" width="120"> </el-table-column>
-                <el-table-column prop="stuGrade" label="成绩"> </el-table-column>
+                <el-table-column prop="stuGrade" label="学生成绩"> </el-table-column>
                 <el-table-column prop="comment" label="评语" width="200"> </el-table-column>
                 <el-table-column prop="createTime" label="创建时间"> </el-table-column>
               </el-table>
               <div class="block zh-mgt-20">
                 <el-pagination
-                  @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
-                  :page-sizes="[5, 10, 20]"
                   :page-size="pageSize"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="tableData.length"
+                  layout="total, prev, pager, next, jumper"
+                  :total="total"
                 >
                 </el-pagination>
               </div>
@@ -187,18 +163,12 @@
 import {
   getTreeData,
   getExperimentContent,
-  getExperimentData,
   getExperimentStudentData,
   courseDetails,
-  teacherCourseDetails,
-  getExperimentResult,
   getStudentScore,
-  scoreList,
   saveExperimentReport,
-  checkChapter,
 } from '@/utils/api.js';
 import { courseStatusConvert } from '@/utils/status.js';
-import { handleDate } from '@/utils/date.js';
 export default {
   data() {
     return {
@@ -229,21 +199,19 @@ export default {
       pageSize: 5, //每页的条数
       submitStatus: '', //学生实验提交状态
       studentScore: '', //学生实验成绩
+      total: 1,
     };
   },
   created() {
     this.roleId = localStorage.getItem('roleId');
-    console.log(this.$route.query.id, 'query,id');
-    if (this.roleId === '3') {
-      //学生查看课程详情
-      this.path = '/myCourse';
-      this.teacherId = this.$route.query.teacherCourseId;
-      this.studentCourseId = this.$route.query.studentCourseId;
-      // 课程详情
-      courseDetails(this.teacherId).then((res) => {
-        this.courseObj = courseStatusConvert(res.course);
-      });
-    }
+    //学生查看课程详情
+    this.path = '/myCourse';
+    this.teacherId = this.$route.query.teacherCourseId;
+    this.studentCourseId = this.$route.query.studentCourseId;
+    // 课程详情
+    courseDetails(this.teacherId).then((res) => {
+      this.courseObj = courseStatusConvert(res.course);
+    });
     this.courseId = this.$route.query.courseId;
     // 获取树形数据
     getTreeData(this.courseId).then((res) => {
@@ -279,7 +247,7 @@ export default {
   },
   methods: {
     // 树形控件的点击事件
-    handleNodeClick(data) {
+    async handleNodeClick(data) {
       // 如果点击的是二级节点，显示课件
       if (data.pid != 0 && data.pid != null) {
         this.$refs.courseWare.style.display = 'block';
@@ -300,68 +268,74 @@ export default {
         this.form.name = name === 'null' ? '' : name;
         const pwd = localStorage.getItem('hostPwd');
         this.form.pwd = pwd === 'null' ? '' : pwd;
-        if (this.roleId === '3') {
-          // 学生端实验结果、实验步骤
-          getExperimentStudentData(this.experimentId, this.studentCourseId).then((res) => {
-            // console.log(res);
-            if (res.experimentReport.type === 2 && res.experimentReport.status != 0) {
-              //学生已提交实验
-              this.submitStatus = true;
-              this.studentScore = res.experimentReport.score;
-              this.$refs.btnStatus.disabled = true;
-              this.$refs.btnStatus.type = '';
-            }
-            // 实验结果
-            if (res.experimentReport.result !== null) {
-              this.$refs.editor.html = res.experimentReport.result;
-            }
-            // this.$refs.editor.html = res.experimentReport.result
-            // 实验步骤
-            if (res.experimentReportPlans !== null) {
-              this.experimentStep = res.experimentReportPlans;
-              setTimeout(() => {
-                res.experimentReportPlans.forEach((ritem, rindex) => {
-                  this.$refs.editors.forEach((eitem, eindex) => {
-                    if (rindex === eindex) {
-                      eitem.html = ritem.content;
-                    }
-                  });
-                });
-              }, 1000);
-            }
-            // this.experimentStep = res.experimentReportPlans
-            // setTimeout(()=>{
-            //   res.experimentReportPlans.forEach((ritem,rindex)=>{
-            //     this.$refs.editors.forEach((eitem,eindex)=>{
-            //       if(rindex === eindex){
-            //         eitem.html = ritem.content
-            //       }
-            //     })
-            //   })
-            // },1000)
-          });
-        }
+        // 学生端实验结果、实验步骤
+        // getExperimentStudentData(this.experimentId, this.studentCourseId).then((res) => {
+        //   console.log(res, 'res11111111111');
+        //   if (res.experimentReport.type === 2 && res.experimentReport.status != 0) {
+        //     //学生已提交实验
+        //     this.submitStatus = true;
+        //     this.studentScore = res.experimentReport.score;
+        //   }
+        //   // 实验结果
+        //   if (res.experimentReport.result !== null) {
+        //     this.$refs.editor.html = res.experimentReport.result;
+        //   }
+        //   // this.$refs.editor.html = res.experimentReport.result
+        //   // 实验步骤
+        //   if (res.experimentReportPlans !== null) {
+        //     this.experimentStep = res.experimentReportPlans;
+        //     setTimeout(() => {
+        //       res.experimentReportPlans.forEach((ritem, rindex) => {
+        //         this.$refs.editors.forEach((eitem, eindex) => {
+        //           if (rindex === eindex) {
+        //             eitem.html = ritem.content;
+        //           }
+        //         });
+        //       });
+        //     }, 1000);
+        //   }
+        // });
+        await this.getExperimentData();
         if (this.teacherId) {
           // 下载实验模版
-          console.log(this.$refs.downLoadTemplate);
-          this.$refs.downLoadTemplate.href = data.fileUrl;
-          if (this.roleId === '2') {
-            // 成绩表格(教师端)
-            scoreList(this.experimentId, this.teacherId).then((res) => {
-              // this.tableData = handleDate(res.data)
-              this.tableData = res.data;
-            });
-          }
-          if (this.roleId === '3') {
-            // 学生的实验成绩
-            getStudentScore(this.studentCourseId).then((res) => {
-              this.tableData = res.data;
-            });
-          }
+          // console.log(this.$refs.downLoadTemplate);
+          // this.$refs.downLoadTemplate.href = data.fileUrl;
+          // 学生的实验成绩
+          getStudentScore(this.teacherId).then((res) => {
+            console.log(res, '实验成绩');
+            this.tableData = res.data;
+          });
         }
         this.$refs.experiment.style.display = 'block';
       } else {
         this.$refs.experiment.style.display = 'none';
+      }
+    },
+    // 获取实验结果，实验步骤
+    async getExperimentData() {
+      const res = await getExperimentStudentData(this.experimentId, this.studentCourseId);
+      console.log(res, 'res111111111');
+      if (res.experimentReport.type === 2 && res.experimentReport.status !== 0) {
+        //学生已提交实验
+        this.submitStatus = true;
+        this.studentScore = res.experimentReport.score;
+      }
+      // 实验结果
+      if (res.experimentReport.result !== null) {
+        this.$refs.editor.html = res.experimentReport.result;
+      }
+      // 实验步骤
+      if (res.experimentReportPlans !== null) {
+        this.experimentStep = res.experimentReportPlans;
+        setTimeout(() => {
+          res.experimentReportPlans.forEach((ritem, rindex) => {
+            this.$refs.editors.forEach((eitem, eindex) => {
+              if (rindex === eindex) {
+                eitem.html = ritem.content;
+              }
+            });
+          });
+        }, 1000);
       }
     },
     // 点击眼睛，显示密码，再次点击，隐藏密码
@@ -371,12 +345,6 @@ export default {
       } else {
         this.inputType = 'password';
       }
-    },
-    // 当前窗口打开
-    openCurrentWindow(e) {
-      e.preventDefault();
-      this.$refs.currentWindow.href = 'https://123.60.85.111:4200/';
-      this.$refs.iframeMain.src = this.$refs.currentWindow.href;
     },
     // 新窗口打开
     openNewWindow() {
@@ -396,8 +364,7 @@ export default {
         experimentContent: this.richTextResult, //实验结果
         planContent: planContent, //实验步骤
       };
-      saveExperimentReport(data).then((res) => {
-        console.log(res);
+      saveExperimentReport(data).then(() => {
         this.$message({
           message: '保存成功',
           type: 'success',
@@ -406,7 +373,7 @@ export default {
     },
     // 提交实验报告
     submit() {
-      this.$confirm('实验报告提交后不能修改，确定提交吗？', '提交实验', {
+      this.$confirm('实验只能提交一次，不可重复提交，确定提交吗？', '提交实验', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -418,7 +385,7 @@ export default {
             this.richTextPlans.push(item.html);
           });
           const planContent = this.richTextPlans;
-          let data = {
+          const data = {
             experimentId: this.experimentId, //实验id
             teacherCourseId: this.teacherId, //课程id
             experimentContent: this.richTextResult, //实验结果
@@ -427,10 +394,8 @@ export default {
           };
           saveExperimentReport(data).then((res) => {
             console.log(res);
-            this.$message({
-              type: 'success',
-              message: '提交成功!',
-            });
+            this.$message.success('提交成功');
+            this.getExperimentData();
           });
         })
         .catch(() => {
@@ -602,8 +567,9 @@ export default {
 }
 .sumbit-status {
   position: absolute;
-  top: 5px;
+  top: -39px;
   right: 140px;
+  transform: scale(0.8);
 }
 .status-img {
   display: inline-block;

@@ -1,9 +1,9 @@
 <template>
-  <div class="course-list content-height theme-bg-white btn-radius-5" v-loading="loadingGlobal">
+  <div class="course-list content-height theme-bg-white btn-radius-5" v-loading="$store.state.isLoading">
     <!-- 左侧树形结构 -->
     <div class="tree">
       <el-tree :data="data" :props="defaultProps" accordion @node-click="handleNodeClick" :highlight-current="true">
-        <span class="node-title" slot-scope="{ node, data }"> {{ node.data.index }}{{ node.data.title }} </span>
+        <span class="node-title" slot-scope="{ node }"> {{ node.data.index }}{{ node.data.title }} </span>
       </el-tree>
     </div>
     <div class="tree-content">
@@ -47,12 +47,12 @@
             </div>
           </el-tab-pane>
           <el-tab-pane v-if="teacherId" label="实验报告" name="third" class="experiment-report">
-            <div class="experiment-title">
+            <!-- <div class="experiment-title">
               <p>【实验模板】</p>
               <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
                 >点击下载实验模板
               </a>
-            </div>
+            </div> -->
             <!-- 实验内容插槽 -->
             <slot name="experiment"></slot>
           </el-tab-pane>
@@ -77,19 +77,7 @@
 </template>
 
 <script>
-import {
-  getTreeData,
-  getExperimentContent,
-  getExperimentData,
-  getExperimentStudentData,
-  courseDetails,
-  teacherCourseDetails,
-  getExperimentResult,
-  getStudentScore,
-  scoreList,
-  saveExperimentReport,
-  checkChapter,
-} from '@/utils/api.js';
+import { getTreeData, getExperimentContent } from '@/utils/api.js';
 export default {
   props: ['treeEvent', 'courseObj', 'teacherId'],
   // props: {
@@ -150,7 +138,7 @@ export default {
         this.form.pwd = pwd === 'null' ? '' : pwd;
         this.$refs.experiment.style.display = 'block';
         // 下载实验模版
-        this.$refs.downLoadTemplate.href = data.fileUrl;
+        // this.$refs.downLoadTemplate.href = data.fileUrl;
         // 通知父组件的事件
         this.treeEvent && this.treeEvent(data.id);
         this.$refs.experiment.style.display = 'block';
@@ -168,7 +156,6 @@ export default {
     },
     // 新窗口打开
     openNewWindow() {
-      // this.$refs.newWindow.href = 'https://123.60.85.111:4200/';
       // window.open('https://ovirt.yt.com/ovirt-engine/web-ui/?locale=zh_CN');
       window.open('https://engine443.com/ovirt-engine/web-ui/?locale=zh_CN');
     },
@@ -206,7 +193,6 @@ export default {
       return node;
     });
     this.data = dataList;
-    this.loadingGlobal = false;
   },
 };
 </script>
