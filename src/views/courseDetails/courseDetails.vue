@@ -134,12 +134,12 @@
             <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
               <!-- 学生端 -->
               <el-table :data="tableData" height="auto" border style="width: 100%">
-                <el-table-column prop="updateTime" label="提交时间"> </el-table-column>
+                <el-table-column prop="updateTime" label="提交时间" width="200"> </el-table-column>
                 <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
-                <el-table-column prop="expResult" label="实验结果" width="120"> </el-table-column>
-                <el-table-column prop="stuGrade" label="学生成绩"> </el-table-column>
-                <el-table-column prop="comment" label="评语" width="200"> </el-table-column>
-                <el-table-column prop="createTime" label="创建时间"> </el-table-column>
+                <el-table-column prop="result" label="实验结果"> </el-table-column>
+                <el-table-column prop="score" label="学生成绩" width="80"> </el-table-column>
+                <el-table-column prop="comment" label="评语"> </el-table-column>
+                <el-table-column prop="createTime" label="创建时间" width="200"> </el-table-column>
               </el-table>
               <div class="block zh-mgt-20">
                 <el-pagination
@@ -573,11 +573,11 @@ export default {
 #courseDeatils .el-table .el-table__cell {
   text-align: center;
 }
-#courseDeatils .el-table .cell {
+/* #courseDeatils .el-table .cell {
   display: -webkit-box;
-  -webkit-line-clamp: 1; /* 指定要显示的行数 */
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-}
+} */
 </style>

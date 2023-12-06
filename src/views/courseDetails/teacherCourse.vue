@@ -66,7 +66,7 @@
           <el-table-column align="center" prop="username" label="学生姓名" width="120"> </el-table-column>
           <el-table-column align="center" prop="title" label="实验标题"> </el-table-column>
           <el-table-column prop="score" label="成绩" width="80"> </el-table-column>
-          <el-table-column prop="updateTime" label="更新日期"> </el-table-column>
+          <el-table-column prop="updateTime" label="更新日期" width="200"> </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <el-button @click="checkDetails(scope.row)" type="text" size="middle">查看详情</el-button>
@@ -471,12 +471,5 @@ export default {
 }
 #courseDeatils .el-table .el-table__cell {
   text-align: center;
-}
-#courseDeatils .el-table .cell {
-  display: -webkit-box;
-  -webkit-line-clamp: 1; /* 指定要显示的行数 */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 </style>
