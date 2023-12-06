@@ -13,7 +13,7 @@
       row-key="id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
     >
-      <el-table-column prop="name" label="章节标题" width="200">
+      <el-table-column prop="name" label="章节标题" align="center" width="200" class-name="chapter-management-tree">
         <template slot-scope="scope">
           <div class="ellipsis">{{ scope.row.order }}：{{ scope.row.name }}</div>
         </template>
@@ -27,7 +27,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述"> </el-table-column>
-      <el-table-column label="操作" width="350">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button v-if="!scope.row.pid" type="primary" @click="addchapterji(scope.row.id)" size="mini"
             >添加节</el-button
@@ -81,6 +81,7 @@
       width="40%"
       :before-close="closeAddJoint"
       :close-on-click-modal="false"
+      v-if="dialogVisibleji"
     >
       <el-form :model="revise" :rules="rules" ref="formRule" label-width="100px" class="chapter-dialog-form">
         <el-form-item label="章节标题" prop="name">
@@ -119,7 +120,7 @@
         </el-form-item>
         <el-form-item class="form-btn">
           <el-button size="small" @click="serveji" type="primary">确 定</el-button>
-          <el-button size="small" @click="dialogVisibleji = false">取 消</el-button>
+          <el-button size="small" @click="closeAddChapter">取 消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -167,6 +168,7 @@ export default {
     // 关闭章dilog
     closeAddChapter() {
       this.dialogVisible = false;
+      this.dialogVisibleji = false;
       this.$refs['formRule'].resetFields();
     },
     // 关闭节dilog
@@ -375,11 +377,6 @@ export default {
 .chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell {
   text-align: center;
 }
-.chapter-managemet .el-table__header-wrapper .el-table__header .el-table__cell:first-child,
-.chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell:first-child,
-.chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell:last-child {
-  text-align: left;
-}
 .chapter-managemet .el-form .is-required {
   display: flex;
   align-items: center;
@@ -434,7 +431,7 @@ export default {
 .upload-file .el-upload-list__item {
   width: 20vw;
 }
-.chapter-managemet .cell {
+.chapter-managemet .chapter-management-tree .cell {
   display: flex;
 }
 </style>
