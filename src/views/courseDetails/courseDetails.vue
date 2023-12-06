@@ -269,32 +269,6 @@ export default {
         const pwd = localStorage.getItem('hostPwd');
         this.form.pwd = pwd === 'null' ? '' : pwd;
         // 学生端实验结果、实验步骤
-        // getExperimentStudentData(this.experimentId, this.studentCourseId).then((res) => {
-        //   console.log(res, 'res11111111111');
-        //   if (res.experimentReport.type === 2 && res.experimentReport.status != 0) {
-        //     //学生已提交实验
-        //     this.submitStatus = true;
-        //     this.studentScore = res.experimentReport.score;
-        //   }
-        //   // 实验结果
-        //   if (res.experimentReport.result !== null) {
-        //     this.$refs.editor.html = res.experimentReport.result;
-        //   }
-        //   // this.$refs.editor.html = res.experimentReport.result
-        //   // 实验步骤
-        //   if (res.experimentReportPlans !== null) {
-        //     this.experimentStep = res.experimentReportPlans;
-        //     setTimeout(() => {
-        //       res.experimentReportPlans.forEach((ritem, rindex) => {
-        //         this.$refs.editors.forEach((eitem, eindex) => {
-        //           if (rindex === eindex) {
-        //             eitem.html = ritem.content;
-        //           }
-        //         });
-        //       });
-        //     }, 1000);
-        //   }
-        // });
         await this.getExperimentData();
         if (this.studentCourseId) {
           // 下载实验模版
@@ -352,24 +326,20 @@ export default {
       window.open('https://engine443.com/ovirt-engine/web-ui/?locale=zh_CN');
     },
     // 保存富文本内容
-    saveContent() {
+    async saveContent() {
       this.richTextResult = this.$refs.editor.html;
       this.$refs.editors.map((item) => {
         this.richTextPlans.push(item.html);
       });
       const planContent = this.richTextPlans;
-      let data = {
+      const data = {
         experimentId: this.experimentId, //实验id
         teacherCourseId: this.teacherId, //课程id
         experimentContent: this.richTextResult, //实验结果
         planContent: planContent, //实验步骤
       };
-      saveExperimentReport(data).then(() => {
-        this.$message({
-          message: '保存成功',
-          type: 'success',
-        });
-      });
+      await saveExperimentReport(data);
+      this.$message.success('保存实验成功');
     },
     // 提交实验报告
     submit() {
@@ -406,10 +376,6 @@ export default {
         });
     },
     // 分页
-    // pageSize 改变时会触发
-    handleSizeChange(val) {
-      this.pageSize = val;
-    },
     // currentPage 改变时会触发
     handleCurrentChange(val) {
       this.currentPage = val;
