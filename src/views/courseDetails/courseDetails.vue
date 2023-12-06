@@ -348,7 +348,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       })
-        .then(() => {
+        .then(async () => {
           // 获取富文本框的内容
           this.richTextResult = this.$refs.editor.html;
           this.$refs.editors.map((item) => {
@@ -362,17 +362,12 @@ export default {
             planContent: planContent, //实验步骤
             status: 1, //实验状态，表示提交
           };
-          saveExperimentReport(data).then((res) => {
-            console.log(res);
-            this.$message.success('提交成功');
-            this.getExperimentData();
-          });
+          await saveExperimentReport(data);
+          await this.getExperimentData();
+          this.$message.success('提交成功');
         })
         .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消提交',
-          });
+          this.$message.info('取消提交');
         });
     },
     // 分页
