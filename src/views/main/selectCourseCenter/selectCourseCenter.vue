@@ -7,17 +7,13 @@
           <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
         </el-col>
         <el-col :span="14" class="choose-item-info zh-mgl-20">
-          <el-row class="info-container" :gutter="20">
-            <el-col :span="12" class="item-info">
-              <div>课程名称：{{ item.name }}</div>
-              <div>已选人数：{{ item.selectedNumber }}</div>
-              <div>授课地点：{{ item.address }}</div>
-            </el-col>
-            <el-col :span="12" class="item-info">
-              <div>授课教师：{{ item.userName }}</div>
-              <div>限制人数：{{ item.maxTaker }}</div>
-            </el-col>
-          </el-row>
+          <div class="info-container">
+            <div>课程名称：{{ item.name }}</div>
+            <div>已选人数：{{ item.selectedNumber }}</div>
+            <div>授课地点：{{ item.address }}</div>
+            <div>授课教师：{{ item.userName }}</div>
+            <div>限制人数：{{ item.maxTaker }}</div>
+          </div>
         </el-col>
         <el-col :span="4">
           <el-button type="primary" size="small" @click="selectCourse(item)" class="choose">选课</el-button>
@@ -65,6 +61,11 @@ export default {
 </script>
 
 <style scoped>
+.info-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+}
 .person-title {
   height: 60px;
   line-height: 60px;
