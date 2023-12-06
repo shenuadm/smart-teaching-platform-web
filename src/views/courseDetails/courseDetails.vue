@@ -373,7 +373,7 @@ export default {
     },
     // 提交实验报告
     submit() {
-      this.$confirm('实验只能提交一次，不可重复提交，确定提交吗？', '提交实验', {
+      this.$confirm('实验报告提交后无法修改，确定提交吗？', '提交实验', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
