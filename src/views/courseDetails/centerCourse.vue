@@ -8,40 +8,10 @@
     </div>
     <!-- 课程信息 -->
     <div class="course-info theme-bg-white btn-radius-5 zh-mgb-20 zh-pd-10">
-      <img src="@/assets/addbg.jpg" alt="" />
+      <img src="@/assets/addbg.jpg" alt="网络错误" />
       <div class="info-content zh-mgl-30">
-        <div class="info-content-left">
-          <div class="info-name">
-            <div>
-              课程名称：<span>{{ courseObj.name }}</span>
-            </div>
-          </div>
-          <div>
-            <p>
-              选课开始日期：<span>{{ courseObj.selectStartDate }}</span>
-            </p>
-            <p>
-              授课开始日期：<span>{{ courseObj.startDate }}</span>
-            </p>
-            <p>
-              课程状态：<span ref="status">{{ courseObj.status }}</span>
-            </p>
-          </div>
-        </div>
-        <div class="info-content-right">
-          <p>
-            任课教师：<span>{{ courseObj.userName }}</span>
-          </p>
-          <p>
-            选课结束日期：<span>{{ courseObj.selectEndDate }}</span>
-          </p>
-          <p>
-            授课结束日期：<span>{{ courseObj.endDate }}</span>
-          </p>
-          <p>
-            授课地点：<span>{{ courseObj.address }}</span>
-          </p>
-        </div>
+        <div class="info-name font-bold">课程名称：{{ courseObj.name }}</div>
+        <div class="mt-20">课程描述：{{ courseObj.description }}</div>
       </div>
     </div>
     <!-- 实验内容 -->
@@ -77,10 +47,6 @@ export default {
 </script>
 
 <style scoped>
-.info-content-left {
-  display: flex;
-  flex-direction: column;
-}
 .info-content-left .info-name {
   margin-bottom: 16px;
 }
@@ -105,10 +71,6 @@ export default {
 .course-info img {
   width: 200px;
   height: 160px;
-}
-.info-content {
-  display: flex;
-  flex-direction: row;
 }
 .info-content p {
   margin-top: 0 !important;

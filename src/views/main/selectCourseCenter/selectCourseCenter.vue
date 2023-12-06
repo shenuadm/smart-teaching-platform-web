@@ -16,7 +16,6 @@
             <el-col :span="12" class="item-info">
               <div>授课教师：{{ item.userName }}</div>
               <div>限制人数：{{ item.maxTaker }}</div>
-              <div>课程状态：{{ item.status }}</div>
             </el-col>
           </el-row>
         </el-col>
