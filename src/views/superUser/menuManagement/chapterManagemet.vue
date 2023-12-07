@@ -27,7 +27,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述"> </el-table-column>
-      <el-table-column label="操作" width="250">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button v-if="!scope.row.pid" type="primary" @click="addchapterji(scope.row.id)" size="mini"
             >添加节</el-button

@@ -1,21 +1,40 @@
 <template>
   <div>
     <div class="header">
-      <div class="title">账号:</div>
-      <el-input class="inputTop" v-model="serch.account" id="inputh" placeholder="请输入账号"></el-input>
-      <div class="title">昵称:</div>
-      <el-input class="inputTop" v-model="serch.username" id="inputh" placeholder="请输入昵称"></el-input>
-      <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
-      <el-button type="primary" size="small" @click="resetting">重置</el-button>
-      <el-button type="primary" size="small" @click="add">添加用户</el-button>
-      <!-- <el-button type="danger" size="small" @click="uploadStudent">导入学生</el-button> -->
-      <el-upload action="" :auto-upload="false" :file-list="fileList" :limit="1" :on-change="uploadChange">
-        <el-button slot="trigger" size="small" type="primary">导入学生账号</el-button>
-        <el-button type="info" size="small" @click="confirmUpload">确认上传</el-button>
-        <div slot="tip" class="upload-tip">只能上传excel文件</div>
-      </el-upload>
-      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
-      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
+      <div class="header-left">
+        <div>
+          <div class="search-input">
+            <div class="title">账号:</div>
+            <el-input size="small" v-model="serch.account" placeholder="请输入账号"></el-input>
+          </div>
+          <div class="search-input">
+            <div class="title">昵称:</div>
+            <el-input size="small" v-model="serch.username" placeholder="请输入昵称"></el-input>
+          </div>
+          <div class="search-input">
+            <div class="title">专业:</div>
+            <el-input size="small" v-model="serch.username" placeholder="请输入专业"></el-input>
+          </div>
+          <div class="search-input">
+            <div class="title">年级:</div>
+            <el-input size="small" v-model="serch.username" placeholder="请输入年级"></el-input>
+          </div>
+        </div>
+        <div>
+          <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
+          <el-button type="primary" size="small" @click="resetting">重置</el-button>
+          <el-button type="primary" size="small" @click="add">添加用户</el-button>
+          <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
+        </div>
+      </div>
+      <div class="header-right ml-10">
+        <el-button type="" size="small" style="height: 34px">下载模板</el-button>
+        <el-upload action="" :auto-upload="false" :file-list="fileList" :limit="1" :on-change="uploadChange">
+          <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>
+          <el-button type="info" size="small" @click="confirmUpload" class="ml-10">确认上传</el-button>
+          <div slot="tip" class="upload-tip">只能上传excel文件</div>
+        </el-upload>
+      </div>
     </div>
     <el-table
       ref="multipleTable"
@@ -37,8 +56,8 @@
           <div v-else-if="scope.row.active === 1" class="forbidden">未激活</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="专业" width="200"> </el-table-column>
-      <el-table-column prop="lastLoginTime" label="年级" width="100"></el-table-column>
+      <el-table-column prop="createTime" label="专业"> </el-table-column>
+      <el-table-column prop="lastLoginTime" label="年级"></el-table-column>
       <el-table-column prop="lastLoginIp" label="班级" width="150"></el-table-column>
       <el-table-column label="操作" width="300">
         <template slot-scope="{ row }" v-if="row.roleName !== '超级管理员'">
@@ -256,27 +275,39 @@ export default {
 .forbidden {
   color: red;
 }
-.custom-file-button {
-  position: absolute;
-  top: 372px;
-  left: 72px;
-  width: 95px;
-  height: 40px;
-  border: 1px solid #dcdfe6;
-  color: #909399;
-}
+
 .header {
   position: relative;
   width: 100%;
-  height: 60px;
   display: flex;
 }
-.title {
-  width: 80px;
-  line-height: 30px;
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 20px;
 }
-.btn-search {
-  margin-left: 10px;
+.header-left > div {
+  display: flex;
+}
+.header-left div:first-child {
+  gap: 10px;
+}
+.header-right {
+  width: 350px;
+  display: flex;
+}
+.header-right div:first-of-type {
+  flex-grow: 1;
+  width: 250px;
+}
+.search-input {
+  display: flex;
+  align-items: center;
+}
+.title {
+  width: 50px;
+  flex-shrink: 0;
 }
 .block {
   margin-top: 20px;
@@ -284,9 +315,7 @@ export default {
 .inputw {
   width: 300px;
 }
-.inputTop {
-  width: 150px;
-}
+
 /* 弹出框的角色 */
 .roles {
   width: 240px !important;
@@ -294,9 +323,6 @@ export default {
 /* 弹出框的激活状态 */
 .active {
   width: 230px !important;
-}
-.el-table {
-  margin-top: 20px;
 }
 </style>
 <style>
