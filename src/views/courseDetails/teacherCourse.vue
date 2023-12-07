@@ -221,7 +221,6 @@ export default {
       },
       experimentId: '', //实验id
       teacherId: '', //教师课程id
-      roleId: '', //角色id--2表示教师角色，3表示学生角色
       courseId: '', //课程的id
       experimentStep: [], //实验步骤
       tableData: [], //学生成绩
@@ -244,7 +243,6 @@ export default {
     };
   },
   async created() {
-    this.roleId = localStorage.getItem('roleId');
     // 获取数据
     this.path = '/myTeaching';
     this.teacherId = this.$route.query.id;

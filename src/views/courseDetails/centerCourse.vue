@@ -28,12 +28,10 @@ export default {
       path: '', //面包屑路由跳转
       courseObj: {}, //课程信息
       teacherId: '', //教师课程id
-      roleId: '', //角色id--2表示教师角色，3表示学生角色
       courseId: '', //课程的id
     };
   },
   async created() {
-    this.roleId = localStorage.getItem('roleId');
     // 获取数据
     this.path = '/courseCenter';
     const id = this.$route.query.courseId;

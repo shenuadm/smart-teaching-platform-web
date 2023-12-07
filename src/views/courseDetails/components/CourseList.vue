@@ -86,7 +86,6 @@ export default {
         pwd: '', //登录密码
       },
       inputType: 'password', //实验操作的密码框的type类型
-      roleId: '', //角色id--2表示教师角色，3表示学生角色
       courseId: '', //课程的id
       studentCourseId: '', //学生实验id
       experimentContent: {}, //实验内容
@@ -148,7 +147,6 @@ export default {
     },
   },
   async created() {
-    this.roleId = localStorage.getItem('roleId');
     this.courseId = this.$route.query.courseId;
     // 获取树形数据
     const res = await getTreeData(this.courseId);

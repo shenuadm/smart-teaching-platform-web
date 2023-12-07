@@ -16,7 +16,7 @@
             </div>
           </el-submenu>
         </div>
-        <div v-if="roleId === 1">
+        <div v-if="rolename === 'supper_admin'">
           <el-menu-item index="/aboutUS">
             <span slot="title"><i class="icon-guanyuwomen iconfont mr-5"></i>关于我们</span>
           </el-menu-item>
@@ -37,13 +37,13 @@ export default {
   data() {
     return {
       navList: [], //侧导航标题
-      roleId: '',
+      rolename: '',
     };
   },
   created() {
     // 从本地存储中取值
     this.navList = JSON.parse(localStorage.getItem('navData'));
-    this.roleId = JSON.parse(localStorage.getItem('roleId'));
+    this.rolename = sessionStorage.getItem('rolename');
   },
 };
 </script>

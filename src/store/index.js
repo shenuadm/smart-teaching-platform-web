@@ -6,21 +6,26 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     username: sessionStorage.getItem('username'),
-    roleId: localStorage.getItem('roleId'),
+    rolename: sessionStorage.getItem('rolename'),
     roleUrl: [],
     isLoading: false,
   },
-  getters: {},
+  getters: {
+    isStudent(state) {
+      return state.rolename === 'student';
+    },
+  },
   mutations: {
     getUsername(state) {
       const username = sessionStorage.getItem('username');
       state.username = username;
     },
+    getRolename(state) {
+      const rolename = sessionStorage.getItem('rolename');
+      state.rolename = rolename;
+    },
     updateUsername(state, newusername) {
       state.username = newusername;
-    },
-    updateRoleId(state, newRoleId) {
-      state.roleId = newRoleId;
     },
     setRoleUrl(state, newData) {
       state.roleUrl = newData;

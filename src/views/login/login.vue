@@ -135,26 +135,27 @@ export default {
           const res = await toLogin(data);
           localStorage.setItem('satoken', res.tokenValue); // 存token
           localStorage.setItem('navData', JSON.stringify(res.menuVoList)); // 存导航信息
-          localStorage.setItem('roleId', res.roleId); // 存角色权限id
+          sessionStorage.setItem('rolename', res.rolename); // 角色名称
+          this.$store.commit('getRolename');
           this.$store.commit('updateUsername', res.username);
           sessionStorage.setItem('username', res.username);
-          console.log(data.password, '');
-          // 获取可访问的路径
-          const getRoleUrl = (data) => {
-            const res = [];
-            function arrange(arr) {
-              arr.forEach((item) => {
-                // 如果funtype是1表示是菜单，是可以访问的路径
-                item.funtype === 1 && res.push(item.funurl);
-                // 有children就递归遍历children
-                item.children !== null && arrange(item.children);
-              });
-            }
-            arrange(data);
-            return res;
-          };
+          // console.log(data.password, '');
+          // // 获取可访问的路径
+          // const getRoleUrl = (data) => {
+          //   const res = [];
+          //   function arrange(arr) {
+          //     arr.forEach((item) => {
+          //       // 如果funtype是1表示是菜单，是可以访问的路径
+          //       item.funtype === 1 && res.push(item.funurl);
+          //       // 有children就递归遍历children
+          //       item.children !== null && arrange(item.children);
+          //     });
+          //   }
+          //   arrange(data);
+          //   return res;
+          // };
           // 存入可访问的路径
-          localStorage.setItem('roleUrl', JSON.stringify(getRoleUrl(res.menuVoList)));
+          // localStorage.setItem('roleUrl', JSON.stringify(getRoleUrl(res.menuVoList)));
           this.$message.success({ message: '登录成功', duration: 1500 });
           this.$router.push('/user/getInfo');
         }

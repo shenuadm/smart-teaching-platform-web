@@ -187,7 +187,6 @@ export default {
       inputType: 'password', //实验操作的密码框的type类型
       experimentId: '', //实验id
       teacherId: '', //教师课程id
-      roleId: '', //角色id--2表示教师角色，3表示学生角色
       courseId: '', //课程的id
       studentCourseId: '', //学生实验id
       experimentContent: {}, //实验内容
@@ -202,7 +201,6 @@ export default {
     };
   },
   created() {
-    this.roleId = localStorage.getItem('roleId');
     //学生查看课程详情
     this.path = '/myCourse';
     this.teacherId = this.$route.query.teacherCourseId;

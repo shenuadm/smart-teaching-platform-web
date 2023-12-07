@@ -48,148 +48,23 @@
     >
     </el-pagination>
     <!-- 编辑框 -->
-    <el-dialog
-      :close-on-click-modal="false"
-      title="编辑课程"
-      :visible.sync="dialogVisible"
-      :before-close="closeDialog"
-      width="30%"
-    >
-      <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px" v-loading="$store.state.isLoading">
-        <!-- 课程名称 -->
-        <el-form-item label="课程名称：" prop="name">
-          <el-input v-model="editCourse.name" placeholder="课程名称"></el-input>
-        </el-form-item>
-        <!-- 选课日期 -->
-        <!-- <div class="choose-date">
-          <el-form-item label="选课日期：" prop="selectStartDate">
-            <el-date-picker
-              type="date"
-              placeholder="选课开始日期"
-              v-model="editCourse.selectStartDate"
-            ></el-date-picker>
-          </el-form-item>
-          <span>至</span>
-          <el-form-item prop="selectEndDate" class="end-date">
-            <el-date-picker type="date" placeholder="选课结束日期" v-model="editCourse.selectEndDate"></el-date-picker>
-          </el-form-item>
-        </div> -->
-        <el-form-item label="选课日期：">
-          <el-date-picker
-            v-model="chooseDate"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <!-- <div class="input-small"> -->
-        <!-- 最多选课人数 -->
-        <el-form-item label="选课人数：" prop="maxTaker" class="more-person">
-          <el-input v-model="editCourse.maxTaker" placeholder="课程最大人数"></el-input>
-        </el-form-item>
-        <!-- 授课地点 -->
-        <el-form-item label="授课地点：" prop="address" class="course-address">
-          <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
-        </el-form-item>
-        <!-- </div> -->
-        <!-- 授课日期 -->
-        <!-- <div class="choose-date"> -->
-        <!-- <el-form-item label="授课日期：" prop="startDate">
-            <el-date-picker type="date" placeholder="授课开始日期" v-model="editCourse.startDate"></el-date-picker>
-          </el-form-item>
-          <span>至</span>
-          <el-form-item prop="endDate" class="end-date">
-            <el-date-picker type="date" placeholder="授课结束日期" v-model="editCourse.endDate"></el-date-picker>
-          </el-form-item> -->
-        <el-form-item label="授课日期：">
-          <el-date-picker
-            v-model="teachDate"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <!-- </div> -->
-        <!-- 课程状态 -->
-        <el-form-item label="课程状态：">
-          <el-radio-group v-model="editCourse.status">
-            <el-radio disabled label="选课中">选课中</el-radio>
-            <el-radio disabled label="选课结束">选课结束</el-radio>
-            <el-radio disabled label="授课中">授课中</el-radio>
-            <el-radio disabled label="评阅中">评阅中</el-radio>
-            <el-radio label="未启用">未启用</el-radio>
-            <el-radio label="启用">启用</el-radio>
-            <el-radio label="已结束">已结束</el-radio>
-            <el-radio label="已关闭">已关闭</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
-        <el-button @click="closeDialog">取消</el-button>
-      </div>
-    </el-dialog>
+    <EditCourse :dialogVisible.sync="dialogVisible" :formDate="editCourse"></EditCourse>
   </div>
 </template>
 
 <script>
-import { myTeaching } from '@/utils/api.js';
 import { teacherCourseStatus } from '@/constant/course.js';
+import { getMyTeachingService } from '@/api/course.js';
+import EditCourse from './components/EditCourse.vue';
 export default {
   data() {
     return {
-      // 表单校验
-      rules: {
-        name: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
-        selectStartDate: [
-          {
-            required: true,
-            message: '请选择您的选课开始日期',
-            trigger: 'blur',
-          },
-        ],
-        selectEndDate: [
-          {
-            required: true,
-            message: '请选择您的选课结束日期',
-            trigger: 'blur',
-          },
-        ],
-        maxTaker: [
-          {
-            required: true,
-            message: '请输入您的最多选课人数',
-            trigger: 'blur',
-          },
-        ],
-        address: [{ required: true, message: '请输入您的授课地点', trigger: 'blur' }],
-        startDate: [
-          {
-            required: true,
-            message: '请选择您的授课开始日期',
-            trigger: 'blur',
-          },
-        ],
-        endDate: [
-          {
-            required: true,
-            message: '请选择您的授课结束日期',
-            trigger: 'blur',
-          },
-        ],
-      },
       page: 1, // 页数
       total: 0, // 总数
-      activeCourseType: '-1',
+      activeCourseType: '-1', // 选择的课程类型
       myTeachList: [], //我的授课的全部课程
       courseForm: {}, //课程的详细信息
       showScore: false, //是否显示成绩列表
-      chooseDate: [], // 课程选课日期
-      teachDate: [], // 课程授课日期
       scoreTable: [
         //成绩列表
         {
@@ -212,16 +87,7 @@ export default {
         },
       ],
       dialogVisible: false, //弹框显示隐藏
-      editCourse: {
-        name: '', //课程名
-        selectStartDate: '', //选课开始日期
-        selectEndDate: '', //选课结束日期
-        maxTaker: '', //最大人数
-        address: '', //课程地点
-        startDate: '', //授课开始时间
-        endDate: '', //授课结束时间
-        status: '未启用',
-      },
+      editCourse: {}, // 编辑的信息
     };
   },
   created() {
@@ -230,52 +96,36 @@ export default {
   methods: {
     // 选择课程类型变化
     courseTypeChange() {
-      console.log(1, this.activeCourseType, typeof this.activeCourseType);
       this.page = 1;
       this.getCourseData();
     },
+    // 获取课程信息
     async getCourseData() {
       const data = { page: this.page };
       this.activeCourseType !== '-1' && Object.assign(data, { status: this.activeCourseType });
-      const res = await myTeaching(data);
+      const res = await getMyTeachingService(data);
       this.total = res.count;
       this.myTeachList = res.data.map((item) => {
         return { ...item, picture: item.picture.split(',')[1] };
       });
     },
-    // 关闭弹框
-    closeDialog() {
-      this.dialogVisible = false;
-      this.$refs['ruleForm'].resetFields();
-    },
-    //保存修改
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
-    },
     // 编辑课程
     editCourseClick(item) {
-      const data = JSON.parse(JSON.stringify(item));
-      this.editCourse = data;
+      this.editCourse = {
+        ...item,
+        date: [item.startDate, item.endDate],
+        selectDate: [item.selectStartDate, item.selectEndDate],
+      };
       this.dialogVisible = true;
     },
     // 查看课程详情
-    lookDetails(e) {
-      localStorage.setItem('hostName', e.hostName); //登录名
-      localStorage.setItem('hostPwd', e.hostPwd); //登录密码
+    lookDetails({ hostName, hostPwd, courseId, id }) {
+      localStorage.setItem('hostName', hostName); //登录名
+      localStorage.setItem('hostPwd', hostPwd); //登录密码
       this.$router.push({
         path: '/teacherCourse',
         name: 'teacherCourse',
-        query: {
-          courseId: e.courseId,
-          id: e.id,
-        },
+        query: { courseId, id },
       });
     },
     // 查看成绩
@@ -285,12 +135,13 @@ export default {
         this.showScore = !this.showScore;
       }
     },
-    handleClose() {
-      this.showScoreVisible = false;
-    },
+    // 课程状态数据转换
     courseStatusConvert(status) {
       return teacherCourseStatus.get(status);
     },
+  },
+  components: {
+    EditCourse,
   },
 };
 </script>
@@ -317,9 +168,6 @@ export default {
   height: 120px;
   cursor: pointer;
 }
-/* .stuScore{
-  background-color: #fff;
-} */
 .downloadScoreList {
   width: 100%;
   text-align: right;
@@ -346,30 +194,6 @@ export default {
   display: flex;
   align-items: center;
   transform: translateY(20px);
-}
-.choose-date {
-  display: flex;
-  gap: 10px;
-}
-.choose-date span {
-  padding-top: 10px;
-}
-.input-small {
-  display: flex;
-}
-.more-person {
-  width: 320px;
-}
-.el-radio-group {
-  display: flex;
-  flex-wrap: wrap;
-}
-.el-radio-group label {
-  margin: 10px 0;
-  margin-right: 20px;
-}
-.el-form-item .el-button--default {
-  margin-left: 30px;
 }
 </style>
 <style>
@@ -398,11 +222,12 @@ export default {
 .myTeaching .el-table .el-table__cell {
   text-align: center;
 }
-.myTeaching .el-table .cell {
-  display: -webkit-box;
-  -webkit-line-clamp: 1; /* 指定要显示的行数 */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* 日期选择器靠左显示 */
+.myTeaching .date-picker .el-form-item__content {
+  text-align: initial !important;
+}
+/* 日期选择器输入框宽度跟随弹框宽度 */
+.myTeaching .date-picker .el-form-item__content .el-date-editor {
+  width: initial !important;
 }
 </style>

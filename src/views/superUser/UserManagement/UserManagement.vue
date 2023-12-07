@@ -253,6 +253,7 @@ export default {
       this.count = res.count;
       this.tableData = res.data;
     },
+    // 选择文件后触发
     uploadChange(file) {
       if (!isAllowFile(file.raw.name, ['.xls', '.xlsx'])) {
         this.$refs.upload.uploadFiles.pop();

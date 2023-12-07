@@ -199,7 +199,6 @@ export default {
             });
           }
         });
-        // this.dialogLoading = false;
       });
     },
     // 确认授权
@@ -224,21 +223,12 @@ export default {
     // 删除
     del(index, row) {
       this.$confirm('你确定要删除吗', '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
         type: 'warning',
       })
         .then(async () => {
-          const res = await delRole(row.roleid);
-          if (res.code === 0) {
-            this.$message({
-              type: 'success',
-              message: '删除角色成功',
-            });
-            this.getroleManagement();
-          } else {
-            this.$message.error(res.msg);
-          }
+          await delRole(row.roleid);
+          this.$message.success('删除角色成功');
+          this.getroleManagement();
         })
         .catch(() => {});
     },
