@@ -60,4 +60,7 @@ input[type='number'] {
 .el-table__body td.el-table__cell {
   text-align: center;
 }
+.el-message {
+  z-index: 2500 !important;
+}
 </style>

@@ -28,8 +28,17 @@ service.interceptors.response.use(
       store.commit('setLoading', false);
       return response.data;
     } else {
+      // 导入用户信息错误，一直显示错误信息
+      if (response.data.code === 'user_excel_import_fail') {
+        Message.error({
+          showClose: true,
+          duration: 0,
+          message: response.data.msg,
+        });
+      } else {
+        Message.error(response.data.msg);
+      }
       // 不成功弹出提示消息
-      Message.error(response.data.msg);
       // 响应状态码为not——login时表示未登录，跳转登录页
       if (response.data.code == 'not_login') {
         sessionStorage.clear();

@@ -33,9 +33,9 @@
           action=""
           :auto-upload="false"
           :file-list="fileList"
-          :limit="1"
+          :limit="2"
           :on-change="uploadChange"
-          :on-exceed="test"
+          ref="upload"
         >
           <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>
           <el-button type="info" size="small" @click="confirmUpload" class="ml-10">确认上传</el-button>
@@ -254,26 +254,24 @@ export default {
       this.tableData = res.data;
     },
     uploadChange(file) {
-      console.log(1);
       if (!isAllowFile(file.raw.name, ['.xls', '.xlsx'])) {
-        this.fileList = [];
+        this.$refs.upload.uploadFiles.pop();
         return this.$message.error('请上传excel类型文件');
       }
+      if (this.$refs.upload.uploadFiles.length == 2) {
+        this.$refs.upload.uploadFiles.shift();
+      }
       this.file = file.raw;
-    },
-    test() {
-      console.log('超出');
     },
     // 确认提交用户信息文件
     async confirmUpload() {
       if (this.file === '') return this.$message.warning('请选择要上传的文件');
       const fd = new FormData();
-      console.log(fd, 'formData');
-      console.log(this.file, 'file');
       fd.append('file', this.file);
-      console.log(fd, 'formData');
-      const res = await uploadStudentExcelService(fd);
-      console.log(res);
+      await uploadStudentExcelService(fd);
+      this.$message.success('上传用户信息成功');
+      this.getData();
+      this.$refs.upload.clearFiles();
     },
     async downloadSample() {
       const res = await downloadExceleSmpleService();
