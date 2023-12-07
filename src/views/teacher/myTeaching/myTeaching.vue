@@ -48,7 +48,13 @@
     >
     </el-pagination>
     <!-- 编辑框 -->
-    <el-dialog :close-on-click-modal="false" title="编辑课程" :visible.sync="dialogVisible" :before-close="closeDialog">
+    <el-dialog
+      :close-on-click-modal="false"
+      title="编辑课程"
+      :visible.sync="dialogVisible"
+      :before-close="closeDialog"
+      width="30%"
+    >
       <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px" v-loading="$store.state.isLoading">
         <!-- 课程名称 -->
         <el-form-item label="课程名称：" prop="name">
@@ -68,7 +74,7 @@
             <el-date-picker type="date" placeholder="选课结束日期" v-model="editCourse.selectEndDate"></el-date-picker>
           </el-form-item>
         </div> -->
-        <el-form-item label="选课日期">
+        <el-form-item label="选课日期：">
           <el-date-picker
             v-model="chooseDate"
             type="daterange"
@@ -97,7 +103,7 @@
           <el-form-item prop="endDate" class="end-date">
             <el-date-picker type="date" placeholder="授课结束日期" v-model="editCourse.endDate"></el-date-picker>
           </el-form-item> -->
-        <el-form-item label="授课日期">
+        <el-form-item label="授课日期：">
           <el-date-picker
             v-model="teachDate"
             type="daterange"
@@ -121,24 +127,21 @@
             <el-radio label="已关闭">已关闭</el-radio>
           </el-radio-group>
         </el-form-item>
-        <!-- 确认/取消 -->
-        <el-form-item class="end-date">
-          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
-          <el-button @click="closeDialog">取消</el-button>
-        </el-form-item>
       </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
+        <el-button @click="closeDialog">取消</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { myTeaching } from '@/utils/api.js';
-import adapter from './adapter.js';
 import { teacherCourseStatus } from '@/constant/course.js';
 export default {
   data() {
     return {
-      ...adapter.data,
       // 表单校验
       rules: {
         name: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
@@ -208,6 +211,17 @@ export default {
           averageScore: 89.5,
         },
       ],
+      dialogVisible: false, //弹框显示隐藏
+      editCourse: {
+        name: '', //课程名
+        selectStartDate: '', //选课开始日期
+        selectEndDate: '', //选课结束日期
+        maxTaker: '', //最大人数
+        address: '', //课程地点
+        startDate: '', //授课开始时间
+        endDate: '', //授课结束时间
+        status: '未启用',
+      },
     };
   },
   created() {
@@ -229,7 +243,22 @@ export default {
         return { ...item, picture: item.picture.split(',')[1] };
       });
     },
-    ...adapter.methods,
+    // 关闭弹框
+    closeDialog() {
+      this.dialogVisible = false;
+      this.$refs['ruleForm'].resetFields();
+    },
+    //保存修改
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!');
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
     // 编辑课程
     editCourseClick(item) {
       const data = JSON.parse(JSON.stringify(item));

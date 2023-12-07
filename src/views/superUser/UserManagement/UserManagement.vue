@@ -28,11 +28,17 @@
         </div>
       </div>
       <div class="header-right ml-10">
-        <el-button type="" size="small" style="height: 34px">下载模板</el-button>
-        <el-upload action="" :auto-upload="false" :file-list="fileList" :limit="1" :on-change="uploadChange">
+        <el-button type="" size="small" style="height: 34px" @click="downloadSample">下载模板</el-button>
+        <el-upload
+          action=""
+          :auto-upload="false"
+          :file-list="fileList"
+          :limit="1"
+          :on-change="uploadChange"
+          :on-exceed="test"
+        >
           <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>
           <el-button type="info" size="small" @click="confirmUpload" class="ml-10">确认上传</el-button>
-          <div slot="tip" class="upload-tip">只能上传excel文件</div>
         </el-upload>
       </div>
     </div>
@@ -116,7 +122,7 @@
 import { userRole } from '@/constant/superUser.js';
 import { delUsers, addUser, getUserData, resetPass, delUser, reviseUser } from '@/utils/api';
 import { isAllowFile } from '@/utils/upload.js';
-import { uploadStudentExcelService } from '@/api/userManagement.js';
+import { uploadStudentExcelService, downloadExceleSmpleService } from '@/api/userManagement.js';
 export default {
   data() {
     return {
@@ -248,12 +254,17 @@ export default {
       this.tableData = res.data;
     },
     uploadChange(file) {
+      console.log(1);
       if (!isAllowFile(file.raw.name, ['.xls', '.xlsx'])) {
         this.fileList = [];
         return this.$message.error('请上传excel类型文件');
       }
       this.file = file.raw;
     },
+    test() {
+      console.log('超出');
+    },
+    // 确认提交用户信息文件
     async confirmUpload() {
       if (this.file === '') return this.$message.warning('请选择要上传的文件');
       const fd = new FormData();
@@ -262,6 +273,10 @@ export default {
       fd.append('file', this.file);
       console.log(fd, 'formData');
       const res = await uploadStudentExcelService(fd);
+      console.log(res);
+    },
+    async downloadSample() {
+      const res = await downloadExceleSmpleService();
       console.log(res);
     },
   },
@@ -332,9 +347,5 @@ export default {
 }
 .el-input-group__prepend {
   width: 55px !important;
-}
-.upload-tip {
-  margin-top: 7px;
-  font-size: 12px;
 }
 </style>
