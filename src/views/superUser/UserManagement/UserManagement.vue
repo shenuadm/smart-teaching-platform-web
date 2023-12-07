@@ -8,7 +8,12 @@
       <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="add">添加用户</el-button>
-      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
+      <!-- <el-button type="danger" size="small" @click="uploadStudent">导入学生</el-button> -->
+      <el-upload action="" :auto-upload="false" :file-list="fileList" :limit="1" :on-change="uploadChange">
+        <el-button slot="trigger" size="small" type="primary">导入学生账号</el-button>
+        <el-button type="info" size="small" @click="confirmUpload">确认上传</el-button>
+        <div slot="tip" class="upload-tip">只能上传excel文件</div>
+      </el-upload>
       <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
       <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
     </div>
@@ -53,7 +58,7 @@
       >
       </el-pagination>
     </div>
-    <!-- 新增用户-->
+    <!-- 新增修改用户弹框-->
     <el-dialog
       :close-on-click-modal="false"
       :title="(revise.userid ? '编辑' : '新增') + '用户'"
@@ -91,10 +96,13 @@
 <script>
 import { userRole } from '@/constant/superUser.js';
 import { delUsers, addUser, getUserData, resetPass, delUser, reviseUser } from '@/utils/api';
+import { isAllowFile } from '@/utils/upload.js';
+import { uploadStudentExcelService } from '@/api/userManagement.js';
 export default {
   data() {
     return {
       dialogVisible: false, // 弹框状态
+      file: '',
       page: 1,
       count: 0,
       userRole,
@@ -111,6 +119,7 @@ export default {
         active: 0,
         userid: '',
       },
+      fileList: [],
       tableData: [],
       multipleSelection: [],
       rules: {
@@ -219,6 +228,23 @@ export default {
       this.count = res.count;
       this.tableData = res.data;
     },
+    uploadChange(file) {
+      if (!isAllowFile(file.raw.name, ['.xls', '.xlsx'])) {
+        this.fileList = [];
+        return this.$message.error('请上传excel类型文件');
+      }
+      this.file = file.raw;
+    },
+    async confirmUpload() {
+      if (this.file === '') return this.$message.warning('请选择要上传的文件');
+      const fd = new FormData();
+      console.log(fd, 'formData');
+      console.log(this.file, 'file');
+      fd.append('file', this.file);
+      console.log(fd, 'formData');
+      const res = await uploadStudentExcelService(fd);
+      console.log(res);
+    },
   },
 };
 </script>
@@ -242,7 +268,7 @@ export default {
 .header {
   position: relative;
   width: 100%;
-  height: 30px;
+  height: 60px;
   display: flex;
 }
 .title {
@@ -274,18 +300,15 @@ export default {
 }
 </style>
 <style>
-.el-table th.el-table__cell > .cell,
-.el-table__body td.el-table__cell {
-  text-align: center;
-}
-.el-checkbox__inner {
-  border: 1px solid #0944cd !important;
-}
 #inputh {
   height: 33px !important;
   width: 150px !important;
 }
 .el-input-group__prepend {
   width: 55px !important;
+}
+.upload-tip {
+  margin-top: 7px;
+  font-size: 12px;
 }
 </style>

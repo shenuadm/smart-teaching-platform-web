@@ -240,32 +240,16 @@ export default {
         // 添加结点
         fd.append('pid', this.chapterId);
         fd.append('courseId', this.id);
-        const res = await addchapter(fd);
-        if (res.code === 0) {
-          this.$message({
-            message: '添加节点成功',
-            type: 'success',
-          });
-          this.break();
-          this.dialogVisibleji = false;
-        } else {
-          this.$message.error(res.msg);
-        }
+        await addchapter(fd);
+        this.$message.success('添加节点成功');
       } else {
         // 修改节点
         fd.append('id', this.revise.id);
-        const res = await rchapter(fd);
-        if (res.code === 0) {
-          this.$message({
-            message: '修改节点成功',
-            type: 'success',
-          });
-          this.break();
-          this.dialogVisibleji = false;
-        } else {
-          this.$message.error(res.msg);
-        }
+        await rchapter(fd);
+        this.$message.success('修改节点成功');
       }
+      this.break();
+      this.dialogVisibleji = false;
     },
     //保存章
     serve() {
@@ -279,55 +263,26 @@ export default {
           if (this.isAddChapter) {
             //添加章
             fd.append('courseId', this.courseId);
-            const res = await addchapter(fd);
-            if (res.code === 0) {
-              this.$message({
-                message: '添加章节成功',
-                type: 'success',
-              });
-              this.break();
-              this.dialogVisible = false;
-            } else {
-              this.$message.error(res.msg);
-            }
+            await addchapter(fd);
+            this.$message.success('添加章节成功');
           } else {
             // 修改章
             fd.append('id', this.revise.id);
-            const res = await rchapter(fd);
-            if (res.code === 0) {
-              this.$message({
-                message: '修改章节成功',
-                type: 'success',
-              });
-              this.break();
-              this.dialogVisible = false;
-            } else {
-              this.$message.error(res.msg);
-            }
+            await rchapter(fd);
+            this.$message.success('修改章节成功');
           }
-        } else {
-          return false;
+          this.dialogVisible = false;
+          this.break();
         }
       });
     },
     //删除章节
     deletechapter(id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
+      this.$confirm('此操作将永久删除该章节, 是否继续?', '提示')
         .then(async () => {
-          const res = await dalchapter(id);
-          if (res.code === 0) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!',
-            });
-            this.break();
-          } else {
-            this.$message.error(res.msg);
-          }
+          await dalchapter(id);
+          this.$message.success('删除成功');
+          this.break();
         })
         .catch(() => {});
     },
@@ -346,6 +301,7 @@ export default {
     handleRowClick(row) {
       console.log(row); // 输出所选行的数据
     },
+    // 获取数据
     break() {
       this.id = parseInt(this.$route.query.id);
       const sort = this.$route.query.sort;

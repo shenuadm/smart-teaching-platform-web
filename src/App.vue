@@ -55,4 +55,9 @@ input[type='number'] {
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
+/*表格内容标题居中 */
+.el-table th.el-table__cell > .cell,
+.el-table__body td.el-table__cell {
+  text-align: center;
+}
 </style>

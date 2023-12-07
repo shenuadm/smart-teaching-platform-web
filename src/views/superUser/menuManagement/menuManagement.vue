@@ -61,6 +61,7 @@
       :visible.sync="addVisible"
       width="40%"
       :before-close="addcancel"
+      :close-on-click-modal="false"
     >
       <el-form ref="form" :model="revise" :rules="rules" label-width="80px">
         <el-form-item label="显示名称" prop="title">
@@ -96,6 +97,7 @@
       :visible.sync="addsonVisible"
       width="40%"
       :before-close="colseDialog"
+      :close-on-click-modal="false"
     >
       <el-form ref="form" :model="revise" label-width="80px" :rules="rules">
         <el-form-item label="显示名称" prop="title">

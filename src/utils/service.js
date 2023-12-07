@@ -44,6 +44,7 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    store.commit('setLoading', false);
     Message.error('服务器已经关闭，请稍后在连接！');
     return Promise.reject(error);
   },
