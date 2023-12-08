@@ -32,7 +32,7 @@
       </div>
     </div>
     <!-- 实验内容 -->
-    <CourseList v-if="pageShow" :treeEvent="handleNodeClick" :teacherId="$route.query.id">
+    <CourseList v-if="pageShow" :treeEvent="handleNodeClick">
       <!-- 实验报告插槽 -->
       <template #experiment>
         <div class="experiment-title">
@@ -182,8 +182,8 @@
 </template>
 
 <script>
-import { getExperimentData, teacherCourseDetails, scoreList, getStudentExperiment } from '@/utils/api.js';
-import { teachEditExperimentService } from '@/api/experiment.js';
+import { teacherCourseDetails, scoreList, getStudentExperiment } from '@/utils/api.js';
+import { teachEditExperimentService, getExperimentStepService } from '@/api/experiment.js';
 import { courseStatusConvert } from '@/utils/status.js';
 import CourseList from './components/CourseList.vue';
 import VmsList from './components/VmsList.vue';
@@ -242,7 +242,7 @@ export default {
     async handleNodeClick(id) {
       this.experimentId = id;
       // 教师端实验步骤
-      const res = await getExperimentData(this.experimentId, this.courseId);
+      const res = await getExperimentStepService(this.experimentId, this.courseId);
       // 为每个实验步骤添加显示隐藏状态属性
       res.experimentReportPlans.forEach((item) => (item.show = false));
       this.experimentStep = res.experimentReportPlans;

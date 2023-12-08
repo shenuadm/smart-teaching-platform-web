@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-management" v-loading="loadingGlobal">
+  <div class="menu-management" v-loading="$store.state.isLoading">
     <el-button type="primary" size="small" class="addRoot" @click="addMenuRootDate">添加根节点</el-button>
     <span class="top">
       <el-row style="width: 100%">
@@ -168,10 +168,8 @@ export default {
   methods: {
     // 获取数据列表
     getMenuData() {
-      this.loadingGlobal = true;
       getdata().then((res) => {
         this.tableData = res.data;
-        this.loadingGlobal = false;
       });
     },
     // 新增根节点，节点//

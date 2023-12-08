@@ -317,7 +317,6 @@ export default {
             });
         });
         this.tableData = res.data;
-        this.loadingGlobal = false;
       });
     },
   },

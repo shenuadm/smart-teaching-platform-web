@@ -8,7 +8,7 @@
       <el-button type="primary" size="small" @click="addNotice">添加公告</el-button>
     </div>
     <div class="table">
-      <el-table :data="tableData" style="width: 100%" border v-loading="loadingGlobal">
+      <el-table :data="tableData" style="width: 100%" border v-loading="$store.state.isLoading">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="content" label="内容"></el-table-column>
@@ -64,7 +64,6 @@ export default {
       const res = await systemNotice();
       this.tableData = res.data;
       console.log(this.tableData);
-      this.loadingGlobal = false;
     },
     //
     statusConvent(status) {

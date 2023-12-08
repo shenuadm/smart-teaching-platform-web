@@ -2,7 +2,7 @@
 export const loadingMixin = {
   data() {
     return {
-      loadingGlobal: true,
+      // loadingGlobal: true,
     };
   },
 };

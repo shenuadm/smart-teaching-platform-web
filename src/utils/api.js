@@ -48,10 +48,7 @@ export function courseDetails(id) {
 export function getTreeData(id) {
   return http.get('/article/articleExperimentTree/' + id);
 }
-// 获取实验内容
-export function getExperimentContent(id) {
-  return http.get('/experiment/selectById/' + id);
-}
+
 // 获取实验步骤
 export function getExperimentStudentData(id, studentCourseId) {
   return http.get('/ExperimentReportPlan/student/getExperimentPlanId/' + id + '/' + studentCourseId);
@@ -60,14 +57,7 @@ export function getExperimentStudentData(id, studentCourseId) {
 export function getExperimentResult(id, studentCourseId) {
   return http.get('/experimentReport/student/' + id + '/' + studentCourseId);
 }
-// 获取实验成绩
-export function getStudentScore(id) {
-  return http.get('/experimentReport/listByStudent/' + id);
-}
-// 保存、提交实验报告
-export function saveExperimentReport(data) {
-  return http.post('/experimentReport/commitExperimentContent', data);
-}
+
 // 超级管理员端
 // 删除菜单管理数据
 export function deldata(id) {
@@ -285,10 +275,7 @@ export function checkChapter(id) {
 export function teacherCourseDetails(courseId, id) {
   return http.get('/course/courseDetail?courseId=' + courseId + '&id=' + id);
 }
-// 获取实验步骤
-export function getExperimentData(id) {
-  return http.get('/ExperimentReportPlan/getExperimentPlanId/' + id);
-}
+
 // 成绩列表
 export function scoreList(experimentId, teacherCourseId) {
   return http.get(

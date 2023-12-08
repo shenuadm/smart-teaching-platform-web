@@ -43,132 +43,77 @@
         </div>
       </div>
     </div>
-    <div class="course-list content-height theme-bg-white btn-radius-5">
-      <!-- 左侧树形结构 -->
-      <div class="tree">
-        <el-tree :data="data" :props="defaultProps" accordion :highlight-current="true" @node-click="handleNodeClick">
-          <span class="node-title" slot-scope="{ node }"> {{ node.data.index }}{{ node.data.title }} </span>
-        </el-tree>
-      </div>
-      <div class="tree-content">
-        <!-- 课件 -->
-        <!-- <div class="courseWare" ref="courseWare">课件</div> -->
-        <iframe src="" frameborder="0" class="courseWare iframe" ref="courseWare"></iframe>
-        <!-- 实验报告 -->
-        <div class="experimentReport" ref="experiment">
-          <el-tabs v-model="activeName">
-            <el-tab-pane label="实验内容" name="first">
-              <div class="experiment-title">
-                <p>【实验标题】</p>
-                <div class="experiment-content">
-                  {{ experimentContent.title }}
-                </div>
-              </div>
-              <div class="experiment-title">
-                <p>【实验课时】</p>
-                <div class="experiment-content">
-                  {{ experimentContent.classHour }}
-                </div>
-              </div>
-              <div class="experiment-title">
-                <p>【实验描述】</p>
-                <div class="experiment-content">
-                  {{ experimentContent.description }}
-                </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane v-if="teacherId" label="实验操作" name="second">
-              <div class="login-user">
-                <label for="name">登录用户：</label>
-                <input type="text" disabled v-model="form.name" />
-              </div>
-              <div class="login-pwd">
-                <label for="pwd">登录密码：</label>
-                <input :type="inputType" disabled v-model="form.pwd" />
-                <img src="@/assets/eye.png" alt="" @click="toShow" />
-              </div>
-              <div class="openWindow">
-                <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">访问实验机</a>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane v-if="teacherId" label="实验报告" name="third" class="experiment-report">
-              <!-- <div class="experiment-title">
-                <p>【实验模板】</p>
-                <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
-                  >点击下载实验模板
-                </a>
-              </div> -->
-              <div class="sumbit-status">
-                <img src="@/assets/notsubmit.png" alt="" class="status-img" />
-                <div v-if="submitStatus" class="submitStatus">
-                  <p class="already-submit">已提交</p>
-                  <p class="already-submit">{{ studentScore }}</p>
-                </div>
-                <div v-else class="submitStatus">未提交</div>
-              </div>
-              <div class="experiment-title">
-                <p>【实验报告】</p>
-                <div class="experiment-report-result">
-                  <p class="experiment-report-title zh-fs-16 zh-fw-m">实验结果:</p>
-                  <Editor ref="editor"></Editor>
-                </div>
-                <div class="experiment-report-step">
-                  <p class="experiment-report-title zh-fs-16 zh-fw-m">实验步骤:</p>
-                  <ul class="step-all">
-                    <li class="step-item" v-for="(item, index) in experimentStep" :key="index">
-                      <p>步骤{{ index + 1 }} {{ item.name }}</p>
-                      <Editor ref="editors"></Editor>
-                    </li>
-                  </ul>
-                </div>
-                <div class="experiment-report-operate">
-                  <el-button :disabled="submitStatus" :type="submitStatus ? 'info' : 'primary'" @click="saveContent"
-                    >保存</el-button
-                  >
-                  <el-button :disabled="submitStatus" :type="submitStatus ? 'info' : 'primary'" @click="submit"
-                    >提交</el-button
-                  >
-                </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane v-if="teacherId" label="实验成绩" name="fourth">
-              <!-- 学生端 -->
-              <el-table :data="tableData" height="auto" border style="width: 100%">
-                <el-table-column prop="updateTime" label="提交时间" width="200"> </el-table-column>
-                <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
-                <el-table-column prop="result" label="实验结果"> </el-table-column>
-                <el-table-column prop="score" label="学生成绩" width="80"> </el-table-column>
-                <el-table-column prop="comment" label="评语"> </el-table-column>
-                <el-table-column prop="createTime" label="创建时间" width="200"> </el-table-column>
-              </el-table>
-              <div class="block zh-mgt-20">
-                <el-pagination
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="10"
-                  layout="total, prev, pager, next, jumper"
-                  :total="tableData.length"
-                >
-                </el-pagination>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
+
+    <CourseList :treeEvent="handleNodeClick">
+      <!-- 实验报告插槽 -->
+      <template #experiment>
+        <div class="sumbit-status">
+          <img src="@/assets/notsubmit.png" alt="" class="status-img" />
+          <div v-if="submitStatus" class="submitStatus">
+            <p class="already-submit">已提交</p>
+            <p class="already-submit">{{ studentScore }}</p>
+          </div>
+          <div v-else class="submitStatus">未提交</div>
         </div>
-      </div>
-    </div>
+        <div class="experiment-title">
+          <p>【实验报告】</p>
+          <div class="experiment-report-result">
+            <p class="experiment-report-title zh-fs-16 zh-fw-m">实验结果:</p>
+            <Editor ref="editor"></Editor>
+          </div>
+          <div class="experiment-report-step">
+            <p class="experiment-report-title zh-fs-16 zh-fw-m">实验步骤:</p>
+            <ul class="step-all">
+              <li class="step-item" v-for="(item, index) in experimentStep" :key="index">
+                <p>步骤{{ index + 1 }} {{ item.name }}</p>
+                <Editor ref="editors"></Editor>
+              </li>
+            </ul>
+          </div>
+          <div class="experiment-report-operate">
+            <el-button :disabled="submitStatus" :type="submitStatus ? 'info' : 'primary'" @click="saveContent(0)"
+              >保存</el-button
+            >
+            <el-button :disabled="submitStatus" :type="submitStatus ? 'info' : 'primary'" @click="submit"
+              >提交</el-button
+            >
+          </div>
+        </div>
+      </template>
+      <!-- 实验成绩插槽 -->
+      <template #experimentAchement>
+        <el-table :data="tableData" height="auto" border style="width: 100%">
+          <el-table-column prop="updateTime" label="提交时间" width="200"> </el-table-column>
+          <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
+          <el-table-column prop="result" label="实验结果">
+            <template slot-scope="{ row }">
+              <div v-html="row.result"></div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="score" label="学生成绩" width="80"> </el-table-column>
+          <el-table-column prop="comment" label="评语"> </el-table-column>
+          <el-table-column prop="createTime" label="创建时间" width="200"> </el-table-column>
+        </el-table>
+        <div class="block zh-mgt-20">
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="tableData.length"
+          >
+          </el-pagination>
+        </div>
+      </template>
+    </CourseList>
   </div>
 </template>
 
 <script>
-import {
-  getTreeData,
-  getExperimentContent,
-  getExperimentStudentData,
-  courseDetails,
-  getStudentScore,
-  saveExperimentReport,
-} from '@/utils/api.js';
+import { getExperimentStudentData, courseDetails } from '@/utils/api.js';
+import { saveExperimentReportService, studentGetScoreService } from '@/api/experiment.js';
 import { courseStatusConvert } from '@/utils/status.js';
+import CourseList from './components/CourseList.vue';
 export default {
   data() {
     return {
@@ -192,8 +137,6 @@ export default {
       experimentContent: {}, //实验内容
       experimentStep: [], //实验步骤
       tableData: [], //学生成绩
-      richTextResult: '', //存储富文本结果数据
-      richTextPlans: [], //存储富文本步骤数据
       currentPage: 1, //当前页
       submitStatus: false, //学生实验提交状态
       studentScore: '', //学生实验成绩
@@ -211,158 +154,69 @@ export default {
     });
     this.courseId = this.$route.query.courseId;
     // 获取树形数据
-    getTreeData(this.courseId).then((res) => {
-      let dataList = res.data;
-      // 添加每个节点添加index，方便填写序号
-      // 一级节点
-      dataList.map((node, index) => {
-        // 二级节点
-        if (node.children != null) {
-          node.children.map((cnode, index) => {
-            // 三级节点
-            if (cnode.children != null) {
-              cnode.children.map((pcode, index) => {
-                if (pcode.children == null) {
-                  pcode.index = `实验${index + 1} `;
-                }
-                return pcode;
-              });
-            }
-            if (cnode.pid !== '') {
-              cnode.index = `第${index + 1}节 `;
-            }
-            return cnode;
-          });
-        }
-        if (node.pid == 0) {
-          node.index = `第${index + 1}章 `;
-        }
-        return node;
-      });
-      this.data = dataList;
-    });
   },
   methods: {
     // 树形控件的点击事件
-    async handleNodeClick(data) {
-      // 如果点击的是二级节点，显示课件
-      if (data.pid != 0 && data.pid != null) {
-        this.$refs.courseWare.style.display = 'block';
-        this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=${data.fileUrl}`;
-        // this.$refs.courseWare.src = `${window.location.origin}/#/pdf?url=/static/test.pdf`;
-      } else {
-        this.$refs.courseWare.style.display = 'none';
-      }
-      // 如果点击的是三级节点，实验才会显示出来
-      if (data.pid == null) {
-        this.experimentId = data.id;
-        // 实验内容
-        getExperimentContent(this.experimentId).then((res) => {
-          this.experimentContent = res.data;
-        });
-        // 实验操作 获取登录用户名与密码
-        const name = localStorage.getItem('hostName');
-        this.form.name = name === 'null' ? '' : name;
-        const pwd = localStorage.getItem('hostPwd');
-        this.form.pwd = pwd === 'null' ? '' : pwd;
-        // 学生端实验结果、实验步骤
-        await this.getExperimentData();
-        if (this.studentCourseId) {
-          // 下载实验模版
-          // console.log(this.$refs.downLoadTemplate);
-          // this.$refs.downLoadTemplate.href = data.fileUrl;
-          // 查询学生的实验成绩列表
-          getStudentScore(this.studentCourseId).then((res) => {
-            console.log(res, '实验成绩');
-            this.tableData = res.data;
-          });
-        }
-        this.$refs.experiment.style.display = 'block';
-      } else {
-        this.$refs.experiment.style.display = 'none';
-      }
+    async handleNodeClick(id) {
+      this.experimentId = id;
+      // 学生端实验结果、实验步骤
+      await this.getExperimentData();
+      // 下载实验模版
+      // console.log(this.$refs.downLoadTemplate);
+      // this.$refs.downLoadTemplate.href = data.fileUrl;
+      // 查询学生的实验成绩列表
+      const res = await studentGetScoreService(this.studentCourseId);
+      this.tableData = res.data;
     },
     // 获取实验结果，实验步骤
     async getExperimentData() {
       const res = await getExperimentStudentData(this.experimentId, this.studentCourseId);
-      console.log(res, 'res111111111');
-      console.log(res.experimentReport.type === 2, 'type');
-      console.log(res.experimentReport.status !== 0, 'status');
-      if (res.experimentReport.type === 2 && res.experimentReport.status !== 0) {
-        //学生已提交实验
-        this.submitStatus = true;
-        this.studentScore = res.experimentReport.score;
-      }
-      // 实验结果
-      if (res.experimentReport.result !== null) {
-        this.$refs.editor.html = res.experimentReport.result;
-      }
-      // 实验步骤
-      if (res.experimentReportPlans !== null) {
-        this.experimentStep = res.experimentReportPlans;
-        setTimeout(() => {
-          res.experimentReportPlans.forEach((ritem, rindex) => {
-            this.$refs.editors.forEach((eitem, eindex) => {
-              if (rindex === eindex) {
-                eitem.html = ritem.content;
-              }
+      this.$nextTick(() => {
+        //学生是否提交实验
+        if (res.experimentReport.type === 2 && res.experimentReport.status !== 0) {
+          this.submitStatus = true;
+          this.studentScore = res.experimentReport.score;
+        } else {
+          this.submitStatus = false;
+          this.studentScore = '';
+        }
+        // 实验结果
+        if (res.experimentReport.result === null) this.$refs.editor.html = '';
+        else this.$refs.editor.html = res.experimentReport.result;
+        // 实验步骤
+        if (res.experimentReportPlans !== null) {
+          this.experimentStep = res.experimentReportPlans;
+          this.$nextTick(() => {
+            res.experimentReportPlans.forEach((ritem, rindex) => {
+              // 实验步骤是否有内容, 为富文本赋值为null为报错
+              if (ritem.content === null) this.$refs.editors[rindex].html = '';
+              else this.$refs.editors[rindex].html = ritem.content;
             });
           });
-        }, 1000);
-      }
-    },
-    // 点击眼睛，显示密码，再次点击，隐藏密码
-    toShow() {
-      if (this.inputType === 'password') {
-        this.inputType = 'text';
-      } else {
-        this.inputType = 'password';
-      }
-    },
-    // 新窗口打开
-    openNewWindow() {
-      // this.$refs.newWindow.href = 'https://123.60.85.111:4200/';
-      window.open('https://engine443.com/ovirt-engine/web-ui/?locale=zh_CN');
-    },
-    // 保存富文本内容
-    async saveContent() {
-      this.richTextResult = this.$refs.editor.html;
-      this.$refs.editors.map((item) => {
-        this.richTextPlans.push(item.html);
+        }
       });
-      const planContent = this.richTextPlans;
+    },
+    // 提交或保存实验报告 1表示提交 0表示保存
+    async saveContent(status) {
+      const planContent = this.$refs.editors.map((item) => item.html);
       const data = {
         experimentId: this.experimentId, //实验id
         teacherCourseId: this.teacherId, //课程id
-        experimentContent: this.richTextResult, //实验结果
-        planContent: planContent, //实验步骤
+        experimentContent: this.$refs.editor.html, //实验结果
+        planContent, //实验步骤
       };
-      await saveExperimentReport(data);
-      this.$message.success('保存实验成功');
+      status === 1 && Object.assign(data, { status: 1 });
+      await saveExperimentReportService(data);
+      status === 0 && this.$message.success('保存实验成功');
+      this.handleNodeClick(this.experimentId);
     },
     // 提交实验报告
     submit() {
       this.$confirm('实验报告提交后无法修改，确定提交吗？', '提交实验', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
         type: 'warning',
       })
         .then(async () => {
-          // 获取富文本框的内容
-          this.richTextResult = this.$refs.editor.html;
-          this.$refs.editors.map((item) => {
-            this.richTextPlans.push(item.html);
-          });
-          const planContent = this.richTextPlans;
-          const data = {
-            experimentId: this.experimentId, //实验id
-            teacherCourseId: this.teacherId, //课程id
-            experimentContent: this.richTextResult, //实验结果
-            planContent: planContent, //实验步骤
-            status: 1, //实验状态，表示提交
-          };
-          await saveExperimentReport(data);
-          await this.getExperimentData();
+          await this.saveContent(1);
           this.$message.success('提交成功');
         })
         .catch(() => {
@@ -370,18 +224,17 @@ export default {
         });
     },
     // 分页
-    // currentPage 改变时会触发
     handleCurrentChange(val) {
       this.currentPage = val;
     },
+  },
+  components: {
+    CourseList,
   },
 };
 </script>
 
 <style scoped>
-.content-height {
-  min-height: 100vh;
-}
 .info-content-left {
   display: flex;
   flex-direction: column;
@@ -389,24 +242,17 @@ export default {
 .info-content-left .info-name {
   margin-bottom: 16px;
 }
-.info-des {
-  margin-top: 20px;
-}
+
 .content {
   margin: 20px auto;
 }
-.course-info,
-.course-list {
+.course-info {
   border: 1px solid #dedede;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
   text-align: left;
   padding: 20px;
-}
-
-.course-list {
-  overflow: hidden;
 }
 
 .course-info {
@@ -426,82 +272,12 @@ export default {
 .info-content-right {
   margin-left: 50px;
 }
-.tree {
-  width: 200px;
-}
-.node-title {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.tree-content {
-  width: 100%;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-.experimentReport,
-.courseWare {
-  display: none;
-  width: 100%;
-}
-.iframe {
-  height: 100vh;
-}
+
 .experiment-title > p {
   font-size: 18px;
   font-weight: 700;
 }
-.experiment-content {
-  padding: 10px;
-}
-.login-user,
-.login-pwd {
-  width: 300px;
-  margin: 20px 0;
-}
-.login-user input,
-.login-pwd input {
-  height: 15px;
-  padding: 5px 10px;
-  outline: none;
-}
-.login-pwd {
-  position: relative;
-}
-.login-pwd img {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 50%;
-  right: 40px;
-  transform: translateY(-50%);
-}
-.openWindow {
-  position: relative;
-  height: 200px;
-}
-.openWindow a {
-  display: inline-block;
-  color: #fff;
-  padding: 5px 10px;
-  margin-right: 10px;
-  border-radius: 5px;
-}
-.iframeMain {
-  position: absolute;
-  top: 40px;
-  left: 0;
-  width: 100%;
-  height: 600px;
-}
-#vt100 #scrollable {
-  overflow-y: hidden !important;
-}
-.experiment-link {
-  display: inline-block;
-  text-decoration: underline;
-  text-indent: 10px;
-}
+
 .experiment-report-result,
 .experiment-report-step {
   padding-left: 10px;
@@ -512,19 +288,11 @@ export default {
 .experiment-report-operate {
   text-align: center;
 }
-.stuInfo {
-  display: flex;
-  justify-content: space-between;
-}
+
 .block {
   text-align: center;
 }
-.exSteps > ul {
-  padding: 0;
-}
-.experiment-report {
-  position: relative;
-}
+
 .sumbit-status {
   position: absolute;
   top: -39px;
@@ -565,18 +333,4 @@ export default {
   background-color: #409eff !important;
   color: #fff !important;
 }
-#courseDeatils .el-button--primary {
-  background-color: #4faff0;
-  border-color: #4faff0;
-}
-#courseDeatils .el-table .el-table__cell {
-  text-align: center;
-}
-/* #courseDeatils .el-table .cell {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-} */
 </style>
