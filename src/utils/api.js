@@ -147,8 +147,6 @@ export function deleteNotice(id) {
 }
 
 // 作业管理
-// 获取作业管理列表
-export const getHomeWorkList = (id, params) => http.get('assignments/list/' + id, params);
 // 添加作业
 export const addHomeWork = (data) => http.post('assignments/add', data);
 // 修改作业

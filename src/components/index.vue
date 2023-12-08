@@ -39,8 +39,8 @@
       <!-- 底部 -->
       <div class="footer theme-bg-black">
         <p class="footer-info-item zh-fc-white">技术支持：成都易腾创想智能科技有限公司</p>
-        <p class="footer-info-item zh-fc-white">联系方式：028-62539515</p>
-        <p class="footer-info-item zh-fc-white">公司地址：四川省成都市温江区海科路东段777号F栋11楼</p>
+        <!-- <p class="footer-info-item zh-fc-white">联系方式：028-62539515</p> -->
+        <!-- <p class="footer-info-item zh-fc-white">公司地址：四川省成都市温江区海科路东段777号F栋11楼</p> -->
       </div>
     </el-container>
   </div>
@@ -121,21 +121,11 @@ export default {
   padding: 10px 0;
   margin-right: 20px;
 }
-.login-name,
-.ex-name {
-  height: 60px;
-  line-height: 60px;
-  text-align: right;
-}
-.ex-name {
-  cursor: pointer;
-}
-.el-menu-item:hover {
-  background-color: rgb(91, 92, 94) !important;
-}
+
+
+
 .main {
-  /* min-height: 582px; */
-  min-height: calc(100vh - 166px);
+  min-height: calc(100vh - 102px);
 }
 .footer > p {
   margin: 10px 0;

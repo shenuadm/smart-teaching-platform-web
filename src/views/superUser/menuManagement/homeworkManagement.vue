@@ -1,20 +1,15 @@
 <template>
   <div class="homework-management">
     <div class="header">
-      <div class="title">作业名称:</div>
-      <el-input v-model="input" id="inputh" placeholder="请输入内容"></el-input>
-      <el-button type="primary" size="small" @click="search">搜索</el-button>
-      <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="addexper">添加作业</el-button>
       <el-button type="danger" size="small" @click="delexper">批量删除</el-button>
-      <el-button type="primary" size="small" @click="returnexper">返回</el-button>
+      <el-button type="primary" size="small" @click="returnexper">返回章节</el-button>
     </div>
-
     <el-table
       ref="multipleTable"
       height="410"
-      v-loading="loadingGlobal"
-      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      v-loading="$store.state.isLoading"
+      :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
       border
@@ -22,16 +17,16 @@
       class="custom-table"
     >
       <el-table-column type="selection" width="50"></el-table-column>
-      <el-table-column prop="name" label="作业名称" width="80" align="center"></el-table-column>
-      <el-table-column prop="content" label="作业内容" align="center" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="answer" label="参考答案" align="center" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="status" label="状态" width="80" align="center">
+      <el-table-column prop="name" label="作业名称" width="80"></el-table-column>
+      <el-table-column prop="content" label="作业内容"></el-table-column>
+      <el-table-column prop="answer" label="参考答案"></el-table-column>
+      <el-table-column prop="status" label="状态" width="80">
         <template slot-scope="scope">
           <div v-if="scope.row.status" class="user">启用</div>
           <div v-else class="forbidden">禁用</div>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="editexrept(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
@@ -44,7 +39,7 @@
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-size="10"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="total,  prev, pager, next"
         :total="tableData.length"
       ></el-pagination>
     </div>
@@ -83,16 +78,15 @@
 </template>
 
 <script>
-import { getHomeWorkList, addHomeWork, editHomeWork, delHomeWork, delAllHomeWork } from '@/utils/api';
+import { addHomeWork, editHomeWork, delHomeWork, delAllHomeWork } from '@/utils/api';
+import { getHomeWorkListService } from '@/api/homework.js';
 export default {
   data() {
     return {
       tableData: [],
       currentPage: 1,
-      pageSize: 5,
       input: '',
       dialogVisible: false,
-      articleId: 0,
       edit: true,
       id: '',
       idArr: [],
@@ -122,16 +116,6 @@ export default {
     closeDialog() {
       this.dialogVisible = false;
       this.$refs['formModel'].resetFields();
-    },
-    //搜索
-    async search() {
-      if (!this.input) return;
-      const res = await getHomeWorkList(this.articleId, { name: this.input });
-      this.tableData = res.data;
-    },
-    //重置
-    resetting() {
-      this.getDataList();
     },
     // 添加实验
     addexper() {
@@ -164,78 +148,42 @@ export default {
         if (valid) {
           if (this.edit) {
             // 添加实验
-            const data = { articleId: this.articleId, ...this.revise };
-            const res = await addHomeWork(data);
-            if (res.code === 0) {
-              this.$message({
-                message: '作业添加成功',
-                type: 'success',
-              });
-              this.getDataList();
-              this.dialogVisible = false;
-            } else {
-              this.$message.error(res.msg);
-            }
+            const data = { articleId: this.$route.query.id, ...this.revise };
+            await addHomeWork(data);
+            this.$message.success('作业添加成功');
           } else {
             // 编辑实验
             const data = { id: this.id, ...this.revise };
-            const res = await editHomeWork(data);
-            if (res.code === 0) {
-              this.$message({
-                message: '作业修改成功',
-                type: 'success',
-              });
-              this.getDataList();
-              this.dialogVisible = false;
-            } else {
-              this.$message.error(res.msg);
-            }
+            await editHomeWork(data);
+            this.$message.success('作业修改成功');
           }
-        } else {
-          return false;
+          this.getDataList();
+          this.dialogVisible = false;
         }
       });
     },
     // 删除
     del(id) {
       this.$confirm('你确定要删除么?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
         type: 'warning',
       })
         .then(async () => {
-          const res = await delHomeWork(id);
-          if (res.code === 0) {
-            this.$message({
-              message: '作业删除成功',
-              type: 'success',
-            });
-            this.getDataList();
-          } else {
-            this.$message.error(res.msg);
-          }
+          await delHomeWork(id);
+          this.$message.success('作业删除成功');
+          this.getDataList();
         })
         .catch(() => {});
     },
     //批量删除
     delexper() {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
         type: 'warning',
       })
         .then(async () => {
           const ids = this.idArr.join(',');
-          const res = await delAllHomeWork(ids);
-          if (res.code === 0) {
-            this.$message({
-              message: '作业删除成功',
-              type: 'success',
-            });
-            this.getDataList();
-          } else {
-            this.$message.error(res.msg);
-          }
+          await delAllHomeWork(ids);
+          this.$message.success('作业删除成功');
+          this.getDataList();
         })
         .catch(() => {});
     },
@@ -256,13 +204,9 @@ export default {
       this.idArr = ids;
     },
     // 获取数据
-    getDataList() {
-      const id = this.$route.query.id;
-      this.articleId = id;
-      getHomeWorkList(id).then((res) => {
-        this.tableData = res.data;
-        this.loadingGlobal = false;
-      });
+    async getDataList() {
+      const res = await getHomeWorkListService(this.$route.query.id);
+      this.tableData = res.data;
     },
   },
   created() {

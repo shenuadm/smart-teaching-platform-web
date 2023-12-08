@@ -3,7 +3,7 @@
     <div class="zh-mgb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 课程信息 -->
@@ -32,7 +32,7 @@
       </div>
     </div>
     <!-- 实验内容 -->
-    <CourseList v-if="pageShow" :treeEvent="handleNodeClick" :teacherId="teacherId">
+    <CourseList v-if="pageShow" :treeEvent="handleNodeClick" :teacherId="$route.query.id">
       <!-- 实验报告插槽 -->
       <template #experiment>
         <div class="experiment-title">
@@ -87,30 +87,7 @@
         </div>
       </template>
     </CourseList>
-    <!-- 学生虚拟机列表 -->
-    <div v-else class="vms-container" v-loading="$store.state.isLoading">
-      <div class="vms-title">
-        <el-button type="primary" size="mini" @click="updateStudentVms">更新虚拟机</el-button>
-        <i class="el-icon-info ml-20"></i>
-        <span style="font-size: 0.75rem; color: grey">如果学生没有分配虚拟机，请点击该按钮更新学生分配机。</span>
-      </div>
-      <div class="vms-list">
-        <div v-for="item in vmsData" :key="item.id" class="vms-item">
-          <div>
-            <div>学生姓名：</div>
-            <div>{{ item.userName }}</div>
-          </div>
-          <div>
-            <div>虚拟机名称：</div>
-            <div>{{ item.host }}</div>
-          </div>
-          <div>
-            <div>虚拟机账户：</div>
-            <div>{{ item.hostName }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <VmsList v-else ref="vmsList"></VmsList>
     <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
     <el-drawer :visible.sync="showReportVisible" v-if="showReportVisible" direction="rtl" size="60%">
       <template slot="title">
@@ -206,10 +183,10 @@
 
 <script>
 import { getExperimentData, teacherCourseDetails, scoreList, getStudentExperiment } from '@/utils/api.js';
-import { getStudentVms, shareStudentVms } from '@/api/vm.js';
 import { teachEditExperimentService } from '@/api/experiment.js';
 import { courseStatusConvert } from '@/utils/status.js';
 import CourseList from './components/CourseList.vue';
+import VmsList from './components/VmsList.vue';
 export default {
   data() {
     return {
@@ -220,7 +197,6 @@ export default {
         label: 'title', //data当中的label的字段名
       },
       experimentId: '', //实验id
-      teacherId: '', //教师课程id
       courseId: '', //课程的id
       experimentStep: [], //实验步骤
       tableData: [], //学生成绩
@@ -245,9 +221,8 @@ export default {
   async created() {
     // 获取数据
     this.path = '/myTeaching';
-    this.teacherId = this.$route.query.id;
     const courseId = this.$route.query.courseId;
-    const res = await teacherCourseDetails(courseId, this.teacherId);
+    const res = await teacherCourseDetails(courseId, this.$route.query.id);
     this.courseObj = courseStatusConvert(res.data);
   },
   methods: {
@@ -274,31 +249,22 @@ export default {
       // 实验结果
       this.experResult.content = res.experimentReport.result;
       // 成绩表格(教师端)
-      // scoreList(this.experimentId, this.teacherId).then((res) => {
+      // scoreList(this.experimentId, this.$route.query.id).then((res) => {
       //   this.tableData = res.data;
       // });
       this.getScroeData();
     },
     // 获取成绩表格
     async getScroeData() {
-      const res = await scoreList(this.experimentId, this.teacherId);
+      const res = await scoreList(this.experimentId, this.$route.query.id);
       this.tableData = res.data;
-    },
-    // 获取学生虚拟机信息
-    async getStudentVmsData() {
-      const res = await getStudentVms(this.teacherId);
-      this.vmsData = res.data;
     },
     // 查看学生虚拟机
     async queryVms() {
-      this.vmsData.length === 0 && this.getStudentVmsData();
       this.pageShow = !this.pageShow;
-    },
-    // 更新学生虚拟机
-    async updateStudentVms() {
-      await shareStudentVms(this.teacherId);
-      await this.getStudentVmsData();
-      this.$message.success('更新学生虚拟机成功');
+      this.$nextTick(() => {
+        this.$refs.vmsList.getStudentVmsData();
+      });
     },
     // 教师端，成绩表格
     // 查看详情
@@ -353,43 +319,12 @@ export default {
   },
   components: {
     CourseList,
+    VmsList,
   },
 };
 </script>
 
 <style scoped>
-/* 学生虚拟机列表 */
-.vms-container {
-  background: #fff;
-  padding: 0 20px;
-  min-height: 100vh;
-}
-.vms-title {
-  padding: 10px 0;
-  text-align: left;
-}
-.vms-list {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  column-gap: 20px;
-  row-gap: 20px;
-}
-.vms-item {
-  padding: 10px 10px;
-  text-align: left;
-  border-radius: 15px;
-  background: #eeeff1;
-}
-.vms-item > div {
-  display: flex;
-  height: 30px;
-  line-height: 30px;
-}
-.vms-item > div :first-of-type {
-  width: 115px;
-  text-align: right;
-}
-
 /* 实验报告插槽内容 */
 /* 大标题 */
 .experiment-title > p {

@@ -44,10 +44,6 @@
       <!-- 课程状态 -->
       <el-form-item label="课程状态：" prop="status">
         <el-radio-group v-model="editCourse.status">
-          <!-- <el-radio disabled label="选课中">选课中</el-radio>
-            <el-radio disabled label="选课结束">选课结束</el-radio>
-            <el-radio disabled label="授课中">授课中</el-radio>
-            <el-radio disabled label="评阅中">评阅中</el-radio>-->
           <el-radio
             v-for="item in teacherCourseStatus"
             :key="item[0]"
@@ -100,6 +96,7 @@ export default {
     },
   },
   watch: {
+    // 传入的数据变化，赋值给编辑表单
     formDate() {
       this.editCourse = this.formDate;
     },
