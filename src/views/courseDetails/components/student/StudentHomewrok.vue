@@ -15,31 +15,27 @@
       </el-tab-pane>
       <el-tab-pane label="自己的作业" name="1">
         <el-table v-if="isMyHomework" :data="myHomeworkData" border>
-          <el-table-column type="selection" width="50"> </el-table-column>
           <el-table-column label="作业名称" prop="name"></el-table-column>
           <el-table-column label="作业内容" prop="content"></el-table-column>
-          <el-table-column label="类型" prop="answer"></el-table-column>
-          <el-table-column label="截止时间" prop="endTime">
-            <template slot-scope="{ row }">
-              <el-date-picker v-model="row.endTime" type="datetime" placeholder="选择日期时间"> </el-date-picker>
-            </template>
-          </el-table-column>
+          <el-table-column label="截止时间" prop="endTime"> </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{ row }">
               <el-button type="primary" size="small" @click="homeworkDetail(row)">详情</el-button>
-              <el-button type="danger" size="small" @click="deleteHomework(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
     </el-tabs>
+    <div class="action">
+      <el-button type="primary">提交作业</el-button>
+    </div>
     <EditHomwork :visible.sync="visible" :editData="editData" @success="success"></EditHomwork>
   </div>
 </template>
 
 <script>
 // import dayjs from 'dayjs';
-import { studentGetAssignHomeworkService } from '@/api/homework.js';
+import { studentGetAssignHomeworkService, stuGetMineHomeworkService } from '@/api/homework.js';
 // import { isAfterNow } fgerom '@/utils/date.js';
 import EditHomwork from './EditHomwork.vue';
 
@@ -61,13 +57,20 @@ export default {
         this.getAssignData();
       } else if (this.isMyHomework && this.myHomeworkData.length === 0) {
         console.log('自己的作业');
+        this.getMineData();
       }
     },
     // 获取布置的作业数据
     async getAssignData() {
-      const res = await studentGetAssignHomeworkService(this.articleId, this.$route.query.courseId);
-      console.log(res.data, 'stu');
+      const res = await studentGetAssignHomeworkService(this.articleId, this.$route.query.teacherCourseId);
+      // console.log(res.data, 'stu');
       this.assignData = res.data;
+    },
+    // 获取自己的作业数据
+    async getMineData() {
+      const res = await stuGetMineHomeworkService(this.articleId, this.$route.query.teacherCourseId);
+      console.log(res.data, 'my');
+      this.myHomeworkData = res.data;
     },
     // 编辑作业
     editHomework(row) {
@@ -77,6 +80,7 @@ export default {
     },
     success() {
       this.getAssignData();
+      this.getMineData();
     },
   },
   mounted() {

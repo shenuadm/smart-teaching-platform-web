@@ -14,8 +14,7 @@
           <div class="zh-fs-20 zh-fw-m">{{ item.name }}</div>
           <div class="course-info">
             <div>任课教师：{{ item.teacherName }}</div>
-            <div>课程状态：{{ chooseStatusConvent(item.teacherCourseStatus) }}</div>
-            <div>选课状态：{{ courseStatusConvent(item.status) }}</div>
+            <div>课程状态：{{ courseStatusConvent(item.teacherCourseStatus) }}</div>
             <div>创建时间：{{ dateFormat(item.createTime) }}</div>
           </div>
         </div>
@@ -26,18 +25,7 @@
             @click="toCheckDetails(item)"
             >查看详情</el-button
           >
-          <!-- <el-button type="primary">查看成绩</el-button> -->
-          <el-button
-            type="primary"
-            v-if="item.status === 1 && item.teacherCourseStatus === 2"
-            @click="recoverCourse(item.id)"
-          >
-            恢复选课
-          </el-button>
-          <el-button
-            type="danger"
-            v-if="item.status === 0 && item.teacherCourseStatus === 2"
-            @click="revokeCourse(item)"
+          <el-button type="danger" v-if="item.teacherCourseStatus === 2" @click="revokeCourse(item)"
             >撤销课程</el-button
           >
         </div>
@@ -56,9 +44,9 @@
 
 <script>
 import dayjs from 'dayjs';
-import { getMyCourse, ClickRevokeCourse } from '@/utils/api.js';
-import { courseStatus, teacherCourseStatus } from '@/constant/course.js';
-import { recoverCourseService } from '@/api/student.js';
+import { getMyCourse } from '@/utils/api.js';
+import { teacherCourseStatus } from '@/constant/course.js';
+import { stuRevokeCourseService } from '@/api/course.js';
 export default {
   components: {},
   data() {
@@ -75,7 +63,6 @@ export default {
   methods: {
     // 查看详情
     toCheckDetails(e) {
-      console.log(e);
       if (e.teacherCourseStatus === 2) return;
       localStorage.setItem('hostName', e.hostName); //登录名
       localStorage.setItem('hostPwd', e.hostPwd); //登录密码
@@ -102,32 +89,18 @@ export default {
       });
     },
     // 撤销课程
-    async revokeCourse(e) {
-      // 如果当前课程状态是已撤回或不是选课中，不能进行撤回
-      const { status, teacherCourseStatus } = e;
-      if (status === 1 || teacherCourseStatus !== 2) return;
-      const data = {
-        id: e.id,
-        teacherCourseId: e.teacherCourseId,
-      };
-      await ClickRevokeCourse(data);
+    async revokeCourse(data) {
+      // 如果当前课程状态不是选课中，不能进行撤回
+      const { teacherCourseStatus, id } = data;
+      if (teacherCourseStatus !== 2) return;
+      await stuRevokeCourseService(id);
       await this.getCourse();
       this.$message.success('课程撤销成功！');
-    },
-    // 恢复选课
-    async recoverCourse(id) {
-      await recoverCourseService(id);
-      await this.getCourse();
-      this.$message.success('恢复选课成功！');
     },
     // 课程类型变化
     courseTypeChange() {},
     // 课程状态数据转换
     courseStatusConvent(status) {
-      return courseStatus.get(status);
-    },
-    // 选课状态数据转换
-    chooseStatusConvent(status) {
       return teacherCourseStatus.get(status);
     },
     dateFormat(date) {

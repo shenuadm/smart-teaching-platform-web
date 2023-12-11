@@ -1,12 +1,4 @@
 /**
- * 学生选课状态
- */
-export const courseStatus = new Map([
-  [0, '已选中'],
-  [1, '已撤回'],
-]);
-
-/**
  * 老师发布课程状态
  */
 export const teacherCourseStatus = new Map([

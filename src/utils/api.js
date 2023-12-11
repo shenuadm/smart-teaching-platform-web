@@ -36,10 +36,7 @@ export function clickSelectCourse(data) {
 export function getMyCourse() {
   return http.get('/studentCourse/list');
 }
-// 撤销课程
-export function ClickRevokeCourse(data) {
-  return http.post('/studentCourse/cancelCourse', data);
-}
+
 // 课程详情
 export function courseDetails(id) {
   return http.get('/studentCourse/detail/' + id);

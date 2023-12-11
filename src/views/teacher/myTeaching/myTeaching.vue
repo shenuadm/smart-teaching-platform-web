@@ -8,7 +8,7 @@
       <el-tab-pane label="授课中" name="4"></el-tab-pane>
       <el-tab-pane label="已结束" name="6"></el-tab-pane>
     </el-tabs>
-    <div class="my-teaching">
+    <div class="my-teaching" v-if="myTeachList.length > 0">
       <div v-for="item in myTeachList" :key="item.id">
         <div class="my-teaching-item zh-pd-10 zh-mgt-20 zh-mgb-20">
           <img :src="'data:image/png;base64,' + item.picture" alt="图片加载失败" />
@@ -39,6 +39,7 @@
         </div>
       </div>
     </div>
+    <el-empty class="bg-white" description="暂无数据" v-else></el-empty>
     <el-pagination
       @current-change="getCourseData"
       :current-page="page"

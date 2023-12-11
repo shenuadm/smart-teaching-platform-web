@@ -84,3 +84,6 @@ export const studentGetAssignHomeworkService = (articleId, teacherCourseId) =>
  */
 export const studentSaveHomeworkService = (id, { articleId, teacherCourseId, answer }) =>
   http.post(`/assignmentStudent/add/${id}`, { articleId, teacherCourseId, answer });
+
+export const stuGetMineHomeworkService = (articleId, teacherCourseId) =>
+  http.get(`/assignmentStudent/list/${articleId}/${teacherCourseId}`);
