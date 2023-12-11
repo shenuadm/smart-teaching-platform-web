@@ -67,5 +67,20 @@ export const teaEditHomeworkService = ({ articleId, teacherCourseId, name, conte
  */
 export const teaDelHomeworkService = (id) => http.delete(`/assignmentTeacher/delete/${id}`);
 
+/**
+ * 学生获取布置的作业
+ * @param {*} articleId
+ * @param {*} teacherCourseId
+ * @returns
+ */
 export const studentGetAssignHomeworkService = (articleId, teacherCourseId) =>
   http.get(`/assignmentStudent/listAssTea/${articleId}/${teacherCourseId}`);
+
+/**
+ * 学生保存作业
+ * @param {*} id 作业id
+ * @param {*} param1
+ * @returns
+ */
+export const studentSaveHomeworkService = (id, { articleId, teacherCourseId, answer }) =>
+  http.post(`/assignmentStudent/add/${id}`, { articleId, teacherCourseId, answer });

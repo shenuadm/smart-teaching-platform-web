@@ -1,6 +1,6 @@
 <template>
-  <el-drawer title="编辑作业" :visible="visible" direction="rtl" :before-close="cancel">
-    <el-form :model="formData" ref="homeworkForm">
+  <el-drawer title="编辑作业" :with-header="false" :visible="visible" direction="rtl" :before-close="cancel" size="50%">
+    <el-form :model="formData" ref="homeworkForm" class="ml-20 student-edit-homework-form" label-position="top">
       <el-form-item label="作业名称">
         <div>{{ formData.name }}</div>
       </el-form-item>
@@ -8,17 +8,18 @@
         <div>{{ formData.content }}</div>
       </el-form-item>
       <el-form-item label="作业结果">
-        <el-input v-model="formData.result" placeholder="请输入您作业的结果" type="textarea" :rows="6"></el-input>
+        <el-input v-model="formData.answer" placeholder="请输入您作业的结果" type="textarea" :rows="10"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit">保存</el-button>
-        <el-button type="primary" @cancel="cancel">取消</el-button>
+        <el-button type="info" @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>
 </template>
 
 <script>
+import { studentSaveHomeworkService } from '@/api/homework.js';
 export default {
   data() {
     return {
@@ -26,7 +27,7 @@ export default {
         name: '',
         content: '',
         endTime: '',
-        result: '',
+        answer: '',
       },
       rules: [],
     };
@@ -36,14 +37,26 @@ export default {
     cancel() {
       this.$emit('update:visible', false);
     },
+    // 保存作业
     submit() {
-      if (this.formData.result === '') {
+      console.log(this.formData.answer);
+      if (this.formData.answer === '' || this.formData.answer === undefined) {
         this.$confirm('您当前的作业结果为空，您确认要保存吗？', '提示', { type: 'warning' })
-          .then(() => {})
+          .then(() => {
+            this.confrimSave();
+          })
           .catch(() => {});
+      } else {
+        this.confrimSave();
       }
     },
-    async confrimSave() {},
+    // 确认保存
+    async confrimSave() {
+      await studentSaveHomeworkService(this.formData.id, this.formData);
+      this.$message.success('保存作业成功');
+      this.cancel();
+      this.$emit('success');
+    },
   },
   watch: {
     editData(newVal) {
@@ -56,4 +69,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.student-edit-homework-form .el-form-item .el-form-item__label {
+  font-weight: 700;
+  font-size: 1rem;
+}
+</style>

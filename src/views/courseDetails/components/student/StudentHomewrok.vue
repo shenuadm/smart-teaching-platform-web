@@ -3,13 +3,12 @@
     <el-tabs v-model="tabActive" @tab-click="handleTabs">
       <el-tab-pane label="布置的作业" name="0">
         <el-table v-if="isPickup" :data="assignData" border>
-          <el-table-column type="selection" width="50"> </el-table-column>
           <el-table-column label="作业名称" prop="name"></el-table-column>
           <el-table-column label="作业内容" prop="content"></el-table-column>
           <el-table-column label="截止时间" prop="endTime"> </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{ row }">
-              <el-button type="primary" @click="editHomework(row)">编辑</el-button>
+              <el-button type="primary" @click="editHomework(row)">去完成 </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -34,6 +33,7 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
+    <EditHomwork :visible.sync="visible" :editData="editData" @success="success"></EditHomwork>
   </div>
 </template>
 
@@ -41,6 +41,7 @@
 // import dayjs from 'dayjs';
 import { studentGetAssignHomeworkService } from '@/api/homework.js';
 // import { isAfterNow } fgerom '@/utils/date.js';
+import EditHomwork from './EditHomwork.vue';
 
 export default {
   data() {
@@ -70,15 +71,12 @@ export default {
     },
     // 编辑作业
     editHomework(row) {
+      this.editData = row;
+      this.visible = true;
       console.log(row);
     },
-    // 查看作业详情
-    homeworkDetail(row) {
-      console.log(row);
-    },
-    // 查看学生作业列表
-    studentHomeWork(row) {
-      console.log(row);
+    success() {
+      this.getAssignData();
     },
   },
   mounted() {
@@ -93,6 +91,9 @@ export default {
     isMyHomework() {
       return this.tabActive === '1';
     },
+  },
+  components: {
+    EditHomwork,
   },
 };
 </script>

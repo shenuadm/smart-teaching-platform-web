@@ -157,7 +157,6 @@ export default {
     homeworkDetail(row) {
       this.editHomeworkData = row;
       this.homeworkDetailVisible = true;
-      console.log(row);
     },
     // 查看学生作业列表
     studentHomeWork(row) {
