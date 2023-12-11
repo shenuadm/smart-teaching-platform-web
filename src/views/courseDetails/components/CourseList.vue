@@ -62,7 +62,12 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-      <div v-else-if="showType === 3">查看实验</div>
+      <!-- 作业 -->
+      <!-- <TeacherHomework v-else-if="showType === 3" :articleId="articleId"></TeacherHomework> -->
+      <TeacherHomework
+        v-else-if="showType === 3 && $store.state.rolename === 'teacher'"
+        :articleId="articleId"
+      ></TeacherHomework>
     </div>
   </div>
 </template>
@@ -70,6 +75,8 @@
 <script>
 import { getTreeData } from '@/utils/api.js';
 import { getExperimentContentService } from '@/api/experiment.js';
+import TeacherHomework from './teacher/TeacherHomework.vue';
+
 export default {
   props: ['treeEvent', 'courseObj'],
   data() {
@@ -87,12 +94,13 @@ export default {
       inputType: 'password', //实验操作的密码框的type类型
       experimentContent: {}, //实验内容
       studentScore: '', //学生实验成绩
-      showType: 0,
+      showType: 0, // 展示的页面类型
+      articleId: 0, // 节id
     };
   },
   methods: {
     // 树形控件的点击事件
-    handleNodeClick({ treeType, id, fileUrl }) {
+    handleNodeClick({ treeType, id, fileUrl, articleId }) {
       this.showType = treeType;
       // 如果点击的是二级节点，显示课件
       this.$nextTick(async () => {
@@ -111,6 +119,10 @@ export default {
           this.treeEvent && this.treeEvent(id);
         }
       });
+      // 查看作业
+      if (treeType === 3) {
+        this.articleId = articleId;
+      }
     },
     // 点击眼睛，显示密码，再次点击，隐藏密码
     toShow() {
@@ -127,6 +139,7 @@ export default {
     },
   },
   async created() {
+    console.log(this.$route.path, 'path');
     // 获取树形数据
     const res = await getTreeData(this.$route.query.courseId);
     const dataList = res.data;
@@ -149,6 +162,7 @@ export default {
             cnode.children.push({
               title: '查看作业',
               treeType: 3,
+              articleId: cnode.id,
             });
           }
           cnode.pid !== '' && (cnode.index = `第${index + 1}节 `);
@@ -157,8 +171,11 @@ export default {
       node.pid == 0 && (node.index = `第${index + 1}章 `);
       return node;
     });
-    console.log(Object.freeze(data));
+    console.log(data);
     this.data = data;
+  },
+  components: {
+    TeacherHomework,
   },
 };
 </script>
@@ -166,6 +183,7 @@ export default {
 <style scoped>
 .content-height {
   min-height: 100vh;
+  /* width: 83vw !important; */
 }
 .course-list {
   border: 1px solid #dedede;
