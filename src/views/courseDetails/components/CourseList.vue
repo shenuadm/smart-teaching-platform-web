@@ -63,11 +63,14 @@
         </el-tabs>
       </div>
       <!-- 作业 -->
-      <!-- <TeacherHomework v-else-if="showType === 3" :articleId="articleId"></TeacherHomework> -->
       <TeacherHomework
         v-else-if="showType === 3 && $store.state.rolename === 'teacher'"
         :articleId="articleId"
       ></TeacherHomework>
+      <StudentHomewrok
+        v-else-if="showType === 3 && $store.state.rolename === 'student'"
+        :articleId="articleId"
+      ></StudentHomewrok>
     </div>
   </div>
 </template>
@@ -76,6 +79,7 @@
 import { getTreeData } from '@/utils/api.js';
 import { getExperimentContentService } from '@/api/experiment.js';
 import TeacherHomework from './teacher/TeacherHomework.vue';
+import StudentHomewrok from './student/StudentHomewrok.vue';
 
 export default {
   props: ['treeEvent', 'courseObj'],
@@ -176,6 +180,7 @@ export default {
   },
   components: {
     TeacherHomework,
+    StudentHomewrok,
   },
 };
 </script>

@@ -27,8 +27,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="布置的作业" name="1">
-        <el-table v-if="isAssign" :data="arrangeData" border @selection-change="arrangeData">
-          <el-table-column type="selection" width="50"> </el-table-column>
+        <el-table v-if="isAssign" :data="arrangeData" border>
           <el-table-column label="作业名称" prop="name"></el-table-column>
           <el-table-column label="作业内容" prop="content"></el-table-column>
           <el-table-column label="类型" prop="custom">
@@ -36,11 +35,7 @@
               {{ row.custom ? '自定义' : '系统' }}
             </template>
           </el-table-column>
-          <el-table-column label="截止时间" prop="endTime">
-            <template slot-scope="{ row }">
-              <el-date-picker v-model="row.endTime" type="datetime" placeholder="选择日期时间"> </el-date-picker>
-            </template>
-          </el-table-column>
+          <el-table-column label="截止时间" prop="endTime"> </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{ row }">
               <el-button type="primary" size="small" @click="homeworkDetail(row)">编辑</el-button>
@@ -66,8 +61,9 @@
     </el-tabs>
     <div class="action">
       <el-button type="primary" @click="addHomework" v-if="isAssign">新增作业</el-button>
-      <el-date-picker v-model="allDate" type="datetime" placeholder="请选择发布的时间"> </el-date-picker>
-      <el-button type="primary" @click="allSubmit">一键发布</el-button>
+      <el-date-picker v-if="isSystem" v-model="allDate" type="datetime" placeholder="请选择发布的时间">
+      </el-date-picker>
+      <el-button v-if="isSystem" type="primary" @click="allSubmit">一键发布</el-button>
     </div>
     <HomeworkDetail
       :visible.sync="homeworkDetailVisible"
@@ -84,14 +80,15 @@ import {
   teacherGetHomeworkService,
   pickupHomeworkService,
   teacherGetStudentHomeworkService,
-  teacherGetAssignHomeworkService,
+  getAssignHomeworkService,
+  teaDelHomeworkService,
 } from '@/api/homework.js';
 import HomeworkDetail from './HomeworkDetail.vue';
 import { isAfterNow } from '@/utils/date.js';
 
+// 编辑新增作业默认数据
 const defaultData = {
   answer: '',
-  assign: false,
   content: '',
   name: '',
   date: '',
@@ -129,7 +126,7 @@ export default {
     },
     // 获取布置的作业数据
     async getSubmitData() {
-      const res = await teacherGetAssignHomeworkService(this.articleId, this.$route.query.courseId);
+      const res = await getAssignHomeworkService(this.articleId, this.$route.query.courseId);
       this.arrangeData = res.data;
     },
     // 获取学生作业列表
@@ -168,7 +165,13 @@ export default {
     },
     // 删除
     deleteHomework({ id }) {
-      console.log(id);
+      this.$confirm('您确认要删除选中的作业吗？', '提示', { type: 'warning' })
+        .then(async () => {
+          await teaDelHomeworkService(id);
+          this.$message.success('删除作业成功');
+          this.getSubmitData();
+        })
+        .catch(() => {});
     },
     // 一键布置作业
     allSubmit() {
@@ -188,7 +191,6 @@ export default {
         .join(',');
     },
   },
-  created() {},
   mounted() {
     this.editHomeworkData = { ...defaultData };
     this.getSystemData();

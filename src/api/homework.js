@@ -27,12 +27,12 @@ export const teacherGetHomeworkService = (articleId, teacherCourseId) =>
   http.get(`/assignmentTeacher/listSystemAss/${articleId}/${teacherCourseId}`);
 
 /**
- * 老师获取布置的作业
+ * 获取老师布置的作业
  * @param {*} articleId 节的id
  * @param {*} teacherCourseId 教师的课程id
  * @returns
  */
-export const teacherGetAssignHomeworkService = (articleId, teacherCourseId) =>
+export const getAssignHomeworkService = (articleId, teacherCourseId) =>
   http.get(`/assignmentTeacher/list/${articleId}/${teacherCourseId}`);
 
 /**
@@ -46,7 +46,7 @@ export const teacherGetStudentHomeworkService = (articleId, teacherCourseId) =>
 
 /**
  * 老师新增作业
- * @param {*} param0
+ * @param {articleId, teacherCourseId, name, content, answer, endTime} 节id，课程id，作业名称，作业内容，作业答案，截止日期
  * @returns
  */
 export const teaAddHomeworkService = ({ articleId, teacherCourseId, name, content, answer, endTime }) =>
@@ -54,8 +54,18 @@ export const teaAddHomeworkService = ({ articleId, teacherCourseId, name, conten
 
 /**
  * 老师编辑作业
- * @param {*} param0
+ * @param {{ articleId, teacherCourseId, name, content, answer, endTime, id }} 节id，课程id，作业名称，作业内容，作业答案，截止日期，作业id
  * @returns
  */
 export const teaEditHomeworkService = ({ articleId, teacherCourseId, name, content, answer, endTime, id }) =>
-  http.post('/assignmentTeacher/add', { articleId, teacherCourseId, name, content, answer, endTime, id });
+  http.post('/assignmentTeacher/update', { articleId, teacherCourseId, name, content, answer, endTime, id });
+
+/**
+ * 教师删除作业
+ * @param {*} id 删除作业id
+ * @returns
+ */
+export const teaDelHomeworkService = (id) => http.delete(`/assignmentTeacher/delete/${id}`);
+
+export const studentGetAssignHomeworkService = (articleId, teacherCourseId) =>
+  http.get(`/assignmentStudent/listAssTea/${articleId}/${teacherCourseId}`);
