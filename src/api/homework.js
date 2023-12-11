@@ -85,5 +85,28 @@ export const studentGetAssignHomeworkService = (articleId, teacherCourseId) =>
 export const studentSaveHomeworkService = (id, { articleId, teacherCourseId, answer }) =>
   http.post(`/assignmentStudent/add/${id}`, { articleId, teacherCourseId, answer });
 
+/**
+ * 学生编辑已经保存的作业
+ * @param {*} param0
+ * @returns
+ */
+export const stuEditHomewrokService = ({ id, articleId, teacherCourseId, answer }) =>
+  http.post(`/assignmentStudent/update`, { id, articleId, teacherCourseId, answer });
+
+/**
+ * 学生获取已保存过的作业
+ * @param {*} articleId
+ * @param {*} teacherCourseId
+ * @returns
+ */
 export const stuGetMineHomeworkService = (articleId, teacherCourseId) =>
   http.get(`/assignmentStudent/list/${articleId}/${teacherCourseId}`);
+
+/**
+ * 学生提交作业
+ * @param {*} articleId
+ * @param {*} teacherCourseId
+ * @returns
+ */
+export const stuSendHomeworkService = (articleId, teacherCourseId) =>
+  http.post(`/assignmentStudent/commit/${articleId}/${teacherCourseId}`);

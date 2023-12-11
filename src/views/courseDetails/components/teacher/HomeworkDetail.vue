@@ -12,7 +12,7 @@
         <el-input v-model="formData.name" placeholder="请输入作业名称"></el-input>
       </el-form-item>
       <el-form-item label="课程类型" v-if="formData.id">
-        <el-input disabled :value="formData.custom ? '自定义' : '系统'" placeholder=""></el-input>
+        <el-input disabled :value="formData.custom ? '老师' : '系统'" placeholder=""></el-input>
       </el-form-item>
       <el-form-item label="作业内容" prop="content">
         <el-input v-model="formData.content" placeholder="请输入作业内容" type="textarea" :rows="3"></el-input>
@@ -61,7 +61,7 @@ export default {
             ...this.formData,
             endTime,
             articleId: this.articleId,
-            teacherCourseId: this.$route.query.courseId,
+            teacherCourseId: this.$route.query.id,
           };
           // 编辑
           if (data.id) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="homework-list">
+  <div class="teacher-homework-list">
     <el-tabs v-model="tabActive" @tab-click="handleTabs">
       <el-tab-pane label="系统作业" name="0">
         <el-table v-if="isSystem" :data="systemData" border @selection-change="handleTable">
@@ -9,7 +9,7 @@
           <el-table-column label="参考答案" prop="answer"></el-table-column>
           <el-table-column label="截止时间" prop="endTime">
             <template slot-scope="{ row }">
-              <el-date-picker v-model="row.endTime" type="datetime" :editable="false" placeholder="选择日期时间">
+              <el-date-picker v-model="row.endTime" type="datetime" :editable="false" placeholder="选择作业截止时间">
               </el-date-picker>
             </template>
           </el-table-column>
@@ -32,7 +32,7 @@
           <el-table-column label="作业内容" prop="content"></el-table-column>
           <el-table-column label="类型" prop="custom">
             <template slot-scope="{ row }">
-              {{ row.custom ? '自定义' : '系统' }}
+              {{ row.custom ? '老师' : '系统' }}
             </template>
           </el-table-column>
           <el-table-column label="截止时间" prop="endTime"> </el-table-column>
@@ -61,7 +61,7 @@
     </el-tabs>
     <div class="action">
       <el-button type="primary" @click="addHomework" v-if="isAssign">新增作业</el-button>
-      <el-date-picker v-if="isSystem" v-model="allDate" type="datetime" placeholder="请选择发布的时间">
+      <el-date-picker v-if="isSystem" v-model="allDate" type="datetime" placeholder="请选择作业截止时间">
       </el-date-picker>
       <el-button v-if="isSystem" type="primary" @click="allSubmit">一键发布</el-button>
     </div>
@@ -121,17 +121,17 @@ export default {
     },
     // 获取系统作业数据
     async getSystemData() {
-      const res = await teacherGetHomeworkService(this.articleId, this.$route.query.courseId);
+      const res = await teacherGetHomeworkService(this.articleId, this.$route.query.id);
       this.systemData = res.data;
     },
     // 获取布置的作业数据
     async getSubmitData() {
-      const res = await getAssignHomeworkService(this.articleId, this.$route.query.courseId);
+      const res = await getAssignHomeworkService(this.articleId, this.$route.query.id);
       this.arrangeData = res.data;
     },
     // 获取学生作业列表
     async getStudentData() {
-      const res = await teacherGetStudentHomeworkService(this.articleId, this.$route.query.courseId);
+      const res = await teacherGetStudentHomeworkService(this.articleId, this.$route.query.id);
       console.log(res, 'student');
     },
     // 表格中的布置作业
@@ -142,7 +142,7 @@ export default {
     },
     // 布置作业
     async assignHomework(id, time) {
-      await pickupHomeworkService(id, this.$route.query.courseId, time);
+      await pickupHomeworkService(id, this.$route.query.id, time);
       this.$message.success('发布作业成功');
       await this.getSubmitData();
       await this.getSystemData();
@@ -194,6 +194,12 @@ export default {
     this.editHomeworkData = { ...defaultData };
     this.getSystemData();
   },
+  watch: {
+    articleId() {
+      this.tabActive = '0';
+      this.getSystemData();
+    },
+  },
   computed: {
     // 是否是系统作业页面
     isSystem() {
@@ -215,7 +221,7 @@ export default {
 </script>
 
 <style scoped>
-.homework-list {
+.teacher-homework-list {
   position: relative;
 }
 .action {

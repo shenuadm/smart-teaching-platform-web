@@ -8,9 +8,24 @@
         <div>{{ formData.content }}</div>
       </el-form-item>
       <el-form-item label="作业结果">
-        <el-input v-model="formData.answer" placeholder="请输入您作业的结果" type="textarea" :rows="10"></el-input>
+        <el-input
+          v-if="isCanEdit"
+          v-model="formData.answer"
+          placeholder="请输入您作业的结果"
+          type="textarea"
+          :rows="10"
+        ></el-input>
+        <el-input v-else :value="formData.answer" type="textarea" autosize></el-input>
       </el-form-item>
-      <el-form-item>
+      <template v-if="!isCanEdit">
+        <el-form-item label="分数">
+          <div>{{ formData.score }}</div>
+        </el-form-item>
+        <el-form-item label="评语">
+          <div>{{ formData.comments }}</div>
+        </el-form-item>
+      </template>
+      <el-form-item v-if="isCanEdit">
         <el-button type="primary" @click="submit">保存</el-button>
         <el-button type="info" @click="cancel">取消</el-button>
       </el-form-item>
@@ -19,7 +34,7 @@
 </template>
 
 <script>
-import { studentSaveHomeworkService } from '@/api/homework.js';
+import { studentSaveHomeworkService, stuEditHomewrokService } from '@/api/homework.js';
 export default {
   data() {
     return {
@@ -52,15 +67,27 @@ export default {
     },
     // 确认保存
     async confrimSave() {
-      await studentSaveHomeworkService(this.formData.id, this.formData);
+      if (this.formData.status === -1) {
+        await studentSaveHomeworkService(this.formData.id, this.formData);
+        this.$emit('assign');
+      } else if (this.formData.status === 0) {
+        await stuEditHomewrokService(this.formData);
+      }
       this.$message.success('保存作业成功');
       this.cancel();
-      this.$emit('success');
+      this.$emit('mine');
     },
   },
   watch: {
     editData(newVal) {
+      console.log(newVal, 'newVal');
       this.formData = JSON.parse(JSON.stringify(newVal));
+    },
+  },
+  computed: {
+    // 是否可编辑状态
+    isCanEdit() {
+      return this.formData.status === -1 || this.formData.status === 0;
     },
   },
   mounted() {

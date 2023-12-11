@@ -9,7 +9,7 @@
     <el-table-column label="评语"></el-table-column>
     <el-table-column label="操作">
       <template slot-scope="{ row }">
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="editHomework(row)">编辑</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -25,6 +25,7 @@ export default {
   },
   methods: {
     getData() {},
+    editHomework() {},
   },
 };
 </script>

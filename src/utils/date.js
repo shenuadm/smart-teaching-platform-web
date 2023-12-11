@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 // 对时间进行处理只要年月日
 export const handleDate = (data) => {
   function dateFormat(item) {
@@ -23,3 +25,5 @@ export const isAfterNow = (date) => {
   const targetDate = new Date(date);
   return targetDate > nowDate;
 };
+
+export const dateToSecond = (date) => dayjs(date).format('YYYY-MM-DD HH:mm:ss');
