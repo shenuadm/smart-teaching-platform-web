@@ -48,9 +48,6 @@ export default {
 .info-content-left .info-name {
   margin-bottom: 16px;
 }
-.info-des {
-  margin-top: 20px;
-}
 .content {
   margin: 20px auto;
 }
@@ -73,9 +70,7 @@ export default {
 .info-content p {
   margin-top: 0 !important;
 }
-.info-content-right {
-  margin-left: 50px;
-}
+
 #vt100 #scrollable {
   overflow-y: hidden !important;
 }

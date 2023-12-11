@@ -124,12 +124,6 @@ export default {
         children: 'children', //data当中的children的字段名
         label: 'title', //data当中的label的字段名
       },
-      activeName: 'first', //默认选择的第一个
-      form: {
-        name: '', //登录用户
-        pwd: '', //登录密码
-      },
-      inputType: 'password', //实验操作的密码框的type类型
       experimentId: '', //实验id
       teacherId: '', //教师课程id
       courseId: '', //课程的id
@@ -153,7 +147,6 @@ export default {
       this.courseObj = courseStatusConvert(res.course);
     });
     this.courseId = this.$route.query.courseId;
-    // 获取树形数据
   },
   methods: {
     // 树形控件的点击事件
@@ -212,9 +205,7 @@ export default {
     },
     // 提交实验报告
     submit() {
-      this.$confirm('实验报告提交后无法修改，确定提交吗？', '提交实验', {
-        type: 'warning',
-      })
+      this.$confirm('实验报告提交后无法修改，确定提交吗？', '提交实验', { type: 'warning' })
         .then(async () => {
           await this.saveContent(1);
           this.$message.success('提交成功');

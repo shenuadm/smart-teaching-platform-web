@@ -148,11 +148,11 @@ export default {
       },
       // 表单校验规则
       rules: {
-        username: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-        oldpwd: [{ validator: oldPWd, trigger: 'blur' }],
-        password: [{ validator: password, trigger: 'blur' }],
-        renewpwd: [{ validator: newpwd, trigger: 'blur' }],
-        phone: [{ validator: phone, trigger: 'blur' }],
+        username: [{ required: true, message: '请输入姓名' }],
+        oldpwd: [{ validator: oldPWd }],
+        password: [{ validator: password }],
+        renewpwd: [{ validator: newpwd }],
+        phone: [{ validator: phone }],
       },
       // 接收个人信息
       personMsg: {},
@@ -161,18 +161,11 @@ export default {
   created() {
     this.getUserInfo();
   },
-  mounted() {},
   methods: {
     // 保存表单
     submitForm() {
       this.$refs['ruleForm'].validate(async (valid) => {
         if (valid) {
-          // const data = {
-          //   oldpwd: this.ruleForm.oldpwd,
-          //   password: this.ruleForm.newpwd,
-          //   account: this.ruleForm.nickname,
-          // };
-          // const {  } = this.ruleForm
           await saveUserInfoService(this.ruleForm);
           await this.getUserInfo();
           this.$message.success('修改名称成功');
@@ -207,7 +200,6 @@ export default {
   gap: 20px;
   grid-template-columns: 1fr 1fr 1fr;
 }
-/* 学生端的页面 */
 .person-info .user-info.student {
   grid-template-columns: 1fr 1fr;
 }

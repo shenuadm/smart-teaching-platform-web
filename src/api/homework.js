@@ -110,3 +110,21 @@ export const stuGetMineHomeworkService = (articleId, teacherCourseId) =>
  */
 export const stuSendHomeworkService = (articleId, teacherCourseId) =>
   http.post(`/assignmentStudent/commit/${articleId}/${teacherCourseId}`);
+
+/**
+ * 教师获取学生作业列表
+ * @param {*} articleId
+ * @param {*} teacherCourseId
+ * @param {*} userId
+ * @returns
+ */
+export const teaGetStuHomeworkService = (articleId, teacherCourseId, userId) =>
+  http.get(`/assignmentTeacher/selectList4Tea/${articleId}/${teacherCourseId}/${userId}`);
+
+/**
+ * 教师保存学生作业
+ * @param {*} param0
+ * @returns
+ */
+export const teaSaveStuHomeworkService = ({ id, score, comments }) =>
+  http.post('/assignmentTeacher/updateStuAss', { id, score, comments });

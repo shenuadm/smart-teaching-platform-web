@@ -1,31 +1,61 @@
 <template>
-  <el-table :data="tableData" border>
-    <el-table-column label="作业名称"></el-table-column>
-    <el-table-column label="作业内容"></el-table-column>
-    <el-table-column label="类型"></el-table-column>
-    <el-table-column label="结果"></el-table-column>
-    <el-table-column label="截止时间"></el-table-column>
-    <el-table-column label="分数"></el-table-column>
-    <el-table-column label="评语"></el-table-column>
-    <el-table-column label="操作">
-      <template slot-scope="{ row }">
-        <el-button type="primary" @click="editHomework(row)">编辑</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div>
+    <el-table :data="tableData" border>
+      <el-table-column label="作业名称" prop="name"></el-table-column>
+      <el-table-column label="作业内容" prop="content"></el-table-column>
+      <el-table-column label="结果" prop="answer"></el-table-column>
+      <el-table-column label="截止时间">
+        <template slot-scope="{ row }">{{ dateToSecond(row.endTime) }}</template>
+      </el-table-column>
+      <el-table-column label="分数" prop="score"></el-table-column>
+      <el-table-column label="状态" width="100px">
+        <template slot-scope="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
+      </el-table-column>
+      <el-table-column label="评语" prop="comments"></el-table-column>
+      <el-table-column label="评阅时间">
+        <template slot-scope="{ row }">{{ row.commentTime === null ? '' : dateToSecond(row.commentTime) }}</template>
+      </el-table-column>
+      <el-table-column label="操作" width="100px">
+        <template slot-scope="{ row }">
+          <el-button type="primary" size="small" @click="editHomework(row)">编辑</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <TeacherEdit :visible.sync="visible" :editData="editData" @success="getData"></TeacherEdit>
+  </div>
 </template>
 
 <script>
+import { teaGetStuHomeworkService } from '@/api/homework.js';
+import { dateToSecond } from '@/utils/date.js';
+import TeacherEdit from './TeacherEdit.vue';
+
 export default {
-  props: [],
+  props: ['studentId', 'articleId'],
   data() {
     return {
       tableData: [], // 学生成绩
+      visible: false,
+      editData: {},
     };
   },
   methods: {
-    getData() {},
-    editHomework() {},
+    async getData() {
+      const res = await teaGetStuHomeworkService(this.articleId, this.$route.query.id, this.studentId);
+      this.tableData = res.data;
+    },
+    editHomework(row) {
+      this.editData = row;
+      console.log(row);
+      this.visible = true;
+    },
+    dateToSecond,
+  },
+  mounted() {
+    this.getData();
+  },
+  components: {
+    TeacherEdit,
   },
 };
 </script>

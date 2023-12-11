@@ -7,7 +7,7 @@
       </el-breadcrumb>
     </div>
     <!-- 课程信息 -->
-    <div class="course-info theme-bg-white btn-radius-5 zh-mgb-20 zh-pd-10">
+    <div class="course-info theme-bg-white btn-radius-5 zh-mgb-20 zh-pd-10" v-loading="$store.state.isLoading">
       <img src="@/assets/addbg.jpg" alt="" />
       <div class="info-content zh-mgl-30">
         <div class="info-content-left">

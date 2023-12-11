@@ -80,7 +80,6 @@ export default {
   },
   watch: {
     editData(newVal) {
-      console.log(newVal, 'newVal');
       this.formData = JSON.parse(JSON.stringify(newVal));
     },
   },
