@@ -26,7 +26,7 @@ export function savePersonInfo(data) {
 }
 // 选课中心
 export function getSelectCourse() {
-  return http.get('/studentCourse/courseCenterList');
+  return http.get('/studentCourse/listTeacherCourse');
 }
 // 点击选课
 export function clickSelectCourse(data) {

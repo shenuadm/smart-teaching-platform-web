@@ -1,7 +1,7 @@
 <template>
   <div class="content global-container" v-loading="$store.state.isLoading">
     <div class="person-title">选课中心</div>
-    <div class="choose-list mt-20">
+    <div class="choose-list mt-20" v-if="chooseCourse.length > 0">
       <el-row class="choose-list-item zh-pd-10 zh-mgb-20" v-for="item in chooseCourse" :key="item.id">
         <el-col :span="6">
           <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
@@ -16,10 +16,18 @@
           </div>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" size="small" @click="selectCourse(item)" class="choose">选课</el-button>
+          <el-button
+            :disabled="item.selected"
+            :type="item.selected ? 'info' : 'primary'"
+            size="small"
+            @click="selectCourse(item)"
+            class="choose"
+            >选课</el-button
+          >
         </el-col>
       </el-row>
     </div>
+    <el-empty class="bg-white" description="暂无课程可选" v-else></el-empty>
   </div>
 </template>
 
@@ -37,8 +45,9 @@ export default {
   },
   methods: {
     // 选课
-    async selectCourse(e) {
-      await clickSelectCourse({ teacherCourseId: e.id });
+    async selectCourse({ id }) {
+      console.log(id);
+      await clickSelectCourse({ teacherCourseId: id });
       this.$message.success('选择课程成功');
       this.getData();
     },
