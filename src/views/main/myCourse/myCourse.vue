@@ -1,42 +1,46 @@
 <template>
   <div class="my-course global-container" v-loading="$store.state.isLoading">
     <div class="person-title">我的课程</div>
-    <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
-      <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
-      <el-tab-pane label="选课中" name="2"></el-tab-pane>
-      <el-tab-pane label="授课中" name="4"></el-tab-pane>
-      <el-tab-pane label="已结束" name="6"></el-tab-pane>
-    </el-tabs>
-    <ul class="list mt-20">
-      <li class="list-item zh-pd-10 zh-mgb-20" v-for="item in courseList" :key="item.id">
-        <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
-        <div class="list-item-info zh-mgl-20 flex">
-          <div class="zh-fs-20 zh-fw-m">{{ item.name }}</div>
-          <div class="course-info">
-            <div>任课教师：{{ item.teacherName }}</div>
-            <div>课程状态：{{ courseStatusConvent(item.teacherCourseStatus) }}</div>
-            <div>创建时间：{{ dateFormat(item.createTime) }}</div>
+    <template v-if="courseList.length > 0">
+      <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
+        <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
+        <el-tab-pane label="选课中" name="2"></el-tab-pane>
+        <el-tab-pane label="授课中" name="4"></el-tab-pane>
+        <el-tab-pane label="已结束" name="6"></el-tab-pane>
+      </el-tabs>
+      <ul class="list mt-20">
+        <li class="list-item zh-pd-10 zh-mgb-20" v-for="item in courseList" :key="item.id">
+          <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
+          <div class="list-item-info zh-mgl-20 flex">
+            <div class="zh-fs-20 zh-fw-m">{{ item.name }}</div>
+            <div class="course-info">
+              <div>任课教师：{{ item.teacherName }}</div>
+              <div>课程状态：{{ courseStatusConvent(item.teacherCourseStatus) }}</div>
+              <div>创建时间：{{ dateFormat(item.createTime) }}</div>
+            </div>
           </div>
-        </div>
-        <div class="btn study">
-          <el-button
-            :type="item.teacherCourseStatus === 2 ? 'info' : 'primary'"
-            :disabled="item.teacherCourseStatus === 2"
-            @click="toCheckDetails(item)"
-            >查看详情</el-button
-          >
-          <el-button type="danger" v-if="item.teacherCourseStatus === 2" @click="revokeCourse(item)"
-            >撤销课程</el-button
-          >
-        </div>
-      </li>
-    </ul>
+          <div class="btn study">
+            <el-button
+              :type="item.teacherCourseStatus === 2 ? 'info' : 'primary'"
+              :disabled="item.teacherCourseStatus === 2"
+              @click="toCheckDetails(item)"
+              >查看详情</el-button
+            >
+            <el-button type="danger" v-if="item.teacherCourseStatus === 2" @click="revokeCourse(item)"
+              >撤销课程</el-button
+            >
+          </div>
+        </li>
+      </ul>
+    </template>
+    <el-empty class="bg-white" description="您还没有选择的课程" v-else></el-empty>
     <el-pagination
       @current-change="getCourse"
       :current-page="page"
       :page-size="10"
       layout="total, prev, pager, next, jumper"
       :total="total"
+      :hide-on-single-page="total <= 10"
     >
     </el-pagination>
   </div>
@@ -44,9 +48,9 @@
 
 <script>
 import dayjs from 'dayjs';
-import { getMyCourse } from '@/utils/api.js';
 import { teacherCourseStatus } from '@/constant/course.js';
-import { stuRevokeCourseService } from '@/api/course.js';
+import { stuRevokeCourseService, stuGetMyCourseService } from '@/api/course.js';
+
 export default {
   components: {},
   data() {
@@ -78,8 +82,9 @@ export default {
         },
       });
     },
+    // 获取课程数据
     async getCourse() {
-      const res = await getMyCourse();
+      const res = await stuGetMyCourseService();
       this.courseList = res.data.map((item) => {
         let picture = item.picture.split(',')[1];
         if (!picture) {

@@ -32,8 +32,9 @@
 </template>
 
 <script>
-import { getSelectCourse, clickSelectCourse } from '@/utils/api.js';
 import { selectStatusConvert } from '@/utils/status.js';
+import { stuGetSelectCourseService, stuSelectCourseService } from '@/api/course.js';
+
 export default {
   data() {
     return {
@@ -47,12 +48,12 @@ export default {
     // 选课
     async selectCourse({ id }) {
       console.log(id);
-      await clickSelectCourse({ teacherCourseId: id });
+      await stuSelectCourseService(id);
       this.$message.success('选择课程成功');
       this.getData();
     },
     async getData() {
-      const res = await getSelectCourse();
+      const res = await stuGetSelectCourseService();
       console.log(res);
       this.chooseCourse = res.data.map((item) => {
         if (item.picture !== null) {

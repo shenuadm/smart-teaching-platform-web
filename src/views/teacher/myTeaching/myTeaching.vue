@@ -2,44 +2,46 @@
   <div class="myTeaching global-container" v-loading="$store.state.isLoading">
     <!-- 标题 -->
     <div class="person-title">我的授课</div>
-    <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
-      <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
-      <el-tab-pane label="选课中" name="2"></el-tab-pane>
-      <el-tab-pane label="授课中" name="4"></el-tab-pane>
-      <el-tab-pane label="已结束" name="6"></el-tab-pane>
-    </el-tabs>
-    <div class="my-teaching" v-if="myTeachList.length > 0">
-      <div v-for="item in myTeachList" :key="item.id">
-        <div class="my-teaching-item zh-pd-10 zh-mgt-20 zh-mgb-20">
-          <img :src="'data:image/png;base64,' + item.picture" alt="图片加载失败" />
-          <div class="my-teaching-text">
-            <div class="title">{{ item.name }}</div>
-            <div class="status">课程状态：{{ courseStatusConvert(item.status) }}</div>
-            <div class="created-date">创建日期：{{ item.createTime }}</div>
+    <template v-if="myTeachList.length > 0">
+      <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
+        <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
+        <el-tab-pane label="选课中" name="2"></el-tab-pane>
+        <el-tab-pane label="授课中" name="4"></el-tab-pane>
+        <el-tab-pane label="已结束" name="6"></el-tab-pane>
+      </el-tabs>
+      <div class="my-teaching">
+        <div v-for="item in myTeachList" :key="item.id">
+          <div class="my-teaching-item zh-pd-10 zh-mgt-20 zh-mgb-20">
+            <img :src="'data:image/png;base64,' + item.picture" alt="图片加载失败" />
+            <div class="my-teaching-text">
+              <div class="title">{{ item.name }}</div>
+              <div class="status">课程状态：{{ courseStatusConvert(item.status) }}</div>
+              <div class="created-date">创建日期：{{ item.createTime }}</div>
+            </div>
+            <div class="my-teaching-btn">
+              <el-button type="primary" @click="editCourseClick(item)">编辑课程</el-button>
+              <el-button type="primary" @click="lookDetails(item)">查看详情</el-button>
+              <!-- <el-button type="primary" @click="lookScore(item)">查看成绩</el-button> -->
+            </div>
           </div>
-          <div class="my-teaching-btn">
-            <el-button type="primary" @click="editCourseClick(item)">编辑课程</el-button>
-            <el-button type="primary" @click="lookDetails(item)">查看详情</el-button>
-            <!-- <el-button type="primary" @click="lookScore(item)">查看成绩</el-button> -->
+          <!-- 学生成绩列表 -->
+          <div class="stuScore theme-bg-white zh-pd-10" v-show="showScore">
+            <div class="downloadScoreList">
+              <el-button type="primary" class="zh-mgb-20">下载成绩列表</el-button>
+            </div>
+            <el-table :data="scoreTable" border style="width: 100%">
+              <el-table-column prop="stuName" label="学生姓名" width="120"> </el-table-column>
+              <el-table-column prop="stuScoreFirst" label="实验一"> </el-table-column>
+              <el-table-column prop="stuScoreSecond" label="实验二"> </el-table-column>
+              <el-table-column prop="stuScoreThird" label="实验三"> </el-table-column>
+              <el-table-column prop="totalScore" label="总分"> </el-table-column>
+              <el-table-column prop="averageScore" label="平均分"> </el-table-column>
+            </el-table>
           </div>
-        </div>
-        <!-- 学生成绩列表 -->
-        <div class="stuScore theme-bg-white zh-pd-10" v-show="showScore">
-          <div class="downloadScoreList">
-            <el-button type="primary" class="zh-mgb-20">下载成绩列表</el-button>
-          </div>
-          <el-table :data="scoreTable" border style="width: 100%">
-            <el-table-column prop="stuName" label="学生姓名" width="120"> </el-table-column>
-            <el-table-column prop="stuScoreFirst" label="实验一"> </el-table-column>
-            <el-table-column prop="stuScoreSecond" label="实验二"> </el-table-column>
-            <el-table-column prop="stuScoreThird" label="实验三"> </el-table-column>
-            <el-table-column prop="totalScore" label="总分"> </el-table-column>
-            <el-table-column prop="averageScore" label="平均分"> </el-table-column>
-          </el-table>
         </div>
       </div>
-    </div>
-    <el-empty class="bg-white" description="暂无数据" v-else></el-empty>
+    </template>
+    <el-empty class="bg-white" description="您还没有选择的授课" v-else></el-empty>
     <el-pagination
       @current-change="getCourseData"
       :current-page="page"

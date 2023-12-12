@@ -238,9 +238,7 @@ export default {
     },
     // 删除
     del(index, row) {
-      this.$confirm('你确定要删除吗', '温馨提示', {
-        type: 'warning',
-      })
+      this.$confirm('你确定要删除吗', '提示', { type: 'warning' })
         .then(async () => {
           await delRole(row.roleid);
           this.$message.success('删除角色成功');

@@ -44,3 +44,56 @@ export const teaUpdateCourseService = ({
     address,
     status,
   });
+
+/**
+ * 老师选择授课
+ * @param {*} param0
+ * @returns
+ */
+export const teaChooseCourseService = ({
+  courseId,
+  title,
+  selectStartDate,
+  selectEndDate,
+  maxTaker,
+  address,
+  startDate,
+  endDate,
+  status,
+}) =>
+  http.post('/teacherCourse/add', {
+    courseId,
+    title,
+    selectStartDate,
+    selectEndDate,
+    maxTaker,
+    address,
+    startDate,
+    endDate,
+    status,
+  });
+
+/**
+ * 老师获取授课中心内容
+ * @returns
+ */
+export const teaGetCourseCenterService = () => http.get('/course/listByTeacher');
+
+/**
+ * 学生获取我的课程
+ * @returns
+ */
+export const stuGetMyCourseService = () => http.get('/studentCourse/list');
+
+/**
+ * 学生获取选课中心课程
+ * @returns
+ */
+export const stuGetSelectCourseService = () => http.get('/studentCourse/listTeacherCourse');
+
+/**
+ * 学生选课
+ * @param {*} teacherCourseId
+ * @returns
+ */
+export const stuSelectCourseService = (teacherCourseId) => http.post('/studentCourse/add', { teacherCourseId });

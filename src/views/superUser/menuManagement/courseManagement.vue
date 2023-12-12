@@ -186,7 +186,6 @@ export default {
           fd.append('status', this.revise.status);
           fd.append('description', this.revise.description);
           fd.append('file', this.file);
-          console.log(this.revise);
           if (!this.revise.id) {
             await addcourse(fd);
             await this.break();
@@ -194,13 +193,9 @@ export default {
             this.$message.success('添加课程成功');
           } else {
             fd.append('id', this.revise.id);
-            updatecourse(fd).then(() => {
-              this.break();
-              this.$message({
-                message: '修改课程成功',
-                type: 'success',
-              });
-            });
+            await updatecourse(fd);
+            this.$message.success('修改课程成功');
+            this.break();
           }
           this.dialogVisible = false;
         }
@@ -213,39 +208,24 @@ export default {
     },
     //删除
     del(e) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          delcourse(e).then(() => {
-            this.break();
-            this.$message({
-              type: 'success',
-              message: '删除成功!',
-            });
-          });
+      this.$confirm('此操作将永久删除该课程, 是否继续?', '提示', { type: 'warning' })
+        .then(async () => {
+          await delcourse(e);
+          this.$message.success('删除课程成功');
+          this.break();
         })
         .catch(() => {});
     },
-
     //批量删除
     batchdel() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('此操作将永久删除该您选中的课程, 是否继续?', '提示', {
         type: 'warning',
       })
-        .then(() => {
+        .then(async () => {
           let data = this.arr;
-          delcoursem(data).then((res) => {
-            this.break();
-            this.$message({
-              type: 'success',
-              message: '删除成功!',
-            });
-          });
+          await delcoursem(data);
+          this.$message.success('删除课程成功');
+          this.break();
         })
         .catch(() => {});
     },

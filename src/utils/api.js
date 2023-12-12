@@ -24,18 +24,6 @@ export function getPersonInfo() {
 export function savePersonInfo(data) {
   return http.post('/user/updateMyself', data);
 }
-// 选课中心
-export function getSelectCourse() {
-  return http.get('/studentCourse/listTeacherCourse');
-}
-// 点击选课
-export function clickSelectCourse(data) {
-  return http.post('/studentCourse/add', data);
-}
-// 我的课程
-export function getMyCourse() {
-  return http.get('/studentCourse/list');
-}
 
 // 课程详情
 export function courseDetails(id) {

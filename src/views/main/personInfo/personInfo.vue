@@ -139,13 +139,7 @@ export default {
     };
     return {
       // 表单数据
-      ruleForm: {
-        // account: '', //账号
-        // username: '', //昵称
-        // oldpwd: '', //原密码
-        // password: '', //新密码
-        // renewpwd: '', //确认新密码
-      },
+      ruleForm: {},
       // 表单校验规则
       rules: {
         username: [{ required: true, message: '请输入姓名' }],
@@ -175,7 +169,6 @@ export default {
     // 获取用户信息
     async getUserInfo() {
       const res = await getUserInfoService();
-      sessionStorage.setItem('username', res.data.username);
       this.$store.commit('getUsername');
       this.personMsg = { ...res.data, oldpwd: '', renewpwd: '', password: '' };
       this.ruleForm = { ...res.data, oldpwd: '', renewpwd: '', password: '' };

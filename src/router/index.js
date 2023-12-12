@@ -145,6 +145,24 @@ const routes = [
             name: 'myTeaching',
             component: () => import('@/views/teacher/myTeaching/myTeaching'),
           },
+          // 专业设置
+          {
+            path: '/major',
+            name: 'major',
+            component: () => import('@/views/systemSetting/majorSetting/majorSetting.vue'),
+          },
+          // 年级设置
+          {
+            path: '/grade',
+            name: 'grade',
+            component: () => import('@/views/systemSetting/gradeSetting/gradeSetting.vue'),
+          },
+          // 班级设置
+          {
+            path: '/clazz',
+            name: 'clazz',
+            component: () => import('@/views/systemSetting/classSetting/classSetting.vue'),
+          },
         ],
       },
       // 学生课程详情

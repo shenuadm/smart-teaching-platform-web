@@ -29,22 +29,6 @@ export const getExperimentStepService = (id) => http.get('/ExperimentReportPlan/
  */
 export const studentGetScoreService = (id) => http.get('/experimentReport/listByStudent/' + id);
 
-// /**
-//  *
-//  * @param {*} experimentId
-//  * @param {*} teacherCourseId
-//  * @param {*} experimentContent
-//  * @param {*} planContent
-//  * @returns
-//  */
-// export const saveExperimentReportService = (experimentId, teacherCourseId, experimentContent, planContent) =>
-//   http.post('/experimentReport/commitExperimentContent', {
-//     experimentId,
-//     teacherCourseId,
-//     experimentContent,
-//     planContent,
-//   });
-
 /**
  * 保存提交实验报告
  * @param {*} data

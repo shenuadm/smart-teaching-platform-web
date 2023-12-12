@@ -92,7 +92,7 @@ export default {
   width: calc(100vw + 10px);
 }
 .main {
-  min-width: calc(100vw - 10px);
+  width: calc(100vw - 10px);
 }
 .logo,
 .logo span {
@@ -121,8 +121,6 @@ export default {
   padding: 10px 0;
   margin-right: 20px;
 }
-
-
 
 .main {
   min-height: calc(100vh - 102px);
