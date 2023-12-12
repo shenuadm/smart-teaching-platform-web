@@ -50,6 +50,7 @@ export default {
   props: ['visible', 'editData'],
   methods: {
     cancel() {
+      this.$refs.homeworkForm.clearValidate();
       this.$emit('update:visible', false);
     },
     // 保存作业

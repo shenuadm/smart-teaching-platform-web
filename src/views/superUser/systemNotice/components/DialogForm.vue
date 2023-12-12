@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     cancel() {
+      this.$refs.noticeForm.clearValidate();
       Bus.$emit('clearDialog');
     },
     // 确认

@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     cancel() {
+      this.$refs.homeworkForm.clearValidate();
       this.$emit('update:visible', false);
     },
     submit() {

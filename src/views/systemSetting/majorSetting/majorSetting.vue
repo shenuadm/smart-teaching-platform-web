@@ -1,22 +1,6 @@
 <template>
   <div>
-    <div class="flex header">
-      <div class="title">专业名称：</div>
-      <el-input
-        v-model="searchInfo"
-        @keydown.enter="search"
-        placeholder="请输入专业名称"
-        style="width: 200px"
-        @click="search"
-      ></el-input>
-      <div class="title">专业状态：</div>
-      <el-select v-model="searchStatus" placeholder="请选择您要搜索的专业状态" clearable>
-        <el-option v-for="item in systemSettingStatus" :key="item[0]" :label="item[1]" :value="item[0]"></el-option>
-      </el-select>
-      <el-button size="small" type="primary" class="ml-10" @click="search">搜索</el-button>
-      <el-button size="small" type="primary" @click="reset">重置</el-button>
-      <el-button size="small" type="primary" @click="addMajor">新增专业</el-button>
-    </div>
+    <SystemHeader :title="'专业'" @getData="getData" @add="addMajor"></SystemHeader>
     <el-table :data="tableData" v-loading="$store.state.isLoading">
       <el-table-column label="专业名称" prop="name"></el-table-column>
       <el-table-column label="专业状态">
@@ -29,15 +13,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @current-change="getData"
-      :current-page.sync="page"
-      :page-size="10"
-      layout="total, prev, pager, next, jumper"
-      :total="total"
-      :hide-on-single-page="total <= 10"
-    >
-    </el-pagination>
     <MajorDialog :visible.sync="visible" @success="getData" :editData="editData"></MajorDialog>
   </div>
 </template>
@@ -46,41 +21,24 @@
 import { getMajorService, deleteMajorService } from '@/api/systemSetting.js';
 import MajorDialog from './components/MajorDialog.vue';
 import { systemSettingStatus } from '@/constant/status.js';
+import SystemHeader from '../components/SystemHeader.vue';
 
 export default {
   data() {
     return {
       tableData: [], // 页面数据
-      searchInfo: '', // 搜索信息
       editData: {}, // 编辑的信息
       visible: false, // 弹框状态
-      page: 1, // 当前页
-      total: 0, // 总数
-      searchStatus: '', // 搜索的专业状态
       systemSettingStatus,
     };
   },
   methods: {
-    // 搜索
-    search() {
-      if (this.searchInfo === '' && this.searchStatus === '') return this.$message.warning('请输入专业名称再搜索');
-      this.page = 1;
-      this.getData();
-    },
-    async getData() {
-      const data = { page: this.page };
-      this.searchInfo !== '' && Object.assign(data, { name: this.searchInfo });
-      this.searchStatus !== '' && Object.assign(data, { status: this.searchStatus });
+    async getData({ searchInfo, searchStatus }) {
+      const data = {};
+      searchInfo !== '' && Object.assign(data, { name: searchInfo });
+      searchStatus !== '' && Object.assign(data, { status: searchStatus });
       const res = await getMajorService(data);
       this.tableData = res.data;
-      this.total = res.count;
-      console.log(res);
-    },
-    reset() {
-      this.searchInfo = '';
-      this.searchStatus = '';
-      this.page = 1;
-      this.getData();
     },
     editMajor(row) {
       this.editData = row;
@@ -101,10 +59,11 @@ export default {
     },
   },
   created() {
-    this.getData();
+    this.getData({});
   },
   components: {
     MajorDialog,
+    SystemHeader,
   },
 };
 </script>

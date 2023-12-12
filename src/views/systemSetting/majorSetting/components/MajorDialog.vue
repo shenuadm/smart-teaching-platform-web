@@ -41,6 +41,7 @@ export default {
   },
   methods: {
     cancel() {
+      this.$refs.formRef.clearValidate();
       this.$emit('update:visible', false);
     },
     submit() {
@@ -54,7 +55,7 @@ export default {
             this.$message.success('新增专业成功');
           }
           this.cancel();
-          this.$emit('success');
+          this.$emit('success', {});
         }
       });
     },

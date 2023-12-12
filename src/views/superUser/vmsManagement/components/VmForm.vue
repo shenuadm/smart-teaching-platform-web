@@ -34,6 +34,7 @@ export default {
   props: ['title', 'editForm'],
   methods: {
     cancel() {
+      this.$refs.vmForm.clearValidate();
       Bus.$emit('vmClear');
     },
     submit() {

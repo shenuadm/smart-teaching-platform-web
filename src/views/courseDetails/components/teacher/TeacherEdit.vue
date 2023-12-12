@@ -43,6 +43,7 @@ export default {
   props: ['visible', 'editData'],
   methods: {
     cancel() {
+      this.$refs.formRef.clearValidate();
       this.$emit('update:visible', false);
     },
     submit() {

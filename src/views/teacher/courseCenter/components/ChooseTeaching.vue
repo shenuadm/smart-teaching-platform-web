@@ -3,7 +3,7 @@
     title="选择授课"
     :close-on-click-modal="false"
     :visible="visible"
-    :before-close="cancle"
+    :before-close="cancel"
     width="40%"
     class="choose-teaching-dia"
   >
@@ -51,8 +51,8 @@
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
-      <el-button type="info" @click="cancle">取消</el-button>
+      <el-button type="primary" @click="submitForm">保存</el-button>
+      <el-button type="info" @click="cancel">取消</el-button>
     </div>
   </el-dialog>
 </template>
@@ -83,12 +83,13 @@ export default {
   },
   props: ['visible', 'formData'],
   methods: {
-    cancle() {
+    cancel() {
+      this.$refs.ruleForm.clearValidate();
       this.$emit('update:visible', false);
     },
     //保存保存
-    submitForm(formName) {
-      this.$refs[formName].validate(async (valid) => {
+    submitForm() {
+      this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
           const { selectDate, date } = this.editCourse;
           const data = {
@@ -100,7 +101,7 @@ export default {
           };
           await teaChooseCourseService(data);
           this.$message.success('选择授课成功');
-          this.cancle();
+          this.cancel();
           this.$emit('success');
         }
       });
