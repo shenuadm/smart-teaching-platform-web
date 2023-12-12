@@ -6,10 +6,10 @@
       <el-table-column label="班级状态">
         <template slot-scope="{ row }"> {{ systemSettingStatus.get(+row.status) }}</template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="150px">
         <template slot-scope="{ row }">
-          <el-button type="primary" @click="editClass(row)">编辑</el-button>
-          <el-button type="danger" @click="deleteClass(row)">删除</el-button>
+          <el-button size="small" type="primary" @click="editClass(row)">编辑</el-button>
+          <el-button size="small" type="danger" @click="deleteClass(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -33,17 +33,24 @@ export default {
     };
   },
   methods: {
-    async getData({ searchInfo, searchStatus }) {
-      const data = {};
-      searchInfo !== '' && Object.assign(data, { name: searchInfo });
-      searchStatus !== '' && Object.assign(data, { status: searchStatus });
-      const res = await getClassService(data);
+    // 获取班级数据
+    // async getData({ searchInfo, searchStatus }) {
+    //   const data = {};
+    //   searchInfo !== '' && Object.assign(data, { name: searchInfo });
+    //   searchStatus !== '' && Object.assign(data, { status: searchStatus });
+    //   const res = await getClassService(data);
+    //   this.tableData = res.data;
+    // },
+    async getData() {
+      const res = await getClassService(this.$route.params.id);
       this.tableData = res.data;
     },
+    // 编辑班级
     editClass(row) {
       this.editData = row;
       this.visible = true;
     },
+    // 删除班级
     deleteClass({ id }) {
       this.$confirm('您确认要删除该班级吗', '提示', { type: 'warning' })
         .then(async () => {
@@ -53,13 +60,14 @@ export default {
         })
         .catch(() => {});
     },
+    // 新增班级
     addClass() {
-      this.editData = {};
+      this.editData = { gradeId: this.$route.params.id };
       this.visible = true;
     },
   },
   created() {
-    this.getData({});
+    this.getData();
   },
   components: {
     ClassDialog,

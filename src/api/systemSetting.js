@@ -5,7 +5,8 @@ import http from '@/utils/service';
  * @param {*} data
  * @returns
  */
-export const getMajorService = (data) => http.get(`/major/list?`, data);
+// export const getMajorService = (data) => http.get(`/major/list?`, data);
+export const getMajorService = () => http.get(`/major/list`);
 
 /**
  * 新增专业
@@ -33,21 +34,23 @@ export const deleteMajorService = (id) => http.delete(`/major/delete/${id}`);
  * @param {*} data
  * @returns
  */
-export const getGradeService = (data) => http.get(`/grade/list?`, data);
+// export const getGradeService = (data) => http.get(`/grade/list?`, data);
+export const getGradeService = (id) => http.get(`/grade/list/${id}`);
 
 /**
  * 新增年级
  * @param {*} param0
  * @returns
  */
-export const addGradeService = ({ name, status }) => http.post('/grade/add', { name, status });
+export const addGradeService = ({ name, status, majorId }) => http.post('/grade/add', { name, status, majorId });
 
 /**
  * 修改年级
  * @param {*} param0
  * @returns
  */
-export const updateGradeService = ({ name, status, id }) => http.post('/grade/update', { name, status, id });
+export const updateGradeService = ({ name, status, id, majorId }) =>
+  http.post('/grade/update', { name, status, id, majorId });
 
 /**
  * 删除年级
@@ -61,21 +64,23 @@ export const deleteGradeService = (id) => http.delete(`/grade/delete/${id}`);
  * @param {*} data
  * @returns
  */
-export const getClassService = (data) => http.get(`/clazz/list?`, data);
+// export const getClassService = (data) => http.get(`/clazz/list?`, data);
+export const getClassService = (id) => http.get(`/clazz/list/${id}`);
 
 /**
  * 新增班级
  * @param {*} param0
  * @returns
  */
-export const addClassService = ({ name, status }) => http.post('/clazz/add', { name, status });
+export const addClassService = ({ name, status, gradeId }) => http.post('/clazz/add', { name, status, gradeId });
 
 /**
  * 更新班级
  * @param {*} param0
  * @returns
  */
-export const updateClassService = ({ name, status, id }) => http.post('/clazz/update', { name, status, id });
+export const updateClassService = ({ name, status, id, gradeId }) =>
+  http.post('/clazz/update', { name, status, id, gradeId });
 
 /**
  * 删除班级

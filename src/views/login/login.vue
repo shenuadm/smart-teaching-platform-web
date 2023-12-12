@@ -28,7 +28,7 @@
             </el-form-item>
           </el-form>
           <div>
-            <p>还没有账号？<a href="javascript:void(0)" class="zh-fc-blue" @click="toRegister">去注册</a></p>
+            <p>还没有账号？<a href="javascript:void(0)" class="text-blue" @click="toRegister">去注册</a></p>
           </div>
         </div>
         <!-- 注册 -->

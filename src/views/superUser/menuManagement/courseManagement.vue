@@ -2,7 +2,7 @@
   <div class="course-manage">
     <div class="header-course">
       <div class="title">课程名称:</div>
-      <el-input v-model="input" class="zh-mgl-10 zh-mgr-10 input-content" placeholder="请输入内容"></el-input>
+      <el-input v-model="input" class="ml-10 mr-10 input-content" placeholder="请输入内容"></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="addcourse">添加课程</el-button>

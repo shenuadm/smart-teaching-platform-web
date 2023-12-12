@@ -1,15 +1,15 @@
 <template>
   <div class="content warpper" id="courseDeatils">
-    <div class="zh-mgb-20">
+    <div class="mb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
         <el-breadcrumb-item>{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 课程信息 -->
-    <div class="course-info theme-bg-white btn-radius-5 zh-mgb-20 zh-pd-10" v-loading="$store.state.isLoading">
+    <div class="course-info bg-white radius-5 mb-20 p-10" v-loading="$store.state.isLoading">
       <img src="@/assets/addbg.jpg" alt="" />
-      <div class="info-content zh-mgl-30">
+      <div class="info-content ml-30">
         <div class="info-content-left">
           <div>课程名称：{{ courseObj.name }}</div>
           <!-- <div>选课开始日期：{{ courseObj.selectStartDate }}</div> -->
@@ -39,7 +39,7 @@
           <p>【实验报告】</p>
           <div class="experiment-res">
             <div class="res-title">
-              <p class="zh-fs-16 zh-fw-m">实验结果：</p>
+              <p class="zh-fs-16 font-bold">实验结果：</p>
               <el-button type="primary" @click="targgleRes" size="mini"
                 >{{ experResult.show ? '隐藏' : '显示' }}实验结果</el-button
               >
@@ -48,7 +48,7 @@
             <div v-else class="experiment-content experiment-prompt">点击上方按钮显示实验结果</div>
           </div>
           <div class="step-all">
-            <p class="zh-fs-16 zh-fw-m">实验步骤：</p>
+            <p class="zh-fs-16 font-bold">实验步骤：</p>
             <div v-for="(item, index) in experimentStep" :key="item.id" @click="targgleStep">
               <div class="step-title">
                 <div class="mb-10">{{ index + 1 }}、&nbsp;{{ item.name }}</div>
@@ -133,15 +133,15 @@
           <div><span class="font-bold">成绩：</span>{{ stuForm.score }}</div>
         </div>
         <div class="exTitle zh-fs-16">
-          <p class="zh-fw-m">实验标题:</p>
+          <p class="font-bold">实验标题:</p>
           <div>{{ stuForm.title }}</div>
         </div>
         <div class="exResult zh-fs-16">
-          <p class="zh-fw-m">实验结果:</p>
+          <p class="font-bold">实验结果:</p>
           <div v-html="stuForm.result"></div>
         </div>
         <div class="exComment zh-fs-16">
-          <p class="zh-fw-m">评语:</p>
+          <p class="font-bold">评语:</p>
           <div>{{ stuForm.comment }}</div>
         </div>
       </div>

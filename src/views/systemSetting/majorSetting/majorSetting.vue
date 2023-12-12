@@ -1,15 +1,16 @@
 <template>
   <div>
     <SystemHeader :title="'专业'" @getData="getData" @add="addMajor"></SystemHeader>
-    <el-table :data="tableData" v-loading="$store.state.isLoading">
+    <el-table :data="tableData" v-loading="$store.state.isLoading" border>
       <el-table-column label="专业名称" prop="name"></el-table-column>
       <el-table-column label="专业状态">
         <template slot-scope="{ row }"> {{ systemSettingStatus.get(+row.status) }}</template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="300px">
         <template slot-scope="{ row }">
-          <el-button type="primary" @click="editMajor(row)">编辑</el-button>
-          <el-button type="danger" @click="deleteMajor(row)">删除</el-button>
+          <el-button size="small" type="primary" @click="goGrade(row)">年级管理</el-button>
+          <el-button size="small" type="primary" @click="editMajor(row)">编辑</el-button>
+          <el-button size="small" type="danger" @click="deleteMajor(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -33,6 +34,7 @@ export default {
     };
   },
   methods: {
+    // 获取专业数据
     async getData({ searchInfo, searchStatus }) {
       const data = {};
       searchInfo !== '' && Object.assign(data, { name: searchInfo });
@@ -40,12 +42,14 @@ export default {
       const res = await getMajorService(data);
       this.tableData = res.data;
     },
+    // 编辑专业
     editMajor(row) {
       this.editData = row;
       this.visible = true;
     },
+    // 删除专业
     deleteMajor({ id }) {
-      this.$confirm('您确认要删除该专业吗', '提示', { type: 'warning' })
+      this.$confirm('删除该专业将会删除该专业下的所有年级和班级，您确认要删除吗', '提示', { type: 'warning' })
         .then(async () => {
           await deleteMajorService(id);
           this.$message.success('删除专业成功');
@@ -53,9 +57,14 @@ export default {
         })
         .catch(() => {});
     },
+    // 新增专业
     addMajor() {
       this.editData = {};
       this.visible = true;
+    },
+    // 查看年级
+    goGrade({ id, name }) {
+      this.$router.push(`/grade/${id}?name=${name}`);
     },
   },
   created() {

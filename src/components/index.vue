@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <!-- 头部 -->
-      <el-header style="position: fixed" class="header theme-bg-black">
+      <el-header style="position: fixed" class="header bg-theme">
         <div class="heder-container">
           <div class="logo">
             <img src="@/assets/logo2.png" alt="网络错误" />
@@ -10,7 +10,7 @@
           <div>
             <div v-if="this.$store.state.username" class="login-info">
               <img src="@/assets/avatar.jpg" alt="网络错误" class="login-img" />
-              <div class="login-name zh-fc-white">
+              <div class="login-name text-white">
                 <el-menu
                   class="userInfo"
                   background-color="#212121"
@@ -37,10 +37,10 @@
         <router-view></router-view>
       </div>
       <!-- 底部 -->
-      <div class="footer theme-bg-black">
-        <p class="footer-info-item zh-fc-white">技术支持：成都易腾创想智能科技有限公司</p>
-        <!-- <p class="footer-info-item zh-fc-white">联系方式：028-62539515</p> -->
-        <!-- <p class="footer-info-item zh-fc-white">公司地址：四川省成都市温江区海科路东段777号F栋11楼</p> -->
+      <div class="footer bg-theme">
+        <p class="footer-info-item text-white">技术支持：成都易腾创想智能科技有限公司</p>
+        <!-- <p class="footer-info-item text-white">联系方式：028-62539515</p> -->
+        <!-- <p class="footer-info-item text-white">公司地址：四川省成都市温江区海科路东段777号F栋11楼</p> -->
       </div>
     </el-container>
   </div>

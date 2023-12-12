@@ -2,11 +2,11 @@
   <div class="content global-container" v-loading="$store.state.isLoading">
     <div class="person-title">选课中心</div>
     <div class="choose-list mt-20" v-if="chooseCourse.length > 0">
-      <el-row class="choose-list-item zh-pd-10 zh-mgb-20" v-for="item in chooseCourse" :key="item.id">
+      <el-row class="choose-list-item p-10 mb-20" v-for="item in chooseCourse" :key="item.id">
         <el-col :span="6">
           <img :src="'data:image/png;base64,' + item.picture" alt="加载失败" />
         </el-col>
-        <el-col :span="14" class="choose-item-info zh-mgl-20">
+        <el-col :span="14" class="choose-item-info ml-20">
           <div class="info-container">
             <div>课程名称：{{ item.name }}</div>
             <div>已选人数：{{ item.selectedNumber }}</div>

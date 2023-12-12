@@ -153,13 +153,13 @@ const routes = [
           },
           // 年级设置
           {
-            path: '/grade',
+            path: '/grade/:id',
             name: 'grade',
             component: () => import('@/views/systemSetting/gradeSetting/gradeSetting.vue'),
           },
           // 班级设置
           {
-            path: '/clazz',
+            path: '/clazz/:id',
             name: 'clazz',
             component: () => import('@/views/systemSetting/classSetting/classSetting.vue'),
           },

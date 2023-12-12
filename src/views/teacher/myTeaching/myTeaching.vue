@@ -11,7 +11,7 @@
       </el-tabs>
       <div class="my-teaching">
         <div v-for="item in myTeachList" :key="item.id">
-          <div class="my-teaching-item zh-pd-10 zh-mgt-20 zh-mgb-20">
+          <div class="my-teaching-item p-10 mt-20 mb-20">
             <img :src="'data:image/png;base64,' + item.picture" alt="图片加载失败" />
             <div class="my-teaching-text">
               <div class="title">{{ item.name }}</div>
@@ -25,9 +25,9 @@
             </div>
           </div>
           <!-- 学生成绩列表 -->
-          <div class="stuScore theme-bg-white zh-pd-10" v-show="showScore">
+          <div class="stuScore bg-white p-10" v-show="showScore">
             <div class="downloadScoreList">
-              <el-button type="primary" class="zh-mgb-20">下载成绩列表</el-button>
+              <el-button type="primary" class="mb-20">下载成绩列表</el-button>
             </div>
             <el-table :data="scoreTable" border style="width: 100%">
               <el-table-column prop="stuName" label="学生姓名" width="120"> </el-table-column>

@@ -2,7 +2,7 @@
   <div class="content">
     <div class="header">
       <div class="title">标题:</div>
-      <el-input v-model="input" placeholder="请输入标题" class="zh-mgl-10 zh-mgr-10"></el-input>
+      <el-input v-model="input" placeholder="请输入标题" class="ml-10 mr-10"></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="reset">重置</el-button>
       <el-button type="primary" size="small" @click="addNotice">添加公告</el-button>

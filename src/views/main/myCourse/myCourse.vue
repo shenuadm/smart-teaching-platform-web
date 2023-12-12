@@ -9,10 +9,10 @@
         <el-tab-pane label="已结束" name="6"></el-tab-pane>
       </el-tabs>
       <ul class="list mt-20">
-        <li class="list-item zh-pd-10 zh-mgb-20" v-for="item in courseList" :key="item.id">
+        <li class="list-item p-10 mb-20" v-for="item in courseList" :key="item.id">
           <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
-          <div class="list-item-info zh-mgl-20 flex">
-            <div class="zh-fs-20 zh-fw-m">{{ item.name }}</div>
+          <div class="list-item-info ml-20 flex">
+            <div class="zh-fs-20 font-bold">{{ item.name }}</div>
             <div class="course-info">
               <div>任课教师：{{ item.teacherName }}</div>
               <div>课程状态：{{ courseStatusConvent(item.teacherCourseStatus) }}</div>

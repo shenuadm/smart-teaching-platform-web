@@ -1,6 +1,6 @@
 <template>
   <div class="role-management">
-    <div class="addRole zh-mgb-20">
+    <div class="addRole mb-20">
       <el-button type="primary" size="small" @click="addRole">添加角色</el-button>
     </div>
     <div class="roleTable">

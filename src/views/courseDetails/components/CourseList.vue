@@ -1,5 +1,5 @@
 <template>
-  <div class="course-list content-height theme-bg-white btn-radius-5" v-loading="$store.state.isLoading">
+  <div class="course-list content-height bg-white radius-5" v-loading="$store.state.isLoading">
     <!-- 左侧树形结构 -->
     <div class="tree">
       <el-tree :data="data" :props="defaultProps" accordion @node-click="handleNodeClick" :highlight-current="true">
@@ -43,13 +43,13 @@
               <img src="@/assets/eye.png" alt="" @click="toShow" />
             </div>
             <div class="openWindow">
-              <a href="javascript:void(0)" ref="newWindow" class="btn-bg-b" @click="openNewWindow">访问实验机</a>
+              <a href="javascript:void(0)" ref="newWindow" class="bg-blue" @click="openNewWindow">访问实验机</a>
             </div>
           </el-tab-pane>
           <el-tab-pane label="实验报告" name="third" class="experiment-report">
             <!-- <div class="experiment-title">
               <p>【实验模板】</p>
-              <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link zh-fc-blue"
+              <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link text-blue"
                 >点击下载实验模板
               </a>
             </div> -->

@@ -32,7 +32,7 @@ const defaultData = {
 export default {
   data() {
     return {
-      formData: { ...defaultData },
+      formData: { ...defaultData }, // 表单展示数据
       rules: {
         name: [{ required: true, message: '请输入年级名称', trigger: 'blur' }],
         status: [{ required: true, message: '请选择年级状态', trigger: 'change' }],
@@ -40,10 +40,12 @@ export default {
     };
   },
   methods: {
+    // 取消
     cancel() {
       this.$refs.formRef.clearValidate();
       this.$emit('update:visible', false);
     },
+    // 提交
     submit() {
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {

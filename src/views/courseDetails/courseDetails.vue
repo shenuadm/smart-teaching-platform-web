@@ -1,14 +1,14 @@
 <template>
   <div class="content warpper" id="courseDeatils" v-loading="$store.state.isLoading">
-    <div class="zh-mgb-20">
+    <div class="mb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div class="course-info theme-bg-white btn-radius-5 zh-mgb-20 zh-pd-10">
+    <div class="course-info bg-white radius-5 mb-20 p-10">
       <img src="@/assets/addbg.jpg" alt="" />
-      <div class="info-content zh-mgl-30">
+      <div class="info-content ml-30">
         <div class="info-content-left">
           <div class="info-name">
             <div>
@@ -58,11 +58,11 @@
         <div class="experiment-title">
           <p>【实验报告】</p>
           <div class="experiment-report-result">
-            <p class="experiment-report-title zh-fs-16 zh-fw-m">实验结果:</p>
+            <p class="experiment-report-title zh-fs-16 font-bold">实验结果:</p>
             <Editor ref="editor"></Editor>
           </div>
           <div class="experiment-report-step">
-            <p class="experiment-report-title zh-fs-16 zh-fw-m">实验步骤:</p>
+            <p class="experiment-report-title zh-fs-16 font-bold">实验步骤:</p>
             <ul class="step-all">
               <li class="step-item" v-for="(item, index) in experimentStep" :key="index">
                 <p>步骤{{ index + 1 }} {{ item.name }}</p>
@@ -94,7 +94,7 @@
           <el-table-column prop="comment" label="评语"> </el-table-column>
           <el-table-column prop="createTime" label="创建时间" width="200"> </el-table-column>
         </el-table>
-        <div class="block zh-mgt-20">
+        <div class="block mt-20">
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page="currentPage"

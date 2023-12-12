@@ -4,14 +4,14 @@
     <div class="person-title">课程中心</div>
     <!-- 内容 -->
     <!-- 搜索框 -->
-    <div class="course-search zh-pd-10">
+    <div class="course-search p-10">
       <span>课程名称：</span>
       <input v-model="search" placeholder="请输入课程名称" />
       <el-button type="primary" size="small">搜索</el-button>
       <el-button type="primary" size="small">重置</el-button>
     </div>
     <!-- 每一项数据 -->
-    <div class="course-center mt-20">
+    <div class="course-center mt-20" v-if="courseList.length > 0">
       <div class="course-center-item mt-20" v-for="item in courseList" :key="item.id">
         <img :src="'data:image/png;base64,' + item.picture" alt="课程logo图片" />
         <div class="course-center-text">
@@ -23,11 +23,12 @@
           </el-popover>
         </div>
         <div class="course-center-btn">
-          <button class="edit btn-bg-b" @click="toChapterDetails(item)">查看章节</button>
-          <button class="detail btn-bg-b" @click="editCourseClick(item)">选择授课</button>
+          <button class="edit bg-blue" @click="toChapterDetails(item)">查看章节</button>
+          <button class="detail bg-blue" @click="editCourseClick(item)">选择授课</button>
         </div>
       </div>
     </div>
+    <el-empty class="bg-white" description="暂无课程" v-else></el-empty>
     <ChooseTeaching :visible.sync="visible" @success="getData" :formData="chooseData"></ChooseTeaching>
   </div>
 </template>

@@ -1,15 +1,15 @@
 <template>
   <div class="content warpper" id="courseDeatils">
-    <div class="zh-mgb-20">
+    <div class="mb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 课程信息 -->
-    <div class="course-info theme-bg-white btn-radius-5 zh-mgb-20 zh-pd-10">
+    <div class="course-info bg-white radius-5 mb-20 p-10">
       <img src="@/assets/addbg.jpg" alt="网络错误" />
-      <div class="info-content zh-mgl-30">
+      <div class="info-content ml-30">
         <div class="info-name font-bold">课程名称：{{ courseObj.name }}</div>
         <div class="mt-20">课程描述：{{ courseObj.description }}</div>
       </div>
