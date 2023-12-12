@@ -14,3 +14,33 @@ export const getMyTeachingService = ({ status, page }) =>
  * @returns
  */
 export const stuRevokeCourseService = (id) => http.delete(`/studentCourse/cancelCourse/${id}`);
+
+/**
+ * 老师编辑课程
+ * @param {*} param0
+ * @returns
+ */
+export const teaUpdateCourseService = ({
+  id,
+  userId,
+  courseId,
+  selectStartDate,
+  selectEndDate,
+  maxTaker,
+  startDate,
+  endDate,
+  address,
+  status,
+}) =>
+  http.post('/teacherCourse/update', {
+    id,
+    userId,
+    courseId,
+    selectStartDate,
+    selectEndDate,
+    maxTaker,
+    startDate,
+    endDate,
+    address,
+    status,
+  });

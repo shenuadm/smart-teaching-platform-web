@@ -74,7 +74,7 @@
         </el-tree>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" size="small" @click="confirmEmpower">确认授权</el-button>
-          <el-button type="success" size="small" @click="cancelEmpower">取消授权</el-button>
+          <el-button type="info" size="small" @click="cancelEmpower">取消授权</el-button>
         </div>
       </el-dialog>
     </div>
@@ -82,7 +82,8 @@
 </template>
 
 <script>
-import { roleManagement, empowerTree, ackEmpower, delRole, updateRole, addRole } from '@/utils/api.js';
+import { roleManagement, ackEmpower, delRole, updateRole, addRole } from '@/utils/api.js';
+import { getEmpowerTreeService } from '@/api/role.js';
 export default {
   data() {
     return {
@@ -112,6 +113,7 @@ export default {
       roleId: '',
       isAddRole: true, //是否添加角色
       dialogLoading: true,
+      test: [],
     };
   },
   created() {
@@ -169,52 +171,66 @@ export default {
       });
     },
     // 授权
-    empower(index, row) {
+    async empower(index, row) {
       // this.dialogLoading = true;
       this.empowerVisible = true;
       this.roleId = row.roleid;
-      empowerTree(this.roleId).then((res) => {
-        this.treeData = res.data;
-        // 一级
-        this.treeData.forEach((item) => {
-          if (item.checked === true) {
-            this.checked.push(item.id);
+      const res = await getEmpowerTreeService(this.roleId);
+      console.log(res.data, '授权');
+      this.treeData = res.data;
+      const getId = (data) => {
+        data.forEach((item) => {
+          if (item.checked) {
+            this.test.push(item.id);
           }
-          // 二级
-          let secondChildren = item.children;
-          if (secondChildren != null) {
-            secondChildren.forEach((items) => {
-              if (items.checked === true) {
-                this.checked.push(items.id);
-              }
-              // 三级
-              let thirdChildren = items.children;
-              if (thirdChildren != null) {
-                thirdChildren.forEach((k) => {
-                  if (k.checked === true) {
-                    this.checked.push(k.id);
-                  }
-                });
-              }
-            });
+          if (item.children != null) {
+            getId(item.children);
           }
         });
+      };
+      getId(res.data);
+      // 一级
+      this.treeData.forEach((item) => {
+        if (item.checked === true) {
+          this.checked.push(item.id);
+        }
+        // 二级
+        let secondChildren = item.children;
+        if (secondChildren != null) {
+          secondChildren.forEach((items) => {
+            if (items.checked === true) {
+              this.checked.push(items.id);
+            }
+            // 三级
+            let thirdChildren = items.children;
+            if (thirdChildren != null) {
+              thirdChildren.forEach((k) => {
+                if (k.checked === true) {
+                  this.checked.push(k.id);
+                }
+              });
+            }
+          });
+        }
       });
     },
     // 确认授权
     async confirmEmpower() {
-      const data = {
-        roleId: this.roleId,
-        permissionIds: this.checked.join(','),
-      };
-      await ackEmpower(data);
-      this.$message.success('授权成功');
-      this.empowerVisible = false;
+      // const data = {
+      //   roleId: this.roleId,
+      //   permissionIds: this.checked.join(','),
+      // };
+      console.log(this.checked);
+      console.log(this.test);
+      // await ackEmpower(data);
+      // this.$message.success('授权成功');
+      // this.empowerVisible = false;
     },
     // 取消授权
     cancelEmpower() {
       this.empowerVisible = false;
       this.checked = [];
+      this.test = [];
     },
     // 判断该用户是否可以编辑与删除信息,可以返回false，不可以返回true
     isClick(rolename) {

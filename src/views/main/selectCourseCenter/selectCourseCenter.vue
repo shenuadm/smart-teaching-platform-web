@@ -79,11 +79,6 @@ export default {
 .content {
   background-color: #f8f6f6 !important;
 }
-.title {
-  text-align: left;
-  border-bottom: 1px solid #dedede;
-  padding-bottom: 20px;
-}
 .choose-list {
   padding: 0 !important;
 }

@@ -46,10 +46,11 @@
       :page-size="10"
       layout="total, prev, pager, next, jumper"
       :total="total"
+      :hide-on-single-page="total <= 10"
     >
     </el-pagination>
     <!-- 编辑框 -->
-    <EditCourse :dialogVisible.sync="dialogVisible" :formDate="editCourse"></EditCourse>
+    <EditCourse :dialogVisible.sync="dialogVisible" :formDate="editCourse" @success="getCourseData"></EditCourse>
   </div>
 </template>
 
@@ -103,6 +104,7 @@ export default {
     // 获取课程信息
     async getCourseData() {
       const data = { page: this.page };
+      // 如果当前选中类型不是所有授课，则添加搜搜条件
       this.activeCourseType !== '-1' && Object.assign(data, { status: this.activeCourseType });
       const res = await getMyTeachingService(data);
       this.total = res.count;

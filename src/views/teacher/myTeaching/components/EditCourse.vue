@@ -44,13 +44,8 @@
       <!-- 课程状态 -->
       <el-form-item label="课程状态：" prop="status">
         <el-radio-group v-model="editCourse.status">
-          <el-radio
-            v-for="item in teacherCourseStatus"
-            :key="item[0]"
-            :label="item[0]"
-            :disabled="[2, 3, 4, 5].includes(item[0])"
-            >{{ item[1] }}</el-radio
-          >
+          <el-radio v-for="item in teacherCourseStatus" :key="item[0]" :label="item[0]">{{ item[1] }}</el-radio>
+          <!-- :disabled="[2, 3, 4, 5].includes(item[0])" -->
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -63,6 +58,7 @@
 
 <script>
 import { teacherCourseStatus } from '@/constant/course.js';
+import { teaUpdateCourseService } from '@/api/course';
 
 export default {
   data() {
@@ -86,7 +82,17 @@ export default {
     submitForm() {
       this.$refs['ruleForm'].validate(async (valid) => {
         if (valid) {
-          console.log(this.editCourse);
+          const { date, selectDate } = this.editCourse;
+          const data = {
+            ...this.editCourse,
+            startDate: date[0],
+            endDate: date[1],
+            selectStartDate: selectDate[0],
+            selectEndDate: selectDate[1],
+          };
+          await teaUpdateCourseService(data);
+          this.closeDialog();
+          this.$emit('success');
         }
       });
     },
