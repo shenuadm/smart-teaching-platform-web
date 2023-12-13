@@ -63,7 +63,7 @@
 
 <script>
 import { teaChooseCourseService } from '@/api/course.js';
-import { teaGetClassService } from '@/api/systemSetting.js';
+import { getLearService } from '@/api/systemSetting.js';
 
 const defaultData = {
   selectDate: [], // 选课时间
@@ -124,7 +124,7 @@ export default {
     },
     // 获取年级班级数据
     async getOptions() {
-      const res = await teaGetClassService();
+      const res = await getLearService();
       console.log(res);
       this.options = res.data;
     },

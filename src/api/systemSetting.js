@@ -89,4 +89,12 @@ export const updateClassService = ({ name, status, id, gradeId }) =>
  */
 export const deleteClasService = (id) => http.delete(`/clazz/delete/${id}`);
 
-export const teaGetClassService = () => http.get('/dictionary/tree/1');
+export const getLearService = () => http.get('/dictionary/tree/1');
+
+export const addLearService = ({ type = 1, parentId = 0, name, status }) =>
+  http.post('/dictionary/add', { type, parentId, name, status });
+
+export const updateLearService = ({ type = 1, parentId = 0, name, status, id }) =>
+  http.post('/dictionary/update', { type, parentId, name, status, id });
+
+export const deleteLearService = (id) => http.delete(`/dictionary/delete/${id}`);

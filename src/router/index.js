@@ -151,18 +151,6 @@ const routes = [
             name: 'dictionary',
             component: () => import('@/views/systemSetting/majorSetting/majorSetting.vue'),
           },
-          // 年级设置
-          {
-            path: '/grade/:id',
-            name: 'grade',
-            component: () => import('@/views/systemSetting/gradeSetting/gradeSetting.vue'),
-          },
-          // 班级设置
-          {
-            path: '/clazz/:id',
-            name: 'clazz',
-            component: () => import('@/views/systemSetting/classSetting/classSetting.vue'),
-          },
         ],
       },
       // 学生课程详情
