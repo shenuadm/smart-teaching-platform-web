@@ -55,7 +55,7 @@
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="account" label="账号" width="120"></el-table-column>
       <el-table-column prop="username" label="姓名" width="150"></el-table-column>
-      <el-table-column prop="roleName" label="角色" width="120"></el-table-column>
+      <el-table-column prop="roleNickName" label="角色" width="120"></el-table-column>
       <el-table-column prop="active" label="是否激活" width="80">
         <template slot-scope="scope">
           <div v-if="scope.row.active === 0" class="user">激活</div>
@@ -66,7 +66,7 @@
       <el-table-column prop="grade" label="年级"></el-table-column>
       <el-table-column prop="clazz" label="班级" width="150"></el-table-column>
       <el-table-column label="操作" width="250" fixed="right">
-        <template slot-scope="{ row }" v-if="row.roleName !== '超级管理员'">
+        <template slot-scope="{ row }" v-if="row.roleName !== 'supper_admin'">
           <el-button type="primary" size="mini" @click="reset(row)">重置密码</el-button>
           <el-button type="primary" size="mini" @click="reviseuser(row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="deleteUser(row)">删除</el-button>
@@ -89,7 +89,6 @@
 </template>
 
 <script>
-import { userRole } from '@/constant/superUser.js';
 import { delUsers, getUserData, resetPass, delUser } from '@/utils/api';
 import { isAllowFile } from '@/utils/upload.js';
 import { uploadStudentExcelService, downloadExceleSmpleService } from '@/api/userManagement.js';
@@ -98,10 +97,9 @@ export default {
   data() {
     return {
       dialogVisible: false, // 弹框状态
-      file: '',
-      page: 1,
-      count: 0,
-      userRole,
+      file: '', // 要上传的文件
+      page: 1, // 页数
+      count: 0, // 数据总数
       serch: {
         account: '',
         username: '',
@@ -109,10 +107,10 @@ export default {
         grade: '',
       }, // 搜索显示内容
       searchInfo: {}, // 实际搜索信息
-      visible: false,
-      fileList: [],
-      tableData: [],
-      multipleSelection: [],
+      visible: false, // 弹框状态
+      fileList: [], // 上传文件列表
+      tableData: [], // 表格数据
+      multipleSelection: [], // 多选框当前选中的
       editData: {}, // 编辑数据
     };
   },
@@ -127,7 +125,8 @@ export default {
     },
     //搜索
     async search() {
-      if (Object.values(this.serch).every((item) => item === '')) return this.$message.error('请输入查询信息后再查询');
+      if (Object.values(this.serch).every((item) => item === ''))
+        return this.$message.warning('请输入查询信息后再查询');
       this.page = 1;
       this.searchInfo = JSON.parse(JSON.stringify(this.serch));
       this.getData();
@@ -141,18 +140,17 @@ export default {
     //批量删除
     batchdel() {
       if (this.multipleSelection.length === 0) return this.$message.info('请选择用户再提交');
-      this.$confirm('是否删除选中的用户', '删除')
+      this.$confirm('是否删除选中的用户', '删除', { type: 'warning' })
         .then(async () => {
-          for (let i = 0, count = this.multipleSelection.length - 1; i < count; i++) {
-            await delUser(this.multipleSelection[i].userid);
-          }
+          await delUsers(this.multipleSelection);
           this.$message.success('删除用户成功');
+          this.getData();
         })
         .catch(() => {});
     },
     //重置密码
     reset({ userid }) {
-      this.$confirm('是否重置选中的用户密码？', '重置密码')
+      this.$confirm('是否重置选中的用户密码？', '重置密码', { type: 'warning' })
         .then(async () => {
           await resetPass(userid);
           this.$message.success('重置用户密码成功');
@@ -161,7 +159,7 @@ export default {
     },
     // 删除
     deleteUser({ userid }) {
-      this.$confirm('是否删除该用户', '删除')
+      this.$confirm('是否删除该用户', '删除', { type: 'warning' })
         .then(async () => {
           await delUser(userid);
           this.$message.success('删除用户成功');
@@ -175,11 +173,7 @@ export default {
       this.visible = true;
     },
     handleSelectionChange(val) {
-      console.log(val);
-      this.multipleSelection = val.map((item) => {
-        return item.userid;
-      });
-      console.log(this.multipleSelection);
+      this.multipleSelection = val.map((item) => item.userid);
     },
     // 获取数据
     async getData() {
@@ -189,7 +183,6 @@ export default {
       } else {
         res = await getUserData({ ...this.searchInfo, page: this.page });
       }
-      console.log(res);
       this.count = res.count;
       this.tableData = res.data;
     },
@@ -215,8 +208,7 @@ export default {
       this.$refs.upload.clearFiles();
     },
     async downloadSample() {
-      const res = await downloadExceleSmpleService();
-      console.log(res);
+      await downloadExceleSmpleService();
     },
   },
   components: {
