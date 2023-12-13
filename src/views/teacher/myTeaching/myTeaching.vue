@@ -2,13 +2,13 @@
   <div class="myTeaching global-container" v-loading="$store.state.isLoading">
     <!-- 标题 -->
     <div class="person-title">我的授课</div>
+    <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
+      <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
+      <el-tab-pane label="选课中" name="2"></el-tab-pane>
+      <el-tab-pane label="授课中" name="4"></el-tab-pane>
+      <el-tab-pane label="已结束" name="6"></el-tab-pane>
+    </el-tabs>
     <template v-if="myTeachList.length > 0">
-      <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
-        <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
-        <el-tab-pane label="选课中" name="2"></el-tab-pane>
-        <el-tab-pane label="授课中" name="4"></el-tab-pane>
-        <el-tab-pane label="已结束" name="6"></el-tab-pane>
-      </el-tabs>
       <div class="my-teaching">
         <div v-for="item in myTeachList" :key="item.id">
           <div class="my-teaching-item p-10 mt-20 mb-20">
@@ -42,6 +42,7 @@
       </div>
     </template>
     <el-empty class="bg-white" description="您还没有选择的授课" v-else></el-empty>
+
     <el-pagination
       @current-change="getCourseData"
       :current-page="page"
@@ -226,13 +227,5 @@ export default {
 }
 .myTeaching .el-table .el-table__cell {
   text-align: center;
-}
-/* 日期选择器靠左显示 */
-.myTeaching .date-picker .el-form-item__content {
-  text-align: initial !important;
-}
-/* 日期选择器输入框宽度跟随弹框宽度 */
-.myTeaching .date-picker .el-form-item__content .el-date-editor {
-  width: initial !important;
 }
 </style>

@@ -122,6 +122,9 @@ img {
   padding-top: 30px;
   padding-bottom: 30px;
 }
+.pr-20 {
+  padding-right: 20px;
+}
 
 /* 圆角边框 */
 .radius-5 {

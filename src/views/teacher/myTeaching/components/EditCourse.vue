@@ -5,11 +5,13 @@
     :visible="dialogVisible"
     :before-close="closeDialog"
     width="40%"
+    class="edit-course"
   >
     <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px" v-loading="$store.state.isLoading">
       <!-- 课程名称 -->
       <el-form-item label="课程名称：" prop="name">
-        <el-input v-model="editCourse.name" placeholder="课程名称"></el-input>
+        <el-input v-if="editCourse.id" disabled v-model="editCourse.name" placeholder="课程名称"></el-input>
+        <el-input v-else disabled v-model="editCourse.title" placeholder="课程名称"></el-input>
       </el-form-item>
       <!-- 选课日期 -->
       <el-form-item label="选课日期：" class="date-picker" prop="selectDate">
@@ -72,8 +74,7 @@
 
 <script>
 import { teacherCourseStatus } from '@/constant/course.js';
-import { teaUpdateCourseService } from '@/api/course';
-import { teaChooseCourseService } from '@/api/course.js';
+import { teaChooseCourseService, teaUpdateCourseService } from '@/api/course.js';
 import { getActiveLearService, getChooseLearService } from '@/api/systemSetting.js';
 
 const defaultData = {
@@ -88,7 +89,7 @@ const defaultData = {
 export default {
   data() {
     const date = (rule, value, callback) => {
-      if (new Date(this.selectDate[1]) > new Date(value[1])) {
+      if (new Date(this.editCourse.selectDate[1]) > new Date(value[1])) {
         callback(new Error('授课结束时间不应在选课结束时间之前'));
       } else {
         callback();
@@ -97,7 +98,7 @@ export default {
     return {
       // 表单校验
       rules: {
-        name: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
+        // name: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
         selectDate: [{ required: true, message: '请选择您课程的选课时间', trigger: 'blur' }],
         maxTaker: [{ required: true, message: '请输入您的最多选课人数', trigger: 'blur' }],
         address: [{ required: true, message: '请输入您的授课地点', trigger: 'blur' }],
@@ -123,6 +124,7 @@ export default {
   methods: {
     //保存修改
     submitForm() {
+      console.log(this.editCourse);
       this.$refs['ruleForm'].validate(async (valid) => {
         if (valid) {
           const { date, selectDate, treeChoose } = this.editCourse;
@@ -151,15 +153,39 @@ export default {
     },
     // 关闭弹框
     closeDialog() {
+      this.$refs.ruleForm.resetFields();
       this.$emit('update:dialogVisible', false);
     },
     // 获取年级班级数据
     async getOptions() {
       let res;
-      console.log(this.formData);
+      // 编辑，转换为级联显示的数据
       if (this.formData.id) {
         res = await getChooseLearService(this.formData.id);
-        console.log(res);
+        const arr = [];
+
+        const arrange = (major) => {
+          major.children.forEach((item) => {
+            if (item.checked && item.children === null) {
+              // 不存在班级
+              arr.push([major.id, item.id]);
+            } else if (item.checked && item.children !== null) {
+              item.children.forEach((clazz) => {
+                clazz.checked && arr.push([major.id, item.id, clazz.id]);
+              });
+            }
+          });
+        };
+        res.data.forEach((item) => {
+          // 没有年级
+          if (item.checked && item.children === null) {
+            arr.push([item.id]);
+          } else if (item.checked && item.children !== null) {
+            // 存在年级。并且是选中状态
+            arrange(item);
+          }
+        });
+        this.editCourse.treeChoose = arr;
       } else {
         res = await getActiveLearService();
       }
@@ -170,7 +196,6 @@ export default {
     // 传入的数据变化，赋值给编辑表单
     formData(newVal) {
       // 获取编辑的选择班级信息
-      console.log(this.editCourse, !!this.editCourse.id);
       if (newVal.id) {
         this.getOptions();
       } else if (!newVal.id && this.options.length === 0) {
@@ -193,5 +218,16 @@ export default {
 }
 .el-cascader {
   width: 100%;
+}
+</style>
+
+<style>
+/* 日期选择器靠左显示 */
+.edit-course .date-picker .el-form-item__content {
+  text-align: initial !important;
+}
+/* 日期选择器输入框宽度跟随弹框宽度 */
+.edit-course .date-picker .el-form-item__content .el-date-editor {
+  width: initial !important;
 }
 </style>

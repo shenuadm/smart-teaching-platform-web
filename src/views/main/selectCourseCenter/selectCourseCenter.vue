@@ -47,14 +47,12 @@ export default {
   methods: {
     // 选课
     async selectCourse({ id }) {
-      console.log(id);
       await stuSelectCourseService(id);
       this.$message.success('选择课程成功');
       this.getData();
     },
     async getData() {
       const res = await stuGetSelectCourseService();
-      console.log(res);
       this.chooseCourse = res.data.map((item) => {
         if (item.picture !== null) {
           var picture = item.picture.split(',')[1];

@@ -22,20 +22,20 @@
             <p slot="reference" class="course-describe">课程描述：{{ item.description }}</p>
           </el-popover>
         </div>
-        <div class="course-center-btn">
-          <button class="edit bg-blue" @click="toChapterDetails(item)">查看章节</button>
-          <button class="detail bg-blue" @click="editCourseClick(item)">选择授课</button>
+        <div class="pr-20">
+          <el-button type="primary" @click="toChapterDetails(item)">查看章节</el-button>
+          <el-button type="primary" @click="editCourseClick(item)">选择授课</el-button>
         </div>
       </div>
     </div>
     <el-empty class="bg-white" description="暂无课程" v-else></el-empty>
-    <ChooseTeaching :visible.sync="visible" @success="getData" :formData="chooseData"></ChooseTeaching>
+    <EditCourse :dialogVisible.sync="visible" @success="getData" :formData="chooseData"></EditCourse>
   </div>
 </template>
 
 <script>
-import ChooseTeaching from './components/ChooseTeaching.vue';
 import { teaGetCourseCenterService } from '@/api/course.js';
+import EditCourse from '../myTeaching/components/EditCourse.vue';
 
 export default {
   data() {
@@ -55,6 +55,7 @@ export default {
       const { id, name } = data;
       this.chooseData = { courseId: id, title: name };
       this.visible = true;
+      console.log(this.visible, 'visible');
     },
     // 获取数据
     async getData() {
@@ -76,7 +77,7 @@ export default {
     },
   },
   components: {
-    ChooseTeaching,
+    EditCourse,
   },
 };
 </script>
@@ -157,24 +158,8 @@ export default {
   font-size: 14px;
   cursor: pointer;
 }
-.course-center-btn {
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  transform: translateY(20px);
-}
-.course-center-btn button {
-  margin-left: 10px;
-  width: 82px;
-  height: 33px;
-  border: none;
-  border-radius: 3px;
-  transition: all 0.3s;
-  color: #fff;
-  cursor: pointer;
-}
-.course-search button,
-.course-center-btn button:hover {
+
+.course-search button {
   box-shadow: 0 2px 5px #ccc;
 }
 </style>
