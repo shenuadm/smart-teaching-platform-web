@@ -139,7 +139,6 @@ export default {
   },
   created() {
     //学生查看课程详情
-    this.path = '/myCourse';
     this.teacherId = this.$route.query.teacherCourseId;
     this.studentCourseId = this.$route.query.studentCourseId;
     // 课程详情

@@ -1,13 +1,13 @@
 <template>
   <div class="my-course global-container" v-loading="$store.state.isLoading">
     <div class="person-title">我的课程</div>
+    <el-tabs v-model="activeCourseType" @tab-click="getCourse" class="mt-20">
+      <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
+      <el-tab-pane label="选课中" name="2"></el-tab-pane>
+      <el-tab-pane label="授课中" name="4"></el-tab-pane>
+      <el-tab-pane label="已结束" name="6"></el-tab-pane>
+    </el-tabs>
     <template v-if="courseList.length > 0">
-      <el-tabs v-model="activeCourseType" @tab-click="courseTypeChange" class="mt-20">
-        <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
-        <el-tab-pane label="选课中" name="2"></el-tab-pane>
-        <el-tab-pane label="授课中" name="4"></el-tab-pane>
-        <el-tab-pane label="已结束" name="6"></el-tab-pane>
-      </el-tabs>
       <ul class="list mt-20">
         <li class="list-item p-10 mb-20" v-for="item in courseList" :key="item.id">
           <img :src="'data:image/png;base64,' + item.picture" alt="课程图片" />
@@ -84,7 +84,9 @@ export default {
     },
     // 获取课程数据
     async getCourse() {
-      const res = await stuGetMyCourseService();
+      const data = {};
+      this.activeCourseType !== '-1' && Object.assign(data, { tc_status: this.activeCourseType });
+      const res = await stuGetMyCourseService(data);
       this.courseList = res.data.map((item) => {
         let picture = item.picture.split(',')[1];
         if (!picture) {

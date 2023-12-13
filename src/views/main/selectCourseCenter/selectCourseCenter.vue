@@ -74,6 +74,10 @@ export default {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   column-gap: 10px;
+  justify-content: center;
+}
+.info-container > div {
+  /* align-items: center; */
 }
 .person-title {
   height: 60px;

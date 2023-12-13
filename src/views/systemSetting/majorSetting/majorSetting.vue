@@ -124,6 +124,7 @@ export default {
   background-color: #fafafa;
   box-shadow: 0 2px 2px #ddd;
   margin-top: 20px;
+  padding-left: 24px;
 }
 .tree-list {
   width: 900px;

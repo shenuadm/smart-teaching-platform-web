@@ -87,7 +87,7 @@ export const teaGetCourseCenterService = () => http.get('/course/listByTeacher')
  * 学生获取我的课程
  * @returns
  */
-export const stuGetMyCourseService = () => http.get('/studentCourse/list');
+export const stuGetMyCourseService = ({ tc_status }) => http.get('/studentCourse/list?', { tc_status });
 
 /**
  * 学生获取选课中心课程
