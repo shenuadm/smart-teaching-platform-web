@@ -17,7 +17,7 @@
       class="custom-table"
     >
       <el-table-column type="selection" width="50"></el-table-column>
-      <el-table-column prop="name" label="作业名称" width="80"></el-table-column>
+      <el-table-column prop="name" label="作业名称" width="200"></el-table-column>
       <el-table-column prop="content" label="作业内容"></el-table-column>
       <el-table-column prop="answer" label="参考答案"></el-table-column>
       <el-table-column prop="status" label="状态" width="80">
@@ -57,10 +57,10 @@
           <el-input placeholder="请输入作业名称" v-model="revise.name"> </el-input>
         </el-form-item>
         <el-form-item label="作业内容" prop="content">
-          <el-input placeholder="请输入作业内容" v-model="revise.content" type="textarea"> </el-input>
+          <el-input placeholder="请输入作业内容" v-model="revise.content" type="textarea" :rows="4"> </el-input>
         </el-form-item>
         <el-form-item label="参考答案" prop="answer">
-          <el-input placeholder="请输入参考答案" v-model="revise.answer" type="textarea"> </el-input>
+          <el-input placeholder="请输入参考答案" v-model="revise.answer" type="textarea" :rows="4"> </el-input>
         </el-form-item>
         <el-form-item label="状态" class="form-status">
           <el-radio-group v-model="revise.status">

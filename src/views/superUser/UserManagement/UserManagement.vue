@@ -13,11 +13,11 @@
           </div>
           <div class="search-input">
             <div class="title">专业:</div>
-            <el-input size="small" v-model="serch.username" placeholder="请输入专业"></el-input>
+            <el-input size="small" v-model="serch.major" placeholder="请输入专业"></el-input>
           </div>
           <div class="search-input">
             <div class="title">年级:</div>
-            <el-input size="small" v-model="serch.username" placeholder="请输入年级"></el-input>
+            <el-input size="small" v-model="serch.grade" placeholder="请输入年级"></el-input>
           </div>
         </div>
         <div>
@@ -54,7 +54,7 @@
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="account" label="账号" width="120"></el-table-column>
-      <el-table-column prop="username" label="姓名" width="160"></el-table-column>
+      <el-table-column prop="username" label="姓名" width="150"></el-table-column>
       <el-table-column prop="roleName" label="角色" width="120"></el-table-column>
       <el-table-column prop="active" label="是否激活" width="80">
         <template slot-scope="scope">
@@ -62,10 +62,10 @@
           <div v-else-if="scope.row.active === 1" class="forbidden">未激活</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="专业"> </el-table-column>
-      <el-table-column prop="lastLoginTime" label="年级"></el-table-column>
-      <el-table-column prop="lastLoginIp" label="班级" width="150"></el-table-column>
-      <el-table-column label="操作" width="300">
+      <el-table-column prop="major" label="专业"> </el-table-column>
+      <el-table-column prop="grade" label="年级"></el-table-column>
+      <el-table-column prop="clazz" label="班级" width="150"></el-table-column>
+      <el-table-column label="操作" width="250" fixed="right">
         <template slot-scope="{ row }" v-if="row.roleName !== '超级管理员'">
           <el-button type="primary" size="mini" @click="reset(row)">重置密码</el-button>
           <el-button type="primary" size="mini" @click="reviseuser(row)">编辑</el-button>
@@ -80,49 +80,20 @@
         :page-size="10"
         layout="total, prev, pager, next, jumper"
         :total="count"
+        :hide-on-single-page="count <= 10"
       >
       </el-pagination>
     </div>
-    <!-- 新增修改用户弹框-->
-    <el-dialog
-      :close-on-click-modal="false"
-      :title="(revise.userid ? '编辑' : '新增') + '用户'"
-      :visible.sync="dialogVisible"
-      :before-close="cancel"
-      width="30%"
-    >
-      <el-form ref="form" :model="revise" label-width="80px" :rules="rules">
-        <el-form-item label="账号" prop="account">
-          <el-input v-model="revise.account" placeholder="请输入用户账号"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" prop="username">
-          <el-input v-model="revise.username" placeholder="请输入用户姓名"></el-input>
-        </el-form-item>
-        <el-form-item label="角色" prop="roleId" class="roles">
-          <el-select v-model="revise.roleId" placeholder="请选择角色">
-            <el-option v-for="item in userRole" :key="item[0]" :label="item[1]" :value="item[0]"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="是否激活" prop="active" class="active">
-          <el-radio-group v-model="revise.active">
-            <el-radio :label="0">激活</el-radio>
-            <el-radio :label="1">不激活</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <span slot="footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="serve">确 定</el-button>
-      </span>
-    </el-dialog>
+    <EditUser :visible.sync="visible" @success="getData" :editData="editData"></EditUser>
   </div>
 </template>
 
 <script>
 import { userRole } from '@/constant/superUser.js';
-import { delUsers, addUser, getUserData, resetPass, delUser, reviseUser } from '@/utils/api';
+import { delUsers, getUserData, resetPass, delUser } from '@/utils/api';
 import { isAllowFile } from '@/utils/upload.js';
 import { uploadStudentExcelService, downloadExceleSmpleService } from '@/api/userManagement.js';
+import EditUser from './components/EditUser.vue';
 export default {
   data() {
     return {
@@ -134,25 +105,15 @@ export default {
       serch: {
         account: '',
         username: '',
+        major: '',
+        grade: '',
       }, // 搜索显示内容
       searchInfo: {}, // 实际搜索信息
-      revise: {},
-      defaultData: {
-        account: '',
-        username: '',
-        roleId: 3,
-        active: 0,
-        userid: '',
-      },
+      visible: false,
       fileList: [],
       tableData: [],
       multipleSelection: [],
-      rules: {
-        account: [{ required: true, message: '请输入用户账号', trigger: 'blur' }],
-        username: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
-        roleId: [{ required: true, message: '请选择角色', trigger: 'change' }],
-        active: [{ required: true, message: '请选择激活状态', trigger: 'change' }],
-      },
+      editData: {}, // 编辑数据
     };
   },
   mounted() {
@@ -161,8 +122,8 @@ export default {
   methods: {
     //添加用户表
     add() {
-      this.dialogVisible = true;
-      this.revise = JSON.parse(JSON.stringify(this.defaultData));
+      this.visible = true;
+      this.editData = {};
     },
     //搜索
     async search() {
@@ -176,28 +137,6 @@ export default {
       this.serch = {};
       this.searchInfo = {};
       this.getData();
-    },
-    //保存
-    serve() {
-      this.$refs.form.validate(async (valid) => {
-        if (valid) {
-          if (this.revise.userid) {
-            await reviseUser(this.revise);
-            this.$message.success('修改用户成功');
-          } else {
-            await addUser(this.revise);
-            this.$message.success('添加用户成功');
-          }
-          this.dialogVisible = false;
-          this.getData();
-        }
-      });
-    },
-    //取消
-    cancel() {
-      this.dialogVisible = false;
-      this.$refs['form'].resetFields();
-      this.revise.userid = '';
     },
     //批量删除
     batchdel() {
@@ -232,8 +171,8 @@ export default {
     },
     // 修改
     reviseuser(row) {
-      this.revise = JSON.parse(JSON.stringify(row));
-      this.dialogVisible = true;
+      this.editData = row;
+      this.visible = true;
     },
     handleSelectionChange(val) {
       console.log(val);
@@ -250,6 +189,7 @@ export default {
       } else {
         res = await getUserData({ ...this.searchInfo, page: this.page });
       }
+      console.log(res);
       this.count = res.count;
       this.tableData = res.data;
     },
@@ -278,6 +218,9 @@ export default {
       const res = await downloadExceleSmpleService();
       console.log(res);
     },
+  },
+  components: {
+    EditUser,
   },
 };
 </script>

@@ -14,3 +14,5 @@ export const uploadStudentExcelService = (file) => {
  * @returns
  */
 export const downloadExceleSmpleService = () => http.get('/user/downloadExcelSample');
+
+export const getUserRoleService = () => http.get('/user/listRole');

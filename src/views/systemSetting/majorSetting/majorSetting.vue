@@ -19,38 +19,19 @@
           <el-col :span="4">{{ systemSettingStatus.get(+node.data.status) }}</el-col>
           <el-col :span="10">
             <el-button v-if="node.data.level !== 3" size="small" type="primary" @click="add(node.data)">新增</el-button>
+            <!-- {{ node.data.level === 1 ? '年级' : '班级' }} -->
             <el-button size="small" type="primary" @click="edit(node.data)">编辑</el-button>
             <el-button size="small" type="danger" @click="del(node.data)">删除</el-button>
           </el-col>
         </el-row>
       </template>
     </el-tree>
-    <!-- <el-table
-      :data="treeData"
-      border
-      style="width: 100%"
-      row-key="id"
-      default-expand-all
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-    >
-      <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="状态" prop="status">
-        <template slot-scope="{ row }">{{ systemSettingStatus.get(+row.status) }}</template>
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="{ row }">
-          <el-button size="small" type="primary" @click="editMajor(row)">编辑</el-button>
-          <el-button size="small" type="danger" @click="deleteMajor(row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table> -->
     <ClassDialog :visible.sync="visible" @success="getData" :editData="editData"></ClassDialog>
   </div>
 </template>
 
 <script>
 import { getLearService, deleteLearService } from '@/api/systemSetting.js';
-// import MajorDialog from './components/MajorDialog.vue';
 import { systemSettingStatus } from '@/constant/status.js';
 import SystemHeader from '../components/SystemHeader.vue';
 import ClassDialog from './components/ClassDialog.vue';
@@ -107,17 +88,14 @@ export default {
     this.getData();
   },
   components: {
-    // MajorDialog,
     SystemHeader,
     ClassDialog,
-    // GradeDialog,
   },
 };
 </script>
 
 <style scoped>
 .title {
-  /* width: 100px; */
   height: 50px;
   margin: 5px 0 0;
   line-height: 50px;

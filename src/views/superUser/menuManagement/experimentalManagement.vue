@@ -26,10 +26,10 @@
       <el-table-column prop="classHour" label="课时" width="120"> </el-table-column>
       <el-table-column prop="description" label="实验描述" text-align: center> </el-table-column>
       <el-table-column label="操作" width="250">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" class="opertea" @click="exreport(scope.row)">实验报告</el-button>
-          <el-button type="primary" size="mini" @click="editexrept(scope.row)">编辑</el-button>
-          <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
+        <template slot-scope="{ row }">
+          <el-button type="primary" size="mini" class="opertea" @click="exreport(row)">实验报告</el-button>
+          <el-button type="primary" size="mini" @click="editexrept(row)">编辑</el-button>
+          <el-button type="danger" size="mini" @click="del(row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -166,30 +166,23 @@ export default {
       });
     },
     //删除
-    del(e) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
+    del(id) {
+      this.$confirm('此操作将永久删除该实验, 是否继续?', '提示', { type: 'warning' })
         .then(async () => {
-          await experdel(e);
+          await experdel(id);
+          this.$message.success('删除实验成功');
           await this.break();
-          this.$message.success('删除成功');
         })
         .catch(() => {});
     },
     //批量删除
     delexper() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
+      if (this.arr.length === 0) return this.$message.warning('您还没有选中要删除的实验');
+      this.$confirm('此操作将永久删除选中的文件, 是否继续?', '提示', { type: 'warning' })
         .then(async () => {
           await mexperdel(this.arr);
-          await this.break();
           this.$message.success('删除成功');
+          await this.break();
         })
         .catch(() => {});
     },
