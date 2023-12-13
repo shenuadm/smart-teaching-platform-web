@@ -147,8 +147,8 @@ const routes = [
           },
           // 专业设置
           {
-            path: '/major',
-            name: 'major',
+            path: '/dictionary',
+            name: 'dictionary',
             component: () => import('@/views/systemSetting/majorSetting/majorSetting.vue'),
           },
           // 年级设置

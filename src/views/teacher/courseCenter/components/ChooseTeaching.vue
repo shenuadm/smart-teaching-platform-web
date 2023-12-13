@@ -42,6 +42,10 @@
       <el-form-item label="授课地点：" prop="address">
         <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
       </el-form-item>
+      <!-- 授课班级： -->
+      <el-form-item label="授课专业/年级/班级：">
+        <el-cascader v-model="test" :options="options" :props="props" ref="cascader"></el-cascader>
+      </el-form-item>
       <!-- 课程状态 -->
       <el-form-item label="课程状态：" prop="status">
         <el-radio-group v-model="editCourse.status">
@@ -59,18 +63,19 @@
 
 <script>
 import { teaChooseCourseService } from '@/api/course.js';
+import { teaGetClassService } from '@/api/systemSetting.js';
 
 const defaultData = {
-  selectDate: [],
-  maxTaker: '',
-  address: '',
-  date: [],
-  status: 0,
+  selectDate: [], // 选课时间
+  maxTaker: '', // 选课人数
+  address: '', // 上课地点
+  date: [], // 上课时间
+  status: 0, // 状态
 };
 export default {
   data() {
     return {
-      editCourse: { ...defaultData },
+      editCourse: { ...defaultData }, // 表单显示数据
       rules: {
         title: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
         selectDate: [{ required: true, message: '请选择您课程的选课时间', trigger: 'blur' }],
@@ -79,6 +84,15 @@ export default {
         date: [{ required: true, message: '请选择您的授课时间', trigger: 'blur' }],
         status: [{ required: true, message: '请选择您的课程状态', trigger: 'blur' }],
       },
+      options: [], // 授课班级数据
+      // 级联选择器配置
+      props: {
+        multiple: true, // 开启多选
+        label: 'name', // 展示文字
+        children: 'dataList', // 子级属性名
+        value: 'id', // 绑定的属性值
+      },
+      test: '',
     };
   },
   props: ['visible', 'formData'],
@@ -87,8 +101,10 @@ export default {
       this.$refs.ruleForm.clearValidate();
       this.$emit('update:visible', false);
     },
-    //保存保存
+    //保存授课
     submitForm() {
+      console.log(this.test);
+      console.log(this.$refs.cascader.getCheckedNodes());
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
           const { selectDate, date } = this.editCourse;
@@ -106,9 +122,16 @@ export default {
         }
       });
     },
+    // 获取年级班级数据
+    async getOptions() {
+      const res = await teaGetClassService();
+      console.log(res);
+      this.options = res.data;
+    },
   },
   watch: {
     formData(newVal) {
+      this.options.length === 0 && this.getOptions();
       this.editCourse = { ...defaultData, ...newVal };
     },
   },

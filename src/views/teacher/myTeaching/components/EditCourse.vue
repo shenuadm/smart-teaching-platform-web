@@ -41,6 +41,10 @@
         >
         </el-date-picker>
       </el-form-item>
+      <!-- 授课班级： -->
+      <el-form-item label="授课班级：">
+        <el-cascader :options="options" :props="props"></el-cascader>
+      </el-form-item>
       <!-- 课程状态 -->
       <el-form-item label="课程状态：" prop="status">
         <el-radio-group v-model="editCourse.status">
@@ -74,6 +78,14 @@ export default {
       },
       teacherCourseStatus, // 课程状态
       editCourse: {}, // 编辑数据
+      options: [], // 授课班级数据
+      // 级联选择器配置
+      props: {
+        multiple: true, // 开启多选
+        label: '', // 展示文字
+        children: '', // 子级属性名
+        value: 'id', // 绑定的属性值
+      },
     };
   },
   props: ['dialogVisible', 'formDate'],

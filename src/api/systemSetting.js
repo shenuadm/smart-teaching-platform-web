@@ -88,3 +88,5 @@ export const updateClassService = ({ name, status, id, gradeId }) =>
  * @returns
  */
 export const deleteClasService = (id) => http.delete(`/clazz/delete/${id}`);
+
+export const teaGetClassService = () => http.get('/dictionary/tree/1');
