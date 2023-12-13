@@ -1,8 +1,14 @@
 <template>
   <el-container class="personalInfo warpper">
     <!-- 侧导航 -->
-    <el-col :span="4" class="mr-20">
-      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" router :collapse="false">
+    <div :span="4" class="mr-20">
+      <el-menu
+        :default-active="$route.path"
+        class="el-menu-vertical-demo"
+        router
+        :collapse="false"
+        style="width: 200px"
+      >
         <div v-for="item in navList" :key="item.id">
           <el-menu-item v-if="item.type === '菜单'" :index="item.funurl">
             <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
@@ -22,12 +28,12 @@
           </el-menu-item>
         </div>
       </el-menu>
-    </el-col>
+    </div>
     <!-- 信息内容 -->
-    <el-col :span="20" class="person-container">
+    <div :span="20" class="person-container">
       <!-- 路由出口 -->
       <router-view></router-view>
-    </el-col>
+    </div>
   </el-container>
 </template>
 

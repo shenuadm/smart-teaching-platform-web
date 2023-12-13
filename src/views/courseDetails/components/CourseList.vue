@@ -194,11 +194,8 @@ export default {
   border: 1px solid #dedede;
   box-sizing: border-box;
   display: flex;
-  flex-direction: row;
   text-align: left;
   padding: 20px;
-}
-.course-list {
   overflow: hidden;
 }
 

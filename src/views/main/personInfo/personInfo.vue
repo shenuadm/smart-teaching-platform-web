@@ -143,10 +143,10 @@ export default {
       // 表单校验规则
       rules: {
         username: [{ required: true, message: '请输入姓名' }],
-        oldpwd: [{ validator: oldPWd }],
-        password: [{ validator: password }],
-        renewpwd: [{ validator: newpwd }],
-        phone: [{ validator: phone }],
+        oldpwd: [{ trigger: 'submit', validator: oldPWd }],
+        password: [{ trigger: 'submit', validator: password }],
+        renewpwd: [{ trigger: 'submit', validator: newpwd }],
+        phone: [{ trigger: 'submit', validator: phone }],
       },
       // 接收个人信息
       personMsg: {},
