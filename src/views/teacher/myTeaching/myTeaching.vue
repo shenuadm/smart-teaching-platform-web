@@ -52,7 +52,7 @@
     >
     </el-pagination>
     <!-- 编辑框 -->
-    <EditCourse :dialogVisible.sync="dialogVisible" :formDate="editCourse" @success="getCourseData"></EditCourse>
+    <EditCourse :dialogVisible.sync="dialogVisible" :formData="editCourse" @success="getCourseData"></EditCourse>
   </div>
 </template>
 

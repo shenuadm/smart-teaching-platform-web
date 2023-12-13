@@ -2,14 +2,14 @@
   <div class="bg" id="loginRegister">
     <div class="login center" v-loading="$store.state.isLoading">
       <div class="login-tab">
-        <div class="login-num" @click="toLogin">
+        <div class="login-num flex-grow" @click="toLogin">
           登录账号
           <div class="bglog" v-if="enrolldis">登录账号</div>
         </div>
-        <div class="enroll-num" @click="toEnroll">
+        <!-- <div class="enroll-num" @click="toEnroll">
           学生注册账号
           <div class="bgenr" v-if="logindis">学生注册账号</div>
-        </div>
+        </div> -->
       </div>
       <div class="content center">
         <!-- 登录 -->
@@ -27,11 +27,11 @@
               <el-button type="primary" @click="Login('loginForm')">登录</el-button>
             </el-form-item>
           </el-form>
-          <div>
+          <!-- <div>
             <p>还没有账号？<a href="javascript:void(0)" class="text-blue" @click="toRegister">去注册</a></p>
-          </div>
+          </div> -->
         </div>
-        <!-- 注册 -->
+        <!-- 注册
         <div class="enroll-login" v-if="enrolldis">
           <el-form
             :model="registerForm"
@@ -59,7 +59,7 @@
               <el-button type="primary" @click="Enroll('registerForm')">注册</el-button>
             </el-form-item>
           </el-form>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

@@ -44,7 +44,13 @@
       </el-form-item>
       <!-- 授课班级： -->
       <el-form-item label="授课专业/年级/班级：">
-        <el-cascader v-model="test" :options="options" :props="props" ref="cascader"></el-cascader>
+        <el-cascader
+          v-model="editCourse.treeChoose"
+          :options="options"
+          :props="props"
+          ref="cascader"
+          placeholder="请选择您要授课的专业/年级/班级"
+        ></el-cascader>
       </el-form-item>
       <!-- 课程状态 -->
       <el-form-item label="课程状态：" prop="status">
@@ -63,7 +69,7 @@
 
 <script>
 import { teaChooseCourseService } from '@/api/course.js';
-import { getLearService } from '@/api/systemSetting.js';
+import { getActiveLearService } from '@/api/systemSetting.js';
 
 const defaultData = {
   selectDate: [], // 选课时间
@@ -71,9 +77,17 @@ const defaultData = {
   address: '', // 上课地点
   date: [], // 上课时间
   status: 0, // 状态
+  treeChoose: [], // 选择的授课班级
 };
 export default {
   data() {
+    const date = (rule, value, callback) => {
+      if (new Date(this.selectDate[1]) > new Date(value[1])) {
+        callback(new Error('授课结束时间不应在选课结束时间之前'));
+      } else {
+        callback();
+      }
+    };
     return {
       editCourse: { ...defaultData }, // 表单显示数据
       rules: {
@@ -81,7 +95,10 @@ export default {
         selectDate: [{ required: true, message: '请选择您课程的选课时间', trigger: 'blur' }],
         maxTaker: [{ required: true, message: '请输入您的最多选课人数', trigger: 'blur' }],
         address: [{ required: true, message: '请输入您的授课地点', trigger: 'blur' }],
-        date: [{ required: true, message: '请选择您的授课时间', trigger: 'blur' }],
+        date: [
+          { required: true, message: '请选择您的授课时间', trigger: 'blur' },
+          { validator: date, trigger: 'blur' },
+        ],
         status: [{ required: true, message: '请选择您的课程状态', trigger: 'blur' }],
       },
       options: [], // 授课班级数据
@@ -89,10 +106,9 @@ export default {
       props: {
         multiple: true, // 开启多选
         label: 'name', // 展示文字
-        children: 'dataList', // 子级属性名
+        children: 'children', // 子级属性名
         value: 'id', // 绑定的属性值
       },
-      test: '',
     };
   },
   props: ['visible', 'formData'],
@@ -103,17 +119,21 @@ export default {
     },
     //保存授课
     submitForm() {
-      console.log(this.test);
-      console.log(this.$refs.cascader.getCheckedNodes());
+      console.log(this.editCourse.treeChoose);
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
-          const { selectDate, date } = this.editCourse;
+          const { selectDate, date, treeChoose } = this.editCourse;
+          let selectedIds = [];
+          treeChoose.forEach((item) => (selectedIds = [...selectedIds, ...item]));
+          console.log(selectedIds);
+          selectedIds = Array.from(new Set([...selectedIds]));
           const data = {
             ...this.editCourse,
             startDate: date[0],
             endDate: date[1],
             selectStartDate: selectDate[0],
             selectEndDate: selectDate[1],
+            selectedIds,
           };
           await teaChooseCourseService(data);
           this.$message.success('选择授课成功');
@@ -124,7 +144,7 @@ export default {
     },
     // 获取年级班级数据
     async getOptions() {
-      const res = await getLearService();
+      const res = await getActiveLearService();
       console.log(res);
       this.options = res.data;
     },
@@ -145,6 +165,9 @@ export default {
 }
 .el-radio-group label {
   margin: 10px 20px 10px 0;
+}
+.el-cascader {
+  width: 100%;
 }
 </style>
 

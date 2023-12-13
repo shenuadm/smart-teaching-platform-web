@@ -18,7 +18,7 @@
           <el-col :span="10">{{ node.data.name }}</el-col>
           <el-col :span="4">{{ systemSettingStatus.get(+node.data.status) }}</el-col>
           <el-col :span="10">
-            <el-button size="small" type="primary" @click="add(node.data)">新增</el-button>
+            <el-button v-if="node.data.level !== 3" size="small" type="primary" @click="add(node.data)">新增</el-button>
             <el-button size="small" type="primary" @click="edit(node.data)">编辑</el-button>
             <el-button size="small" type="danger" @click="del(node.data)">删除</el-button>
           </el-col>
@@ -94,11 +94,11 @@ export default {
     add(data) {
       if (data) {
         // 新增子集
-        const { id } = data;
-        this.editData = { parentId: id };
+        const { id, level } = data;
+        this.editData = { parentId: id, level: level + 1 };
       } else {
         // 新增专业
-        this.editData = {};
+        this.editData = { level: 1 };
       }
       this.visible = true;
     },
