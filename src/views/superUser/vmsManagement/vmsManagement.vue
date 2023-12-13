@@ -44,7 +44,6 @@ import { getVmDataService, deleteVmService } from '@/api/vm.js';
 export default {
   data() {
     return {
-      // tableData: [{ id: 1, name: '127.0.0.1', username: '张阿三', pwd: '123321' }], // 渲染数据
       tableData: [],
       searchInfo: '', // 搜索条件
       total: 0, // 总数

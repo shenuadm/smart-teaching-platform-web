@@ -54,7 +54,7 @@
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="account" label="账号" width="120"></el-table-column>
-      <el-table-column prop="username" label="姓名" width="160"></el-table-column>
+      <el-table-column prop="username" label="姓名" width="150"></el-table-column>
       <el-table-column prop="roleName" label="角色" width="120"></el-table-column>
       <el-table-column prop="active" label="是否激活" width="80">
         <template slot-scope="scope">

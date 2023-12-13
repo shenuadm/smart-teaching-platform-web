@@ -92,6 +92,7 @@ export default {
 }
 .main {
   width: calc(100vw - 10px);
+  overflow-x: scroll;
 }
 .logo,
 .logo span {

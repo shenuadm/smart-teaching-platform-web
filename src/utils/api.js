@@ -125,7 +125,7 @@ export function deleteNotice(id) {
 // 添加作业
 export const addHomeWork = (data) => http.post('assignments/add', data);
 // 修改作业
-export const editHomeWork = (data) => http.put('assignments/update', data);
+export const editHomeWork = (data) => http.post('assignments/update', data);
 // 删除作业
 export const delHomeWork = (id) => http.delete('assignments/delete/' + id);
 // 批量删除作业
