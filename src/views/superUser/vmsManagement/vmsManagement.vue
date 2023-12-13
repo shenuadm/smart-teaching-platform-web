@@ -8,13 +8,14 @@
       <el-button type="primary" size="small" @click="search">搜素</el-button>
       <el-button type="primary" size="small" @click="reset">重置</el-button>
       <el-button type="primary" size="small" @click="addVm">添加</el-button>
+      <el-button type="primary" size="small" @click="goManage">进入虚拟机管理门户</el-button>
     </div>
     <div class="table">
       <el-table :data="tableData" border v-loading="$store.state.isLoading">
-        <el-table-column align="center" label="名称" prop="name"></el-table-column>
-        <el-table-column align="center" label="登录账号" prop="username"></el-table-column>
-        <el-table-column align="center" label="密码" prop="pwd"></el-table-column>
-        <el-table-column align="center" label="操作" width="250">
+        <el-table-column label="名称" prop="name"></el-table-column>
+        <el-table-column label="登录账号" prop="username"></el-table-column>
+        <el-table-column label="密码" prop="pwd"></el-table-column>
+        <el-table-column label="操作" width="250">
           <template slot-scope="{ row }">
             <el-button size="small" type="primary" @click="editVm(row)">编辑</el-button>
             <el-button size="small" type="danger" @click="delVm(row)">删除</el-button>
@@ -84,6 +85,9 @@ export default {
     editVm(row) {
       this.editForm = row;
       this.editVisible = true;
+    },
+    goManage() {
+      window.open('https://engine443.com/ovirt-engine/webadmin/?locale=zh_CN');
     },
   },
   mounted() {

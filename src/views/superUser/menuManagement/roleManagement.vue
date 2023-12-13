@@ -6,10 +6,13 @@
     <div class="roleTable">
       <el-table ref="tableData" :data="tableData" border style="width: 100%" v-loading="$store.state.isLoading">
         <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column prop="rolename" label="角色标识" align="center"> </el-table-column>
-        <el-table-column prop="nickname" label="角色名称" align="center"> </el-table-column>
-        <el-table-column prop="description" label="角色描述" align="center"> </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column prop="rolename" label="角色标识"> </el-table-column>
+        <el-table-column prop="nickname" label="角色名称"> </el-table-column>
+        <el-table-column prop="description" label="角色描述"> </el-table-column>
+        <el-table-column label="状态">
+          <template slot-scope="{ row }">{{ row.status ? '未激活' : '激活' }}</template>
+        </el-table-column>
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="empower(scope.$index, scope.row)">授权</el-button>
             <el-button
@@ -46,6 +49,12 @@
         </el-form-item>
         <el-form-item label="角色描述" prop="description">
           <el-input v-model="form.description"></el-input>
+        </el-form-item>
+        <el-form-item label="角色状态">
+          <el-radio-group v-model="form.status">
+            <el-radio :label="false">激活</el-radio>
+            <el-radio :label="true">不激活</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item class="form-btn">
           <el-button type="primary" size="small" @click="submit">提交</el-button>
@@ -94,6 +103,7 @@ export default {
         rolename: '',
         nickname: '',
         description: '',
+        active: false,
       },
       // 表单校验
       rules: {

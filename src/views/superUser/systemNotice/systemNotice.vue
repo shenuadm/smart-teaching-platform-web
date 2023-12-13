@@ -14,12 +14,12 @@
         <el-table-column prop="content" label="内容"></el-table-column>
         <el-table-column prop="publishTime" label="发布时间"></el-table-column>
         <el-table-column prop="updateBy" label="发布人"></el-table-column>
-        <el-table-column prop="status" label="公告状态" ref="status">
+        <el-table-column prop="status" label="公告状态" ref="status" width="80">
           <template slot-scope="scope">
             {{ statusConvent(scope.row.status) }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="editNotice(scope.row)">编辑</el-button>
             <el-button type="danger" size="mini" @click="deleteNotice(scope.row)">删除</el-button>
