@@ -23,15 +23,17 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="学生专业" prop="major">
-        <el-input v-model="formData.major" placeholder="请输入学生专业"></el-input>
-      </el-form-item>
-      <el-form-item label="学生年级" prop="grade">
-        <el-input v-model="formData.grade" placeholder="请输入学生年级"></el-input>
-      </el-form-item>
-      <el-form-item label="学生班级" prop="clazz">
-        <el-input v-model="formData.clazz" placeholder="请输入学生班级"></el-input>
-      </el-form-item>
+      <template v-if="!formData.userid || formData.roleName === 'student'">
+        <el-form-item label="学生专业" prop="major">
+          <el-input v-model="formData.major" placeholder="请输入学生专业"></el-input>
+        </el-form-item>
+        <el-form-item label="学生年级" prop="grade">
+          <el-input v-model="formData.grade" placeholder="请输入学生年级"></el-input>
+        </el-form-item>
+        <el-form-item label="学生班级" prop="clazz">
+          <el-input v-model="formData.clazz" placeholder="请输入学生班级"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="是否激活：" prop="active" class="active">
         <el-radio-group v-model="formData.active">
           <el-radio :label="0">激活</el-radio>
@@ -63,7 +65,11 @@ const defaultData = {
 export default {
   data() {
     const userRule = (rules, value, callback) => {
-      if (this.formData.roleId === 3 && value === '') {
+      if (this.formData.roleId === '') return callback();
+      if (
+        this.userRole.find((item) => item.roleid === this.formData.roleId).rolename === 'student' &&
+        (value === '' || value === null)
+      ) {
         callback(new Error('学生角色请输入专业、年级、班级信息'));
       } else {
         callback();
@@ -74,7 +80,7 @@ export default {
       rules: {
         account: [{ required: true, message: '请输入用户账号', trigger: 'blur' }],
         username: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
-        roleId: [{ required: true, message: '请选择角色', trigger: 'change' }],
+        roleId: [{ required: true, message: '请选择角色', trigger: 'blur' }],
         active: [{ required: true, message: '请选择激活状态', trigger: 'change' }],
         grade: [{ validator: userRule, trigger: 'blur' }],
         major: [{ validator: userRule, trigger: 'blur' }],
@@ -91,7 +97,7 @@ export default {
     submit() {
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {
-          if (this.formData.id) {
+          if (this.formData.userid) {
             await reviseUser(this.formData);
             this.$message.success('修改用户成功');
           } else {
