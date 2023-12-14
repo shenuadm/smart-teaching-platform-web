@@ -7,13 +7,13 @@
     width="30%"
   >
     <el-form ref="formRef" :model="formData" label-width="100px" :rules="rules" class="user-edit-form">
-      <el-form-item label="用户账号：" prop="account">
+      <el-form-item label="账号：" prop="account">
         <el-input v-model="formData.account" placeholder="请输入用户账号"></el-input>
       </el-form-item>
-      <el-form-item label="用户姓名：" prop="username">
+      <el-form-item label="姓名：" prop="username">
         <el-input v-model="formData.username" placeholder="请输入用户姓名"></el-input>
       </el-form-item>
-      <el-form-item label="用户角色：" prop="roleId" class="roles">
+      <el-form-item label="角色：" prop="roleId" class="roles">
         <el-select v-model="formData.roleId" placeholder="请选择角色">
           <el-option
             v-for="item in userRole"

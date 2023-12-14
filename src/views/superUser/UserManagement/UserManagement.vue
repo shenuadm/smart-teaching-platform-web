@@ -8,8 +8,8 @@
             <el-input size="small" v-model="serch.account" placeholder="请输入账号"></el-input>
           </div>
           <div class="search-input">
-            <div class="title">昵称:</div>
-            <el-input size="small" v-model="serch.username" placeholder="请输入昵称"></el-input>
+            <div class="title">姓名:</div>
+            <el-input size="small" v-model="serch.username" placeholder="请输入姓名"></el-input>
           </div>
           <div class="search-input">
             <div class="title">专业:</div>
