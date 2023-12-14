@@ -143,12 +143,12 @@ export default {
     },
   },
   async created() {
-    console.log(this.$route.path, 'path');
     // 获取树形数据
     const res = await getTreeData(this.$route.query.courseId);
     const dataList = res.data;
     // 添加每个节点添加index，方便填写序号,并添加对应的节点类型，0：一级节点，1：二级节点，3：三级节点-实验，4：三级节点-作业
-    const data = dataList.map((node, index) => {
+    this.$store.commit('setLoading', true);
+    this.data = dataList.map((node, index) => {
       // 一级节点
       node.treeType = 0;
       // 二级节点
@@ -175,8 +175,7 @@ export default {
       node.pid == 0 && (node.index = `第${index + 1}章 `);
       return node;
     });
-    console.log(data);
-    this.data = data;
+    this.$store.commit('setLoading', false);
   },
   components: {
     TeacherHomework,

@@ -2,6 +2,7 @@
   <div style="border: 1px solid #ccc">
     <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
     <Editor
+      ref="editor"
       style="height: 200px; overflow-y: hidden"
       v-model="html"
       :defaultConfig="editorConfig"
@@ -15,12 +16,15 @@ import Vue from 'vue';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 
 export default Vue.extend({
+  name: 'editorComponent',
   components: { Editor, Toolbar },
   data() {
     return {
       editor: null,
       html: '',
-      toolbarConfig: {},
+      toolbarConfig: {
+        excludeKeys: ['fullScreen'],
+      },
       editorConfig: {
         placeholder: '请输入内容',
         MENU_CONF: {

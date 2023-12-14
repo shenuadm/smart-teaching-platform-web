@@ -38,7 +38,9 @@
             </template>
           </el-table-column>
           <el-table-column label="分数" prop="score">
-            <template slot-scope="{ row }">{{ row.score.toFixed(1) }}</template>
+            <template slot-scope="{ row }">{{
+              Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
+            }}</template>
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{ row }">

@@ -119,12 +119,12 @@ export default {
     };
   },
   mounted() {
-    const element = document.getElementById('qwer');
-    console.log(element);
-    element.addEventListener('click', (event) => {
-      event.preventDefault();
-      console.log('点击');
-    });
+    // const element = document.getElementById('qwer');
+    // console.log(element);
+    // element.addEventListener('click', (event) => {
+    //   event.preventDefault();
+    //   console.log('点击');
+    // });
   },
   methods: {
     toLogin() {
