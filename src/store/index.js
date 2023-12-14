@@ -9,7 +9,7 @@ export default new Vuex.Store({
     username: sessionStorage.getItem('username'),
     rolename: sessionStorage.getItem('rolename'),
     roleUrl: [],
-    isLoading: false, // 是否是加载状态
+    isLoading: true, // 是否是加载状态
     unreadNotice: 0, // 未读通知数
   },
   getters: {

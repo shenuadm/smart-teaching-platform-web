@@ -4,12 +4,12 @@
     <div class="person-title">课程中心</div>
     <!-- 内容 -->
     <!-- 搜索框 -->
-    <div class="course-search p-10">
+    <!-- <div class="course-search p-10">
       <span>课程名称：</span>
       <input v-model="search" placeholder="请输入课程名称" />
       <el-button type="primary" size="small">搜索</el-button>
       <el-button type="primary" size="small">重置</el-button>
-    </div>
+    </div> -->
     <!-- 每一项数据 -->
     <div class="course-center mt-20" v-if="courseList.length > 0">
       <div class="course-center-item mt-20" v-for="item in courseList" :key="item.id">
@@ -18,7 +18,7 @@
           <div class="course-name">课程名称：{{ item.name }}</div>
           <div class="course-title">课程标题：{{ item.title }}</div>
           <div class="course-score">学分：{{ item.credit }}</div>
-          <el-popover placement="bottom" width="400" trigger="hover" :content="item.description">
+          <el-popover placement="bott om" width="400" trigger="hover" :content="item.description">
             <p slot="reference" class="course-describe">课程描述：{{ item.description }}</p>
           </el-popover>
         </div>
@@ -28,7 +28,11 @@
         </div>
       </div>
     </div>
-    <el-empty class="bg-white" description="暂无课程" v-else></el-empty>
+    <el-empty
+      class="bg-white"
+      description="暂无课程"
+      v-else-if="!$store.state.isLoading && courseList.length === 0"
+    ></el-empty>
     <EditCourse :dialogVisible.sync="visible" @success="getData" :formData="chooseData"></EditCourse>
   </div>
 </template>

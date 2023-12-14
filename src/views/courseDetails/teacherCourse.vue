@@ -2,7 +2,7 @@
   <div class="content warpper" id="courseDeatils">
     <div class="mb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/myTeaching' }">返回上一级</el-breadcrumb-item>
         <el-breadcrumb-item>{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -192,7 +192,6 @@ import VmsList from './components/VmsList.vue';
 export default {
   data() {
     return {
-      path: '', //面包屑路由跳转
       courseObj: {}, //课程信息
       defaultProps: {
         children: 'children', //data当中的children的字段名
@@ -222,7 +221,6 @@ export default {
   },
   async created() {
     // 获取数据
-    this.path = '/myTeaching';
     const courseId = this.$route.query.courseId;
     const res = await teacherCourseDetails(courseId, this.$route.query.id);
     this.courseObj = courseStatusConvert(res.data);

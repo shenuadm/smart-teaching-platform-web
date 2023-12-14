@@ -111,8 +111,8 @@ export default {
     },
     // 提交作业
     submitSendHomework() {
-      if (this.assignData.length !== this.myHomeworkData.length)
-        return this.$message.warning('请完成该节的所有作业再进行提交');
+      // if (this.assignData.length !== this.myHomeworkData.length)
+      //   return this.$message.warning('请完成该节的所有作业再进行提交');
       this.$confirm('此操作将会提交该节所有作业，且提交后不能修改，您确认提交吗？', '提示', { type: 'warning' })
         .then(async () => {
           await stuSendHomeworkService(this.articleId, this.$route.query.teacherCourseId);

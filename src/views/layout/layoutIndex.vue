@@ -86,6 +86,7 @@ export default {
 
 <style>
 .layout-index .el-badge__content {
-  top: 10px;
+  top: 15px;
+  right: 0;
 }
 </style>

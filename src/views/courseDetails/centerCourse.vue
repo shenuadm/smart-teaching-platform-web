@@ -1,8 +1,8 @@
 <template>
-  <div class="content warpper" id="courseDeatils">
+  <div class="content warpper" id="courseDeatils" v-loading="$store.state.isLoading">
     <div class="mb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/courseCenter' }">返回上一级</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -25,7 +25,6 @@ import CourseList from './components/CourseList.vue';
 export default {
   data() {
     return {
-      path: '', //面包屑路由跳转
       courseObj: {}, //课程信息
       teacherId: '', //教师课程id
       courseId: '', //课程的id
@@ -33,7 +32,6 @@ export default {
   },
   async created() {
     // 获取数据
-    this.path = '/courseCenter';
     const id = this.$route.query.courseId;
     const res = await checkChapter(id);
     this.courseObj = res.courseInfo;

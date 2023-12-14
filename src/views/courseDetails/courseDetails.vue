@@ -2,8 +2,8 @@
   <div class="content warpper" id="courseDeatils" v-loading="$store.state.isLoading">
     <div class="mb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: path }">返回上一级</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: 'myCourse' }">返回上一级</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="course-info bg-white radius-5 mb-20 p-10">
@@ -119,7 +119,6 @@ import CourseList from './components/CourseList.vue';
 export default {
   data() {
     return {
-      path: '', //面包屑路由跳转
       courseObj: {}, //课程信息
       data: [], //存储树形数据,
       defaultProps: {
