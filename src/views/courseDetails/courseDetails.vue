@@ -91,7 +91,9 @@
             </template>
           </el-table-column>
           <el-table-column prop="score" label="实验成绩" width="80">
-            <template slot-scope="{ row }">{{ row.score.toFixed(1) }}</template>
+            <template slot-scope="{ row }">{{
+              Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
+            }}</template>
           </el-table-column>
           <el-table-column prop="comment" label="评语"> </el-table-column>
           <el-table-column prop="createTime" label="创建时间" width="200"> </el-table-column>

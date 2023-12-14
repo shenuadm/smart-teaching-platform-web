@@ -23,7 +23,11 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <template v-if="!formData.userid || formData.roleName === 'student'">
+      <el-form-item label="用户手机：" prop="phone">
+        <el-input type="number" v-model.number="formData.phone" placeholder="请输入用户手机号"></el-input>
+      </el-form-item>
+      <!-- <template v-if="!formData.userid || formData.roleName === 'student'"> -->
+      <template v-if="isStudent">
         <el-form-item label="学生专业" prop="major">
           <el-input v-model="formData.major" placeholder="请输入学生专业"></el-input>
         </el-form-item>
@@ -75,6 +79,15 @@ export default {
         callback();
       }
     };
+    const phone = (rule, value, callback) => {
+      const regex = /^1[3-9]\d{9}$/;
+      if (this.formData.phone === '' || this.formData.phone === null) return callback();
+      else if (!regex.test(value)) {
+        callback(new Error('请输入正确的手机号'));
+      } else {
+        callback();
+      }
+    };
     return {
       formData: { ...defaultData },
       rules: {
@@ -85,6 +98,7 @@ export default {
         grade: [{ validator: userRule, trigger: 'blur' }],
         major: [{ validator: userRule, trigger: 'blur' }],
         clazz: [{ validator: userRule, trigger: 'blur' }],
+        phone: [{ validator: phone, trigger: 'blur' }],
       },
       userRole: [],
     };
@@ -97,6 +111,14 @@ export default {
     submit() {
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {
+          if (this.userRole.find((item) => item.roleid === this.formData.roleId).rolename !== 'student') {
+            // delete this.formData.major;
+            // delete this.formData.clazz;
+            // delete this.formData.grade;
+            this.formData.major = '';
+            this.formData.clazz = '';
+            this.formData.grade = '';
+          }
           if (this.formData.userid) {
             await reviseUser(this.formData);
             this.$message.success('修改用户成功');
@@ -112,6 +134,16 @@ export default {
     async getUserRole() {
       const res = await getUserRoleService();
       this.userRole = res.data;
+    },
+  },
+  computed: {
+    isStudent() {
+      if (this.formData.roleId === '' || this.formData.roleId === null) {
+        return false;
+      } else if (this.userRole.find((item) => item.roleid === this.formData.roleId).rolename === 'student') {
+        return true;
+      }
+      return false;
     },
   },
   props: ['visible', 'editData'],

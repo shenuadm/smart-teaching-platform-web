@@ -58,7 +58,11 @@
             <el-table-column label="专业" prop="major"></el-table-column>
             <el-table-column label="年级" prop="grade"></el-table-column>
             <el-table-column label="班级" prop="clazz"></el-table-column>
-            <el-table-column label="分数" prop="score"></el-table-column>
+            <el-table-column label="分数" prop="score">
+              <template slot-scope="{ row }">{{
+                Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
+              }}</template>
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="{ row }">
                 <el-button type="primary" size="small" @click="studentHomeWork(row)">详情</el-button>
