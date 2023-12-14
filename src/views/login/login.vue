@@ -26,10 +26,10 @@
             <el-form-item class="login-btn">
               <el-button type="primary" @click="Login('loginForm')">登录</el-button>
             </el-form-item>
-            <el-button type="" @click="www">退出</el-button>
+            <!-- <el-button type="" @click="www">退出</el-button> -->
             <!-- <img src="https://engine443.com/ovirt-engine/web-ui/sso/logout" /> -->
             <!-- <a href="javascript:void(https://engine443.com/ovirt-engine/web-ui/sso/logout)">退出</a> -->
-            <a href="https://engine443.com/ovirt-engine/web-ui/sso/logout" id="qwer">qwe</a>
+            <!-- <a href="https://engine443.com/ovirt-engine/web-ui/sso/logout" id="qwer">qwe</a> -->
           </el-form>
           <!-- <div>
             <p>还没有账号？<a href="javascript:void(0)" class="text-blue" @click="toRegister">去注册</a></p>

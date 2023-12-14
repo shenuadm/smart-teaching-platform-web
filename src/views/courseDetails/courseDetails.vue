@@ -59,7 +59,8 @@
           <p>【实验报告】</p>
           <div class="experiment-report-result">
             <p class="experiment-report-title zh-fs-16 font-bold">实验结果:</p>
-            <Editor ref="editor"></Editor>
+            <!-- <Editor ref="editor"></Editor> -->
+            <el-input v-model="experimentRes" type="textarea" :rows="8" placeholder="请输入实验结果"></el-input>
           </div>
           <div class="experiment-report-step">
             <p class="experiment-report-title zh-fs-16 font-bold">实验步骤:</p>
@@ -138,6 +139,7 @@ export default {
       submitStatus: false, //学生实验提交状态
       studentScore: '', //学生实验成绩
       total: 1,
+      experimentRes: '',
     };
   },
   created() {
@@ -176,8 +178,10 @@ export default {
           this.studentScore = '';
         }
         // 实验结果
-        if (res.experimentReport.result === null) this.$refs.editor.html = '';
-        else this.$refs.editor.html = res.experimentReport.result;
+        // if (res.experimentReport.result === null) this.$refs.editor.html = '';
+        // // else this.$refs.editor.html = res.experimentReport.result;
+        if (res.experimentReport.result === null || res.experimentReport.result === '') this.experimentRes = '';
+        else this.experimentRes = res.experimentReport.result;
         // 实验步骤
         if (res.experimentReportPlans !== null) {
           this.experimentStep = res.experimentReportPlans;
@@ -197,7 +201,8 @@ export default {
       const data = {
         experimentId: this.experimentId, //实验id
         teacherCourseId: this.teacherId, //课程id
-        experimentContent: this.$refs.editor.html, //实验结果
+        // experimentContent: this.$refs.editor.html, //实验结果
+        experimentContent: this.experimentRes, //实验结果
         planContent, //实验步骤
       };
       status === 1 && Object.assign(data, { status: 1 });
