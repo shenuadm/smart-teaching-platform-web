@@ -1,11 +1,6 @@
 <template>
   <div style="border: 1px solid #ccc">
-    <Toolbar
-      style="border-bottom: 1px solid #ccc"
-      :editor="editor"
-      :defaultConfig="toolbarConfig"
-      :mode="mode"
-    />
+    <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
     <Editor
       style="height: 200px; overflow-y: hidden"
       v-model="html"
@@ -16,33 +11,33 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+import Vue from 'vue';
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 
 export default Vue.extend({
   components: { Editor, Toolbar },
   data() {
     return {
       editor: null,
-      html: "",
+      html: '',
       toolbarConfig: {},
       editorConfig: {
-        placeholder: "请输入内容",
+        placeholder: '请输入内容',
         MENU_CONF: {
           uploadImage: {
             // 后端上传地址，必填
-            server: "/dev-api/common/upload",
+            server: '/dev-api/common/upload',
             timeout: 5 * 1000, // 5s 超时时间
-            fieldName: "custom-fileName",
+            fieldName: 'custom-fileName',
             //选择文件时的类型限制，默认为['image/*'] 如不想限制，则设置为 []
-            allowedFileTypes: ["image/*"],
+            allowedFileTypes: ['image/*'],
             metaWithUrl: true, // 参数拼接到 url 上
             maxFileSize: 1000 * 1024 * 1024, //1g //设置大点 不然图片过大会报错
             base64LimitSize: 1000000 * 1024, // 1g 以下插入 base64
           },
         },
       },
-      mode: "default", // or 'simple'
+      mode: 'default', // or 'simple'
     };
   },
   methods: {
@@ -69,6 +64,10 @@ export default Vue.extend({
       if (editor != null) {
         editor.setHtml(html);
       }
+    },
+    // 清空富文本内容
+    clearContent() {
+      this.html = '';
     },
   },
   mounted() {

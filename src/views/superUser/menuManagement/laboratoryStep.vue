@@ -22,36 +22,12 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      v-if="dialogtabledata"
       border
       v-loading="$store.state.isLoading"
     >
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="name" label="步骤名称" width="550"> </el-table-column>
       <el-table-column prop="sort" label="顺序" width="100"> </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="editstep(scope.row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 搜索 -->
-    <el-table
-      height="410"
-      ref="multipleTable"
-      :data="stepdata.slice((currentPage - 1) * pageSize, currentPage * 10)"
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-      class="custom-table"
-      v-if="exdialogtabledata"
-    >
-      <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="name" label="步骤名称" width="140"> </el-table-column>
-
-      <el-table-column prop="sort" label="顺序" width="60"> </el-table-column>
-      <el-table-column prop="content" label="步骤内容" width="250" show-overflow-tooltip> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)">编辑</el-button>
@@ -95,6 +71,15 @@
 <script>
 import { step, addstep, updatestep, mdelstep, delstep, getdetail, experplan } from '@/utils/api';
 import Editor from '../../../components/editor.vue';
+
+const defaultData = {
+  description: '',
+  name: '',
+  content: '',
+  sort: '',
+  imageStorePath: '',
+};
+
 export default {
   components: { Editor },
   data() {
@@ -109,25 +94,13 @@ export default {
     return {
       multipleSelection: [],
       tableData: [],
-      stepdata: [],
-      detailsdata: [],
       arr: [],
-      detailsData: [],
       currentPage: 1,
       input: '',
-      dialogtabledata: true,
-      exdialogtabledata: false,
       dialogVisible: false,
-      dialogTableVisible: false,
       imgSrc: '',
       id: 0,
-      revise: {
-        description: '',
-        name: '',
-        content: '',
-        sort: '',
-        imageStorePath: '',
-      },
+      revise: { ...defaultData },
       stepRule: {
         name: [{ required: true, message: '请输入实验步骤名称', trigger: 'blur' }],
         sort: [{ required: true, message: '请输入实验步骤顺序', trigger: 'blur' }],
@@ -139,41 +112,32 @@ export default {
     //保存
     async serve() {
       this.revise.content = this.$refs.editor.html;
-      console.log(this.revise.content, 'content');
       this.$refs['stepForm'].validate(async (validate) => {
         if (validate) {
+          const data = {
+            name: this.revise.name,
+            content: this.$refs.editor.html,
+            sort: this.revise.sort,
+          };
           if (!this.revise.id) {
-            const data = {
-              experimentReportId: +this.id,
-              name: this.revise.name,
-              content: this.$refs.editor.html,
-              sort: parseInt(this.revise.sort),
-              updateTime: new Date().toISOString(),
-            };
+            data.experimentReportId = +this.id;
             await addstep(data);
-            this.dialogVisible = false;
             this.$message.success('添加实验步骤成功');
-            await this.break();
           } else {
-            const data = {
-              id: this.revise.id,
-              experimentReportId: this.revise.experimentReportId,
-              name: this.revise.name,
-              content: this.$refs.editor.html,
-              sort: this.revise.sort,
-              updateTime: new Date().toISOString(),
-            };
+            data.id = this.revise.id;
+            data.experimentReportId = this.revise.experimentReportId;
             await updatestep(data);
-            this.dialogVisible = false;
             this.$message.success('编辑实验步骤成功');
-            await this.break();
           }
+          this.dialogVisible = false;
+          await this.break();
         }
       });
     },
     //取消
     cancel() {
       this.dialogVisible = false;
+      this.$refs.editor.clearContent();
       this.$refs['stepForm'].resetFields();
     },
     //返回实验报告
@@ -182,6 +146,7 @@ export default {
     },
     //添加实验步骤
     addstep() {
+      this.revise = { ...defaultData };
       this.dialogVisible = true;
     },
     //编辑实验
@@ -192,58 +157,33 @@ export default {
       this.$refs.editor.html = res.data.content;
     },
     //搜索
-    search() {
-      this.dialogtabledata = false;
-      this.exdialogtabledata = true;
-      this.stepdata = this.tableData.filter((item) => {
-        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
-        return item.name.includes(this.input);
-      });
-    },
+    search() {},
     //重置
     resetting() {
-      this.dialogtabledata = true;
-      this.exdialogtabledata = false;
       this.input = '';
-      this.stepdata = [];
     },
     //删除
     del(e) {
-      this.$confirm('此操作将永久删除该实验步骤, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
+      this.$confirm('此操作将永久删除该实验步骤, 是否继续?', '提示', { type: 'warning' })
         .then(async () => {
           await delstep(e);
           this.$message.success('删除实验步骤成功');
+          this.break();
         })
         .catch(() => {});
     },
     //批量删除
     delstep() {
-      this.$confirm('此操作将永久删除选中的实验步骤, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
+      this.$confirm('此操作将永久删除选中的实验步骤, 是否继续?', '提示', { type: 'warning' })
         .then(async () => {
           await mdelstep(this.arr);
           this.$message.success('删除实验步骤成功');
+          this.break();
         })
         .catch(() => {});
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-    },
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach((row) => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -252,7 +192,6 @@ export default {
         this.arr.push(id);
         const arrdel = [...new Set(this.arr)];
         this.arr = arrdel;
-        console.log(arrdel);
       });
     },
     // 获取数据
