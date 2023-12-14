@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { promptUnreadNoticeService } from '@/api/notice';
 
 Vue.use(Vuex);
 
@@ -8,7 +9,8 @@ export default new Vuex.Store({
     username: sessionStorage.getItem('username'),
     rolename: sessionStorage.getItem('rolename'),
     roleUrl: [],
-    isLoading: false,
+    isLoading: false, // 是否是加载状态
+    unreadNotice: 0, // 未读通知数
   },
   getters: {
     isStudent(state) {
@@ -33,7 +35,16 @@ export default new Vuex.Store({
     setLoading(state, value) {
       state.isLoading = value;
     },
+    setUnreadNotice(state, value) {
+      state.unreadNotice = value;
+    },
   },
-  actions: {},
+  actions: {
+    // 获取未阅读的系统通知数
+    async getUnreadNotice(context) {
+      const { data } = await promptUnreadNoticeService();
+      context.commit('setUnreadNotice', data);
+    },
+  },
   modules: {},
 });

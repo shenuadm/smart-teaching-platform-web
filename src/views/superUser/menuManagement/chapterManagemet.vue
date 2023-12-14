@@ -13,31 +13,33 @@
       row-key="id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
     >
-      <el-table-column prop="name" label="章节标题" align="center" width="200" class-name="chapter-management-tree">
-        <template slot-scope="scope">
-          <div class="ellipsis">{{ scope.row.order }}：{{ scope.row.name }}</div>
+      <el-table-column
+        prop="name"
+        label="章节标题"
+        width="300"
+        show-overflow-tooltip
+        class-name="chapter-management-tree"
+      >
+        <template slot-scope="{ row }">
+          <div class="ellipsis">{{ row.order }}：{{ row.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="classHour" label="课时" width="50"> </el-table-column>
       <el-table-column prop="sort" label="排序" width="50"> </el-table-column>
       <el-table-column prop="fileUrl" label="课件" width="100">
-        <template slot-scope="scope">
-          <!-- <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a> -->
-          <a href="javascript:void(0);" @click="goPdf(scope.row.fileUrl)" v-if="scope.row.fileUrl">查看课件</a>
+        <template slot-scope="{ row }">
+          <!-- <a :href="row.fileUrl" v-if="row.fileUrl">查看课件</a> -->
+          <a href="javascript:void(0);" @click="goPdf(row.fileUrl)" v-if="row.fileUrl">查看课件</a>
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述"> </el-table-column>
       <el-table-column label="操作" width="370px">
-        <template slot-scope="scope">
-          <el-button v-if="!scope.row.pid" type="primary" @click="addchapterji(scope.row.id)" size="mini"
-            >添加节</el-button
-          >
-          <el-button v-if="scope.row.pid" type="primary" @click="homework(scope.row.id)" size="mini"
-            >作业管理</el-button
-          >
-          <el-button v-if="scope.row.pid" type="primary" @click="exper(scope.row.id)" size="mini">实验管理</el-button>
-          <el-button type="primary" size="mini" @click="revisechapter(scope, scope.row)">修改</el-button>
-          <el-button type="danger" size="mini" @click="deletechapter(scope.row.id)">删除</el-button>
+        <template slot-scope="{ row }">
+          <el-button v-if="!row.pid" type="primary" @click="addchapterji(row.id)" size="mini">添加节</el-button>
+          <el-button v-if="row.pid" type="primary" @click="homework(row.id)" size="mini">作业管理</el-button>
+          <el-button v-if="row.pid" type="primary" @click="exper(row.id)" size="mini">实验管理</el-button>
+          <el-button type="primary" size="mini" @click="revisechapter(row)">修改</el-button>
+          <el-button type="danger" size="mini" @click="deletechapter(row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -190,8 +192,7 @@ export default {
       this.dialogVisibleji = true;
     },
     //修改章节回显
-    revisechapter(q, e) {
-      console.log(q);
+    revisechapter(e) {
       if (e.pid) {
         // 修改节
         this.isAddJoint = false;
