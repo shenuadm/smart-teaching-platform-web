@@ -69,6 +69,9 @@ export default Vue.extend({
     clearContent() {
       this.html = '';
     },
+    setContent(content) {
+      this.html = content;
+    },
   },
   mounted() {
     // 模拟 ajax 请求，异步渲染编辑器

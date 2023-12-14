@@ -38,7 +38,7 @@
     <!-- 添加/编辑实验 -->
     <el-dialog
       :close-on-click-modal="false"
-      :visible.sync="dialogVisible"
+      :visible="dialogVisible"
       width="40%"
       :title="(revise.id ? '编辑' : '添加') + '实验步骤'"
     >
@@ -56,7 +56,7 @@
         <el-form-item label="步骤顺序" prop="sort">
           <el-input type="number" v-model.number="revise.sort" placeholder="请输入实验顺序"></el-input>
         </el-form-item>
-        <el-form-item label="步骤内容" prop="content">
+        <el-form-item label="步骤内容" required prop="content">
           <Editor ref="editor"></Editor>
         </el-form-item>
         <el-form-item>
@@ -129,7 +129,7 @@ export default {
             await updatestep(data);
             this.$message.success('编辑实验步骤成功');
           }
-          this.dialogVisible = false;
+          this.cancel();
           await this.break();
         }
       });
@@ -149,12 +149,19 @@ export default {
       this.revise = { ...defaultData };
       this.dialogVisible = true;
     },
-    //编辑实验
+    //编辑实验步骤
     async editstep({ id }) {
       this.dialogVisible = true;
-      const res = await experplan(id);
-      this.revise = res.data;
-      this.$refs.editor.html = res.data.content;
+      const { data } = await experplan(id);
+      // this.$nextTick(() => {
+      this.revise = data;
+      this.$nextTick(() => {
+        this.$refs.editor.html = data.content;
+        this.$refs.editor.setContent(data.content);
+        console.log(this.$refs.editor);
+      });
+      // this.$refs.editor.html = data.content;
+      // });
     },
     //搜索
     search() {},
