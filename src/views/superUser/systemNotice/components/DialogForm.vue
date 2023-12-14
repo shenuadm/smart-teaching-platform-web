@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :title="title + '通知'" :visible="true" width="30%" :close-on-click-modal="false" :before-close="cancel">
+  <el-dialog
+    :title="title + '通知'"
+    :visible="visible"
+    width="30%"
+    :close-on-click-modal="false"
+    :before-close="cancel"
+  >
     <el-form :model="formData" :rules="rules" ref="noticeForm" v-loading="$store.state.isLoading" label-width="100px">
       <el-form-item label="通知标题" prop="title">
         <el-input v-model="formData.title" placeholder="请输入通知的标题"></el-input>
@@ -23,11 +29,18 @@
 <script>
 import Bus from '@/utils/eventBus';
 import { noticeStatus } from '@/constant/status.js';
+
+const defaultData = {
+  title: '',
+  status: '',
+  content: '',
+};
+
 export default {
   data() {
     return {
       // 显示数据
-      formData: {},
+      formData: { ...defaultData },
       noticeStatus, // 通知状态
       // 校验规则
       rules: {
@@ -59,19 +72,23 @@ export default {
         if (valid) {
           // 通过校验通知父组件处理
           this.$emit('formEvent', this.formData);
-        } else {
-          return this.$message.error('请输入正确的通知信息');
-        }
+        } else this.$message.warning('请输入正确的通知信息');
       });
     },
   },
   props: {
     title: String,
     editFrom: Object || null,
+    visible: Boolean,
   },
-  mounted() {
-    // 如果传入了值就表示是修改
-    this.editFrom && (this.formData = JSON.parse(JSON.stringify(this.editFrom)));
+  // mounted() {
+  //   // 如果传入了值就表示是修改
+  //   this.editFrom && (this.formData = JSON.parse(JSON.stringify(this.editFrom)));
+  // },
+  watch: {
+    editFrom(newVal) {
+      this.formData = { ...defaultData, ...newVal };
+    },
   },
 };
 </script>

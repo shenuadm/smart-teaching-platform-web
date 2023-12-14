@@ -1,11 +1,11 @@
 <template>
-  <DialogForm :title="'新增'" @formEvent="addNotice"></DialogForm>
+  <DialogForm :title="'新增'" @formEvent="addNotice" :visible="visible" :editFrom="{}"></DialogForm>
 </template>
 
 <script>
+import { addSystemNoticeService } from '@/api/notice';
 import DialogForm from './DialogForm.vue';
-import Bus from '@/utils/eventBus';
-import { addNotice } from '@/utils/api.js';
+
 export default {
   components: {
     DialogForm,
@@ -13,12 +13,13 @@ export default {
   methods: {
     // 新增通知
     async addNotice(form) {
-      await addNotice(form);
+      await addSystemNoticeService(form);
       this.$message.success('新增通知成功');
-      Bus.$emit('clearDialog');
+      this.$emit('update:visible', false);
       this.$emit('getData');
     },
   },
+  props: ['visible'],
 };
 </script>
 

@@ -93,6 +93,7 @@ import { delUsers, getUserData, resetPass, delUser } from '@/utils/api';
 import { isAllowFile } from '@/utils/upload.js';
 import { uploadStudentExcelService, downloadExceleSmpleService } from '@/api/userManagement.js';
 import EditUser from './components/EditUser.vue';
+
 export default {
   data() {
     return {
@@ -172,6 +173,7 @@ export default {
       this.editData = row;
       this.visible = true;
     },
+    // 选择框选中事件
     handleSelectionChange(val) {
       this.multipleSelection = val.map((item) => item.userid);
     },

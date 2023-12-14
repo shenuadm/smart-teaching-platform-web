@@ -108,18 +108,6 @@ export function experplan(id) {
 export function mexperdel(data) {
   return http.delete('experiment/deletes/' + data);
 }
-// 发布通知
-export function addNotice({ title, content, status }) {
-  return http.post('notice/add', { title, content, status });
-}
-// 修改通知
-export function editNotice({ id, title, content, status }) {
-  return http.post('notice/update', { id, title, content, status });
-}
-// 删除通知
-export function deleteNotice(id) {
-  return http.get(`notice/delete/${id}`);
-}
 
 // 作业管理
 // 添加作业
@@ -232,10 +220,7 @@ export function updateRole(data) {
 export function delRole(id) {
   return http.delete('/role/delete/' + id);
 }
-// 系统通知管理
-export function systemNotice() {
-  return http.get('/notice/list');
-}
+
 // 教师端
 // 课程中心
 export function courseCenter() {

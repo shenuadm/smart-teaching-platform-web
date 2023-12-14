@@ -5,7 +5,6 @@ import store from './store';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import ElementUI from 'element-ui';
-import { Message } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // 解决使用dialog弹出，页面垂直滚动条消失
 ElementUI.Dialog.props.lockScroll.default = false;

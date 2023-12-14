@@ -38,7 +38,7 @@ import { stuGetSelectCourseService, stuSelectCourseService } from '@/api/course.
 export default {
   data() {
     return {
-      chooseCourse: [],
+      chooseCourse: [], // 可选的课程列表
     };
   },
   mounted() {

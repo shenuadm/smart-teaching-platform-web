@@ -15,4 +15,7 @@ export const uploadStudentExcelService = (file) => {
  */
 export const downloadExceleSmpleService = () => http.get('/user/downloadExcelSample');
 
+// 获取角色列表
 export const getUserRoleService = () => http.get('/user/listRole');
+
+export const deletesUserService = (ids) => http.delete('/user/deletes/' + [ids]);

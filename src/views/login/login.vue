@@ -222,7 +222,7 @@ img {
   font-size: 16px;
   text-align: center;
   line-height: 62px;
-  cursor: pointer;
+  /* cursor: pointer; */
   background-color: white;
 }
 .bglog,
