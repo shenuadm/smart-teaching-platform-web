@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   components: {},
   data() {
@@ -62,6 +63,7 @@ export default {
         path: '/',
         name: 'login',
       });
+      axios.get('https://engine443.com/ovirt-engine/web-ui/sso/logout');
     },
   },
 };

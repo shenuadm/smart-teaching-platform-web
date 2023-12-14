@@ -100,7 +100,7 @@ export default {
         clazz: [{ validator: userRule, trigger: 'blur' }],
         phone: [{ validator: phone, trigger: 'blur' }],
       },
-      userRole: [],
+      userRole: [], // 用户角色列表
     };
   },
   methods: {
@@ -112,9 +112,6 @@ export default {
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {
           if (this.userRole.find((item) => item.roleid === this.formData.roleId).rolename !== 'student') {
-            // delete this.formData.major;
-            // delete this.formData.clazz;
-            // delete this.formData.grade;
             this.formData.major = '';
             this.formData.clazz = '';
             this.formData.grade = '';
@@ -138,6 +135,7 @@ export default {
   },
   computed: {
     isStudent() {
+      // 用户当前没有选中
       if (this.formData.roleId === '' || this.formData.roleId === null) {
         return false;
       } else if (this.userRole.find((item) => item.roleid === this.formData.roleId).rolename === 'student') {
