@@ -7,7 +7,7 @@
         <template slot-scope="{ row }">{{ dateToSecond(row.endTime) }}</template>
       </el-table-column>
       <el-table-column label="分数" prop="score">
-        <template slot-scope="{ row }">{{ row.score.toFixed(1) }}</template>
+        <template slot-scope="{ row }">{{ Number.isInteger(row.score) ? row.score : row.score.toFixed(1) }}</template>
       </el-table-column>
       <el-table-column label="状态" width="100px">
         <template slot-scope="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>

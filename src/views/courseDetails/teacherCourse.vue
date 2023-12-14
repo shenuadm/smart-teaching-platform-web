@@ -67,7 +67,9 @@
           <el-table-column align="center" prop="username" label="学生姓名" width="120"> </el-table-column>
           <el-table-column align="center" prop="title" label="实验标题"> </el-table-column>
           <el-table-column prop="score" label="成绩" width="80">
-            <template slot-scope="{ row }">{{ row.score.toFixed(1) }}</template>
+            <template slot-scope="{ row }">{{
+              Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
+            }}</template>
           </el-table-column>
           <el-table-column prop="updateTime" label="更新日期" width="200"> </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">

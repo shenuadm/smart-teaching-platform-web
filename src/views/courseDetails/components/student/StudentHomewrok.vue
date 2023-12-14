@@ -117,6 +117,7 @@ export default {
         .then(async () => {
           await stuSendHomeworkService(this.articleId, this.$route.query.teacherCourseId);
           this.$message.success('提交作业成功');
+          this.getMineData();
         })
         .catch(() => {});
     },

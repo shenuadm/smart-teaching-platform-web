@@ -3,7 +3,7 @@
     <div class="mb-20">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/courseCenter' }">返回上一级</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/courseDetails' }">{{ courseObj.name }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ courseObj.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 课程信息 -->
