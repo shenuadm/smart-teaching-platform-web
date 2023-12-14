@@ -50,7 +50,7 @@ export default {
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {
           await teaSaveStuHomeworkService(this.formData);
-          this.$message.success('修改学生作业成功');
+          this.$message.success('评阅学生作业成功');
           this.cancel();
           this.$emit('success');
         }
