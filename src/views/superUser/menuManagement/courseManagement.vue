@@ -50,6 +50,7 @@
         :page-size="pageSize"
         layout="total, prev, pager, next, jumper"
         :total="count"
+        :hide-on-single-page="count <= 10"
       >
       </el-pagination>
     </div>
