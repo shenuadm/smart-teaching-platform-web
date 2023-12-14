@@ -36,3 +36,22 @@ export const addSystemNoticeService = ({ title, content, status }) =>
  * @returns
  */
 export const deletesSystemNoticeService = (ids) => http.delete(`/notice/deletes/${ids}`);
+
+/**
+ * 获取系统通知
+ * @returns
+ */
+export const getNoticeService = (data) => http.get('/userNotice/list?', data);
+
+/**
+ * 提示未读通知
+ * @returns
+ */
+export const promptUnreadNoticeService = () => http.get('/userNotice/checkUnreadNotice');
+
+/**
+ * 查看通知
+ * @param {*} id
+ * @returns
+ */
+export const readNoticeService = (id) => http.post(`/userNotice/read/${id}`);

@@ -54,4 +54,8 @@ body {
 .el-message {
   z-index: 2500 !important;
 }
+
+.el-notification {
+  z-index: 2100 !important;
+}
 </style>

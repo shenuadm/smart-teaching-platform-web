@@ -92,7 +92,6 @@ export default {
       this.tableData = res.data;
       this.total = res.count;
     },
-
     // 搜索
     search() {
       if (this.input === '') return this.$message.warning('请输入查询信息后再搜索');

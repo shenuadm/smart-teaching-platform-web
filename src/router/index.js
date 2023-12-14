@@ -151,6 +151,11 @@ const routes = [
             name: 'dictionary',
             component: () => import('@/views/systemSetting/majorSetting/majorSetting.vue'),
           },
+          {
+            path: '/userNotice',
+            name: 'userNotice',
+            component: () => import('@/views/userNotice/userNotice.vue'),
+          },
         ],
       },
       // 学生课程详情
