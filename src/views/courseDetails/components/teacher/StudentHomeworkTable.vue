@@ -2,12 +2,13 @@
   <div>
     <el-table :data="tableData" border>
       <el-table-column label="作业名称" prop="name"></el-table-column>
-      <el-table-column label="作业内容" prop="content"></el-table-column>
       <el-table-column label="结果" prop="answer"></el-table-column>
       <el-table-column label="截止时间">
         <template slot-scope="{ row }">{{ dateToSecond(row.endTime) }}</template>
       </el-table-column>
-      <el-table-column label="分数" prop="score"></el-table-column>
+      <el-table-column label="分数" prop="score">
+        <template slot-scope="{ row }">{{ row.score.toFixed(1) }}</template>
+      </el-table-column>
       <el-table-column label="状态" width="100px">
         <template slot-scope="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
       </el-table-column>

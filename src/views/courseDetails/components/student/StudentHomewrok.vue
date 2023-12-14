@@ -37,7 +37,9 @@
               {{ assignStatusConvent(row.status) }}
             </template>
           </el-table-column>
-          <el-table-column label="分数" prop="score"></el-table-column>
+          <el-table-column label="分数" prop="score">
+            <template slot-scope="{ row }">{{ row.score.toFixed(1) }}</template>
+          </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{ row }">
               <el-button type="primary" size="small" @click="editHomework(row)">{{

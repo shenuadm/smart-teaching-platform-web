@@ -92,10 +92,8 @@ export default {
       }
     };
     return {
-      multipleSelection: [],
       tableData: [],
       arr: [],
-      currentPage: 1,
       input: '',
       dialogVisible: false,
       imgSrc: '',
@@ -153,15 +151,12 @@ export default {
     async editstep({ id }) {
       this.dialogVisible = true;
       const { data } = await experplan(id);
-      // this.$nextTick(() => {
       this.revise = data;
       this.$nextTick(() => {
         this.$refs.editor.html = data.content;
         this.$refs.editor.setContent(data.content);
         console.log(this.$refs.editor);
       });
-      // this.$refs.editor.html = data.content;
-      // });
     },
     //搜索
     search() {},
@@ -189,17 +184,8 @@ export default {
         })
         .catch(() => {});
     },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-    },
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      this.multipleSelection.forEach((obj) => {
-        const id = obj.id;
-        this.arr.push(id);
-        const arrdel = [...new Set(this.arr)];
-        this.arr = arrdel;
-      });
+      this.arr = val.map((item) => item.id);
     },
     // 获取数据
     async break() {

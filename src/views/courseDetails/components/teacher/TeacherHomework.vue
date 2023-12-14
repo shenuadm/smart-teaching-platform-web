@@ -143,8 +143,9 @@ export default {
     },
     // 获取学生作业列表
     async getStudentData() {
-      const res = await teacherGetStudentHomeworkService(this.articleId, this.$route.query.id);
-      this.studentData = res.data;
+      const { data } = await teacherGetStudentHomeworkService(this.articleId, this.$route.query.id);
+      if (!Array.isArray(data)) return (this.studentData = []);
+      this.studentData = data;
     },
     // 表格中的布置作业
     submitHomework({ id, endTime }) {
@@ -159,7 +160,6 @@ export default {
       await this.getSubmitData();
       await this.getSystemData();
     },
-
     // 新增作业
     addHomework() {
       this.editHomeworkData = { ...defaultData };
@@ -192,7 +192,6 @@ export default {
       if (!isAfterNow(this.allDate)) return this.$message.warning('截止日期至少在当前时间半小时之后');
       this.assignHomework(this.selectionList, dayjs(this.allDate).format('YYYY-MM-DD HH:mm:ss'));
     },
-
     // 表格选择
     handleTable(val) {
       this.selectionList = val
