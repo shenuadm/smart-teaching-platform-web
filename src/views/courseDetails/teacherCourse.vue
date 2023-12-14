@@ -24,7 +24,7 @@
           <div>授课地点：{{ courseObj.address }}</div>
           <div>
             <el-button type="primary" size="mini" @click="queryVms">{{
-              pageShow ? '查看虚拟机' : '查看课程章节'
+              pageShow ? '查看实验虚拟机' : '查看课程章节'
             }}</el-button>
             <!-- <el-button type="info" size="mini" @click=""></el-button> -->
           </div>

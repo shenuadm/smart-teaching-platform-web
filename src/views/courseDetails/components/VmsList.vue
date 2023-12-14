@@ -1,9 +1,9 @@
 <template>
   <div class="vms-container" v-loading="$store.state.isLoading">
     <div class="vms-title">
-      <el-button type="primary" size="mini" @click="updateStudentVms">更新虚拟机</el-button>
+      <el-button type="primary" size="mini" @click="updateStudentVms">更新实验虚拟机</el-button>
       <i class="el-icon-info ml-20"></i>
-      <span style="font-size: 0.75rem; color: grey">如果学生没有分配虚拟机，请点击该按钮更新学生分配机。</span>
+      <span style="font-size: 0.75rem; color: grey">如果没有分配实验虚拟机，请点击该按钮更新分配实验虚拟机。</span>
     </div>
     <div class="vms-list">
       <div v-for="item in vmsData" :key="item.id" class="vms-item">
@@ -37,7 +37,7 @@ export default {
     async updateStudentVms() {
       await shareStudentVms(this.$route.query.id);
       await this.getStudentVmsData();
-      this.$message.success('更新学生虚拟机成功');
+      this.$message.success('更新实验虚拟机成功');
     },
     // 获取学生虚拟机信息
     async getStudentVmsData() {
