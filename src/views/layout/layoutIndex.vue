@@ -1,5 +1,5 @@
 <template>
-  <el-container class="personalInfo warpper">
+  <el-container class="personalInfo layout-index warpper">
     <!-- 侧导航 -->
     <div :span="4" class="mr-20">
       <el-menu
@@ -11,7 +11,13 @@
       >
         <div v-for="item in navList" :key="item.id">
           <el-menu-item v-if="item.type === '菜单'" :index="item.funurl">
-            <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
+            <!-- 系统通知，展示未读通知数 -->
+            <span slot="title" v-if="item.funurl === '/userNotice'">
+              <el-badge :value="$store.state.unreadNotice" :max="99" :hidden="$store.state.unreadNotice === 0">
+                <i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}
+              </el-badge>
+            </span>
+            <span slot="title" v-else><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
           </el-menu-item>
           <el-submenu v-if="item.type === '目录'" :index="item.funurl">
             <span slot="title"><i :class="item.icon" class="iconfont mr-5"></i>{{ item.title }}</span>
@@ -46,10 +52,14 @@ export default {
       rolename: '',
     };
   },
-  created() {
+  async created() {
     // 从本地存储中取值
     this.navList = JSON.parse(localStorage.getItem('navData'));
     this.rolename = sessionStorage.getItem('rolename');
+    // 如果有系统通知选项，就获取未读的通知
+    if (this.navList.find((item) => item.funurl === '/userNotice')) {
+      this.$store.dispatch('getUnreadNotice');
+    }
   },
 };
 </script>
@@ -71,5 +81,11 @@ export default {
 }
 .second {
   padding: 0 0 0 46px;
+}
+</style>
+
+<style>
+.layout-index .el-badge__content {
+  top: 10px;
 }
 </style>

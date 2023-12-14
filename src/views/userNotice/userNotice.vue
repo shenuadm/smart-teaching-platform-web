@@ -41,15 +41,19 @@ export default {
     // 获取数据
     async getData() {
       const res = await getNoticeService({ page: this.page });
+      // 为每项数据添加是否展示字段
       this.noticeData = res.data.map((item) => ({ ...item, show: false }));
       this.total = res.count;
     },
     // 查看通知
     async readDetail(id) {
-      const item = this.noticeData.find((item) => item.id === id);
-      if (item.show) return;
+      const item = this.noticeData.find((item) => item.id === id); // 当前查看项
+      if (item.show) return; // 是展示状态就返回
       const res = await readNoticeService(id);
-      item.read = true;
+      if (!item.read) {
+        this.$store.dispatch('getUnreadNotice'); // 如果是没有读过的状态更新未读通知数
+        item.read = true;
+      }
       item.show = true;
       const { title, content } = res.data;
       this.$notify.info({
