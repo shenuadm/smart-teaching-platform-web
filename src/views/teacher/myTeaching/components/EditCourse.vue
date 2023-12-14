@@ -89,8 +89,8 @@ const defaultData = {
 export default {
   data() {
     const date = (rule, value, callback) => {
-      if (new Date(this.editCourse.selectDate[1]) > new Date(value[1])) {
-        callback(new Error('授课结束时间不应在选课结束时间之前'));
+      if (new Date(this.editCourse.selectDate[1]) > new Date(value[0])) {
+        callback(new Error('选课结束时间不应在授课开始时间后'));
       } else {
         callback();
       }

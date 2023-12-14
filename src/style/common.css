@@ -47,6 +47,10 @@ img {
   background-color: #F56C6C;
 }
 
+.border-grey {
+  border: 1px solid #dcdfe6;
+}
+
 
 /* 字体大小 */
 /* 一级标题 */
@@ -122,6 +126,10 @@ img {
 .px-30 {
   padding-left: 30px;
   padding-right: 30px;
+}
+.py-5 {
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 .py-10 {
   padding-top: 10px;

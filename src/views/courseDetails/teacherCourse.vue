@@ -104,19 +104,19 @@
         </div>
         <div class="stuExperimentContent">
           <div class="exTitle">
-            <p class="title text-bold">实验标题：</p>
+            <p class="title font-bold">实验标题：</p>
             <div>{{ stuForm.result.title }}</div>
           </div>
           <div class="exResult">
-            <p class="title text-bold">实验结果:</p>
-            <div v-html="stuForm.result.result"></div>
+            <p class="title font-bold">实验结果:</p>
+            <div class="px-10 py-5 border-grey" v-html="stuForm.result.result"></div>
           </div>
           <div class="exSteps">
-            <p class="title text-bold">实验步骤:</p>
+            <p class="title font-bold">实验步骤:</p>
             <ul>
               <li v-for="(item, index) in stuForm.step" :key="item.id">
                 <p>{{ index + 1 }}、{{ item.name }}</p>
-                <div v-html="item.content"></div>
+                <div class="px-10 py-5 border-grey" v-html="item.content"></div>
               </li>
             </ul>
           </div>

@@ -51,7 +51,7 @@
       :before-close="closeAddChapter"
       :close-on-click-modal="false"
     >
-      <el-form :model="revise" :rules="rules" ref="formRule" v-loading="$store.state.isLoading">
+      <el-form :model="revise" :rules="rules" ref="formRule" v-loading="$store.state.isLoading" label-width="100px">
         <el-form-item label="章节标题" prop="name">
           <el-input placeholder="请输入章节标题" v-model="revise.name"> </el-input>
         </el-form-item>
@@ -83,7 +83,6 @@
       width="40%"
       :before-close="closeAddJoint"
       :close-on-click-modal="false"
-      v-if="dialogVisibleji"
     >
       <el-form :model="revise" :rules="rules" ref="formRule" label-width="100px" class="chapter-dialog-form">
         <el-form-item label="章节标题" prop="name">
@@ -279,16 +278,13 @@ export default {
     },
     //删除章节
     deletechapter(id) {
-      this.$confirm('此操作将永久删除该章节, 是否继续?', '提示')
+      this.$confirm('您确认要删除该章节吗?', '提示', { type: 'warning' })
         .then(async () => {
           await dalchapter(id);
           this.$message.success('删除成功');
           this.break();
         })
         .catch(() => {});
-    },
-    handleChooseFile() {
-      this.$refs.fileInput.click();
     },
     //返回课程
     returncourse() {
@@ -333,39 +329,7 @@ export default {
 .chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell {
   text-align: center;
 }
-.chapter-managemet .el-form .is-required {
-  display: flex;
-  align-items: center;
-}
-.chapter-managemet .el-form .is-required .el-form-item__content {
-  flex: 1;
-}
-.chapter-managemet .el-form .upload-file,
-.chapter-managemet .el-form .form-btn {
-  display: flex;
-  margin-bottom: 10px;
-}
-.chapter-managemet .el-form .form-btn .el-form-item__content {
-  padding: 0 100px;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-}
-.chapter-managemet .el-form .upload-file .el-form-item__label {
-  width: 75px;
-  text-align: right;
-}
-.chapter-managemet .el-form .upload-file .el-form-item__content {
-  display: flex;
-  text-align: left;
-}
-.chapter-managemet .el-form .upload-file .el-form-item__content .el-upload__tip {
-  margin: 0;
-  height: 30px;
-}
-.chapter-managemet .el-form .upload-file .el-form-item__content .el-upload__tip .el-upload-list__item {
-  margin-top: 0 !important;
-}
+
 .el-input-group__prepend {
   width: 65px;
 }
