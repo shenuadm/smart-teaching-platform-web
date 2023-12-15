@@ -26,7 +26,7 @@
             v-model.number="ruleForm.phone"
             autocomplete="off"
             placeholder="请输入手机号"
-            type="number"
+            maxlength="11"
           ></el-input>
         </el-form-item>
         <el-form-item label="原密码" prop="oldpwd">
@@ -62,7 +62,7 @@
             v-model.number="ruleForm.phone"
             autocomplete="off"
             placeholder="请输入手机号"
-            type="number"
+            maxlength="11"
           ></el-input>
         </el-form-item>
         <el-form-item label="原密码" prop="oldpwd">

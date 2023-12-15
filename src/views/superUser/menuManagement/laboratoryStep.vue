@@ -1,7 +1,7 @@
 <template>
   <div class="Step">
-    <div class="header">
-      <div class="title">步骤名称:</div>
+    <div class="header mb-20">
+      <!-- <div class="title">步骤名称:</div>
       <el-input
         style="display: initial; width: initial"
         v-model="input"
@@ -9,7 +9,7 @@
         placeholder="请输入步骤名称"
       ></el-input>
       <el-button type="primary" class="step" @click="search">搜索</el-button>
-      <el-button type="primary" class="step" @click="resetting">重置</el-button>
+      <el-button type="primary" class="step" @click="resetting">重置</el-button> -->
       <el-button type="primary" class="step" @click="addstep">添加步骤</el-button>
       <el-button type="primary" class="step" @click="returnstep">返回实验报告</el-button>
       <el-button type="danger" class="step" @click="delstep">批量删除</el-button>
@@ -204,9 +204,7 @@ export default {
 .header {
   position: relative;
   width: 100%;
-  height: 30px;
   display: flex;
-  top: -10px;
   align-items: center;
 }
 .title {

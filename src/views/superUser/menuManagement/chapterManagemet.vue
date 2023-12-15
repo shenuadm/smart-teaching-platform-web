@@ -162,7 +162,6 @@ export default {
   methods: {
     // 查看pdf
     goPdf(url) {
-      console.log(url);
       window.open(`${window.location.origin}/#/pdf?url=${url}`);
       // window.open(`${window.location.origin}/#/pdf?url=/static/test.pdf`);
     },
@@ -324,24 +323,10 @@ export default {
 </script>
 
 <style>
-/* 表格 */
-.chapter-managemet .el-table__header-wrapper .el-table__header .el-table__cell,
-.chapter-managemet .el-table__body-wrapper .el-table__row .el-table__cell {
-  text-align: center;
-}
-
 .el-input-group__prepend {
   width: 65px;
 }
-#inputwd {
-  width: 195px !important;
-  margin-left: 234px;
-  margin-top: -89px;
-  height: 72px !important;
-}
-/* 修改节弹框中表单项左侧间隙 .chapter-dialog-form .el-form-item__content {
-    margin-left: 0 !important;
-  } */
+
 /* 文件上传表单左侧标题不缩小 */
 .upload-file .el-form-item__label {
   flex-shrink: 0;
@@ -366,6 +351,7 @@ a {
 .header {
   display: flex;
   margin-bottom: 10px;
+  align-items: center;
 }
 
 .upload,

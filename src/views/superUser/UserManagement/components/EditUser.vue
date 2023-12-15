@@ -24,7 +24,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="用户手机：" prop="phone">
-        <el-input type="number" v-model.number="formData.phone" placeholder="请输入用户手机号"></el-input>
+        <el-input
+          type="number"
+          v-model.number="formData.phone"
+          placeholder="请输入用户手机号"
+          maxlength="11"
+        ></el-input>
       </el-form-item>
       <!-- <template v-if="!formData.userid || formData.roleName === 'student'"> -->
       <template v-if="isStudent">

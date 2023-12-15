@@ -65,17 +65,16 @@
     >
       <el-form :model="revise" :rules="rules" ref="ruleForm" v-loading="$store.state.isLoading" label-width="80px">
         <el-form-item label="课程名称" prop="name">
-          <el-input class="inputw" placeholder="请输入课程名称" v-model="revise.name"> </el-input>
+          <el-input placeholder="请输入课程名称" v-model="revise.name"> </el-input>
         </el-form-item>
         <el-form-item label="课程标题" prop="title">
-          <el-input class="inputw" placeholder="请输入课程标题" v-model="revise.title"> </el-input>
+          <el-input placeholder="请输入课程标题" v-model="revise.title"> </el-input>
         </el-form-item>
         <el-form-item label="课程学分" prop="credit">
-          <el-input class="inputw" placeholder="请输入学分" v-model="revise.credit"> </el-input>
+          <el-input placeholder="请输入学分" v-model="revise.credit"> </el-input>
         </el-form-item>
         <el-form-item label="课程描述" prop="description">
           <el-input
-            class="inputw"
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 4 }"
             placeholder="请输入课程描述"
@@ -112,6 +111,16 @@
 
 <script>
 import { course, addcourse, delcourse, delcoursem, updatecourse } from '@/utils/api';
+
+const defaultData = {
+  name: '',
+  title: '',
+  credit: '',
+  description: '',
+  status: false,
+  picture: '',
+};
+
 export default {
   data() {
     return {
@@ -119,14 +128,7 @@ export default {
       currentPage: 1,
       count: 0,
       input: '',
-      revise: {
-        name: '',
-        title: '',
-        credit: '',
-        description: '',
-        status: false,
-        picture: '',
-      },
+      revise: { ...defaultData },
       tableData: [],
       arr: [],
       imageUrl: '', //图片路径
@@ -150,17 +152,16 @@ export default {
       fileReader.readAsDataURL(file.raw);
     },
     //修改课程
-    updatacour(e) {
-      this.revise = JSON.parse(JSON.stringify(e));
+    updatacour(data) {
+      this.revise = JSON.parse(JSON.stringify(data));
       this.imageUrl = 'data:image/png;base64,' + this.revise.picture;
-      this.dialogVisible = !this.dialogVisible;
+      this.dialogVisible = true;
     },
     //添加课程
     addcourse() {
-      this.empty(this.revise);
+      this.revise = { ...defaultData };
       this.imageUrl = '';
       this.dialogVisible = true;
-      this.revise.status = false;
     },
     //课程搜索
     search() {
@@ -232,12 +233,7 @@ export default {
         },
       });
     },
-    //清空对象
-    empty(obj) {
-      for (const prop of Object.keys(obj)) {
-        obj[prop] = '';
-      }
-    },
+
     handleSelectionChange(val) {
       this.arr = val.map((item) => item.id);
     },

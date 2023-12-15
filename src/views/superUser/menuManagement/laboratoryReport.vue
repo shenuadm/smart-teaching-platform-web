@@ -1,10 +1,10 @@
 <template>
   <div class="laboratory-report">
-    <div class="header">
-      <div class="title">实验报告标题:</div>
-      <el-input v-model="input" id="inputh" placeholder="请输入实验报告标题"></el-input>
-      <button class="but" @click="search">搜索</button>
-      <button class="but" @click="resetting">重置</button>
+    <div class="header mb-20">
+      <!-- <div class="title">实验报告标题:</div> -->
+      <!-- <el-input v-model="input" id="inputh" placeholder="请输入实验报告标题"></el-input> -->
+      <!-- <button class="but" @click="search">搜索</button> -->
+      <!-- <button class="but" @click="resetting">重置</button> -->
       <el-button type="primary" class="exper" @click="addreport">添加实验报告</el-button>
       <el-button type="primary" class="exper" @click="returnexper">返回实验</el-button>
       <el-button type="danger" class="exper" @click="delexper">批量删除</el-button>
@@ -221,24 +221,8 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
     },
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach((row) => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
-    },
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      this.multipleSelection.forEach((obj) => {
-        const id = obj.id;
-        this.arr.push(id);
-        const arrdel = [...new Set(this.arr)];
-        this.arr = arrdel;
-        console.log(arrdel);
-      });
+      this.arr = val.map((item) => item.id);
     },
     empty(obj) {
       for (const prop of Object.keys(obj)) {
@@ -268,9 +252,8 @@ export default {
 .header {
   position: relative;
   width: 100%;
-  height: 30px;
   display: flex;
-  top: -10px;
+  align-items: center;
 }
 .title {
   width: 120px;

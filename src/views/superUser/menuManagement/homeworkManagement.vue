@@ -1,6 +1,6 @@
 <template>
   <div class="homework-management">
-    <div class="header">
+    <div class="header mb-20">
       <el-button type="primary" size="small" @click="addexper">添加作业</el-button>
       <el-button type="danger" size="small" @click="delexper">批量删除</el-button>
       <el-button type="primary" size="small" @click="returnexper">返回章节</el-button>
@@ -41,7 +41,7 @@
       :before-close="closeDialog"
       :close-on-click-modal="false"
     >
-      <el-form :model="revise" :rules="rules" ref="formModel" label-width="80px">
+      <el-form :model="revise" :rules="rules" ref="formModel" label-width="80px" style="text-align: initial">
         <el-form-item label="作业名称" prop="name">
           <el-input placeholder="请输入作业名称" v-model="revise.name"> </el-input>
         </el-form-item>
@@ -177,9 +177,8 @@ export default {
 .header {
   width: 100%;
   height: 30px;
-  line-height: 30px;
   display: flex;
-  margin-bottom: 10px;
+  align-items: center;
 }
 
 .form-status {
