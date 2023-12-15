@@ -123,11 +123,6 @@ export default {
   data() {
     return {
       courseObj: {}, //课程信息
-      data: [], //存储树形数据,
-      defaultProps: {
-        children: 'children', //data当中的children的字段名
-        label: 'title', //data当中的label的字段名
-      },
       experimentId: '', //实验id
       teacherId: '', //教师课程id
       courseId: '', //课程的id

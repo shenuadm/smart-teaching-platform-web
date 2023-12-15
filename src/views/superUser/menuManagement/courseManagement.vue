@@ -1,12 +1,12 @@
 <template>
   <div class="course-manage">
-    <div class="header-course">
+    <div class="header-course mb-20">
       <div class="title">课程名称:</div>
       <el-input v-model="input" class="ml-10 mr-10 input-content" placeholder="请输入内容"></el-input>
       <el-button type="primary" size="small" @click="search">搜索</el-button>
       <el-button type="primary" size="small" @click="resetting">重置</el-button>
       <el-button type="primary" size="small" @click="addcourse">添加课程</el-button>
-      <el-button type="primary" size="small" @click="batchdel">删除</el-button>
+      <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
     </div>
     <el-table
       v-loading="$store.state.isLoading"
@@ -45,9 +45,9 @@
     </el-table>
     <div class="block">
       <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-size="pageSize"
+        @current-change="getData"
+        :current-page.sync="currentPage"
+        :page-size="10"
         layout="total, prev, pager, next, jumper"
         :total="count"
         :hide-on-single-page="count <= 10"
@@ -63,7 +63,7 @@
       :title="revise.id ? '修改课程' : '添加课程'"
       :close-on-click-modal="false"
     >
-      <el-form :model="revise" :rules="rules" ref="ruleForm" v-loading="$store.state.isLoading">
+      <el-form :model="revise" :rules="rules" ref="ruleForm" v-loading="$store.state.isLoading" label-width="80px">
         <el-form-item label="课程名称" prop="name">
           <el-input class="inputw" placeholder="请输入课程名称" v-model="revise.name"> </el-input>
         </el-form-item>
@@ -83,7 +83,7 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item label="状态" class="status">
+        <el-form-item label="状态" class="status" required>
           <el-radio-group v-model="revise.status">
             <el-radio :label="true">启用</el-radio>
             <el-radio :label="false">禁用</el-radio>
@@ -117,10 +117,8 @@ export default {
     return {
       dialogVisible: false,
       currentPage: 1,
-      pageSize: 10,
       count: 0,
       input: '',
-      imgSrc: '',
       revise: {
         name: '',
         title: '',
@@ -129,11 +127,8 @@ export default {
         status: false,
         picture: '',
       },
-      searchdata: [],
       tableData: [],
-      multipleSelection: [],
       arr: [],
-      id: '',
       imageUrl: '', //图片路径
       file: '', //图片文件
       rules: {
@@ -164,16 +159,12 @@ export default {
     addcourse() {
       this.empty(this.revise);
       this.imageUrl = '';
-      this.dialogVisible = !this.dialogVisible;
+      this.dialogVisible = true;
       this.revise.status = false;
     },
     //课程搜索
     search() {
-      if (!this.input) return;
-      this.searchdata = this.tableData.filter((item) => {
-        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
-        return item.title.includes(this.input);
-      });
+      if (!this.input) return this.$message.warning('请输入课程名称后再进行搜索');
     },
     //保存
     serve() {
@@ -189,51 +180,46 @@ export default {
           fd.append('file', this.file);
           if (!this.revise.id) {
             await addcourse(fd);
-            await this.break();
-            this.$message.success('添加课程成功');
             this.$message.success('添加课程成功');
           } else {
             fd.append('id', this.revise.id);
             await updatecourse(fd);
             this.$message.success('修改课程成功');
-            this.break();
           }
           this.dialogVisible = false;
+          this.getData();
         }
       });
     },
     //取消
     cancel() {
       this.$refs['ruleForm'].resetFields();
-      this.dialogVisible = !this.dialogVisible;
+      this.dialogVisible = false;
     },
     //删除
-    del(e) {
-      this.$confirm('此操作将永久删除该课程, 是否继续?', '提示', { type: 'warning' })
+    del(id) {
+      this.$confirm('您确认要删除该课程吗?', '提示', { type: 'warning' })
         .then(async () => {
-          await delcourse(e);
+          await delcourse(id);
           this.$message.success('删除课程成功');
-          this.break();
+          this.getData();
         })
         .catch(() => {});
     },
     //批量删除
     batchdel() {
-      this.$confirm('此操作将永久删除该您选中的课程, 是否继续?', '提示', {
-        type: 'warning',
-      })
+      if (this.arr.length === 0) return this.$message.warning('请选中课程后再进行删除');
+      this.$confirm('您确认要删除选中的课程吗?', '提示', { type: 'warning' })
         .then(async () => {
-          let data = this.arr;
-          await delcoursem(data);
+          await delcoursem(this.arr);
           this.$message.success('删除课程成功');
-          this.break();
+          this.getData();
         })
         .catch(() => {});
     },
     //重置按钮
     resetting() {
       this.input = '';
-      this.searchdata.length = 0;
     },
     //章节管理
     chapter(e) {
@@ -252,37 +238,11 @@ export default {
         obj[prop] = '';
       }
     },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      let data = {
-        limit: 10,
-        page: val,
-      };
-      course(data).then((res) => {
-        this.tableData = res.data;
-      });
-    },
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach((row) => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
-    },
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      this.multipleSelection.forEach((obj) => {
-        const id = obj.id;
-        this.arr.push(id);
-        const arrdel = [...new Set(this.arr)];
-        this.arr = arrdel;
-        console.log(arrdel);
-      });
+      this.arr = val.map((item) => item.id);
     },
-    async break() {
-      const res = await course();
+    async getData() {
+      const res = await course({ page: this.currentPage });
       this.count = res.count;
       this.tableData = res.data.map((item) => {
         return { ...item, picture: item.picture.split(',')[1] };
@@ -290,7 +250,7 @@ export default {
     },
   },
   mounted() {
-    this.break();
+    this.getData();
   },
 };
 </script>
@@ -313,64 +273,20 @@ export default {
   width: 150px;
 }
 .user {
-  /* background-color: #08b1e4; */
   color: #08b1e4;
 }
 .forbidden {
-  /* background-color: rgb(166, 2, 2); */
-  color: red;
-}
-.img {
-  width: 100px;
-  height: 80px;
-  margin-left: 30px;
+  color: #f56c6c;
 }
 .header-course {
   position: relative;
   width: 100%;
   height: 30px;
   display: flex;
+  align-items: center;
 }
-.title {
-  width: 80px;
-  line-height: 30px;
-}
-.but {
-  text-align: center;
-  line-height: 30px;
-  width: 40px !important;
-  /* background-color: #45c864; */
-  background-color: #409eff;
-  border: none;
-  margin-left: 5px;
-  border-radius: 5px;
-  color: white;
-}
-.buttow {
-  position: relative;
-  /* background-color: #05d1d1; */
-  background-color: #409eff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  margin-left: 10px;
-}
+
 .block {
-  margin-top: 20px;
-}
-.dec {
-  width: 105px;
-  height: 70px;
-  margin-top: 10px;
-  margin-left: 85px;
-  border: 1px solid #dcdfe6;
-  line-height: 70px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  background-color: #f5f7fa;
-  color: #909399;
-}
-.el-table {
   margin-top: 20px;
 }
 </style>
@@ -394,50 +310,13 @@ export default {
 .input-content .el-input__inner {
   height: 31px;
 }
-.course-manage .el-form-item {
-  display: flex;
-  align-items: center;
-}
-.course-manage .el-form-item .el-form-item__content {
-  flex: 1;
-}
-.course-manage .status .el-form-item__label,
-.course-manage .select-pic .el-form-item__label {
-  text-align: left;
-  padding-left: 10px;
-  width: 80px;
-}
-.course-manage .status,
-.course-manage .select-pic,
-.course-manage .form-btn {
+.course-manage .select-pic {
   margin-bottom: 0;
-}
-.course-manage .form-btn .el-form-item__content {
-  width: 100%;
-  padding: 0 100px;
-  display: flex;
-  justify-content: space-between;
-}
-.el-table th.el-table__cell > .cell,
-.el-table__body td.el-table__cell {
-  text-align: center;
 }
 .el-checkbox__inner {
   border: 1px solid #0944cd !important;
 }
-#inputh {
-  height: 30px !important;
-  width: 150px !important;
-}
 .el-input-group__prepend {
   width: 66px !important;
-}
-#inputwd {
-  width: 292px !important;
-  margin-left: 191px;
-  margin-top: -89px;
-  height: 72px !important;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
 }
 </style>
