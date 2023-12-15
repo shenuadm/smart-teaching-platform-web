@@ -72,6 +72,9 @@
             }}</template>
           </el-table-column>
           <el-table-column prop="updateTime" label="更新日期" width="200"> </el-table-column>
+          <el-table-column label="状态" width="100">
+            <template slot-scope="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
+          </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <el-button @click="checkDetails(scope.row)" type="text" size="middle">查看详情</el-button>
@@ -80,15 +83,16 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="text-center">
+        <!-- <div class="text-center">
           <el-pagination
             :current-page="currentPage"
             :page-size="10"
             layout="total, prev, pager, next, jumper"
             :total="tableData.length"
+            :hide-on-single-page="tableData.length <= 10"
           >
           </el-pagination>
-        </div>
+        </div> -->
       </template>
     </CourseList>
     <VmsList v-else ref="vmsList"></VmsList>
@@ -125,12 +129,12 @@
     </el-drawer>
     <!-- 教师端，点击查看详情，弹出学生的成绩详情 -->
     <el-dialog
-      title="成绩详情"
       :visible.sync="showDetailsVisible"
       width="30%"
       :before-close="handleCloseDetsils"
       :close-on-click-modal="false"
     >
+      <div slot="title" class="font-bold">成绩详情</div>
       <div class="stuScoreDetails" style="text-align: initial">
         <div class="stuInfo zh-fs-16">
           <div><span class="font-bold">学生姓名：</span>{{ stuForm.username }}</div>
@@ -177,10 +181,10 @@
           </el-form-item>
         </el-form>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel('stuForm')">取 消</el-button>
+      <template slot="footer">
+        <el-button type="info" @click="cancel('stuForm')">取 消</el-button>
         <el-button type="primary" @click="determine">确 定</el-button>
-      </span>
+      </template>
     </el-dialog>
   </div>
 </template>

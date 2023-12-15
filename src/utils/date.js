@@ -17,3 +17,15 @@ export const isAfterNow = (date) => {
  * @returns
  */
 export const dateToSecond = (date) => dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+
+/**
+ * 判断选择的时间是否是当天之前
+ * @param {*} date
+ * @returns 当前之前返回true
+ */
+export const isYearsterday = (date) => {
+  const nowDate = new Date();
+  const targetDate = new Date(date);
+  nowDate.setHours(0, 0, 0, 0);
+  return targetDate < nowDate;
+};

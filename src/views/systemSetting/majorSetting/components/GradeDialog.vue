@@ -15,10 +15,10 @@
         <el-switch v-model="formData.status" active-text="启用" inactive-text="禁用"></el-switch>
       </el-form-item>
     </el-form>
-    <div slot="footer">
+    <template slot="footer">
       <el-button type="primary" @click="submit">确认</el-button>
       <el-button type="cancel" @click="cancel">取消</el-button>
-    </div>
+    </template>
   </el-dialog>
 </template>
 

@@ -4,7 +4,7 @@
     <div :span="4" class="mr-20">
       <el-menu
         :default-active="$route.path"
-        class="el-menu-vertical-demo"
+        class="el-menu-vertical-demo text-center"
         router
         :collapse="false"
         style="width: 200px"

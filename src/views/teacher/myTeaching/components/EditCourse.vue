@@ -65,10 +65,10 @@
         </el-radio-group>
       </el-form-item>
     </el-form>
-    <div slot="footer">
+    <template slot="footer">
       <el-button type="primary" @click="submitForm">确认</el-button>
-      <el-button @click="closeDialog">取消</el-button>
-    </div>
+      <el-button type="info" @click="closeDialog">取消</el-button>
+    </template>
   </el-dialog>
 </template>
 
@@ -76,6 +76,7 @@
 import { teacherCourseStatus } from '@/constant/course.js';
 import { teaChooseCourseService, teaUpdateCourseService } from '@/api/course.js';
 import { getActiveLearService, getChooseLearService } from '@/api/systemSetting.js';
+// import { isYearsterday } from '@/utils/date';
 
 const defaultData = {
   selectDate: [], // 选课时间
@@ -95,11 +96,21 @@ export default {
         callback();
       }
     };
+    // const selectDate = (rule, value, callback) => {
+    //   if (isYearsterday(value[1])) {
+    //     callback(new Error('选课结束时间应在当天及之后'));
+    //   } else {
+    //     callback();
+    //   }
+    // };
     return {
       // 表单校验
       rules: {
         // name: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
-        selectDate: [{ required: true, message: '请选择您课程的选课时间', trigger: 'blur' }],
+        selectDate: [
+          { required: true, message: '请选择您课程的选课时间', trigger: 'blur' },
+          // { validator: selectDate, trigger: 'blur' },
+        ],
         maxTaker: [{ required: true, message: '请输入您的最多选课人数', trigger: 'blur' }],
         address: [{ required: true, message: '请输入您的授课地点', trigger: 'blur' }],
         date: [

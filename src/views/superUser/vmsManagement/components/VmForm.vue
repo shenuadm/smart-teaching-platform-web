@@ -10,11 +10,11 @@
       <el-form-item label="登录密码" prop="pwd">
         <el-input v-model="formData.pwd" placeholder="请输入虚拟机登录密码"></el-input>
       </el-form-item>
-      <el-form-item class="flex jstify-around">
-        <el-button type="primary" size="small" @click="submit">确认</el-button>
-        <el-button size="small" @click="cancel">取消</el-button>
-      </el-form-item>
     </el-form>
+    <template slot="footer">
+      <el-button type="primary" @click="submit">确认</el-button>
+      <el-button type="info" @click="cancel">取消</el-button>
+    </template>
   </el-dialog>
 </template>
 

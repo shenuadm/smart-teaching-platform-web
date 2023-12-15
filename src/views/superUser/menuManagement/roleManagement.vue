@@ -56,10 +56,10 @@
             <el-radio :label="true">不激活</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item class="form-btn">
-          <el-button type="primary" size="small" @click="submit">提交</el-button>
-          <el-button size="small" @click="cancal">取消</el-button>
-        </el-form-item>
+        <template slot="footer">
+          <el-button type="primary" @click="submit">提交</el-button>
+          <el-button type="info" @click="cancal">取消</el-button>
+        </template>
       </el-form>
     </el-dialog>
     <!-- 授权树 -->
@@ -81,9 +81,9 @@
           v-loading="$store.state.isLoading"
         >
         </el-tree>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" size="small" @click="confirmEmpower">确认授权</el-button>
-          <el-button type="info" size="small" @click="cancelEmpower">取消授权</el-button>
+        <div slot="footer">
+          <el-button type="primary" @click="confirmEmpower">确认授权</el-button>
+          <el-button type="info" @click="cancelEmpower">取消授权</el-button>
         </div>
       </el-dialog>
     </div>
@@ -266,11 +266,6 @@ export default {
 }
 .form-btn {
   display: flex;
-}
-.dialog-footer {
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-evenly;
 }
 </style>
 <style>

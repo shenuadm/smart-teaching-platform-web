@@ -5,7 +5,6 @@
     width="30%"
     :before-close="cancel"
     :close-on-click-modal="false"
-    center
   >
     <el-form :model="formData" ref="homeworkForm" :rules="rules" label-width="80px">
       <el-form-item label="作业名称" prop="name">
@@ -90,4 +89,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.el-dialog__header {
+  text-align: center;
+}
+</style>

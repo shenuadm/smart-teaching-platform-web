@@ -23,7 +23,7 @@
               <el-input type="password" v-model="loginForm.logPas" autocomplete="off" placeholder="请输入密码">
               </el-input>
             </el-form-item>
-            <el-form-item class="login-btn">
+            <el-form-item class="login-btn text-center">
               <el-button type="primary" @click="Login('loginForm')">登录</el-button>
             </el-form-item>
             <!-- <el-button type="" @click="www">退出</el-button> -->

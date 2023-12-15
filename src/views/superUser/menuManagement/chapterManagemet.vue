@@ -70,11 +70,11 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item class="form-btn">
-          <el-button size="small" @click="serve" type="primary">确 定</el-button>
-          <el-button size="small" @click="closeAddChapter">取 消</el-button>
-        </el-form-item>
       </el-form>
+      <template slot="footer">
+        <el-button @click="serve" type="primary">确定</el-button>
+        <el-button @click="closeAddChapter" type="info">取消</el-button>
+      </template>
     </el-dialog>
     <!-- 添加/修改节 -->
     <el-dialog
@@ -106,7 +106,7 @@
         <el-form-item :label="isAddJoint ? '上传课件' : '修改课件'" class="upload-file">
           <el-upload
             action=""
-            class="teststst"
+            class="upload"
             :auto-upload="false"
             :file-list="fileList"
             :limit="1"
@@ -119,11 +119,11 @@
           </el-upload>
           <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view">查看课件</a>
         </el-form-item>
-        <el-form-item class="form-btn">
-          <el-button size="small" @click="serveji" type="primary">确 定</el-button>
-          <el-button size="small" @click="closeAddChapter">取 消</el-button>
-        </el-form-item>
       </el-form>
+      <template slot="footer">
+        <el-button @click="serveji" type="primary">确定</el-button>
+        <el-button @click="closeAddChapter" type="info">取消</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -339,10 +339,9 @@ export default {
   margin-top: -89px;
   height: 72px !important;
 }
-/* 修改节弹框中表单项左侧间隙 */
-.chapter-dialog-form .el-form-item__content {
-  margin-left: 0 !important;
-}
+/* 修改节弹框中表单项左侧间隙 .chapter-dialog-form .el-form-item__content {
+    margin-left: 0 !important;
+  } */
 /* 文件上传表单左侧标题不缩小 */
 .upload-file .el-form-item__label {
   flex-shrink: 0;
@@ -357,48 +356,23 @@ export default {
 </style>
 <style scoped>
 .pdf-view {
-  /* margin-left: 50px; */
   color: #409eff;
+  text-align: initial;
 }
-.dec {
-  width: 105px;
-  height: 70px;
-  margin-top: 10px;
-  margin-left: 128px;
-  border: 1px solid #dcdfe6;
-  line-height: 70px;
-  color: #909399;
-}
-
 a {
   color: #606266;
 }
-.inputw {
-  width: 300px;
-  margin-top: 10px;
-}
-.inputwh {
-  width: 192px;
-  margin-top: -9px;
-  margin-left: 105px;
-}
+
 .header {
   display: flex;
   margin-bottom: 10px;
 }
-.custom-file-button {
-  position: absolute;
-  top: 324px;
-  left: 148px;
-  width: 105px;
-  height: 37px;
-  border: 1px solid #dcdfe6;
-  color: #909399;
-  line-height: 37px;
+
+.upload,
+.upload-file {
+  text-align: initial;
 }
-.custom-file-buttont {
-  top: 325px !important;
-}
+
 span {
   position: relative;
   left: -100px;

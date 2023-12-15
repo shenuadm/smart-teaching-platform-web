@@ -196,11 +196,7 @@ export default {
     },
     //删除
     del(e) {
-      this.$confirm('此操作将永久删除该实验报告, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
+      this.$confirm('您确认要删除该实验吗?', '提示', { type: 'warning' })
         .then(async () => {
           await reportdelete(e);
           await this.break();
@@ -210,11 +206,8 @@ export default {
     },
     //批量删除
     delexper() {
-      this.$confirm('此操作将永久删除这些实验报告, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
+      if (this.arr.length === 0) return this.$message.warning('请选择实验后再进行删除');
+      this.$confirm('您确认要删除选中的实验吗?', '提示', { type: 'warning' })
         .then(async () => {
           await mreportdelete(this.arr);
           await this.break();

@@ -46,7 +46,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer">
-      <el-button @click="cancel">取 消</el-button>
+      <el-button type="info" @click="cancel">取 消</el-button>
       <el-button type="primary" @click="submit">确 定</el-button>
     </span>
   </el-dialog>

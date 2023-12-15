@@ -59,11 +59,11 @@
         <el-form-item label="步骤内容" required prop="content">
           <Editor ref="editor"></Editor>
         </el-form-item>
-        <el-form-item>
-          <el-button @click="serve" type="primary">确认</el-button>
-          <el-button @click="cancel" type="info">取消</el-button>
-        </el-form-item>
       </el-form>
+      <template slot="footer">
+        <el-button @click="serve" type="primary">确认</el-button>
+        <el-button @click="cancel" type="info">取消</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>

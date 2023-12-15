@@ -282,11 +282,7 @@ export default {
     },
     // 删除
     delMenuDate(e) {
-      this.$confirm('此操作将永久删除该节点, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
+      this.$confirm('您确认要删除该节点吗?', '提示', { type: 'warning' })
         .then(async () => {
           await deldata(e);
           this.$message.success('删除节点成功');

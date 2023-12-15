@@ -54,11 +54,11 @@
         <el-form-item label="实验描述" prop="description">
           <el-input type="textarea" v-model="revise.description" placeholder="请输入实验描述" :rows="8"></el-input>
         </el-form-item>
-        <el-form-item class="form-btn">
-          <el-button size="small" type="primary" @click="serve">保 存</el-button>
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-        </el-form-item>
       </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="serve">保存</el-button>
+        <el-button @click="closeDialog" type="info">取消</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>

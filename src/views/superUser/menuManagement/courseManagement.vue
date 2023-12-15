@@ -101,11 +101,11 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item class="form-btn">
-          <el-button size="small" type="primary" @click="serve">确定</el-button>
-          <el-button size="small" @click="cancel">取消</el-button>
-        </el-form-item>
       </el-form>
+      <template slot="footer">
+        <el-button type="primary" @click="serve">确定</el-button>
+        <el-button type="info" @click="cancel">取消</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
