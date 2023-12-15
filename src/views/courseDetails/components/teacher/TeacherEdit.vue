@@ -1,6 +1,13 @@
 <template>
   <el-drawer title="评阅学生作业" :visible="visible" :with-header="false" size="50%" :before-close="cancel">
-    <el-form :model="formData" ref="formRef" :rules="rules" class="ml-20 tea-edit-stu-home" label-position="top">
+    <el-form
+      :model="formData"
+      ref="formRef"
+      :rules="rules"
+      class="ml-20 tea-edit-stu-home"
+      label-position="top"
+      v-loading="$store.state.isLoading"
+    >
       <el-form-item label="作业名称">
         <div>{{ formData.name }}</div>
       </el-form-item>

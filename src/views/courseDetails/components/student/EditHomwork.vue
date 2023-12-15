@@ -1,6 +1,12 @@
 <template>
   <el-drawer title="编辑作业" :with-header="false" :visible="visible" direction="rtl" :before-close="cancel" size="50%">
-    <el-form :model="formData" ref="homeworkForm" class="ml-20 student-edit-homework-form" label-position="top">
+    <el-form
+      :model="formData"
+      ref="homeworkForm"
+      class="ml-20 student-edit-homework-form"
+      label-position="top"
+      v-loading="$store.state.isLoading"
+    >
       <el-form-item label="作业名称">
         <div>{{ formData.name }}</div>
       </el-form-item>

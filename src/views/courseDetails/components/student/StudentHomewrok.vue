@@ -2,7 +2,7 @@
   <div class="student-homework-list">
     <el-tabs v-model="tabActive" @tab-click="handleTabs">
       <el-tab-pane label="布置的作业" name="0">
-        <el-table v-if="isPickup" :data="assignData" border>
+        <el-table v-if="isPickup" :data="assignData" border v-loading="$store.state.isLoading">
           <el-table-column label="作业名称" prop="name"></el-table-column>
           <el-table-column label="作业内容" prop="content"></el-table-column>
           <el-table-column label="截止时间" prop="endTime">
@@ -24,7 +24,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="自己的作业" name="1">
-        <el-table v-if="isMyHomework" :data="myHomeworkData" border>
+        <el-table v-if="isMyHomework" :data="myHomeworkData" border v-loading="$store.state.isLoading">
           <el-table-column label="作业名称" prop="name"></el-table-column>
           <el-table-column label="作业内容" prop="content"></el-table-column>
           <el-table-column label="截止时间" prop="endTime">

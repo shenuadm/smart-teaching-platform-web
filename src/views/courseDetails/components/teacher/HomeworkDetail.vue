@@ -6,7 +6,7 @@
     :before-close="cancel"
     :close-on-click-modal="false"
   >
-    <el-form :model="formData" ref="homeworkForm" :rules="rules" label-width="80px">
+    <el-form :model="formData" ref="homeworkForm" :rules="rules" label-width="80px" v-loading="$store.state.isLoading">
       <el-form-item label="作业名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入作业名称"></el-input>
       </el-form-item>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="tableData" border>
+    <el-table :data="tableData" border v-loading="$store.state.isLoading">
       <el-table-column label="作业名称" prop="name"></el-table-column>
       <el-table-column label="结果" prop="answer"></el-table-column>
       <el-table-column label="截止时间">
@@ -22,7 +22,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <TeacherEdit :visible.sync="visible" :editData="editData" @success="getData"></TeacherEdit>
+    <TeacherEdit :visible.sync="visible" :editData="editData" @success="changeStudentSuccess"></TeacherEdit>
   </div>
 </template>
 
@@ -41,6 +41,10 @@ export default {
     };
   },
   methods: {
+    changeStudentSuccess() {
+      this.getData();
+      this.$emit('success');
+    },
     async getData() {
       const res = await teaGetStuHomeworkService(this.articleId, this.$route.query.id, this.studentId);
       this.tableData = res.data;

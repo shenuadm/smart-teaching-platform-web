@@ -4,12 +4,22 @@
       <div class="student-homework-action">
         <el-button type="primary" @click="() => (studentHomeworkVisible = false)">返回</el-button>
       </div>
-      <StudentHomeworkTable :studentId="studentId" :articleId="articleId"></StudentHomeworkTable>
+      <StudentHomeworkTable
+        :studentId="studentId"
+        :articleId="articleId"
+        @success="getStudentData"
+      ></StudentHomeworkTable>
     </template>
     <template v-else>
       <el-tabs v-model="tabActive" @tab-click="handleTabs">
         <el-tab-pane label="系统作业" name="0">
-          <el-table v-if="isSystem" :data="systemData" border @selection-change="handleTable">
+          <el-table
+            v-if="isSystem"
+            :data="systemData"
+            border
+            @selection-change="handleTable"
+            v-loading="$store.state.isLoading"
+          >
             <el-table-column type="selection" width="50"> </el-table-column>
             <el-table-column label="作业名称" prop="name"></el-table-column>
             <el-table-column label="作业内容" prop="content"></el-table-column>
@@ -34,7 +44,7 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="布置的作业" name="1">
-          <el-table v-if="isAssign" :data="arrangeData" border>
+          <el-table v-if="isAssign" :data="arrangeData" border v-loading="$store.state.isLoading">
             <el-table-column label="作业名称" prop="name"></el-table-column>
             <el-table-column label="作业内容" prop="content"></el-table-column>
             <el-table-column label="类型" prop="custom">
@@ -52,7 +62,7 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="学生作业" name="2">
-          <el-table v-if="isSutdent" :data="studentData" border>
+          <el-table v-if="isSutdent" :data="studentData" border v-loading="$store.state.isLoading">
             <el-table-column label="账号" prop="account"></el-table-column>
             <el-table-column label="姓名" prop="username"></el-table-column>
             <el-table-column label="专业" prop="major"></el-table-column>
