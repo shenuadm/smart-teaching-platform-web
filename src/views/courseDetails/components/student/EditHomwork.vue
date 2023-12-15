@@ -15,7 +15,7 @@
           type="textarea"
           :rows="10"
         ></el-input>
-        <el-input v-else :value="formData.answer" type="textarea" autosize></el-input>
+        <el-input v-else :value="formData.answer" type="textarea" disabled autosize></el-input>
       </el-form-item>
       <template v-if="!isCanEdit">
         <el-form-item label="分数">
