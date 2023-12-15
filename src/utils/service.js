@@ -10,6 +10,17 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
+    // 判断是否该请求地址是否有缓存,有则拦截请求
+    if (store.state.apiMap.has(config.url)) return Promise.reject({ requestCacheError: '请勿重复点击' });
+    // 加入缓存
+    store.state.apiMap.set(
+      config.url,
+      setTimeout(() => {
+        store.state.apiMap.delete(config.url);
+      }, 1000),
+    );
+    console.log(config.url);
+    // 开启加载动画
     store.commit('setLoading', true);
     // 可在此处对请求进行处理，例如添加请求头、设置认证信息等
     return config;
@@ -54,7 +65,12 @@ service.interceptors.response.use(
   },
   (error) => {
     store.commit('setLoading', false);
-    Message.error('服务器已经关闭，请稍后在连接！');
+    console.log(error, 'error');
+    if (error.requestCacheError) {
+      // Message.error(error.requestCacheError);
+    } else {
+      Message.error('服务器已经关闭，请稍后在连接！');
+    }
     return Promise.reject(error);
   },
 );

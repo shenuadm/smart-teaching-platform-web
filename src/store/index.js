@@ -11,6 +11,7 @@ export default new Vuex.Store({
     roleUrl: [],
     isLoading: false, // 是否是加载状态
     unreadNotice: 0, // 未读通知数
+    apiMap: new Map([]), // 请求缓存
   },
   getters: {
     isStudent(state) {
@@ -37,6 +38,14 @@ export default new Vuex.Store({
     },
     setUnreadNotice(state, value) {
       state.unreadNotice = value;
+    },
+    setApiMap(state, value) {
+      state.apiMap.set(
+        value,
+        setTimeout(() => {
+          state.apiMap.delete(value);
+        }, 1000),
+      );
     },
   },
   actions: {

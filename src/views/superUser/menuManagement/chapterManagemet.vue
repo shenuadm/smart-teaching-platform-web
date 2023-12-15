@@ -294,9 +294,6 @@ export default {
         obj[prop] = '';
       }
     },
-    handleRowClick(row) {
-      console.log(row); // 输出所选行的数据
-    },
     // 获取数据
     break() {
       this.id = parseInt(this.$route.query.id);
@@ -334,9 +331,6 @@ export default {
 /* 限制文件上传的文件名显示长度 */
 .upload-file .el-upload-list__item {
   width: 20vw;
-}
-.chapter-managemet .chapter-management-tree .cell {
-  display: flex;
 }
 
 /* 章节标题靠左显示 */
