@@ -41,10 +41,12 @@ export default {
     };
   },
   methods: {
+    // 修改单一学生某个作业后，重新获取该学生作业表，并通知父组件更新学生列表中的平均成绩
     changeStudentSuccess() {
       this.getData();
       this.$emit('success');
     },
+    // 获取学生作业列表数据
     async getData() {
       const res = await teaGetStuHomeworkService(this.articleId, this.$route.query.id, this.studentId);
       this.tableData = res.data;

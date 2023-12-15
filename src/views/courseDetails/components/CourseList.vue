@@ -155,13 +155,17 @@ export default {
       if (node.children != null) {
         node.children.forEach((cnode, index) => {
           // 三级节点
-          cnode.treeType = 1;
+          // cnode.treeType = 1;
           if (cnode.children != null) {
             cnode.children.forEach((pcode, index) => {
               if (pcode.children == null) {
                 pcode.treeType = 2;
                 pcode.index = `实验${index + 1} `;
               }
+            });
+            cnode.children.push({
+              title: '查看课件',
+              treeType: 1,
             });
             cnode.children.push({
               title: '查看作业',
