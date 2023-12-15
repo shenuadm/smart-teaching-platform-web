@@ -338,6 +338,11 @@ export default {
 .chapter-managemet .chapter-management-tree .cell {
   display: flex;
 }
+
+/* 章节标题靠左显示 */
+.chapter-managemet .el-tooltip {
+  justify-content: initial;
+}
 </style>
 <style scoped>
 .pdf-view {
