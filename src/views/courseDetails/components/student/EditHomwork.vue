@@ -25,11 +25,13 @@
           <div>{{ formData.comments }}</div>
         </el-form-item>
       </template>
+      <template v-if="isCanEdit">
+        <el-form-item>
+          <el-button type="primary" @click="submit">保存</el-button>
+          <el-button type="info" @click="cancel">取消</el-button>
+        </el-form-item>
+      </template>
     </el-form>
-    <template slot="footer" v-if="isCanEdit">
-      <el-button type="primary" @click="submit">保存</el-button>
-      <el-button type="info" @click="cancel">取消</el-button>
-    </template>
   </el-drawer>
 </template>
 
