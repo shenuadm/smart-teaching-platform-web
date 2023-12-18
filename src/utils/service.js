@@ -35,7 +35,7 @@ service.interceptors.response.use(
   (response) => {
     // 可在此处对响应进行处理，例如处理错误码、格式化数据等
     // 响应成功返回数据
-    if (response.data.code == 0) {
+    if (response.data.code === 0) {
       store.commit('setLoading', false);
       return response.data;
     } else {
@@ -51,7 +51,7 @@ service.interceptors.response.use(
       }
       // 不成功弹出提示消息
       // 响应状态码为not——login时表示未登录，跳转登录页
-      if (response.data.code == 'not_login') {
+      if (response.data.code === 'not_login') {
         sessionStorage.clear();
         localStorage.clear();
         store.commit('setLoading', false);

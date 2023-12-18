@@ -167,6 +167,9 @@ img {
 .text-center {
   text-align: center;
 }
+.text-initial {
+  text-align: initial;
+}
 
 .flex {
   display: flex;

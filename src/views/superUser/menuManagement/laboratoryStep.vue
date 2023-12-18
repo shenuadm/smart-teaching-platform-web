@@ -1,15 +1,6 @@
 <template>
   <div class="Step">
     <div class="header mb-20">
-      <!-- <div class="title">步骤名称:</div>
-      <el-input
-        style="display: initial; width: initial"
-        v-model="input"
-        id="inputh"
-        placeholder="请输入步骤名称"
-      ></el-input>
-      <el-button type="primary" class="step" @click="search">搜索</el-button>
-      <el-button type="primary" class="step" @click="resetting">重置</el-button> -->
       <el-button type="primary" class="step" @click="addstep">添加步骤</el-button>
       <el-button type="primary" class="step" @click="returnstep">返回实验报告</el-button>
       <el-button type="danger" class="step" @click="delstep">批量删除</el-button>
@@ -35,131 +26,38 @@
       </el-table-column>
     </el-table>
     <!-- 添加/编辑实验 -->
-    <el-dialog
-      :close-on-click-modal="false"
-      :visible="dialogVisible"
-      width="40%"
-      :title="(revise.id ? '编辑' : '添加') + '实验步骤'">
-      <el-form
-        :model="revise"
-        class="step-form"
-        label-width="100px"
-        ref="stepForm"
-        :rules="stepRule"
-        v-loading="$store.state.isLoading">
-        <el-form-item label="步骤名称" prop="name">
-          <el-input v-model="revise.name" placeholder="请输入实验步骤名称"></el-input>
-        </el-form-item>
-        <el-form-item label="步骤顺序" prop="sort">
-          <el-input type="number" v-model.number="revise.sort" placeholder="请输入实验顺序"></el-input>
-        </el-form-item>
-        <el-form-item label="步骤内容" required prop="content">
-          <Editor ref="editor"></Editor>
-        </el-form-item>
-      </el-form>
-      <template slot="footer">
-        <el-button @click="serve" type="primary">确认</el-button>
-        <el-button @click="cancel" type="info">取消</el-button>
-      </template>
-    </el-dialog>
+    <LaboratoryStepEdit :visible.sync="visible" :id.sync="editId" @success="getData"></LaboratoryStepEdit>
   </div>
 </template>
 
 <script>
-import { step, addstep, updatestep, mdelstep, delstep, getdetail, experplan } from '@/utils/api';
-import Editor from '../../../components/editor.vue';
-
-const defaultData = {
-  description: '',
-  name: '',
-  content: '',
-  sort: '',
-  imageStorePath: '',
-};
+import { step, mdelstep, delstep } from '@/utils/api';
+import LaboratoryStepEdit from './components/LaboratoryStepEdit.vue';
 
 export default {
-  components: { Editor },
+  components: { LaboratoryStepEdit },
   data() {
-    const editContent = (rule, value, callback) => {
-      console.log(value, 'value', typeof value);
-      if (value === '<p><br></p>' || value == '') {
-        callback(new Error('请输入实验步骤内容'));
-      } else {
-        callback();
-      }
-    };
     return {
       tableData: [],
-      arr: [],
-      input: '',
-      dialogVisible: false,
-      imgSrc: '',
-      id: 0,
-      revise: { ...defaultData },
-      stepRule: {
-        name: [{ required: true, message: '请输入实验步骤名称', trigger: 'blur' }],
-        sort: [{ required: true, message: '请输入实验步骤顺序', trigger: 'blur' }],
-        content: [{ validator: editContent, trigger: 'blur' }],
-      },
+      arr: [], // 批量删除
+      visible: false,
+      editId: '',
     };
   },
   methods: {
-    //保存
-    async serve() {
-      this.revise.content = this.$refs.editor.html;
-      this.$refs['stepForm'].validate(async (validate) => {
-        if (validate) {
-          const data = {
-            name: this.revise.name,
-            content: this.$refs.editor.html,
-            sort: this.revise.sort,
-          };
-          if (!this.revise.id) {
-            data.experimentReportId = +this.id;
-            await addstep(data);
-            this.$message.success('添加实验步骤成功');
-          } else {
-            data.id = this.revise.id;
-            data.experimentReportId = this.revise.experimentReportId;
-            await updatestep(data);
-            this.$message.success('编辑实验步骤成功');
-          }
-          this.cancel();
-          await this.break();
-        }
-      });
-    },
-    //取消
-    cancel() {
-      this.dialogVisible = false;
-      this.$refs.editor.clearContent();
-      this.$refs['stepForm'].resetFields();
-    },
     //返回实验报告
     returnstep() {
       history.back();
     },
     //添加实验步骤
     addstep() {
-      this.revise = { ...defaultData };
-      this.dialogVisible = true;
+      this.editId = '';
+      this.visible = true;
     },
     //编辑实验步骤
     async editstep({ id }) {
-      this.dialogVisible = true;
-      const { data } = await experplan(id);
-      this.revise = data;
-      this.$nextTick(() => {
-        this.$refs.editor.html = data.content;
-        this.$refs.editor.setContent(data.content);
-        console.log(this.$refs.editor);
-      });
-    },
-    //搜索
-    search() {},
-    //重置
-    resetting() {
-      this.input = '';
+      this.editId = id;
+      this.visible = true;
     },
     //删除
     del(e) {
@@ -167,7 +65,7 @@ export default {
         .then(async () => {
           await delstep(e);
           this.$message.success('删除实验步骤成功');
-          this.break();
+          await this.getData();
         })
         .catch(() => {});
     },
@@ -177,7 +75,7 @@ export default {
         .then(async () => {
           await mdelstep(this.arr);
           this.$message.success('删除实验步骤成功');
-          this.break();
+          await this.getData();
         })
         .catch(() => {});
     },
@@ -185,14 +83,13 @@ export default {
       this.arr = val.map((item) => item.id);
     },
     // 获取数据
-    async break() {
-      const res = await step(this.id);
+    async getData() {
+      const res = await step(this.$route.query.id);
       this.tableData = res.data;
     },
   },
   mounted() {
-    this.id = this.$route.query.id;
-    this.break();
+    this.getData();
   },
 };
 </script>
@@ -203,9 +100,6 @@ export default {
   width: 100%;
   display: flex;
   align-items: center;
-}
-.title {
-  width: 110px;
 }
 .Step .step {
   position: relative;

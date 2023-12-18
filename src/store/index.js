@@ -20,15 +20,13 @@ export default new Vuex.Store({
   },
   mutations: {
     getUsername(state) {
-      const username = sessionStorage.getItem('username');
-      state.username = username;
+      state.username = sessionStorage.getItem('username');
     },
     getRolename(state) {
-      const rolename = sessionStorage.getItem('rolename');
-      state.rolename = rolename;
+      state.rolename = sessionStorage.getItem('rolename');
     },
-    updateUsername(state, newusername) {
-      state.username = newusername;
+    updateUsername(state, newVal) {
+      state.username = newVal;
     },
     setRoleUrl(state, newData) {
       state.roleUrl = newData;
@@ -44,7 +42,7 @@ export default new Vuex.Store({
         value,
         setTimeout(() => {
           state.apiMap.delete(value);
-        }, 1000),
+        }, 500),
       );
     },
   },
