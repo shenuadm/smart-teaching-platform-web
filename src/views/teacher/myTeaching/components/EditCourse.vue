@@ -5,8 +5,7 @@
     :visible="dialogVisible"
     :before-close="closeDialog"
     width="40%"
-    class="edit-course"
-  >
+    class="edit-course">
     <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px" v-loading="$store.state.isLoading">
       <!-- 课程名称 -->
       <el-form-item label="课程名称：" prop="name">
@@ -20,8 +19,7 @@
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        >
+          end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <!-- 最多选课人数 -->
@@ -39,8 +37,7 @@
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        >
+          end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <!-- 授课班级： -->
@@ -49,8 +46,7 @@
           :options="options"
           :props="props"
           v-model="editCourse.treeChoose"
-          placeholder="请选择您要授课的专业/年级/班级"
-        ></el-cascader>
+          placeholder="请选择您要授课的专业/年级/班级"></el-cascader>
       </el-form-item>
       <!-- 课程状态 -->
       <el-form-item label="课程状态：" prop="status">
@@ -96,13 +92,6 @@ export default {
         callback();
       }
     };
-    // const selectDate = (rule, value, callback) => {
-    //   if (isYearsterday(value[1])) {
-    //     callback(new Error('选课结束时间应在当天及之后'));
-    //   } else {
-    //     callback();
-    //   }
-    // };
     return {
       // 表单校验
       rules: {

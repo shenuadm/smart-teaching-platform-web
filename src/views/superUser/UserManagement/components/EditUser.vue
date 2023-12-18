@@ -4,8 +4,7 @@
     :title="(formData.userid ? '编辑' : '新增') + '用户'"
     :visible="visible"
     :before-close="cancel"
-    width="30%"
-  >
+    width="30%">
     <el-form ref="formRef" :model="formData" label-width="100px" :rules="rules" class="user-edit-form">
       <el-form-item label="账号：" prop="account">
         <el-input v-model="formData.account" placeholder="请输入用户账号"></el-input>
@@ -19,8 +18,7 @@
             v-for="item in userRole"
             :key="item.roleid"
             :label="item.nickname"
-            :value="item.roleid"
-          ></el-option>
+            :value="item.roleid"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="用户手机：" prop="phone">
@@ -28,19 +26,15 @@
           type="number"
           v-model.number="formData.phone"
           placeholder="请输入用户手机号"
-          maxlength="11"
-        ></el-input>
+          maxlength="11"></el-input>
       </el-form-item>
-      <!-- <template v-if="!formData.userid || formData.roleName === 'student'"> -->
       <template v-if="isStudent">
-        <el-form-item label="学生专业" prop="major">
-          <el-input v-model="formData.major" placeholder="请输入学生专业"></el-input>
-        </el-form-item>
-        <el-form-item label="学生年级" prop="grade">
-          <el-input v-model="formData.grade" placeholder="请输入学生年级"></el-input>
-        </el-form-item>
-        <el-form-item label="学生班级" prop="clazz">
-          <el-input v-model="formData.clazz" placeholder="请输入学生班级"></el-input>
+        <el-form-item label="学生班级" required prop="majorId">
+          <el-cascader
+            v-model="majorGradeClass"
+            :options="majorData"
+            @change="changeMajor"
+            :props="{ label: 'name', children: 'children', value: 'id' }"></el-cascader>
         </el-form-item>
       </template>
       <el-form-item label="是否激活：" prop="active" class="active">
@@ -60,15 +54,17 @@
 <script>
 import { addUser, reviseUser } from '@/utils/api';
 import { getUserRoleService } from '@/api/userManagement.js';
+import { getActiveLearService } from '@/api/systemSetting';
 
 const defaultData = {
   account: '',
   username: '',
   roleId: '',
   active: 0,
-  grade: '',
-  major: '',
-  clazz: '',
+  majorId: 0,
+  clazzId: 0,
+  gradeId: 0,
+  phone: '',
 };
 
 export default {
@@ -87,7 +83,7 @@ export default {
     const phone = (rule, value, callback) => {
       const regex = /^1[3-9]\d{9}$/;
       if (this.formData.phone === '' || this.formData.phone === null) return callback();
-      else if (!regex.test(value)) {
+      if (!regex.test(value)) {
         callback(new Error('请输入正确的手机号'));
       } else {
         callback();
@@ -100,12 +96,12 @@ export default {
         username: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
         roleId: [{ required: true, message: '请选择角色', trigger: 'blur' }],
         active: [{ required: true, message: '请选择激活状态', trigger: 'change' }],
-        grade: [{ validator: userRule, trigger: 'blur' }],
-        major: [{ validator: userRule, trigger: 'blur' }],
-        clazz: [{ validator: userRule, trigger: 'blur' }],
-        phone: [{ validator: phone, trigger: 'blur' }],
+        phone: [{ validator: phone, trigger: 'submit' }],
+        majorId: [{ validator: userRule }],
       },
       userRole: [], // 用户角色列表
+      majorData: [], // 专业年级班级列表
+      majorGradeClass: [], // 当前选择的专业年级班级
     };
   },
   methods: {
@@ -114,12 +110,16 @@ export default {
       this.$emit('update:visible', false);
     },
     submit() {
+      console.log(this.majorGradeClass);
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {
           if (this.userRole.find((item) => item.roleid === this.formData.roleId).rolename !== 'student') {
+            this.formData.majorId = '';
+            this.formData.clazzId = '';
+            this.formData.gradeId = '';
             this.formData.major = '';
             this.formData.clazz = '';
-            this.formData.grade = '';
+            this.formData.gradeId = '';
           }
           if (this.formData.userid) {
             await reviseUser(this.formData);
@@ -133,29 +133,55 @@ export default {
         }
       });
     },
+    // 获取用户角色列表
     async getUserRole() {
       const res = await getUserRoleService();
       this.userRole = res.data;
+    },
+    // 获取专业列表
+    async getMajorData() {
+      const { data } = await getActiveLearService();
+      this.majorData = data;
+    },
+    changeMajor(val) {
+      this.formData.majorId = val[0];
+      val[1] && (this.formData.gradeId = val[1]);
+      val[2] && (this.formData.clazzId = val[2]);
     },
   },
   computed: {
     isStudent() {
       // 用户当前没有选中
-      if (this.formData.roleId === '' || this.formData.roleId === null) {
-        return false;
-      } else if (this.userRole.find((item) => item.roleid === this.formData.roleId).rolename === 'student') {
-        return true;
-      }
-      return false;
+      if (this.formData.roleId === '' || this.formData.roleId === null) return false;
+      const item = this.userRole.find((item) => item.roleid === this.formData.roleId);
+      if (!item) return false;
+      return item.rolename === 'student';
     },
   },
   props: ['visible', 'editData'],
   watch: {
-    editData(newVal) {
+    editData() {
       if (this.userRole.length === 0) {
         this.getUserRole();
       }
-      this.formData = { ...defaultData, ...newVal };
+    },
+    isStudent(newVal) {
+      if (newVal && this.majorData.length === 0) {
+        this.getMajorData();
+      }
+    },
+    visible(newVal) {
+      if (newVal) {
+        this.userRole.length === 0 && this.getMajorData();
+        console.log(1);
+        console.log(this.editData);
+        const { majorId, gradeId, clazzId } = this.editData;
+        majorId && this.majorGradeClass.push(majorId);
+        gradeId && this.majorGradeClass.push(gradeId);
+        clazzId && this.majorGradeClass.push(clazzId);
+        console.log(this.majorGradeClass);
+        this.formData = { ...defaultData, ...this.editData };
+      }
     },
   },
 };

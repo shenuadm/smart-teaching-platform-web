@@ -13,6 +13,10 @@ export const updateLearService = ({ type = 1, parentId = 0, name, status, id, le
 
 export const deleteLearService = (id) => http.delete(`/dictionary/delete/${id}`);
 
+/**
+ * 获取专业树状结构
+ * @returns {*}
+ */
 export const getActiveLearService = () => http.get('/dictionary/treeActive/1');
 
 export const getChooseLearService = (teacherCourseId) =>

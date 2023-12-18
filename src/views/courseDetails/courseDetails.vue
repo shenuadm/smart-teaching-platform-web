@@ -10,36 +10,14 @@
       <img src="@/assets/addbg.jpg" alt="" />
       <div class="info-content ml-30">
         <div class="info-content-left">
-          <div class="info-name">
-            <div>
-              课程名称：<span>{{ courseObj.name }}</span>
-            </div>
-          </div>
-          <div>
-            <p>
-              选课开始日期：<span>{{ courseObj.selectStartDate }}</span>
-            </p>
-            <p>
-              授课开始日期：<span>{{ courseObj.startDate }}</span>
-            </p>
-            <p>
-              课程状态：<span ref="status">{{ courseObj.status }}</span>
-            </p>
-          </div>
+          <div>课程名称：{{ courseObj.name }}</div>
+          <div>授课开始日期：{{ courseObj.startDate }}</div>
+          <div>课程状态：{{ courseObj.status }}</div>
         </div>
-        <div class="info-content-right">
-          <p>
-            任课教师：<span>{{ courseObj.userName }}</span>
-          </p>
-          <p>
-            选课结束日期：<span>{{ courseObj.selectEndDate }}</span>
-          </p>
-          <p>
-            授课结束日期：<span>{{ courseObj.endDate }}</span>
-          </p>
-          <p>
-            授课地点：<span>{{ courseObj.address }}</span>
-          </p>
+        <div class="info-content-right flex">
+          <div>任课教师：{{ courseObj.userName }}</div>
+          <div>授课结束日期：{{ courseObj.endDate }}</div>
+          <div>授课地点：{{ courseObj.address }}</div>
         </div>
       </div>
     </div>
@@ -256,11 +234,12 @@ export default {
   display: flex;
   flex-direction: row;
 }
-.info-content p {
-  margin-top: 0 !important;
+.info-content > div {
+  justify-content: space-around;
 }
 .info-content-right {
   margin-left: 50px;
+  flex-direction: column;
 }
 
 .experiment-title > p {

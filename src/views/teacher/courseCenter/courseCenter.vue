@@ -2,14 +2,6 @@
   <div class="global-container" v-loading="$store.state.isLoading">
     <!-- 标题 -->
     <div class="person-title">课程中心</div>
-    <!-- 内容 -->
-    <!-- 搜索框 -->
-    <!-- <div class="course-search p-10">
-      <span>课程名称：</span>
-      <input v-model="search" placeholder="请输入课程名称" />
-      <el-button type="primary" size="small">搜索</el-button>
-      <el-button type="primary" size="small">重置</el-button>
-    </div> -->
     <!-- 每一项数据 -->
     <div class="course-center mt-20" v-if="courseList.length > 0">
       <div class="course-center-item mt-20" v-for="item in courseList" :key="item.id">
@@ -31,8 +23,7 @@
     <el-empty
       class="bg-white"
       description="暂无课程"
-      v-else-if="!$store.state.isLoading && courseList.length === 0"
-    ></el-empty>
+      v-else-if="!$store.state.isLoading && courseList.length === 0"></el-empty>
     <EditCourse :dialogVisible.sync="visible" @success="getData" :formData="chooseData"></EditCourse>
   </div>
 </template>
@@ -44,9 +35,8 @@ import EditCourse from '../myTeaching/components/EditCourse.vue';
 export default {
   data() {
     return {
-      courseList: [],
-      chooseData: {},
-      search: '', //搜索框
+      courseList: [], // 课程列表
+      chooseData: {}, // 当前选择的授课课程
       visible: false,
     };
   },
@@ -59,7 +49,6 @@ export default {
       const { id, name } = data;
       this.chooseData = { courseId: id, title: name };
       this.visible = true;
-      console.log(this.visible, 'visible');
     },
     // 获取数据
     async getData() {
@@ -96,31 +85,6 @@ export default {
   font-size: 20px;
   border-bottom: 2px solid #efefef;
   background-color: #fff;
-}
-/* 搜索框 */
-.course-search {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-}
-.course-search input {
-  padding: 0 10px;
-  height: 33px;
-  border: 1px solid #ccc;
-  outline: none;
-}
-.course-search input::placeholder {
-  color: #ccc;
-}
-.course-search button {
-  margin-left: 10px;
-  width: 82px;
-  height: 33px;
-  border: none;
-  border-radius: 3px;
-  transition: all 0.3s;
-  color: #fff;
-  cursor: pointer;
 }
 /* 每一项数据 */
 .course-center-item {
@@ -161,10 +125,6 @@ export default {
   text-overflow: ellipsis; /* 显示省略号 */
   font-size: 14px;
   cursor: pointer;
-}
-
-.course-search button {
-  box-shadow: 0 2px 5px #ccc;
 }
 </style>
 <style>

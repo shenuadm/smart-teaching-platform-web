@@ -12,14 +12,12 @@
       <div class="info-content ml-30">
         <div class="info-content-left">
           <div>课程名称：{{ courseObj.name }}</div>
-          <!-- <div>选课开始日期：{{ courseObj.selectStartDate }}</div> -->
           <div>授课开始日期：{{ courseObj.startDate }}</div>
           <div>课程状态：{{ courseObj.status }}</div>
-          <div>选课人数：{{ courseObj.selectedNumber }}</div>
+          <div>上课人数：{{ courseObj.selectedNumber }}</div>
         </div>
         <div class="info-content-right">
           <div>任课教师：{{ courseObj.userName }}</div>
-          <!-- <div>选课结束日期：{{ courseObj.selectEndDate }}</div> -->
           <div>授课结束日期：{{ courseObj.endDate }}</div>
           <div>授课地点：{{ courseObj.address }}</div>
           <div>
@@ -75,28 +73,18 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template #default="scope">
-              <el-button @click="checkDetails(scope.row)" type="text" size="middle">查看详情</el-button>
-              <el-button @click="checkReport(scope.row)" type="text" size="middle">查看报告</el-button>
-              <el-button @click="editContent(scope.row)" type="text" size="middle">编辑</el-button>
+              <el-button @click="checkDetails(scope.row)" type="text" size="medium">查看详情</el-button>
+              <el-button @click="checkReport(scope.row)" type="text" size="medium">查看报告</el-button>
+              <el-button @click="editContent(scope.row)" type="text" size="medium">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <!-- <div class="text-center">
-          <el-pagination
-            :current-page="currentPage"
-            :page-size="10"
-            layout="total, prev, pager, next, jumper"
-            :total="tableData.length"
-            :hide-on-single-page="tableData.length <= 10"
-          >
-          </el-pagination>
-        </div> -->
       </template>
     </CourseList>
     <VmsList v-else ref="vmsList"></VmsList>
     <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
     <el-drawer :visible.sync="showReportVisible" v-if="showReportVisible" direction="rtl" size="60%">
-      <template slot="title">
+      <template #title>
         <div class="zh-fs-20 font-bold">实验报告</div>
       </template>
       <div class="stuExperimentReport mx-20" style="text-align: initial">
@@ -177,7 +165,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <template slot="footer">
+      <template #footer>
         <el-button type="info" @click="cancel('stuForm')">取 消</el-button>
         <el-button type="primary" @click="determine">确 定</el-button>
       </template>
@@ -233,7 +221,7 @@ export default {
       let { id } = e.target.dataset;
       if (id === undefined) id = e.target.parentNode.dataset.id;
       if (id === undefined) return;
-      const item = this.experimentStep.find((item) => item.id == id);
+      const item = this.experimentStep.find((item) => item.id === +id);
       item.show = !item.show;
     },
     // 切换实验结果显示与隐藏
@@ -285,9 +273,6 @@ export default {
       this.stuForm = { result: row, step: res.data };
       this.showReportVisible = true;
     },
-    handleCloseReport() {
-      this.showReportVisible = false;
-    },
     // 编辑学生成绩、评语
     editContent(row) {
       this.showEditVisible = true;
@@ -312,11 +297,6 @@ export default {
           this.$message.success('修改学生成绩评语成功');
         }
       });
-    },
-    // 分页
-    // currentPage 改变时会触发
-    handleCurrentChange(val) {
-      this.currentPage = val;
     },
   },
   components: {
@@ -390,9 +370,6 @@ export default {
   margin-left: 50px;
   min-width: 200px;
 }
-#vt100 #scrollable {
-  overflow-y: hidden !important;
-}
 
 .stuInfo {
   display: flex;
@@ -401,24 +378,5 @@ export default {
 
 .exSteps > ul {
   padding: 0;
-}
-</style>
-<style>
-#courseDeatils .el-tabs__item {
-  background-color: #b2d5f1 !important;
-  color: #000 !important;
-  padding: 0 20px !important;
-  border-right: 1px solid #fff;
-}
-#courseDeatils .el-tabs__item.is-active {
-  background-color: #409eff !important;
-  color: #fff !important;
-}
-#courseDeatils .el-button--primary {
-  background-color: #4faff0;
-  border-color: #4faff0;
-}
-#courseDeatils .el-table .el-table__cell {
-  text-align: center;
 }
 </style>

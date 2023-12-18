@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="header-right ml-10">
-        <el-button type="" size="small" style="height: 34px" @click="downloadSample">下载模板</el-button>
+        <el-button size="small" style="height: 34px" @click="downloadSample">下载模板</el-button>
         <el-upload
           action=""
           :auto-upload="false"
@@ -36,6 +36,7 @@
           :limit="2"
           :on-change="uploadChange"
           ref="upload">
+          <!--          <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>-->
           <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>
           <el-button type="info" size="small" @click="confirmUpload" class="ml-10">确认上传</el-button>
         </el-upload>
@@ -64,10 +65,12 @@
       <el-table-column prop="grade" label="年级"></el-table-column>
       <el-table-column prop="clazz" label="班级" width="150"></el-table-column>
       <el-table-column label="操作" width="250" fixed="right">
-        <template #default="{ row }" v-if="row.roleName !== 'supper_admin'">
-          <el-button type="primary" size="mini" @click="reset(row)">重置密码</el-button>
-          <el-button type="primary" size="mini" @click="reviseuser(row)">编辑</el-button>
-          <el-button type="danger" size="mini" @click="deleteUser(row)">删除</el-button>
+        <template #default="scope">
+          <template v-if="scope.row.roleName !== 'supper_admin'">
+            <el-button type="primary" size="mini" @click="reset(scope.row)">重置密码</el-button>
+            <el-button type="primary" size="mini" @click="reviseuser(scope.row)">编辑</el-button>
+            <el-button type="danger" size="mini" @click="deleteUser(scope.row)">删除</el-button>
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -127,7 +130,7 @@ export default {
         return this.$message.warning('请输入查询信息后再查询');
       this.page = 1;
       this.searchInfo = JSON.parse(JSON.stringify(this.serch));
-      this.getData();
+      await this.getData();
     },
     // 重置表格数据
     resetting() {
@@ -142,7 +145,7 @@ export default {
         .then(async () => {
           await delUsers(this.multipleSelection);
           this.$message.success('删除用户成功');
-          this.getData();
+          await this.getData();
         })
         .catch(() => {});
     },
@@ -161,7 +164,7 @@ export default {
         .then(async () => {
           await delUser(userid);
           this.$message.success('删除用户成功');
-          this.getData();
+          await this.getData();
         })
         .catch(() => {});
     },
@@ -191,7 +194,7 @@ export default {
         this.$refs.upload.uploadFiles.pop();
         return this.$message.error('请上传excel类型文件');
       }
-      if (this.$refs.upload.uploadFiles.length == 2) {
+      if (this.$refs.upload.uploadFiles.length === 2) {
         this.$refs.upload.uploadFiles.shift();
       }
       this.file = file.raw;
@@ -203,7 +206,7 @@ export default {
       fd.append('file', this.file);
       await uploadStudentExcelService(fd);
       this.$message.success('上传用户信息成功');
-      this.getData();
+      await this.getData();
       this.$refs.upload.clearFiles();
     },
     async downloadSample() {
@@ -259,26 +262,5 @@ export default {
 }
 .block {
   margin-top: 20px;
-}
-.inputw {
-  width: 300px;
-}
-
-/* 弹出框的角色 */
-.roles {
-  width: 240px !important;
-}
-/* 弹出框的激活状态 */
-.active {
-  width: 230px !important;
-}
-</style>
-<style>
-#inputh {
-  height: 33px !important;
-  width: 150px !important;
-}
-.el-input-group__prepend {
-  width: 55px !important;
 }
 </style>
