@@ -23,13 +23,12 @@
       @selection-change="handleSelectionChange"
       class="custom-table"
       border
-      v-loading="$store.state.isLoading"
-    >
+      v-loading="$store.state.isLoading">
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="name" label="步骤名称" width="550"> </el-table-column>
       <el-table-column prop="sort" label="顺序" width="100"> </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button type="primary" size="small" @click="editstep(scope.row)">编辑</el-button>
           <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
         </template>
@@ -40,16 +39,14 @@
       :close-on-click-modal="false"
       :visible="dialogVisible"
       width="40%"
-      :title="(revise.id ? '编辑' : '添加') + '实验步骤'"
-    >
+      :title="(revise.id ? '编辑' : '添加') + '实验步骤'">
       <el-form
         :model="revise"
         class="step-form"
         label-width="100px"
         ref="stepForm"
         :rules="stepRule"
-        v-loading="$store.state.isLoading"
-      >
+        v-loading="$store.state.isLoading">
         <el-form-item label="步骤名称" prop="name">
           <el-input v-model="revise.name" placeholder="请输入实验步骤名称"></el-input>
         </el-form-item>

@@ -10,10 +10,10 @@
         <el-table-column prop="nickname" label="角色名称"> </el-table-column>
         <el-table-column prop="description" label="角色描述"> </el-table-column>
         <el-table-column label="状态">
-          <template slot-scope="{ row }">{{ row.status ? '未激活' : '激活' }}</template>
+          <template #default="{ row }">{{ row.status ? '未激活' : '激活' }}</template>
         </el-table-column>
         <el-table-column label="操作">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-button size="mini" type="primary" @click="empower(scope.$index, scope.row)">授权</el-button>
             <el-button
               size="mini"
@@ -38,8 +38,7 @@
       :title="isAddRole ? '添加角色' : '修改角色'"
       :visible.sync="aeditVisible"
       :before-close="cancal"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" v-loading="$store.state.isLoading">
         <el-form-item label="角色标识" prop="rolename">
           <el-input v-model="form.rolename" :disabled="form.roleid < 5"></el-input>
@@ -68,8 +67,7 @@
         title="授权"
         :visible.sync="empowerVisible"
         :before-close="cancelEmpower"
-        :close-on-click-modal="false"
-      >
+        :close-on-click-modal="false">
         <el-tree
           :data="treeData"
           ref="tree"
@@ -78,8 +76,7 @@
           :props="defaultProps"
           :default-checked-keys="checked"
           @check="check"
-          v-loading="$store.state.isLoading"
-        >
+          v-loading="$store.state.isLoading">
         </el-tree>
         <div slot="footer">
           <el-button type="primary" @click="confirmEmpower">确认授权</el-button>

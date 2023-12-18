@@ -18,15 +18,14 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      v-loading="$store.state.isLoading"
-    >
+      v-loading="$store.state.isLoading">
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="title" label="实验标题" width="200" show-overflow-tooltip> </el-table-column>
       <el-table-column prop="sort" label="排序" width="80"> </el-table-column>
       <el-table-column prop="classHour" label="课时" width="80"> </el-table-column>
       <el-table-column prop="description" label="实验描述" text-align: center> </el-table-column>
       <el-table-column label="操作" width="250">
-        <template slot-scope="{ row }">
+        <template #default="{ row }">
           <el-button type="primary" size="mini" class="opertea" @click="exreport(row)">实验报告</el-button>
           <el-button type="primary" size="mini" @click="editexrept(row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="del(row.id)">删除</el-button>
@@ -39,8 +38,7 @@
       :title="edit ? '添加实验' : '编辑实验'"
       :before-close="closeDialog"
       :close-on-click-modal="false"
-      v-loading="$store.state.isLoading"
-    >
+      v-loading="$store.state.isLoading">
       <el-form :model="revise" :rules="rules" ref="revise" label-width="80px" class="demo-ruleForm">
         <el-form-item label="实验标题" prop="title">
           <el-input v-model="revise.title" placeholder="请输入实验标题"></el-input>

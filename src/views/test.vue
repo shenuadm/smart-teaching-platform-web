@@ -5,10 +5,9 @@
       :data="tableData"
       style="width: 100%; margin-bottom: 20px"
       row-key="id"
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-    >
+      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template>
           <div>
             <p>额外的展开内容：</p>
             <p>随意添加一些内容来展示不同的展开数据，可以根据需要自定义内容。</p>
@@ -19,8 +18,13 @@
       <el-table-column prop="classHour" label="课时" width="80"> </el-table-column>
       <el-table-column prop="sort" label="排序" width="80"> </el-table-column>
       <el-table-column prop="fileUrl" label="课件" width="100" show-overflow-tooltip>
-        <template slot-scope="scope">
+        <template #default="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
+        </template>
+      </el-table-column>
+      <el-table-column label="测试">
+        <template #default="{ row }">
+          {{ row }}
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述" width="110" show-overflow-tooltip> </el-table-column>
@@ -31,10 +35,9 @@
       range-separator="至"
       start-placeholder="开始日期"
       end-placeholder="结束日期"
-      :change="chooseDate"
-    >
+      :change="chooseDate">
     </el-date-picker>
-    <el-button type="" @click="chooseDate">测试</el-button>
+    <el-button @click="chooseDate">测试</el-button>
   </div>
 </template>
 

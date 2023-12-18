@@ -35,8 +35,7 @@
           :file-list="fileList"
           :limit="2"
           :on-change="uploadChange"
-          ref="upload"
-        >
+          ref="upload">
           <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>
           <el-button type="info" size="small" @click="confirmUpload" class="ml-10">确认上传</el-button>
         </el-upload>
@@ -50,14 +49,13 @@
       v-loading="$store.state.isLoading"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      border
-    >
+      border>
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="account" label="账号" width="120"></el-table-column>
       <el-table-column prop="username" label="姓名" width="150"></el-table-column>
       <el-table-column prop="roleNickName" label="角色" width="120"></el-table-column>
       <el-table-column prop="active" label="是否激活" width="80">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div v-if="scope.row.active === 0" class="user">激活</div>
           <div v-else-if="scope.row.active === 1" class="forbidden">未激活</div>
         </template>
@@ -66,7 +64,7 @@
       <el-table-column prop="grade" label="年级"></el-table-column>
       <el-table-column prop="clazz" label="班级" width="150"></el-table-column>
       <el-table-column label="操作" width="250" fixed="right">
-        <template slot-scope="{ row }" v-if="row.roleName !== 'supper_admin'">
+        <template #default="{ row }" v-if="row.roleName !== 'supper_admin'">
           <el-button type="primary" size="mini" @click="reset(row)">重置密码</el-button>
           <el-button type="primary" size="mini" @click="reviseuser(row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="deleteUser(row)">删除</el-button>
@@ -80,8 +78,7 @@
         :page-size="10"
         layout="total, prev, pager, next, jumper"
         :total="count"
-        :hide-on-single-page="count <= 10"
-      >
+        :hide-on-single-page="count <= 10">
       </el-pagination>
     </div>
     <EditUser :visible.sync="visible" @success="getData" :editData="editData"></EditUser>

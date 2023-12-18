@@ -7,8 +7,7 @@
       <StudentHomeworkTable
         :studentId="studentId"
         :articleId="articleId"
-        @success="getStudentData"
-      ></StudentHomeworkTable>
+        @success="getStudentData"></StudentHomeworkTable>
     </template>
     <template v-else>
       <el-tabs v-model="tabActive" @tab-click="handleTabs">
@@ -18,20 +17,19 @@
             :data="systemData"
             border
             @selection-change="handleTable"
-            v-loading="$store.state.isLoading"
-          >
+            v-loading="$store.state.isLoading">
             <el-table-column type="selection" width="50"> </el-table-column>
             <el-table-column label="作业名称" prop="name"></el-table-column>
             <el-table-column label="作业内容" prop="content"></el-table-column>
             <el-table-column label="参考答案" prop="answer"></el-table-column>
             <el-table-column label="截止时间" prop="endTime">
-              <template slot-scope="{ row }">
+              <template #default="{ row }">
                 <el-date-picker v-model="row.endTime" type="datetime" :editable="false" placeholder="选择作业截止时间">
                 </el-date-picker>
               </template>
             </el-table-column>
             <el-table-column label="操作">
-              <template slot-scope="{ row }">
+              <template #default="{ row }">
                 <el-button
                   :type="row.assign ? 'info' : 'primary'"
                   :disabled="row.assign"
@@ -48,13 +46,13 @@
             <el-table-column label="作业名称" prop="name"></el-table-column>
             <el-table-column label="作业内容" prop="content"></el-table-column>
             <el-table-column label="类型" prop="custom">
-              <template slot-scope="{ row }">
+              <template #default="{ row }">
                 {{ row.custom ? '老师' : '系统' }}
               </template>
             </el-table-column>
             <el-table-column label="截止时间" prop="endTime"> </el-table-column>
             <el-table-column label="操作">
-              <template slot-scope="{ row }">
+              <template #default="{ row }">
                 <el-button type="primary" size="small" @click="homeworkDetail(row)">编辑</el-button>
                 <el-button type="danger" size="small" @click="deleteHomework(row)">删除</el-button>
               </template>
@@ -69,12 +67,12 @@
             <el-table-column label="年级" prop="grade"></el-table-column>
             <el-table-column label="班级" prop="clazz"></el-table-column>
             <el-table-column label="分数" prop="score">
-              <template slot-scope="{ row }">{{
+              <template #default="{ row }">{{
                 Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
               }}</template>
             </el-table-column>
             <el-table-column label="操作">
-              <template slot-scope="{ row }">
+              <template #default="{ row }">
                 <el-button type="primary" size="small" @click="studentHomeWork(row)">详情</el-button>
               </template>
             </el-table-column>
@@ -92,8 +90,7 @@
       :visible.sync="homeworkDetailVisible"
       :editData="editHomeworkData"
       :articleId="articleId"
-      @success="getSubmitData"
-    ></HomeworkDetail>
+      @success="getSubmitData"></HomeworkDetail>
   </div>
 </template>
 

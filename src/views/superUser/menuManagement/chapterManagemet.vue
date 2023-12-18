@@ -11,30 +11,28 @@
       :data="tableData"
       style="width: 100%; margin-bottom: 20px"
       row-key="id"
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-    >
+      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <el-table-column
         prop="name"
         label="章节标题"
         width="300"
         show-overflow-tooltip
-        class-name="chapter-management-tree"
-      >
-        <template slot-scope="{ row }">
+        class-name="chapter-management-tree">
+        <template #default="{ row }">
           <div class="ellipsis">{{ row.order }}：{{ row.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="classHour" label="课时" width="50"> </el-table-column>
       <el-table-column prop="sort" label="排序" width="50"> </el-table-column>
       <el-table-column prop="fileUrl" label="课件" width="100">
-        <template slot-scope="{ row }">
+        <template #default="{ row }">
           <!-- <a :href="row.fileUrl" v-if="row.fileUrl">查看课件</a> -->
           <a href="javascript:void(0);" @click="goPdf(row.fileUrl)" v-if="row.fileUrl">查看课件</a>
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述"> </el-table-column>
       <el-table-column label="操作" width="370px">
-        <template slot-scope="{ row }">
+        <template #default="{ row }">
           <el-button v-if="!row.pid" type="primary" @click="addchapterji(row.id)" size="mini">添加节</el-button>
           <el-button v-if="row.pid" type="primary" @click="homework(row.id)" size="mini">作业管理</el-button>
           <el-button v-if="row.pid" type="primary" @click="exper(row.id)" size="mini">实验管理</el-button>
@@ -49,8 +47,7 @@
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="closeAddChapter"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <el-form :model="revise" :rules="rules" ref="formRule" v-loading="$store.state.isLoading" label-width="100px">
         <el-form-item label="章节标题" prop="name">
           <el-input placeholder="请输入章节标题" v-model="revise.name"> </el-input>
@@ -66,8 +63,7 @@
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 4 }"
             placeholder="请输入课程描述"
-            v-model="revise.description"
-          >
+            v-model="revise.description">
           </el-input>
         </el-form-item>
       </el-form>
@@ -82,8 +78,7 @@
       :visible.sync="dialogVisibleji"
       width="40%"
       :before-close="closeAddJoint"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <el-form :model="revise" :rules="rules" ref="formRule" label-width="100px" class="chapter-dialog-form">
         <el-form-item label="章节标题" prop="name">
           <el-input placeholder="请输入章节标题" v-model="revise.name"></el-input>
@@ -99,8 +94,7 @@
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 4 }"
             placeholder="请输入课程描述"
-            v-model="revise.description"
-          >
+            v-model="revise.description">
           </el-input>
         </el-form-item>
         <el-form-item :label="isAddJoint ? '上传课件' : '修改课件'" class="upload-file">
@@ -110,8 +104,7 @@
             :auto-upload="false"
             :file-list="fileList"
             :limit="1"
-            :on-change="handlePreview"
-          >
+            :on-change="handlePreview">
             <el-button size="mini" type="primary" plain v-if="fileList.length === 0">{{
               isAddJoint ? '点击上传' : '点击修改'
             }}</el-button>

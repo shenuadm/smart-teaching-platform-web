@@ -4,20 +4,20 @@
       <el-table-column label="作业名称" prop="name"></el-table-column>
       <el-table-column label="结果" prop="answer"></el-table-column>
       <el-table-column label="截止时间">
-        <template slot-scope="{ row }">{{ dateToSecond(row.endTime) }}</template>
+        <template #default="{ row }">{{ dateToSecond(row.endTime) }}</template>
       </el-table-column>
       <el-table-column label="分数" prop="score">
-        <template slot-scope="{ row }">{{ Number.isInteger(row.score) ? row.score : row.score.toFixed(1) }}</template>
+        <template #default="{ row }">{{ Number.isInteger(row.score) ? row.score : row.score.toFixed(1) }}</template>
       </el-table-column>
       <el-table-column label="状态" width="100px">
-        <template slot-scope="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
+        <template #default="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
       </el-table-column>
       <el-table-column label="评语" prop="comments"></el-table-column>
       <el-table-column label="评阅时间">
-        <template slot-scope="{ row }">{{ row.commentTime === null ? '' : dateToSecond(row.commentTime) }}</template>
+        <template #default="{ row }">{{ row.commentTime === null ? '' : dateToSecond(row.commentTime) }}</template>
       </el-table-column>
       <el-table-column label="操作" width="100px">
-        <template slot-scope="{ row }">
+        <template #default="{ row }">
           <el-button type="primary" size="small" @click="editHomework(row)">编辑</el-button>
         </template>
       </el-table-column>

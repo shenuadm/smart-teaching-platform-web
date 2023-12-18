@@ -67,16 +67,14 @@
           <el-table-column align="center" prop="username" label="学生姓名" width="120"> </el-table-column>
           <el-table-column align="center" prop="title" label="实验标题"> </el-table-column>
           <el-table-column prop="score" label="成绩" width="80">
-            <template slot-scope="{ row }">{{
-              Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
-            }}</template>
+            <template #default="{ row }">{{ Number.isInteger(row.score) ? row.score : row.score.toFixed(1) }}</template>
           </el-table-column>
           <el-table-column prop="updateTime" label="更新日期" width="200"> </el-table-column>
           <el-table-column label="状态" width="100">
-            <template slot-scope="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
+            <template #default="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button @click="checkDetails(scope.row)" type="text" size="middle">查看详情</el-button>
               <el-button @click="checkReport(scope.row)" type="text" size="middle">查看报告</el-button>
               <el-button @click="editContent(scope.row)" type="text" size="middle">编辑</el-button>
@@ -132,8 +130,7 @@
       :visible.sync="showDetailsVisible"
       width="30%"
       :before-close="handleCloseDetsils"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <div slot="title" class="font-bold">成绩详情</div>
       <div class="stuScoreDetails" style="text-align: initial">
         <div class="stuInfo zh-fs-16">
@@ -163,8 +160,7 @@
       :visible.sync="showEditVisible"
       width="30%"
       :before-close="handleCloseEdit"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <div class="form" style="text-align: initial">
         <el-form ref="stuForm" :rules="editRule" :model="stuForm" label-width="80px" v-loading="$store.state.isLoading">
           <el-form-item label="学生姓名">

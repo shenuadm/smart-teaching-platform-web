@@ -6,12 +6,12 @@
           <el-table-column label="作业名称" prop="name"></el-table-column>
           <el-table-column label="作业内容" prop="content"></el-table-column>
           <el-table-column label="截止时间" prop="endTime">
-            <template slot-scope="{ row }">
+            <template #default="{ row }">
               {{ dateToSecond(row.endTime) }}
             </template>
           </el-table-column>
           <el-table-column label="操作">
-            <template slot-scope="{ row }">
+            <template #default="{ row }">
               <el-button
                 :type="row.status !== -1 ? 'info' : 'primary'"
                 :disabled="row.status !== -1"
@@ -28,22 +28,20 @@
           <el-table-column label="作业名称" prop="name"></el-table-column>
           <el-table-column label="作业内容" prop="content"></el-table-column>
           <el-table-column label="截止时间" prop="endTime">
-            <template slot-scope="{ row }">
+            <template #default="{ row }">
               {{ dateToSecond(row.endTime) }}
             </template>
           </el-table-column>
           <el-table-column label="作业状态">
-            <template slot-scope="{ row }">
+            <template #default="{ row }">
               {{ assignStatusConvent(row.status) }}
             </template>
           </el-table-column>
           <el-table-column label="分数" prop="score">
-            <template slot-scope="{ row }">{{
-              Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
-            }}</template>
+            <template #default="{ row }">{{ Number.isInteger(row.score) ? row.score : row.score.toFixed(1) }}</template>
           </el-table-column>
           <el-table-column label="操作">
-            <template slot-scope="{ row }">
+            <template #default="{ row }">
               <el-button type="primary" size="small" @click="editHomework(row)">{{
                 row.status === 0 ? '编辑' : '详情'
               }}</el-button>

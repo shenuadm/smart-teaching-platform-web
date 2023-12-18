@@ -13,7 +13,7 @@
       </el-col>
     </el-row>
     <el-tree :data="treeData" node-key="id" accordion :expand-on-click-node="false" :props="props" style="width: 100%">
-      <template slot-scope="{ node }">
+      <template #default="{ node }">
         <el-row class="tree-list">
           <el-col :span="10">{{ node.data.name }}</el-col>
           <el-col :span="4">{{ systemSettingStatus.get(+node.data.status) }}</el-col>

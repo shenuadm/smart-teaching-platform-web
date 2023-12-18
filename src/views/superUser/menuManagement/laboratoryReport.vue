@@ -18,20 +18,19 @@
       @selection-change="handleSelectionChange"
       class="custom-table"
       border
-      v-loading="$store.state.isLoading"
-    >
+      v-loading="$store.state.isLoading">
       <el-table-column align="center" type="selection" width="50"> </el-table-column>
       <el-table-column align="center" prop="title" label="实验报告标题" width="150"> </el-table-column>
       <el-table-column align="center" prop="classHour" label="课时" width="80"> </el-table-column>
       <el-table-column prop="description" label="实验描述" width="300" align="center"> </el-table-column>
       <!-- <el-table-column prop="fileUrl" label="实验课件" width="200"  align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl">查看课件</a>
         </template>
       </el-table-column> -->
       <el-table-column prop="result" label="实验结果"></el-table-column>
       <el-table-column label="操作" width="250">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button type="primary" size="small" class="opertea" @click="exreport(scope.row)">实验步骤</el-button>
           <el-button type="primary" size="small" @click="editexrept(scope.row)">编辑</el-button>
           <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
@@ -44,16 +43,14 @@
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="closeAddReport"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <el-form
         :model="revise"
         :rules="rules"
         label-width="110px"
         ref="formRule"
         label-position="right"
-        v-loading="$store.state.isLoading"
-      >
+        v-loading="$store.state.isLoading">
         <el-form-item label="实验报告标题" prop="title" class="laboratory-from">
           <el-input placeholder="请输入实验报告标题" v-model="revise.title"></el-input>
         </el-form-item>
@@ -65,16 +62,14 @@
             placeholder="请输入实验报告描述"
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 4 }"
-            v-model="revise.description"
-          ></el-input>
+            v-model="revise.description"></el-input>
         </el-form-item>
         <el-form-item label="实验报告结果" prop="result" class="laboratory-from">
           <el-input
             v-model="revise.result"
             placeholder="请输入实验报告结果"
             type="textarea"
-            :autosize="{ minRows: 4, maxRows: 4 }"
-          ></el-input>
+            :autosize="{ minRows: 4, maxRows: 4 }"></el-input>
         </el-form-item>
         <!-- <el-form-item :label="isAddReport ? '上传课件' : '修改课件'" class="upload-file laboratory-from">
           <el-upload action="" :auto-upload="false" :file-list="fileList" :limit="1" :on-change="handlePreview">

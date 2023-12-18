@@ -3,13 +3,13 @@
     <el-table :data="noticeData" border v-loading="$store.state.isLoading" style="width: 100%">
       <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="发布时间">
-        <template slot-scope="{ row }">{{ dateToSecond(row.publishTime) }}</template>
+        <template #default="{ row }">{{ dateToSecond(row.publishTime) }}</template>
       </el-table-column>
       <el-table-column label="状态">
-        <template slot-scope="{ row }">{{ row.read ? '已读' : '未读' }}</template>
+        <template #default="{ row }">{{ row.read ? '已读' : '未读' }}</template>
       </el-table-column>
       <el-table-column label="操作" width="100">
-        <template slot-scope="{ row }">
+        <template #default="{ row }">
           <el-button type="primary" size="small" @click="readDetail(row.id)">查看</el-button>
         </template>
       </el-table-column>

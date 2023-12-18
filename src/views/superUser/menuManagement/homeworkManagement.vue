@@ -14,20 +14,19 @@
       style="width: 100%"
       border
       @selection-change="handleSelectionChange"
-      class="custom-table"
-    >
+      class="custom-table">
       <el-table-column type="selection" width="50"></el-table-column>
       <el-table-column prop="name" label="作业名称" width="200"></el-table-column>
       <el-table-column prop="content" label="作业内容"></el-table-column>
       <el-table-column prop="answer" label="参考答案"></el-table-column>
       <el-table-column prop="status" label="状态" width="80">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div v-if="scope.row.status" class="user">启用</div>
           <div v-else class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
-        <template slot-scope="{ row }">
+        <template #default="{ row }">
           <el-button type="primary" size="mini" @click="editexrept(row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="del(row.id)">删除</el-button>
         </template>
@@ -39,8 +38,7 @@
       width="30%"
       :title="revise.id ? '修改作业' : '添加作业'"
       :before-close="closeDialog"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <el-form :model="revise" :rules="rules" ref="formModel" label-width="80px" style="text-align: initial">
         <el-form-item label="作业名称" prop="name">
           <el-input placeholder="请输入作业名称" v-model="revise.name"> </el-input>

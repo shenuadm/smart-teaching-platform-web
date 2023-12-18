@@ -16,27 +16,26 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
       class="custom-table"
-      border
-    >
+      border>
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="name" label="课程名称" width="120"> </el-table-column>
       <el-table-column prop="title" label="课程标题" width="160"> </el-table-column>
       <el-table-column prop="credit" label="学分" width="60"> </el-table-column>
       <el-table-column prop="description" label="课程描述"> </el-table-column>
       <el-table-column label="状态" width="80">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div v-if="scope.row.status" class="user">启用</div>
           <div v-else class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column label="封面图片" width="120" class-name="table-image">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-image v-if="scope.row.picture" :src="'data:image/png;base64,' + scope.row.picture" alt="图片未找到" />
           <el-image v-else alt="图片未找到" />
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button type="primary" size="mini" @click="chapter(scope.row)">章节管理</el-button>
           <el-button type="primary" size="mini" @click="updatacour(scope.row)">修改</el-button>
           <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
@@ -50,8 +49,7 @@
         :page-size="10"
         layout="total, prev, pager, next, jumper"
         :total="count"
-        :hide-on-single-page="count <= 10"
-      >
+        :hide-on-single-page="count <= 10">
       </el-pagination>
     </div>
     <!-- 新增课程 -->
@@ -61,8 +59,7 @@
       center
       :before-close="cancel"
       :title="revise.id ? '修改课程' : '添加课程'"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <el-form :model="revise" :rules="rules" ref="ruleForm" v-loading="$store.state.isLoading" label-width="80px">
         <el-form-item label="课程名称" prop="name">
           <el-input placeholder="请输入课程名称" v-model="revise.name"> </el-input>
@@ -78,8 +75,7 @@
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 4 }"
             placeholder="请输入课程描述"
-            v-model="revise.description"
-          >
+            v-model="revise.description">
           </el-input>
         </el-form-item>
         <el-form-item label="状态" class="status" required>
@@ -94,8 +90,7 @@
             action="#"
             :on-change="handleChange"
             :show-file-list="false"
-            :auto-upload="false"
-          >
+            :auto-upload="false">
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>

@@ -87,14 +87,12 @@
           <el-table-column prop="updateTime" label="提交时间" width="200"> </el-table-column>
           <el-table-column prop="title" label="实验标题" width="120"> </el-table-column>
           <el-table-column prop="result" label="实验结果">
-            <template slot-scope="{ row }">
+            <template #default="{ row }">
               <div v-html="row.result"></div>
             </template>
           </el-table-column>
           <el-table-column prop="score" label="实验成绩" width="80">
-            <template slot-scope="{ row }">{{
-              Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
-            }}</template>
+            <template #default="{ row }">{{ Number.isInteger(row.score) ? row.score : row.score.toFixed(1) }}</template>
           </el-table-column>
           <el-table-column prop="comment" label="评语"> </el-table-column>
           <el-table-column prop="createTime" label="创建时间" width="200"> </el-table-column>
@@ -105,8 +103,7 @@
             :current-page="currentPage"
             :page-size="10"
             layout="total, prev, pager, next, jumper"
-            :total="tableData.length"
-          >
+            :total="tableData.length">
           </el-pagination>
         </div>
       </template>

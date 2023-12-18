@@ -16,7 +16,7 @@
         <el-table-column label="登录账号" prop="username"></el-table-column>
         <el-table-column label="密码" prop="pwd"></el-table-column>
         <el-table-column label="操作" width="250">
-          <template slot-scope="{ row }">
+          <template #default="{ row }">
             <el-button size="small" type="primary" @click="editVm(row)">编辑</el-button>
             <el-button size="small" type="danger" @click="delVm(row)">删除</el-button>
           </template>
