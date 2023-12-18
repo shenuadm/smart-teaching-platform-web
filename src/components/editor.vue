@@ -1,14 +1,18 @@
 <template>
   <div style="border: 1px solid #ccc">
-    <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
+    <Toolbar
+      ref="toolbar"
+      style="border-bottom: 1px solid #ccc"
+      :editor="editor"
+      :defaultConfig="toolbarConfig"
+      :mode="mode" />
     <Editor
       ref="editor"
       style="height: 200px; overflow-y: hidden"
       v-model="html"
       :defaultConfig="editorConfig"
       :mode="mode"
-      @onCreated="onCreated"
-    />
+      @onCreated="onCreated" />
   </div>
 </template>
 <script>
@@ -23,7 +27,7 @@ export default Vue.extend({
       editor: null,
       html: '',
       toolbarConfig: {
-        excludeKeys: ['fullScreen'],
+        excludeKeys: ['fullScreen', 'uploadVideo', 'emotion', 'insertVideo', 'viewImageLink', 'insertLink'],
       },
       editorConfig: {
         placeholder: '请输入内容',
@@ -47,6 +51,8 @@ export default Vue.extend({
   methods: {
     onCreated(editor) {
       this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
+      // console.log(this.editor.getAllMenuKeys());
+      // console.log(this.editor);
     },
     // 获取html内容
     getEditorHtml() {
@@ -79,9 +85,9 @@ export default Vue.extend({
   },
   mounted() {
     // 模拟 ajax 请求，异步渲染编辑器
-    // setTimeout(() => {
-    //   this.html = "";
-    // }, 1500);
+    setTimeout(() => {
+      // this.html = "";
+    }, 1500);
   },
   beforeDestroy() {
     const editor = this.editor;

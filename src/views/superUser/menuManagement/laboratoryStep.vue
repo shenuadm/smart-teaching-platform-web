@@ -26,7 +26,7 @@
       </el-table-column>
     </el-table>
     <!-- 添加/编辑实验 -->
-    <LaboratoryStepEdit :visible.sync="visible" :id.sync="editId" @success="getData"></LaboratoryStepEdit>
+    <LaboratoryStepEdit :visible.sync="visible" :editId.sync="editId" @success="getData"></LaboratoryStepEdit>
   </div>
 </template>
 
@@ -107,42 +107,12 @@ export default {
   text-align: center;
   line-height: 7px;
 }
-.Step .dec {
-  width: 105px;
-  height: 40px;
-  margin-top: 10px;
-  margin-left: 54px;
-  border: 1px solid #dcdfe6;
-  line-height: 40px;
-  color: #909399;
-}
 .Step span {
   position: relative;
   left: -100px;
 }
-.Step .editor {
-  position: relative;
-  width: 444px;
-  top: 10px;
-  left: 84px;
-}
 .Step .box > p {
   text-align: left;
-}
-.Step .stepcontent {
-  width: 102px;
-  height: 38px;
-  border: 1px solid #dcdfe6;
-  color: #909399;
-  background-color: #f5f7fa;
-  text-align: center;
-  line-height: 38px;
-  margin-left: 84px;
-  margin-top: 10px;
-  border-radius: 4px;
-}
-.Step .inputshow {
-  display: none;
 }
 </style>
 <style>

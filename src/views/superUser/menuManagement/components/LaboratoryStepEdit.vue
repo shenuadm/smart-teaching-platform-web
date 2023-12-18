@@ -1,6 +1,6 @@
 <template>
   <el-drawer
-    :title="(id ? '编辑' : '添加') + '实验步骤'"
+    :title="(editId ? '编辑' : '添加') + '实验步骤'"
     :visible="visible"
     :dircetion="'rtl'"
     :wrapperClosable="false"
@@ -20,7 +20,7 @@
         <el-input type="number" v-model.number="formData.sort" placeholder="请输入实验顺序"></el-input>
       </el-form-item>
       <el-form-item label="步骤内容" class="dialog-form-editor" prop="content">
-        <Editor ref="editor"></Editor>
+        <Editor ref="editor" v-if="visible"></Editor>
       </el-form-item>
       <el-form-item>
         <el-button @click="serve" type="primary">确认</el-button>
@@ -65,12 +65,14 @@ export default {
   methods: {
     // 取消
     cancel() {
+      this.$emit('update:editId', '');
       this.$emit('update:visible', false);
       this.$refs.editor.clearContent();
       this.$refs.formRef.resetFields();
     },
     serve() {
       this.formData.content = this.$refs.editor.html;
+      console.log(this.$refs.editor.html, 1);
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {
           if (this.formData.id) {
@@ -82,19 +84,17 @@ export default {
           }
           this.cancel();
           this.$emit('success');
-          this.$emit('update:id', '');
         }
       });
     },
   },
-  props: ['visible', 'id'],
+  props: ['visible', 'editId'],
   watch: {
-    async id(newVal) {
+    async editId(newVal) {
       if (newVal) {
         const { data } = await experplan(newVal);
         this.formData = data;
         this.$nextTick(() => {
-          this.$refs.editor.html = data.content;
           this.$refs.editor.setContent(data.content);
         });
       } else {
