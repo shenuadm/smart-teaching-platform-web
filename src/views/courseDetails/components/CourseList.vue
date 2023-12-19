@@ -2,7 +2,15 @@
   <div class="course-list content-height bg-white radius-5" v-loading="$store.state.isLoading">
     <!-- 左侧树形结构 -->
     <div class="tree">
-      <el-tree :data="data" :props="defaultProps" accordion @node-click="handleNodeClick" :highlight-current="true">
+      <el-tree
+        :data="data"
+        :props="defaultProps"
+        accordion
+        @node-click="handleNodeClick"
+        :highlight-current="true"
+        :default-expanded-keys="defaultExpandedKeys"
+        ref="treeRef"
+        node-key="id">
         <span class="node-title" slot-scope="{ node }"> {{ node.data.index }}{{ node.data.title }} </span>
       </el-tree>
     </div>
@@ -32,7 +40,7 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="实验操作" name="second">
+          <el-tab-pane label="实验操作" v-if="!center" name="second">
             <div class="login-user">
               <label for="name">登录用户：</label>
               <input type="text" disabled v-model="form.name" />
@@ -46,7 +54,7 @@
               <a href="javascript:void(0)" ref="newWindow" class="bg-blue" @click="openNewWindow">访问实验机</a>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="实验报告" name="third" class="experiment-report">
+          <el-tab-pane label="实验报告" v-if="!center" name="third" class="experiment-report">
             <!-- <div class="experiment-title">
               <p>【实验模板】</p>
               <a href="javascript:void(0)" ref="downLoadTemplate" class="experiment-link text-blue"
@@ -56,7 +64,7 @@
             <!-- 实验内容插槽 -->
             <slot name="experiment"></slot>
           </el-tab-pane>
-          <el-tab-pane label="实验成绩" name="fourth">
+          <el-tab-pane label="实验成绩" v-if="!center" name="fourth">
             <!-- 实验成绩插槽 -->
             <slot name="experimentAchement"></slot>
           </el-tab-pane>
@@ -65,12 +73,10 @@
       <!-- 作业 -->
       <TeacherHomework
         v-else-if="showType === 3 && $store.state.rolename === 'teacher'"
-        :articleId="articleId"
-      ></TeacherHomework>
+        :articleId="articleId"></TeacherHomework>
       <StudentHomewrok
         v-else-if="showType === 3 && $store.state.rolename === 'student'"
-        :articleId="articleId"
-      ></StudentHomewrok>
+        :articleId="articleId"></StudentHomewrok>
     </div>
   </div>
 </template>
@@ -82,7 +88,7 @@ import TeacherHomework from './teacher/TeacherHomework.vue';
 import StudentHomewrok from './student/StudentHomewrok.vue';
 
 export default {
-  props: ['treeEvent', 'courseObj'],
+  props: ['treeEvent', 'courseObj', 'center'],
   data() {
     return {
       data: [], //存储树形数据,
@@ -100,12 +106,16 @@ export default {
       studentScore: '', //学生实验成绩
       showType: 0, // 展示的页面类型
       articleId: 0, // 节id
+      defaultExpandedKeys: [], // 默认展开的树节点
     };
   },
   methods: {
     // 树形控件的点击事件
     handleNodeClick({ treeType, id, fileUrl, articleId }) {
+      console.log(treeType, id, fileUrl, articleId, 'handleClick');
+      if (treeType === undefined) return;
       this.showType = treeType;
+      console.log(treeType, 'treeType');
       // 如果点击的是二级节点，显示课件
       this.$nextTick(async () => {
         if (treeType === 1) {
@@ -144,24 +154,18 @@ export default {
   },
   async created() {
     // 获取树形数据
-    const res = await getTreeData(this.$route.query.courseId);
-    const dataList = res.data;
-    // 添加每个节点添加index，方便填写序号,并添加对应的节点类型，0：一级节点，1：二级节点，3：三级节点-实验，4：三级节点-作业
+    const { data } = await getTreeData(this.$route.query.courseId);
+    // 添加每个节点添加index，方便填写序号,并添加对应的节点类型，0：一级节点，1：课件节点，3：实验节点，4：作业节点
     this.$store.commit('setLoading', true);
-    this.data = dataList.map((node, index) => {
-      // 一级节点
-      node.treeType = 0;
+    this.data = data.map((node, index) => {
       // 二级节点
       if (node.children != null) {
         node.children.forEach((cnode, index) => {
           // 三级节点
-          // cnode.treeType = 1;
           if (cnode.children != null) {
             cnode.children.forEach((pcode, index) => {
-              if (pcode.children == null) {
-                pcode.treeType = 2;
-                pcode.index = `实验${index + 1} `;
-              }
+              pcode.treeType = 2;
+              pcode.index = `实验${index + 1} `;
             });
             cnode.children.push({
               title: '查看课件',
@@ -176,9 +180,24 @@ export default {
           cnode.pid !== '' && (cnode.index = `第${index + 1}节 `);
         });
       }
-      node.pid == 0 && (node.index = `第${index + 1}章 `);
+      node.pid === 0 && (node.index = `第${index + 1}章 `);
       return node;
     });
+    // 添加默认展开的节点
+    const [chapter] = data;
+    this.defaultExpandedKeys.push(chapter.id);
+    if (chapter.children) {
+      const [joint] = chapter.children;
+      this.defaultExpandedKeys.push(joint.id);
+      if (joint.children) {
+        const [item] = joint.children;
+        this.defaultExpandedKeys.push(item.id);
+        // 触发默认展开的子节点的点击事件
+        this.handleNodeClick(item);
+        // 高亮默认展开的子节点
+        this.$nextTick(() => this.$refs.treeRef.setCurrentKey(item.id));
+      }
+    }
     this.$store.commit('setLoading', false);
   },
   components: {

@@ -10,25 +10,21 @@
     <div class="course-info bg-white radius-5 mb-20 p-10" v-loading="$store.state.isLoading">
       <img src="@/assets/addbg.jpg" alt="" />
       <div class="info-content ml-30">
-        <div class="info-content-left">
-          <div>课程名称：{{ courseObj.name }}</div>
-          <div>授课开始日期：{{ courseObj.startDate }}</div>
-          <div>课程状态：{{ courseObj.status }}</div>
-          <div>课程类型：{{ courseObj.type ? '必修' : '选修' }}</div>
-          <div>
-            <el-button type="primary" size="mini" @click="queryVms">{{
-              pageShow ? '查看实验虚拟机' : '查看课程章节'
-            }}</el-button>
-          </div>
+        <div>课程名称：{{ courseObj.name }}</div>
+        <div>任课教师：{{ courseObj.userName }}</div>
+        <div>授课开始日期：{{ courseObj.startDate }}</div>
+        <div>授课结束日期：{{ courseObj.endDate }}</div>
+        <div>课程类型：{{ courseObj.type ? '必修' : '选修' }}</div>
+        <div>课程状态：{{ courseObj.status }}</div>
+        <div>授课地点：{{ courseObj.address }}</div>
+        <div>上课人数：{{ courseObj.selectedNumber }}</div>
+        <div>
+          <el-button type="primary" size="mini" @click="queryVms">{{
+            pageShow ? '查看实验虚拟机' : '查看课程章节'
+          }}</el-button>
         </div>
-        <div class="info-content-right">
-          <div>任课教师：{{ courseObj.userName }}</div>
-          <div>授课结束日期：{{ courseObj.endDate }}</div>
-          <div>授课地点：{{ courseObj.address }}</div>
-          <div>上课人数：{{ courseObj.selectedNumber }}</div>
-          <div>
-            <el-button type="info" size="mini">查看学生列表</el-button>
-          </div>
+        <div>
+          <el-button type="info" size="mini">查看学生列表</el-button>
         </div>
       </div>
     </div>
@@ -344,14 +340,6 @@ export default {
   min-height: 200px;
   border: 1px solid #ddd;
 }
-.info-content > div {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.info-content-left {
-  min-width: 200px;
-}
 
 .content {
   margin: 20px auto;
@@ -369,15 +357,14 @@ export default {
   width: 200px;
 }
 .info-content {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: repeat(5, 1fr);
+  column-gap: 40px;
+  align-items: center;
 }
 .info-content div {
   margin-top: 0 !important;
-}
-.info-content-right {
-  margin-left: 50px;
-  min-width: 200px;
 }
 
 .stuInfo {

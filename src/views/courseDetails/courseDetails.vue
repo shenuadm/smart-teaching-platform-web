@@ -9,16 +9,13 @@
     <div class="course-info bg-white radius-5 mb-20 p-10">
       <img src="@/assets/addbg.jpg" alt="" />
       <div class="info-content ml-30">
-        <div class="info-content-left">
-          <div>课程名称：{{ courseObj.name }}</div>
-          <div>授课开始日期：{{ courseObj.startDate }}</div>
-          <div>课程状态：{{ courseObj.status }}</div>
-        </div>
-        <div class="info-content-right flex">
-          <div>任课教师：{{ courseObj.userName }}</div>
-          <div>授课结束日期：{{ courseObj.endDate }}</div>
-          <div>授课地点：{{ courseObj.address }}</div>
-        </div>
+        <div>课程名称：{{ courseObj.name }}</div>
+        <div>任课教师：{{ courseObj.userName }}</div>
+        <div>授课开始日期：{{ courseObj.startDate }}</div>
+        <div>授课结束日期：{{ courseObj.endDate }}</div>
+        <div>课程类型：{{ courseObj.type ? '必修' : '选修' }}</div>
+        <div>课程状态：{{ courseObj.status }}</div>
+        <div>授课地点：{{ courseObj.address }}</div>
       </div>
     </div>
 
@@ -203,14 +200,6 @@ export default {
 </script>
 
 <style scoped>
-.info-content-left {
-  display: flex;
-  flex-direction: column;
-}
-.info-content-left .info-name {
-  margin-bottom: 16px;
-}
-
 .content {
   margin: 20px auto;
 }
@@ -231,15 +220,14 @@ export default {
   height: 160px;
 }
 .info-content {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  column-gap: 40px;
+  align-items: center;
 }
 .info-content > div {
   justify-content: space-around;
-}
-.info-content-right {
-  margin-left: 50px;
-  flex-direction: column;
 }
 
 .experiment-title > p {
@@ -289,17 +277,5 @@ export default {
 }
 .already-submit {
   color: rgb(11, 139, 11);
-}
-</style>
-<style>
-#courseDeatils .el-tabs__item {
-  background-color: #b2d5f1 !important;
-  color: #000 !important;
-  padding: 0 20px !important;
-  border-right: 1px solid #fff;
-}
-#courseDeatils .el-tabs__item.is-active {
-  background-color: #409eff !important;
-  color: #fff !important;
 }
 </style>

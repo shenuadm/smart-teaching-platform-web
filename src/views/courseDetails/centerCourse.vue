@@ -15,7 +15,7 @@
       </div>
     </div>
     <!-- 实验内容 -->
-    <CourseList :teacherId="teacherId"> </CourseList>
+    <CourseList :teacherId="teacherId" :center="true"> </CourseList>
   </div>
 </template>
 
@@ -43,9 +43,6 @@ export default {
 </script>
 
 <style scoped>
-.info-content-left .info-name {
-  margin-bottom: 16px;
-}
 .content {
   margin: 20px auto;
 }
@@ -67,9 +64,5 @@ export default {
 }
 .info-content p {
   margin-top: 0 !important;
-}
-
-#vt100 #scrollable {
-  overflow-y: hidden !important;
 }
 </style>
