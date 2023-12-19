@@ -14,17 +14,20 @@
           <div>课程名称：{{ courseObj.name }}</div>
           <div>授课开始日期：{{ courseObj.startDate }}</div>
           <div>课程状态：{{ courseObj.status }}</div>
-          <div>上课人数：{{ courseObj.selectedNumber }}</div>
+          <div>课程类型：{{ courseObj.type ? '必修' : '选修' }}</div>
+          <div>
+            <el-button type="primary" size="mini" @click="queryVms">{{
+              pageShow ? '查看实验虚拟机' : '查看课程章节'
+            }}</el-button>
+          </div>
         </div>
         <div class="info-content-right">
           <div>任课教师：{{ courseObj.userName }}</div>
           <div>授课结束日期：{{ courseObj.endDate }}</div>
           <div>授课地点：{{ courseObj.address }}</div>
+          <div>上课人数：{{ courseObj.selectedNumber }}</div>
           <div>
-            <el-button type="primary" size="mini" @click="queryVms">{{
-              pageShow ? '查看实验虚拟机' : '查看课程章节'
-            }}</el-button>
-            <!-- <el-button type="info" size="mini" @click=""></el-button> -->
+            <el-button type="info" size="mini">查看学生列表</el-button>
           </div>
         </div>
       </div>
@@ -82,6 +85,9 @@
       </template>
     </CourseList>
     <VmsList v-else ref="vmsList"></VmsList>
+    <keep-alive v-show="false">
+      <StudentTable></StudentTable>
+    </keep-alive>
     <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
     <el-drawer :visible.sync="showReportVisible" v-if="showReportVisible" direction="rtl" size="60%">
       <template #title>
@@ -179,6 +185,7 @@ import { teachEditExperimentService, getExperimentStepService } from '@/api/expe
 import { courseStatusConvert } from '@/utils/status.js';
 import CourseList from './components/CourseList.vue';
 import VmsList from './components/VmsList.vue';
+import StudentTable from '@/views/courseDetails/components/teacher/StudentTable.vue';
 export default {
   data() {
     return {
@@ -207,6 +214,7 @@ export default {
         comment: [{ min: 0, max: 200, message: '实验评语长度最多为200个文字', trigger: 'blur' }],
         score: [{ required: true, message: '实验成绩不能为空', trigger: 'blur' }],
       },
+      viewShow: 0,
     };
   },
   async created() {
@@ -302,6 +310,7 @@ export default {
   components: {
     CourseList,
     VmsList,
+    StudentTable,
   },
 };
 </script>

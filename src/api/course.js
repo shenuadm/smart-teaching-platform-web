@@ -88,6 +88,15 @@ export const teaChooseCourseService = ({
 export const teaGetCourseCenterService = () => http.get('/course/listByTeacher');
 
 /**
+ * 老师获取课程学生列表
+ * @param teacherCourseId
+ * @param page
+ * @returns {*}
+ */
+export const teaGetCourseStuService = (teacherCourseId, page) =>
+  http.get(`/teacherCourse/listStu/${teacherCourseId}?`, { page });
+
+/**
  * 学生获取我的课程
  * @returns
  */

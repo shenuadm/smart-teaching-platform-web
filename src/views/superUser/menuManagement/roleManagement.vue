@@ -88,8 +88,9 @@
 </template>
 
 <script>
-import { roleManagement, ackEmpower, delRole, updateRole, addRole } from '@/utils/api.js';
+import { addRole, delRole, roleManagement, updateRole } from '@/utils/api.js';
 import { getEmpowerTreeService } from '@/api/role.js';
+
 export default {
   data() {
     return {
@@ -144,10 +145,8 @@ export default {
     },
     // 编辑
     edit(index, row) {
-      // 数据回显到表单
-      const data = JSON.parse(JSON.stringify(row));
       // 编辑表单显示
-      this.form = data;
+      this.form = JSON.parse(JSON.stringify(row));
       this.isAddRole = false;
       this.aeditVisible = true;
     },
@@ -161,29 +160,23 @@ export default {
     submit() {
       this.$refs['form'].validate(async (valid) => {
         if (valid) {
+          const message = this.isAddRole ? '添加' : '修改' + '角色成功';
           if (this.isAddRole) {
-            // 添加角色
             await addRole(this.form);
-            this.aeditVisible = false;
-            this.$message.success('添加角色成功');
-            this.getroleManagement();
           } else {
-            // 编辑角色
             await updateRole(this.form);
-            this.aeditVisible = false;
-            this.$message.success('修改角色成功');
-            this.getroleManagement();
           }
+          await this.getroleManagement();
+          this.$message.success(message);
+          this.aeditVisible = false;
         }
       });
     },
     // 授权
     async empower(index, row) {
-      // this.dialogLoading = true;
       this.empowerVisible = true;
       this.roleId = row.roleid;
       const res = await getEmpowerTreeService(this.roleId);
-      console.log(res.data, '授权');
       this.treeData = res.data;
       const getId = (data) => {
         data.forEach((item) => {
@@ -225,10 +218,10 @@ export default {
     async confirmEmpower() {
       // const data = {
       //   roleId: this.roleId,
-      //   permissionIds: this.checked.join(','),
+      //   permissionIds: this.test.join(','),
       // };
-      console.log(this.checked);
-      console.log(this.test);
+      // console.log(this.checked);
+      // console.log(this.test);
       // await ackEmpower(data);
       // this.$message.success('授权成功');
       // this.empowerVisible = false;

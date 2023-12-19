@@ -191,7 +191,7 @@ export default {
 .user-edit-form .el-form-item__content {
   text-align: initial;
 }
-// 弹框左侧内边距
+/*弹框左侧内边距 */
 .user-edit-dialog .el-dialog__body {
   padding-left: 0 !important;
 }

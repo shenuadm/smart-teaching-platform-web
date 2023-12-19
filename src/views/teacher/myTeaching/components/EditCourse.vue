@@ -63,6 +63,7 @@
             <el-radio
               v-for="item in teacherCourseStatus"
               :disabled="courseStatusCanChoose(item[0])"
+              v-if="!(editCourse.type && [2, 3].includes(item[0]))"
               :key="item[0]"
               :label="item[0]"
               >{{ item[1] }}</el-radio
