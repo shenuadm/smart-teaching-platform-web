@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>成都易腾创想智能科技有限公司</h1>   
+    <h1>成都易腾创想智能科技有限公司</h1>
     <ul>
       <li ><h2>公司介绍</h2></li>
       <li class="text"><span>成都易腾创想智能科技有限公司（简称：易腾创想）成立于2017年，是一家致力于智能软硬件系统设计、研发、集成交付服务和产教融合解决方案提供的科技公司。</span></li>
@@ -29,14 +29,14 @@
       </li>
       <li>
         <h4>用户使用手册</h4>
-        <a href="#">点击这里访问用户使用手册</a>
+        <a target="_blank" href="http://notice.itentbase.com/">点击这里访问用户使用手册</a>
       </li>
     </ul>
     <ul class="bottom" style="margin-left:200px">
       <li style="text-align: center;"><h4>公众号二维码</h4></li>
       <li><img src="@/assets/qrcode.png" alt="" class="qrcode" /></li>
-    </ul>   
-    </div>  
+    </ul>
+    </div>
   </div>
 </template>
 
@@ -80,7 +80,7 @@ span {
 .bottom {
   float: left;
   text-align: left;
-  
+
 }
 .qrcode {
   width: 200px;

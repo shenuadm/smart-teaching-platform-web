@@ -210,7 +210,8 @@ export default {
       this.$refs.upload.clearFiles();
     },
     async downloadSample() {
-      await downloadExceleSmpleService();
+      // await downloadExceleSmpleService();
+      location.href = 'http://localhost/export/用户信息导入模版表.xlsx';
     },
   },
   components: {
