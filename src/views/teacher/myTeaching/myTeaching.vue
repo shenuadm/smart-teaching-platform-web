@@ -2,11 +2,7 @@
   <div v-loading="$store.state.isLoading" class="myTeaching global-container">
     <!-- 标题 -->
     <div class="person-title">我的授课</div>
-    <el-tabs
-      v-model="activeCourseType"
-      class="mt-20"
-      @tab-click="courseTypeChange"
-    >
+    <el-tabs v-model="activeCourseType" class="mt-20" @tab-click="courseTypeChange">
       <el-tab-pane label="所有课程" name="-1"></el-tab-pane>
       <el-tab-pane label="选课中" name="2"></el-tab-pane>
       <el-tab-pane label="授课中" name="4"></el-tab-pane>
@@ -16,24 +12,15 @@
       <div class="my-teaching">
         <div v-for="item in myTeachList" :key="item.id">
           <div class="my-teaching-item p-10 mt-20 mb-20">
-            <img
-              :src="'data:image/png;base64,' + item.picture"
-              alt="图片加载失败"
-            />
+            <img :src="'data:image/png;base64,' + item.picture" alt="图片加载失败" />
             <div class="my-teaching-text">
               <div class="title">{{ item.name }}</div>
-              <div class="status">
-                课程状态：{{ courseStatusConvert(item.status) }}
-              </div>
+              <div class="status">课程状态：{{ courseStatusConvert(item.status) }}</div>
               <div class="created-date">创建日期：{{ item.createTime }}</div>
             </div>
             <div class="my-teaching-btn">
-              <el-button type="primary" @click="editCourseClick(item)"
-                >编辑课程
-              </el-button>
-              <el-button type="primary" @click="lookDetails(item)"
-                >查看详情
-              </el-button>
+              <el-button type="primary" @click="editCourseClick(item)">编辑课程 </el-button>
+              <el-button type="primary" @click="lookDetails(item)">查看详情 </el-button>
               <!-- <el-button type="primary" @click="lookScore(item)">查看成绩</el-button> -->
             </div>
           </div>
@@ -43,28 +30,18 @@
               <el-button class="mb-20" type="primary">下载成绩列表</el-button>
             </div>
             <el-table :data="scoreTable" border style="width: 100%">
-              <el-table-column label="学生姓名" prop="stuName" width="120">
-              </el-table-column>
-              <el-table-column label="实验一" prop="stuScoreFirst">
-              </el-table-column>
-              <el-table-column label="实验二" prop="stuScoreSecond">
-              </el-table-column>
-              <el-table-column label="实验三" prop="stuScoreThird">
-              </el-table-column>
-              <el-table-column label="总分" prop="totalScore">
-              </el-table-column>
-              <el-table-column label="平均分" prop="averageScore">
-              </el-table-column>
+              <el-table-column label="学生姓名" prop="stuName" width="120"> </el-table-column>
+              <el-table-column label="实验一" prop="stuScoreFirst"> </el-table-column>
+              <el-table-column label="实验二" prop="stuScoreSecond"> </el-table-column>
+              <el-table-column label="实验三" prop="stuScoreThird"> </el-table-column>
+              <el-table-column label="总分" prop="totalScore"> </el-table-column>
+              <el-table-column label="平均分" prop="averageScore"> </el-table-column>
             </el-table>
           </div>
         </div>
       </div>
     </template>
-    <el-empty
-      v-else
-      class="bg-white"
-      description="您还没有选择的授课"
-    ></el-empty>
+    <el-empty v-else class="bg-white" description="您还没有选择的授课"></el-empty>
 
     <el-pagination
       :current-page="page"
@@ -72,29 +49,24 @@
       :page-size="10"
       :total="total"
       layout="total, prev, pager, next, jumper"
-      @current-change="getCourseData"
-    >
+      @current-change="getCourseData">
     </el-pagination>
     <!-- 编辑框 -->
-    <EditCourse
-      :dialogVisible.sync="dialogVisible"
-      :formData="editCourse"
-      @success="getCourseData"
-    ></EditCourse>
+    <EditCourse :dialogVisible.sync="dialogVisible" :formData="editCourse" @success="getCourseData"></EditCourse>
   </div>
 </template>
 
 <script>
-import { teacherCourseStatus } from "@/constant/course.js";
-import { getMyTeachingService } from "@/api/course.js";
-import EditCourse from "./components/EditCourse.vue";
+import { teacherCourseStatus } from '@/constant/course.js';
+import { getMyTeachingService } from '@/api/course.js';
+import EditCourse from './components/EditCourse.vue';
 
 export default {
   data() {
     return {
       page: 1, // 页数
       total: 0, // 总数
-      activeCourseType: "-1", // 选择的课程类型
+      activeCourseType: '-1', // 选择的课程类型
       myTeachList: [], //我的授课的全部课程
       courseForm: {}, //课程的详细信息
       showScore: false, //是否显示成绩列表
@@ -102,7 +74,7 @@ export default {
         //成绩列表
         {
           id: 1,
-          stuName: "张三",
+          stuName: '张三',
           stuScoreFirst: 98,
           stuScoreSecond: 90,
           stuScoreThird: 95,
@@ -111,7 +83,7 @@ export default {
         },
         {
           id: 2,
-          stuName: "李四",
+          stuName: '李四',
           stuScoreFirst: 90,
           stuScoreSecond: 85,
           stuScoreThird: 93,
@@ -136,12 +108,11 @@ export default {
     async getCourseData() {
       const data = { page: this.page };
       // 如果当前选中类型不是所有授课，则添加搜搜条件
-      this.activeCourseType !== "-1" &&
-        Object.assign(data, { status: this.activeCourseType });
+      this.activeCourseType !== '-1' && Object.assign(data, { status: this.activeCourseType });
       const res = await getMyTeachingService(data);
       this.total = res.count;
       this.myTeachList = res.data.map((item) => {
-        return { ...item, picture: item.picture.split(",")[1] };
+        return { ...item, picture: item.picture.split(',')[1] };
       });
     },
     // 编辑课程
@@ -151,15 +122,19 @@ export default {
         date: [item.startDate, item.endDate],
         selectDate: [item.selectStartDate, item.selectEndDate],
       };
+      // 如果是必修课，将其选课时间改为空字符串，防止编辑弹框出现选课时间为元年
+      if (item.selectStartDate === null) {
+        this.editCourse.selectDate = ['', ''];
+      }
       this.dialogVisible = true;
     },
     // 查看课程详情
     lookDetails({ hostName, hostPwd, courseId, id }) {
-      localStorage.setItem("hostName", hostName); //登录名
-      localStorage.setItem("hostPwd", hostPwd); //登录密码
+      localStorage.setItem('hostName', hostName); //登录名
+      localStorage.setItem('hostPwd', hostPwd); //登录密码
       this.$router.push({
-        path: "/teacherCourse",
-        name: "teacherCourse",
+        path: '/teacherCourse',
+        name: 'teacherCourse',
         query: { courseId, id },
       });
     },

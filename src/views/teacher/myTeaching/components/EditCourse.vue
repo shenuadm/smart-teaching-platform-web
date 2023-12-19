@@ -13,7 +13,7 @@
         <el-input v-else disabled v-model="editCourse.title" placeholder="课程名称"></el-input>
       </el-form-item>
       <el-form-item label="课程类型：" prop="type">
-        <el-radio-group v-model="editCourse.type">
+        <el-radio-group v-model="editCourse.type" :disabled="courseStatus >= 4">
           <el-radio :label="0">选修</el-radio>
           <el-radio :label="1">必修</el-radio>
         </el-radio-group>
@@ -129,44 +129,55 @@ export default {
         children: 'children', // 子级属性名
         value: 'id', // 绑定的属性值
       },
+      courseStatus: 0,
     };
   },
   props: ['dialogVisible', 'formData'],
   methods: {
     //保存修改
     submitForm() {
-      this.$refs['ruleForm'].validate(async (valid) => {
+      this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          const { date, selectDate, treeChoose } = this.editCourse;
-          // 获取选中的级联id
-          let selectedIds = [];
-          treeChoose.forEach((item) => (selectedIds = [...selectedIds, ...item]));
-          selectedIds = Array.from(new Set([...selectedIds]));
-          const data = {
-            ...this.editCourse,
-            startDate: date[0],
-            endDate: date[1],
-            selectStartDate: selectDate[0],
-            selectEndDate: selectDate[1],
-            selectedIds,
-          };
-          // 必修课，删除选修相关数据
-          if (this.editCourse.type === 1) {
-            delete data.selectStartDate;
-            delete data.selectEndDate;
-            delete data.maxTaker;
-          }
-          if (data.id) {
-            await teaUpdateCourseService(data);
-            this.$message.success('编辑课程成功');
+          if (this.editCourse.status === 4) {
+            this.$confirm('将课程状态修改为授课中后，就不能修改为授课中之间的课程状态，您确认要修改吗?', '提示', {
+              type: 'warning',
+            })
+              .then(() => this.publish())
+              .catch(() => {});
           } else {
-            await teaChooseCourseService(data);
-            this.$message.success('选择授课成功');
+            this.publish();
           }
-          this.closeDialog();
-          this.$emit('success');
         }
       });
+    },
+    // 提交服务器
+    async publish() {
+      const { date, selectDate, treeChoose } = this.editCourse;
+      // 获取选中的级联id
+      const selectedIds = Array.from(new Set([...treeChoose.reduce((acc, item) => acc.concat(item), [])]));
+      const data = {
+        ...this.editCourse,
+        startDate: date[0],
+        endDate: date[1],
+        selectStartDate: selectDate[0],
+        selectEndDate: selectDate[1],
+        selectedIds,
+      };
+      const successMessage = data.id ? '编辑课程成功' : '选择授课成功';
+      // 必修课，删除选修相关数据
+      if (data.type === 1) {
+        delete data.selectStartDate;
+        delete data.selectEndDate;
+        delete data.maxTaker;
+      }
+      if (data.id) {
+        await teaUpdateCourseService(data);
+      } else {
+        await teaChooseCourseService(data);
+      }
+      this.$message.success(successMessage);
+      this.closeDialog();
+      this.$emit('success');
     },
     // 关闭弹框
     closeDialog() {
@@ -209,38 +220,21 @@ export default {
     },
     // 判断课程状态是否可选
     courseStatusCanChoose(status) {
-      return status < 4 && this.editCourse.status >= 4;
-    },
-    async test() {
-      if (!this.formData.id) {
-        const { data } = await getActiveLearService();
-        this.options = data;
-      } else {
-        const res = await getChooseLearService(this.formData.id);
-        const buildArrangement = (item) => {
-          if (item.checked) {
-            if (item.children === null) {
-              return [[item.id]];
-            } else {
-              const children = item.children || [];
-              return children.filter((clazz) => clazz.checked).map((clazz) => [item.id.clazz.id]);
-            }
-          }
-        };
-      }
+      return status < 4 && this.courseStatus >= 4;
     },
   },
   watch: {
     // 传入的数据变化，赋值给编辑表单
     formData(newVal) {
-      // 获取编辑的选择班级信息
       if (newVal.id) {
+        // 获取编辑的选择班级信息
         this.getOptions();
+        newVal.type = +newVal.type;
+        this.courseStatus = newVal.status;
       } else if (!newVal.id && this.options.length === 0) {
         // 获取选择授课的班级信息
         this.getOptions();
       }
-      newVal.type = +newVal.type;
       this.editCourse = { ...defaultData, ...newVal };
     },
   },
