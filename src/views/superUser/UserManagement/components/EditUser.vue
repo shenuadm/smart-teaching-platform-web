@@ -4,8 +4,10 @@
     :title="(formData.userid ? '编辑' : '新增') + '用户'"
     :visible="visible"
     :before-close="cancel"
+    class="user-edit-dialog"
+    custom-class="user-edit-dialog"
     width="30%">
-    <el-form ref="formRef" :model="formData" label-width="100px" :rules="rules" class="user-edit-form">
+    <el-form ref="formRef" :model="formData" label-width="140px" :rules="rules" class="user-edit-form">
       <el-form-item label="账号：" prop="account">
         <el-input v-model="formData.account" placeholder="请输入用户账号"></el-input>
       </el-form-item>
@@ -29,7 +31,7 @@
           maxlength="11"></el-input>
       </el-form-item>
       <template v-if="isStudent">
-        <el-form-item label="学生班级" required prop="majorId">
+        <el-form-item label="专业/年级/班级：" required prop="majorId">
           <el-cascader
             v-model="majorGradeClass"
             :options="majorData"
@@ -173,13 +175,10 @@ export default {
     visible(newVal) {
       if (newVal) {
         this.userRole.length === 0 && this.getMajorData();
-        console.log(1);
-        console.log(this.editData);
         const { majorId, gradeId, clazzId } = this.editData;
         majorId && this.majorGradeClass.push(majorId);
         gradeId && this.majorGradeClass.push(gradeId);
         clazzId && this.majorGradeClass.push(clazzId);
-        console.log(this.majorGradeClass);
         this.formData = { ...defaultData, ...this.editData };
       }
     },
@@ -191,5 +190,9 @@ export default {
 /* 选择器靠左 */
 .user-edit-form .el-form-item__content {
   text-align: initial;
+}
+// 弹框左侧内边距
+.user-edit-dialog .el-dialog__body {
+  padding-left: 0 !important;
 }
 </style>

@@ -9,26 +9,34 @@
     <el-form ref="ruleForm" :model="editCourse" :rules="rules" label-width="100px" v-loading="$store.state.isLoading">
       <!-- 课程名称 -->
       <el-form-item label="课程名称：" prop="name">
-        <el-input v-if="editCourse.id" disabled v-model="editCourse.name" placeholder="课程名称"></el-input>
+        <el-input v-if="editCourse.id" disabled v-model="editCourse.name" placeholder="请输入课程名称"></el-input>
         <el-input v-else disabled v-model="editCourse.title" placeholder="课程名称"></el-input>
       </el-form-item>
-      <!-- 选课日期 -->
-      <el-form-item label="选课日期：" class="date-picker" prop="selectDate">
-        <el-date-picker
-          v-model="editCourse.selectDate"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
+      <el-form-item label="课程类型：" prop="type">
+        <el-radio-group v-model="editCourse.type">
+          <el-radio :label="0">选修</el-radio>
+          <el-radio :label="1">必修</el-radio>
+        </el-radio-group>
       </el-form-item>
-      <!-- 最多选课人数 -->
-      <el-form-item label="选课人数：" prop="maxTaker">
-        <el-input v-model="editCourse.maxTaker" placeholder="课程最大人数"></el-input>
-      </el-form-item>
+      <template v-if="!editCourse.type">
+        <!-- 选课日期 -->
+        <el-form-item label="选课日期：" class="date-picker" prop="selectDate">
+          <el-date-picker
+            v-model="editCourse.selectDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker>
+        </el-form-item>
+        <!-- 最多选课人数 -->
+        <el-form-item label="选课人数：" prop="maxTaker">
+          <el-input v-model="editCourse.maxTaker" placeholder="请输入课程最大人数"></el-input>
+        </el-form-item>
+      </template>
       <!-- 授课地点 -->
       <el-form-item label="授课地点：" prop="address" class="course-address">
-        <el-input v-model="editCourse.address" placeholder="授课地点"></el-input>
+        <el-input v-model="editCourse.address" placeholder="请输入授课地点"></el-input>
       </el-form-item>
       <!-- 授课日期 -->
       <el-form-item label="授课日期：" class="date-picker" prop="date">
@@ -52,7 +60,13 @@
       <el-form-item label="课程状态：" prop="status">
         <el-radio-group v-model="editCourse.status">
           <template v-if="editCourse.id">
-            <el-radio v-for="item in teacherCourseStatus" :key="item[0]" :label="item[0]">{{ item[1] }}</el-radio>
+            <el-radio
+              v-for="item in teacherCourseStatus"
+              :disabled="courseStatusCanChoose(item[0])"
+              :key="item[0]"
+              :label="item[0]"
+              >{{ item[1] }}</el-radio
+            >
           </template>
           <template v-else>
             <el-radio :label="0">未启用</el-radio>
@@ -61,7 +75,7 @@
         </el-radio-group>
       </el-form-item>
     </el-form>
-    <template slot="footer">
+    <template #footer>
       <el-button type="primary" @click="submitForm">确认</el-button>
       <el-button type="info" @click="closeDialog">取消</el-button>
     </template>
@@ -72,7 +86,6 @@
 import { teacherCourseStatus } from '@/constant/course.js';
 import { teaChooseCourseService, teaUpdateCourseService } from '@/api/course.js';
 import { getActiveLearService, getChooseLearService } from '@/api/systemSetting.js';
-// import { isYearsterday } from '@/utils/date';
 
 const defaultData = {
   selectDate: [], // 选课时间
@@ -81,6 +94,7 @@ const defaultData = {
   date: [], // 上课时间
   status: 0, // 状态
   treeChoose: [], // 选择的授课班级
+  type: 0, // 课程类型 0:选修,1:必修
 };
 
 export default {
@@ -95,11 +109,7 @@ export default {
     return {
       // 表单校验
       rules: {
-        // name: [{ required: true, message: '请输入您的课程名称', trigger: 'blur' }],
-        selectDate: [
-          { required: true, message: '请选择您课程的选课时间', trigger: 'blur' },
-          // { validator: selectDate, trigger: 'blur' },
-        ],
+        selectDate: [{ required: true, message: '请选择您课程的选课时间', trigger: 'blur' }],
         maxTaker: [{ required: true, message: '请输入您的最多选课人数', trigger: 'blur' }],
         address: [{ required: true, message: '请输入您的授课地点', trigger: 'blur' }],
         date: [
@@ -107,6 +117,7 @@ export default {
           { validator: date, trigger: 'blur' },
         ],
         status: [{ required: true, message: '请选择您的课程状态', trigger: 'blur' }],
+        type: [{ required: true, message: '请选择课程类型', trigger: 'blur' }],
       },
       teacherCourseStatus, // 课程状态
       editCourse: { ...defaultData }, // 编辑数据
@@ -124,10 +135,10 @@ export default {
   methods: {
     //保存修改
     submitForm() {
-      console.log(this.editCourse);
       this.$refs['ruleForm'].validate(async (valid) => {
         if (valid) {
           const { date, selectDate, treeChoose } = this.editCourse;
+          // 获取选中的级联id
           let selectedIds = [];
           treeChoose.forEach((item) => (selectedIds = [...selectedIds, ...item]));
           selectedIds = Array.from(new Set([...selectedIds]));
@@ -139,6 +150,12 @@ export default {
             selectEndDate: selectDate[1],
             selectedIds,
           };
+          // 必修课，删除选修相关数据
+          if (this.editCourse.type === 1) {
+            delete data.selectStartDate;
+            delete data.selectEndDate;
+            delete data.maxTaker;
+          }
           if (data.id) {
             await teaUpdateCourseService(data);
             this.$message.success('编辑课程成功');
@@ -163,7 +180,6 @@ export default {
       if (this.formData.id) {
         res = await getChooseLearService(this.formData.id);
         const arr = [];
-
         const arrange = (major) => {
           major.children.forEach((item) => {
             if (item.checked && item.children === null) {
@@ -191,6 +207,28 @@ export default {
       }
       this.options = res.data;
     },
+    // 判断课程状态是否可选
+    courseStatusCanChoose(status) {
+      return status < 4 && this.editCourse.status >= 4;
+    },
+    async test() {
+      if (!this.formData.id) {
+        const { data } = await getActiveLearService();
+        this.options = data;
+      } else {
+        const res = await getChooseLearService(this.formData.id);
+        const buildArrangement = (item) => {
+          if (item.checked) {
+            if (item.children === null) {
+              return [[item.id]];
+            } else {
+              const children = item.children || [];
+              return children.filter((clazz) => clazz.checked).map((clazz) => [item.id.clazz.id]);
+            }
+          }
+        };
+      }
+    },
   },
   watch: {
     // 传入的数据变化，赋值给编辑表单
@@ -202,6 +240,7 @@ export default {
         // 获取选择授课的班级信息
         this.getOptions();
       }
+      newVal.type = +newVal.type;
       this.editCourse = { ...defaultData, ...newVal };
     },
   },

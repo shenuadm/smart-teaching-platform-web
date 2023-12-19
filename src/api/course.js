@@ -32,6 +32,7 @@ export const teaUpdateCourseService = ({
   address,
   status,
   selectedIds,
+  type,
 }) =>
   http.post('/teacherCourse/update', {
     id,
@@ -45,6 +46,7 @@ export const teaUpdateCourseService = ({
     address,
     status,
     selectedIds,
+    type,
   });
 
 /**
@@ -63,6 +65,7 @@ export const teaChooseCourseService = ({
   endDate,
   status,
   selectedIds,
+  type,
 }) =>
   http.post('/teacherCourse/add', {
     courseId,
@@ -75,6 +78,7 @@ export const teaChooseCourseService = ({
     endDate,
     status,
     selectedIds,
+    type,
   });
 
 /**

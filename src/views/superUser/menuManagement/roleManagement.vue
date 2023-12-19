@@ -37,7 +37,7 @@
     <el-dialog
       :title="isAddRole ? '添加角色' : '修改角色'"
       :visible.sync="aeditVisible"
-      :before-close="cancal"
+      :before-close="cancel"
       :close-on-click-modal="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" v-loading="$store.state.isLoading">
         <el-form-item label="角色标识" prop="rolename">
@@ -57,7 +57,7 @@
         </el-form-item>
         <template slot="footer">
           <el-button type="primary" @click="submit">提交</el-button>
-          <el-button type="info" @click="cancal">取消</el-button>
+          <el-button type="info" @click="cancel">取消</el-button>
         </template>
       </el-form>
     </el-dialog>
@@ -152,7 +152,7 @@ export default {
       this.aeditVisible = true;
     },
     // 关闭弹框
-    cancal() {
+    cancel() {
       this.aeditVisible = false;
       this.$refs['form'].resetFields();
       this.form = {};
