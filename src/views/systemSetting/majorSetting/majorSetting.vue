@@ -6,11 +6,20 @@
       <el-col :span="4"> 状态 </el-col>
       <el-col :span="10"> 操作 </el-col>
     </el-row>
-    <el-tree :data="treeData" node-key="id" accordion :expand-on-click-node="false" :props="props" style="width: 100%">
+    <el-tree
+      v-loading="$store.state.isLoading"
+      :data="treeData"
+      node-key="id"
+      accordion
+      :expand-on-click-node="false"
+      :props="props"
+      style="width: 100%">
       <template #default="{ node }">
-        <el-row class="tree-list bg-grey-100">
+        <el-row class="tree-list">
           <el-col class="text-initial" :span="10">{{ node.data.name }}</el-col>
-          <el-col :span="4">{{ systemSettingStatus.get(+node.data.status) }}</el-col>
+          <el-col :class="node.data.status ? 'text-blue' : 'text-red'" :span="4">{{
+            systemSettingStatus.get(+node.data.status)
+          }}</el-col>
           <el-col :span="10">
             <el-button v-if="node.data.level !== 3" size="small" type="primary" @click="add(node.data)">新增</el-button>
             <!-- {{ node.data.level === 1 ? '年级' : '班级' }} -->
@@ -18,7 +27,6 @@
             <el-button size="small" type="danger" @click="del(node.data)">删除</el-button>
           </el-col>
         </el-row>
-        <div></div>
       </template>
     </el-tree>
     <ClassDialog :visible.sync="visible" @success="getData" :editData="editData"></ClassDialog>
