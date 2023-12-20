@@ -1,44 +1,42 @@
 <template>
   <div>
     <div class="header">
-      <div class="header-left">
-        <div>
-          <div class="search-input">
-            <div class="title">账号:</div>
-            <el-input size="small" v-model="serch.account" placeholder="请输入账号"></el-input>
-          </div>
-          <div class="search-input">
-            <div class="title">姓名:</div>
-            <el-input size="small" v-model="serch.username" placeholder="请输入姓名"></el-input>
-          </div>
-          <div class="search-input">
-            <div class="title">专业:</div>
-            <el-input size="small" v-model="serch.major" placeholder="请输入专业"></el-input>
-          </div>
-          <div class="search-input">
-            <div class="title">年级:</div>
-            <el-input size="small" v-model="serch.grade" placeholder="请输入年级"></el-input>
-          </div>
+      <div class="header-top">
+        <div class="search-input">
+          <div class="title">账号:</div>
+          <el-input size="small" v-model="serch.account" placeholder="请输入账号"></el-input>
         </div>
-        <div>
-          <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
-          <el-button type="primary" size="small" @click="resetting">重置</el-button>
-          <el-button type="primary" size="small" @click="add">添加用户</el-button>
-          <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
+        <div class="search-input">
+          <div class="title">姓名:</div>
+          <el-input size="small" v-model="serch.username" placeholder="请输入姓名"></el-input>
         </div>
+        <div class="search-input">
+          <div class="title">专业:</div>
+          <el-input size="small" v-model="serch.major" placeholder="请输入专业"></el-input>
+        </div>
+        <div class="search-input">
+          <div class="title">年级:</div>
+          <el-input size="small" v-model="serch.grade" placeholder="请输入年级"></el-input>
+        </div>
+        <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
+        <el-button type="primary" size="small" @click="resetting">重置</el-button>
       </div>
-      <div class="header-right ml-10">
-        <el-button size="small" style="height: 34px" @click="downloadSample">下载模板</el-button>
+      <div class="header-bottom mt-10">
+        <el-button size="small" style="height: 34px" @click="batchdel" type="danger">批量删除</el-button>
+        <el-button class="mr-10" size="small" style="height: 34px" @click="downloadSample">下载模板</el-button>
         <el-upload
           action=""
           :auto-upload="false"
           :file-list="fileList"
           :limit="2"
+          class="flex user-manage-upload"
           :on-change="uploadChange"
           ref="upload">
           <!--          <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>-->
           <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>
-          <el-button type="info" size="small" @click="confirmUpload" class="ml-10">确认上传</el-button>
+          <el-button style="height: 34px" type="info" size="small" @click="confirmUpload" class="ml-10"
+            >确认上传</el-button
+          >
         </el-upload>
       </div>
     </div>
@@ -221,6 +219,14 @@ export default {
 </script>
 
 <style scoped>
+.header-top {
+  display: flex;
+  gap: 10px;
+}
+.header-bottom {
+  display: flex;
+  min-height: 44px;
+}
 .user {
   color: #409eff;
 }
@@ -231,7 +237,7 @@ export default {
 .header {
   position: relative;
   width: 100%;
-  display: flex;
+  //display: flex;
 }
 .header-left {
   display: flex;
@@ -263,5 +269,16 @@ export default {
 }
 .block {
   margin-top: 20px;
+}
+</style>
+
+<style>
+/* 上传学生的文件上传组件，待上传文件在横排展示*/
+.user-manage-upload .el-upload-list {
+  display: flex;
+  align-items: center;
+}
+.user-manage-upload .el-upload-list li {
+  margin-top: 0;
 }
 </style>

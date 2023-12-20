@@ -32,12 +32,18 @@
     <el-date-picker
       v-model="date"
       type="daterange"
+      :unlink-panels="true"
       range-separator="至"
       start-placeholder="开始日期"
       end-placeholder="结束日期"
       :change="chooseDate">
     </el-date-picker>
     <el-button @click="chooseDate">测试</el-button>
+    <div>
+      <!--      <el-date-picker :disableDate="disableDate1" v-model="date1" align="right" type="date"></el-date-picker>-->
+      <el-date-picker :picker-options="pickerOptions" v-model="date1" align="right" type="date"></el-date-picker>
+      <el-date-picker :picker-options="pickerOptions2" v-model="date2" align="right" type="date"></el-date-picker>
+    </div>
   </div>
 </template>
 
@@ -45,6 +51,8 @@
 export default {
   data() {
     return {
+      date1: '',
+      date2: '',
       tableData: [
         {
           id: 1,
@@ -84,11 +92,26 @@ export default {
         },
       ],
       date: '',
+      pickerOptions: {
+        disabledDate: (time) => {
+          if (this.date2 === '') return false;
+          else return time.getTime() > this.date2.getTime();
+        },
+      },
+      pickerOptions2: {
+        disabledDate: (time) => {
+          if (this.date1 === '') return false;
+          else return time.getTime() > this.date1.getTime();
+        },
+      },
     };
   },
   methods: {
     chooseDate() {
       console.log(this.date);
+    },
+    disableDate1(time) {
+      return time.getTime() < this.date2.getTime();
     },
   },
   mounted() {},
