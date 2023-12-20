@@ -19,69 +19,77 @@
         <div>授课地点：{{ courseObj.address }}</div>
         <div>上课人数：{{ courseObj.selectedNumber }}</div>
         <div>
-          <el-button type="primary" size="mini" @click="queryVms">{{
-            pageShow ? '查看实验虚拟机' : '查看课程章节'
+          <el-button type="primary" size="mini" @click="toggleView(1)">{{
+            viewShow === 1 ? '查看课程章节' : '查看实验虚拟机'
           }}</el-button>
         </div>
         <div>
-          <el-button type="info" size="mini">查看学生列表</el-button>
+          <el-button type="primary" size="mini" @click="toggleView(2)">{{
+            viewShow === 2 ? '查看课程章节' : '查看学生列表'
+          }}</el-button>
         </div>
       </div>
     </div>
     <!-- 实验内容 -->
-    <CourseList v-if="pageShow" :treeEvent="handleNodeClick">
-      <!-- 实验报告插槽 -->
-      <template #experiment>
-        <div class="experiment-title">
-          <p>【实验报告】</p>
-          <div class="experiment-res">
-            <div class="res-title">
-              <p class="zh-fs-16 font-bold">实验结果：</p>
-              <el-button type="primary" @click="targgleRes" size="mini"
-                >{{ experResult.show ? '隐藏' : '显示' }}实验结果</el-button
-              >
-            </div>
-            <div class="experiment-content" v-html="experResult.content" v-if="experResult.show"></div>
-            <div v-else class="experiment-content experiment-prompt">点击上方按钮显示实验结果</div>
-          </div>
-          <div class="step-all">
-            <p class="zh-fs-16 font-bold">实验步骤：</p>
-            <div v-for="(item, index) in experimentStep" :key="item.id" @click="targgleStep">
-              <div class="step-title">
-                <div class="mb-10">{{ index + 1 }}、&nbsp;{{ item.name }}</div>
-                <el-button type="primary" :data-id="item.id" size="mini">{{ item.show ? '隐藏' : '显示' }}</el-button>
+    <keep-alive v-if="viewShow === 0">
+      <CourseList :treeEvent="handleNodeClick">
+        <!-- 实验报告插槽 -->
+        <template #experiment>
+          <div class="experiment-title">
+            <p>【实验报告】</p>
+            <div class="experiment-res">
+              <div class="res-title">
+                <p class="zh-fs-16 font-bold">实验结果：</p>
+                <el-button type="primary" @click="targgleRes" size="mini"
+                  >{{ experResult.show ? '隐藏' : '显示' }}实验结果</el-button
+                >
               </div>
-              <div class="experiment-content" v-html="item.content" v-if="item.show"></div>
-              <div v-else class="experiment-content experiment-prompt">点击上方按钮显示实验步骤</div>
+              <div class="experiment-content" v-html="experResult.content" v-if="experResult.show"></div>
+              <div v-else class="experiment-content experiment-prompt">点击上方按钮显示实验结果</div>
+            </div>
+            <div class="step-all">
+              <p class="zh-fs-16 font-bold">实验步骤：</p>
+              <div v-for="(item, index) in experimentStep" :key="item.id" @click="targgleStep">
+                <div class="step-title">
+                  <div class="mb-10">{{ index + 1 }}、&nbsp;{{ item.name }}</div>
+                  <el-button type="primary" :data-id="item.id" size="mini">{{ item.show ? '隐藏' : '显示' }}</el-button>
+                </div>
+                <div class="experiment-content" v-html="item.content" v-if="item.show"></div>
+                <div v-else class="experiment-content experiment-prompt">点击上方按钮显示实验步骤</div>
+              </div>
             </div>
           </div>
-        </div>
-      </template>
-      <!-- 实验成绩插槽 -->
-      <template #experimentAchement>
-        <!-- 教师端 -->
-        <el-table :data="tableData" height="auto" border style="width: 100%">
-          <el-table-column align="center" prop="username" label="学生姓名" width="120"> </el-table-column>
-          <el-table-column align="center" prop="title" label="实验标题"> </el-table-column>
-          <el-table-column prop="score" label="成绩" width="80">
-            <template #default="{ row }">{{ Number.isInteger(row.score) ? row.score : row.score.toFixed(1) }}</template>
-          </el-table-column>
-          <el-table-column prop="updateTime" label="更新日期" width="200"> </el-table-column>
-          <el-table-column label="状态" width="100">
-            <template #default="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
-          </el-table-column>
-          <el-table-column fixed="right" label="操作" width="200">
-            <template #default="scope">
-              <el-button @click="checkDetails(scope.row)" type="text" size="medium">查看详情</el-button>
-              <el-button @click="checkReport(scope.row)" type="text" size="medium">查看报告</el-button>
-              <el-button @click="editContent(scope.row)" type="text" size="medium">编辑</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </template>
-    </CourseList>
-    <VmsList v-else ref="vmsList"></VmsList>
-    <keep-alive v-show="false">
+        </template>
+        <!-- 实验成绩插槽 -->
+        <template #experimentAchement>
+          <!-- 教师端 -->
+          <el-table :data="tableData" height="auto" border style="width: 100%">
+            <el-table-column align="center" prop="username" label="学生姓名" width="120"> </el-table-column>
+            <el-table-column align="center" prop="title" label="实验标题"> </el-table-column>
+            <el-table-column prop="score" label="成绩" width="80">
+              <template #default="{ row }">{{
+                Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
+              }}</template>
+            </el-table-column>
+            <el-table-column prop="updateTime" label="更新日期" width="200"> </el-table-column>
+            <el-table-column label="状态" width="100">
+              <template #default="{ row }">{{ row.status === 1 ? '未评阅' : '已评阅' }}</template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="200">
+              <template #default="scope">
+                <el-button @click="checkDetails(scope.row)" type="text" size="medium">查看详情</el-button>
+                <el-button @click="checkReport(scope.row)" type="text" size="medium">查看报告</el-button>
+                <el-button @click="editContent(scope.row)" type="text" size="medium">编辑</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </CourseList>
+    </keep-alive>
+    <keep-alive v-else-if="viewShow === 1">
+      <VmsList></VmsList>
+    </keep-alive>
+    <keep-alive v-else-if="viewShow === 2">
       <StudentTable></StudentTable>
     </keep-alive>
     <!-- 教师端，点击查看报告，弹出学生的实验报告 -->
@@ -228,6 +236,10 @@ export default {
       const item = this.experimentStep.find((item) => item.id === +id);
       item.show = !item.show;
     },
+    toggleView(view) {
+      if (this.viewShow === view) this.viewShow = 0;
+      else this.viewShow = view;
+    },
     // 切换实验结果显示与隐藏
     targgleRes() {
       this.experResult.show = !this.experResult.show;
@@ -252,13 +264,6 @@ export default {
     async getScroeData() {
       const res = await scoreList(this.experimentId, this.$route.query.id);
       this.tableData = res.data;
-    },
-    // 查看学生虚拟机
-    async queryVms() {
-      this.pageShow = !this.pageShow;
-      this.$nextTick(() => {
-        this.$refs.vmsList.getStudentVmsData();
-      });
     },
     // 教师端，成绩表格
     // 查看详情

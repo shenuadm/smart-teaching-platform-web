@@ -46,6 +46,24 @@ img {
 .bg-red {
   background-color: #F56C6C;
 }
+.bg-grey-50 {
+  background-color: #f9fafb;
+}
+.bg-grey-100 {
+  background-color: #f3f4f6;
+}
+.bg-grey-200 {
+  background-color: #e5e7eb;
+}
+.bg-grey-300 {
+  background-color: #d1d5db;
+}
+.bg-grey-400 {
+  background-color: #9ca3af;
+}
+.bg-grey-500 {
+  background-color: #6b7280;
+}
 
 .border-grey {
   border: 1px solid #dcdfe6;

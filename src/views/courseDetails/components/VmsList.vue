@@ -45,6 +45,9 @@ export default {
       this.vmsData = res.data;
     },
   },
+  mounted() {
+    this.getStudentVmsData();
+  },
 };
 </script>
 

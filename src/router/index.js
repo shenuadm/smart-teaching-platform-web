@@ -168,7 +168,7 @@ const routes = [
       {
         path: '/teacherCourse',
         name: 'teacherCourse',
-        component: () => import('@/views/courseDetails/teacherCourse'),
+        component: () => import('@/views/courseDetails/teacherCourse.vue'),
       },
       // 教师端课程中心的查看章节
       {

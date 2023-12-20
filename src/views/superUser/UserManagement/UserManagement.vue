@@ -22,6 +22,7 @@
         <el-button type="primary" size="small" @click="resetting">重置</el-button>
       </div>
       <div class="header-bottom mt-10">
+        <el-button size="small" style="height: 34px" @click="add" type="primary">添加</el-button>
         <el-button size="small" style="height: 34px" @click="batchdel" type="danger">批量删除</el-button>
         <el-button class="mr-10" size="small" style="height: 34px" @click="downloadSample">下载模板</el-button>
         <el-upload
@@ -239,21 +240,11 @@ export default {
   width: 100%;
   //display: flex;
 }
-.header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding-bottom: 20px;
-}
 .header-left > div {
   display: flex;
 }
 .header-left div:first-child {
   gap: 10px;
-}
-.header-right {
-  width: 350px;
-  display: flex;
 }
 .header-right div:first-of-type {
   flex-grow: 1;
