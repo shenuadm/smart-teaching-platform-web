@@ -1,27 +1,37 @@
 <template>
-  <div>
+  <div class="user-management">
     <div class="header">
       <div class="header-top">
         <div class="search-input">
           <div class="title">账号:</div>
-          <el-input size="small" v-model="serch.account" placeholder="请输入账号"></el-input>
+          <el-input size="small" v-model="search.account" placeholder="请输入账号"></el-input>
         </div>
         <div class="search-input">
           <div class="title">姓名:</div>
-          <el-input size="small" v-model="serch.username" placeholder="请输入姓名"></el-input>
+          <el-input size="small" v-model="search.username" placeholder="请输入姓名"></el-input>
         </div>
         <div class="search-input">
           <div class="title">专业:</div>
-          <el-input size="small" v-model="serch.major" placeholder="请输入专业"></el-input>
+          <el-input size="small" v-model="search.major" placeholder="请输入专业"></el-input>
         </div>
         <div class="search-input">
           <div class="title">年级:</div>
-          <el-input size="small" v-model="serch.grade" placeholder="请输入年级"></el-input>
+          <el-input size="small" v-model="search.grade" placeholder="请输入年级"></el-input>
         </div>
-        <el-button type="primary" size="small" @click="search" class="btn-search">搜索</el-button>
-        <el-button type="primary" size="small" @click="resetting">重置</el-button>
+        <div class="search-input">
+          <div class="title">角色:</div>
+          <el-select v-model="selectType" size="small" class="mr-10" placeholder="用户角色">
+            <el-option
+              v-for="item in roleList"
+              :key="item.roleid"
+              :label="item.nickname"
+              :value="item.roleid"></el-option>
+          </el-select>
+        </div>
+        <el-button type="primary" size="mini" @click="searchClick" class="btn-search">搜索</el-button>
+        <el-button type="primary" size="mini" @click="resetting">重置</el-button>
       </div>
-      <div class="header-bottom mt-10">
+      <div class="header-bottom my-5">
         <el-button size="small" style="height: 34px" @click="add" type="primary">添加</el-button>
         <el-button size="small" style="height: 34px" @click="batchdel" type="danger">批量删除</el-button>
         <el-button class="mr-10" size="small" style="height: 34px" @click="downloadSample">下载模板</el-button>
@@ -53,21 +63,21 @@
       <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column prop="account" label="账号" width="120"></el-table-column>
       <el-table-column prop="username" label="姓名" width="150"></el-table-column>
-      <el-table-column prop="roleNickName" label="角色" width="120"></el-table-column>
+      <el-table-column prop="roleNickName" label="角色" width="120" show-overflow-tooltip></el-table-column>
       <el-table-column prop="active" label="是否激活" width="80">
         <template #default="scope">
           <div v-if="scope.row.active === 0" class="user">激活</div>
           <div v-else-if="scope.row.active === 1" class="forbidden">未激活</div>
         </template>
       </el-table-column>
-      <el-table-column prop="major" label="专业"> </el-table-column>
+      <el-table-column prop="major" label="专业" show-overflow-tooltip> </el-table-column>
       <el-table-column prop="grade" label="年级"></el-table-column>
       <el-table-column prop="clazz" label="班级" width="150"></el-table-column>
       <el-table-column label="操作" width="250" fixed="right">
         <template #default="scope">
           <template v-if="scope.row.roleName !== 'supper_admin'">
             <el-button type="primary" size="mini" @click="reset(scope.row)">重置密码</el-button>
-            <el-button type="primary" size="mini" @click="reviseuser(scope.row)">编辑</el-button>
+            <el-button type="primary" size="mini" @click="editUser(scope.row)">编辑</el-button>
             <el-button type="danger" size="mini" @click="deleteUser(scope.row)">删除</el-button>
           </template>
         </template>
@@ -83,14 +93,14 @@
         :hide-on-single-page="count <= 10">
       </el-pagination>
     </div>
-    <EditUser :visible.sync="visible" @success="getData" :editData="editData"></EditUser>
+    <EditUser :visible.sync="visible" @success="getData" :editData="editData" :role-list="roleList"></EditUser>
   </div>
 </template>
 
 <script>
 import { delUsers, getUserData, resetPass, delUser } from '@/utils/api';
 import { isAllowFile } from '@/utils/upload.js';
-import { uploadStudentExcelService, downloadExceleSmpleService } from '@/api/userManagement.js';
+import { uploadStudentExcelService, downloadExceleSmpleService, getUserRoleService } from '@/api/userManagement.js';
 import EditUser from './components/EditUser.vue';
 
 export default {
@@ -100,7 +110,7 @@ export default {
       file: '', // 要上传的文件
       page: 1, // 页数
       count: 0, // 数据总数
-      serch: {
+      search: {
         account: '',
         username: '',
         major: '',
@@ -112,10 +122,13 @@ export default {
       tableData: [], // 表格数据
       multipleSelection: [], // 多选框当前选中的
       editData: {}, // 编辑数据
+      selectType: '',
+      roleList: [],
     };
   },
   mounted() {
     this.getData();
+    this.getRoleList();
   },
   methods: {
     //添加用户表
@@ -124,16 +137,16 @@ export default {
       this.editData = {};
     },
     //搜索
-    async search() {
-      if (Object.values(this.serch).every((item) => item === ''))
+    async searchClick() {
+      if (Object.values(this.search).every((item) => item === ''))
         return this.$message.warning('请输入查询信息后再查询');
       this.page = 1;
-      this.searchInfo = JSON.parse(JSON.stringify(this.serch));
+      this.searchInfo = JSON.parse(JSON.stringify(this.search));
       await this.getData();
     },
     // 重置表格数据
     resetting() {
-      this.serch = {};
+      this.search = {};
       this.searchInfo = {};
       this.getData();
     },
@@ -168,13 +181,14 @@ export default {
         .catch(() => {});
     },
     // 修改
-    reviseuser(row) {
+    editUser(row) {
       this.editData = row;
       this.visible = true;
     },
     // 选择框选中事件
     handleSelectionChange(val) {
-      this.multipleSelection = val.map((item) => item.userid);
+      this.multipleSelection = val.map((item) => (item.roleName !== 'supper_admin' ? item.userid : ''));
+      // console.log(this.multipleSelection);
     },
     // 获取数据
     async getData() {
@@ -186,6 +200,11 @@ export default {
       }
       this.count = res.count;
       this.tableData = res.data;
+    },
+    async getRoleList() {
+      const { data } = await getUserRoleService();
+      console.log(data, 'roleData');
+      this.roleList = data;
     },
     // 选择文件后触发
     uploadChange(file) {
@@ -227,6 +246,7 @@ export default {
 .header-bottom {
   display: flex;
   min-height: 44px;
+  align-items: center;
 }
 .user {
   color: #409eff;
@@ -238,7 +258,6 @@ export default {
 .header {
   position: relative;
   width: 100%;
-  //display: flex;
 }
 .header-left > div {
   display: flex;
@@ -271,5 +290,8 @@ export default {
 }
 .user-manage-upload .el-upload-list li {
   margin-top: 0;
+}
+.user-management .el-tooltip {
+  display: revert;
 }
 </style>

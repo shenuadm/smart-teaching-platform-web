@@ -5,12 +5,13 @@
     </div>
     <div class="roleTable">
       <el-table ref="tableData" :data="tableData" border style="width: 100%" v-loading="$store.state.isLoading">
-        <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column prop="rolename" label="角色标识"> </el-table-column>
         <el-table-column prop="nickname" label="角色名称"> </el-table-column>
         <el-table-column prop="description" label="角色描述"> </el-table-column>
         <el-table-column label="状态">
-          <template #default="{ row }">{{ row.status ? '未激活' : '激活' }}</template>
+          <template #default="{ row }">
+            <div :class="row.status ? 'text-red' : 'text-blue'">{{ row.status ? '未激活' : '激活' }}</div>
+          </template>
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">

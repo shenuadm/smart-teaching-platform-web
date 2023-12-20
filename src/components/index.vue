@@ -17,11 +17,10 @@
                   text-color="#ffffff"
                   active-text-color="#409EFF"
                   mode="horizontal"
-                  router
-                >
+                  router>
                   <el-submenu index="1">
                     <template slot="title">{{ this.$store.state.username }}</template>
-                    <el-menu-item @click="exitLogin">退出登录</el-menu-item>
+                    <el-menu-item class="logout" @click="exitLogin">退出登录</el-menu-item>
                   </el-submenu>
                 </el-menu>
               </div>
@@ -128,5 +127,13 @@ export default {
 }
 .footer > p {
   margin: 10px 0;
+}
+</style>
+
+<style>
+/* 退出登录按钮 */
+.el-menu--popup:has(.logout) {
+  min-width: initial !important;
+  padding: 5px 20px;
 }
 </style>

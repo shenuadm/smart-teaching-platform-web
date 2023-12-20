@@ -17,7 +17,7 @@
       <el-form-item label="角色：" prop="roleId" class="roles">
         <el-select v-model="formData.roleId" placeholder="请选择角色">
           <el-option
-            v-for="item in userRole"
+            v-for="item in roleList"
             :key="item.roleid"
             :label="item.nickname"
             :value="item.roleid"></el-option>
@@ -55,7 +55,6 @@
 
 <script>
 import { addUser, reviseUser } from '@/utils/api';
-import { getUserRoleService } from '@/api/userManagement.js';
 import { getActiveLearService } from '@/api/systemSetting';
 
 const defaultData = {
@@ -74,7 +73,7 @@ export default {
     const userRule = (rules, value, callback) => {
       if (this.formData.roleId === '') return callback();
       if (
-        this.userRole.find((item) => item.roleid === this.formData.roleId).rolename === 'student' &&
+        this.roleList.find((item) => item.roleid === this.formData.roleId).rolename === 'student' &&
         (value === '' || value === null)
       ) {
         callback(new Error('学生角色请输入专业、年级、班级信息'));
@@ -101,7 +100,6 @@ export default {
         phone: [{ validator: phone, trigger: 'submit' }],
         majorId: [{ validator: userRule }],
       },
-      userRole: [], // 用户角色列表
       majorData: [], // 专业年级班级列表
       majorGradeClass: [], // 当前选择的专业年级班级
     };
@@ -115,7 +113,7 @@ export default {
       console.log(this.majorGradeClass);
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {
-          if (this.userRole.find((item) => item.roleid === this.formData.roleId).rolename !== 'student') {
+          if (this.roleList.find((item) => item.roleid === this.formData.roleId).rolename !== 'student') {
             this.formData.majorId = '';
             this.formData.clazzId = '';
             this.formData.gradeId = '';
@@ -135,11 +133,6 @@ export default {
         }
       });
     },
-    // 获取用户角色列表
-    async getUserRole() {
-      const res = await getUserRoleService();
-      this.userRole = res.data;
-    },
     // 获取专业列表
     async getMajorData() {
       const { data } = await getActiveLearService();
@@ -155,18 +148,13 @@ export default {
     isStudent() {
       // 用户当前没有选中
       if (this.formData.roleId === '' || this.formData.roleId === null) return false;
-      const item = this.userRole.find((item) => item.roleid === this.formData.roleId);
+      const item = this.roleList.find((item) => item.roleid === this.formData.roleId);
       if (!item) return false;
       return item.rolename === 'student';
     },
   },
-  props: ['visible', 'editData'],
+  props: ['visible', 'editData', 'roleList'],
   watch: {
-    editData() {
-      if (this.userRole.length === 0) {
-        this.getUserRole();
-      }
-    },
     isStudent(newVal) {
       if (newVal && this.majorData.length === 0) {
         this.getMajorData();
@@ -174,7 +162,6 @@ export default {
     },
     visible(newVal) {
       if (newVal) {
-        this.userRole.length === 0 && this.getMajorData();
         const { majorId, gradeId, clazzId } = this.editData;
         majorId && this.majorGradeClass.push(majorId);
         gradeId && this.majorGradeClass.push(gradeId);
@@ -194,5 +181,8 @@ export default {
 /*弹框左侧内边距 */
 .user-edit-dialog .el-dialog__body {
   padding-left: 0 !important;
+}
+.user-edit-dialog .el-cascader {
+  width: 100%;
 }
 </style>
