@@ -56,9 +56,9 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <template slot="footer">
+      <template #footer>
         <el-button size="small" @click="serve" type="primary">确认</el-button>
-        <el-button size="small" @click="closeDialog" type="info">取消</el-button>
+        <el-button size="small" @click="closeDialog">取消</el-button>
       </template>
     </el-dialog>
   </div>

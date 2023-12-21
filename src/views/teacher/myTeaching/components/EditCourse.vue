@@ -1,3 +1,4 @@
+<!--suppress CssUnusedSymbol, CssUnusedSymbol -->
 <template>
   <el-dialog
     :close-on-click-modal="false"
@@ -78,7 +79,7 @@
     </el-form>
     <template #footer>
       <el-button type="primary" @click="submitForm">确认</el-button>
-      <el-button type="info" @click="closeDialog">取消</el-button>
+      <el-button @click="closeDialog">取消</el-button>
     </template>
   </el-dialog>
 </template>

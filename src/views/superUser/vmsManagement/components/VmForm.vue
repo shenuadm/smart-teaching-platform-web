@@ -11,9 +11,9 @@
         <el-input v-model="formData.pwd" placeholder="请输入虚拟机登录密码"></el-input>
       </el-form-item>
     </el-form>
-    <template slot="footer">
+    <template #footer>
       <el-button type="primary" @click="submit">确认</el-button>
-      <el-button type="info" @click="cancel">取消</el-button>
+      <el-button @click="cancel">取消</el-button>
     </template>
   </el-dialog>
 </template>

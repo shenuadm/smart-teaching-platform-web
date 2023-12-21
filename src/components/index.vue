@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     async exitLogin() {
+      userLogout();
       sessionStorage.clear();
       localStorage.clear();
       this.$store.state.username = '';
@@ -63,7 +64,6 @@ export default {
         path: '/',
         name: 'login',
       });
-      userLogout()
     },
   },
 };
@@ -132,6 +132,7 @@ export default {
 }
 </style>
 
+<!--suppress CssUnusedSymbol, CssUnusedSymbol -->
 <style>
 /* 退出登录按钮 */
 .el-menu--popup:has(.logout) {

@@ -115,8 +115,3 @@ export default {
   text-align: left;
 }
 </style>
-<style>
-.Step #inputh {
-  height: 30px !important;
-}
-</style>

@@ -4,6 +4,7 @@
   </div>
 </template>
 
+<!--suppress CssUnusedSymbol, CssUnusedSymbol, CssUnusedSymbol, CssUnusedSymbol, CssUnusedSymbol -->
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -57,5 +58,9 @@ body {
 
 .el-notification {
   z-index: 2100 !important;
+}
+/*弹框footer插槽恢复默认*/
+.el-dialog__footer {
+  text-align: right !important;
 }
 </style>

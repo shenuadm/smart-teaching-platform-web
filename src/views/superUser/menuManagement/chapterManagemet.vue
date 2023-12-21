@@ -67,9 +67,9 @@
           </el-input>
         </el-form-item>
       </el-form>
-      <template slot="footer">
+      <template #footer>
         <el-button @click="serve" type="primary">确定</el-button>
-        <el-button @click="closeAddChapter" type="info">取消</el-button>
+        <el-button @click="closeAddChapter">取消</el-button>
       </template>
     </el-dialog>
     <!-- 添加/修改节 -->
@@ -113,16 +113,17 @@
           <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view">查看课件</a>
         </el-form-item>
       </el-form>
-      <template slot="footer">
+      <template #footer>
         <el-button @click="serveji" type="primary">确定</el-button>
-        <el-button @click="closeAddChapter" type="info">取消</el-button>
+        <el-button @click="closeAddChapter">取消</el-button>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { chapter, addchapter, rchapter, dalchapter } from '@/utils/api';
+import { addchapter, chapter, dalchapter, rchapter } from '@/utils/api';
+
 export default {
   data() {
     return {
@@ -188,14 +189,12 @@ export default {
         // 修改节
         this.isAddJoint = false;
         this.dialogVisibleji = true;
-        const data = JSON.parse(JSON.stringify(e));
-        this.revise = data;
+        this.revise = JSON.parse(JSON.stringify(e));
       } else {
         //修改章
         this.isAddChapter = false;
         this.dialogVisible = true;
-        const data = JSON.parse(JSON.stringify(e));
-        this.revise = data;
+        this.revise = JSON.parse(JSON.stringify(e));
       }
     },
     // 上传文件
@@ -290,8 +289,7 @@ export default {
     // 获取数据
     break() {
       this.id = parseInt(this.$route.query.id);
-      const sort = this.$route.query.sort;
-      this.sort = sort;
+      this.sort = this.$route.query.sort;
       this.courseId = this.id;
       chapter(this.id).then((res) => {
         // 为每一章每一节添加标题
@@ -312,6 +310,7 @@ export default {
 };
 </script>
 
+<!--suppress CssUnusedSymbol -->
 <style>
 .el-input-group__prepend {
   width: 65px;

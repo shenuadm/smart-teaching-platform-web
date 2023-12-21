@@ -2,7 +2,7 @@ import http from '@/utils/service';
 
 /**
  * 获取系统通知管理
- * @param {page?, title?} data 搜索条件
+ * @param {*} data 搜索条件
  * @returns
  */
 export const getSystemNoticeService = (data) => http.get('/notice/list?', data);

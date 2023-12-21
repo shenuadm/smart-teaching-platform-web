@@ -11,22 +11,22 @@
           <el-input size="small" v-model="search.username" placeholder="请输入姓名"></el-input>
         </div>
         <div class="search-input">
-          <div class="title">专业:</div>
-          <el-input size="small" v-model="search.major" placeholder="请输入专业"></el-input>
-        </div>
-        <div class="search-input">
-          <div class="title">年级:</div>
-          <el-input size="small" v-model="search.grade" placeholder="请输入年级"></el-input>
-        </div>
-        <div class="search-input">
           <div class="title">角色:</div>
-          <el-select v-model="selectType" size="small" class="mr-10" placeholder="用户角色">
+          <el-select v-model="search.role" size="small" class="mr-10" placeholder="用户角色">
             <el-option
               v-for="item in roleList"
               :key="item.roleid"
               :label="item.nickname"
               :value="item.roleid"></el-option>
           </el-select>
+        </div>
+        <div class="search-input">
+          <div class="title">专业:</div>
+          <el-input size="small" v-model="search.major" placeholder="请输入专业"></el-input>
+        </div>
+        <div class="search-input">
+          <div class="title">年级:</div>
+          <el-input size="small" v-model="search.grade" placeholder="请输入年级"></el-input>
         </div>
         <el-button type="primary" size="mini" @click="searchClick" class="btn-search">搜索</el-button>
         <el-button type="primary" size="mini" @click="resetting">重置</el-button>
@@ -45,7 +45,7 @@
           ref="upload">
           <!--          <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>-->
           <el-button slot="trigger" size="small" type="primary">导入用户信息</el-button>
-          <el-button style="height: 34px" type="info" size="small" @click="confirmUpload" class="ml-10"
+          <el-button style="height: 34px" type="primary" size="small" @click="confirmUpload" class="ml-10"
             >确认上传</el-button
           >
         </el-upload>
@@ -100,7 +100,7 @@
 <script>
 import { delUsers, getUserData, resetPass, delUser } from '@/utils/api';
 import { isAllowFile } from '@/utils/upload.js';
-import { uploadStudentExcelService, downloadExceleSmpleService, getUserRoleService } from '@/api/userManagement.js';
+import { uploadStudentExcelService, getUserRoleService } from '@/api/userManagement.js';
 import EditUser from './components/EditUser.vue';
 
 export default {
@@ -115,6 +115,7 @@ export default {
         username: '',
         major: '',
         grade: '',
+        role: '',
       }, // 搜索显示内容
       searchInfo: {}, // 实际搜索信息
       visible: false, // 弹框状态
@@ -122,7 +123,6 @@ export default {
       tableData: [], // 表格数据
       multipleSelection: [], // 多选框当前选中的
       editData: {}, // 编辑数据
-      selectType: '',
       roleList: [],
     };
   },
@@ -138,6 +138,7 @@ export default {
     },
     //搜索
     async searchClick() {
+      console.log(this.search);
       if (Object.values(this.search).every((item) => item === ''))
         return this.$message.warning('请输入查询信息后再查询');
       this.page = 1;
@@ -228,7 +229,6 @@ export default {
       this.$refs.upload.clearFiles();
     },
     async downloadSample() {
-      // await downloadExceleSmpleService();
       location.href = 'http://localhost/export/用户信息导入模版表.xlsx';
     },
   },

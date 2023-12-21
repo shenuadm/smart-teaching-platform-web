@@ -1,3 +1,4 @@
+<!--suppress CssUnusedSymbol, CssUnusedSymbol -->
 <template>
   <el-dialog
     :close-on-click-modal="false"
@@ -46,10 +47,10 @@
         </el-radio-group>
       </el-form-item>
     </el-form>
-    <span slot="footer">
-      <el-button type="info" @click="cancel">取 消</el-button>
+    <template #footer>
       <el-button type="primary" @click="submit">确 定</el-button>
-    </span>
+      <el-button @click="cancel">取 消</el-button>
+    </template>
   </el-dialog>
 </template>
 

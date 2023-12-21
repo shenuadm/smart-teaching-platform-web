@@ -83,6 +83,7 @@ export default {
 }
 </style>
 
+<!--suppress CssUnusedSymbol -->
 <style>
 .layout-index .el-badge__content {
   top: 15px;

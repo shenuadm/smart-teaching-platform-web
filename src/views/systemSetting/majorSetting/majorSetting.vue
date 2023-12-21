@@ -100,11 +100,10 @@ export default {
 <style scoped>
 .title {
   height: 50px;
-  margin: 5px 0 0;
   line-height: 50px;
   background-color: #fafafa;
   box-shadow: 0 2px 2px #ddd;
-  margin-top: 20px;
+  margin: 20px 0 0;
   padding-left: 24px;
 }
 .tree-list {

@@ -46,7 +46,7 @@ export const teacherGetStudentHomeworkService = (articleId, teacherCourseId) =>
 
 /**
  * 老师新增作业
- * @param {articleId, teacherCourseId, name, content, answer, endTime} 节id，课程id，作业名称，作业内容，作业答案，截止日期
+ * @param {articleId, teacherCourseId, name, content, answer, endTime} // 节id，课程id，作业名称，作业内容，作业答案，截止日期
  * @returns
  */
 export const teaAddHomeworkService = ({ articleId, teacherCourseId, name, content, answer, endTime }) =>
@@ -54,7 +54,7 @@ export const teaAddHomeworkService = ({ articleId, teacherCourseId, name, conten
 
 /**
  * 老师编辑作业
- * @param {{ articleId, teacherCourseId, name, content, answer, endTime, id }} 节id，课程id，作业名称，作业内容，作业答案，截止日期，作业id
+ * @param {{ articleId, teacherCourseId, name, content, answer, endTime, id }} // 节id，课程id，作业名称，作业内容，作业答案，截止日期，作业id
  * @returns
  */
 export const teaEditHomeworkService = ({ articleId, teacherCourseId, name, content, answer, endTime, id }) =>

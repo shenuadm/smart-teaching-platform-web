@@ -1,3 +1,4 @@
+<!--suppress CssUnusedSymbol, CssUnusedSymbol -->
 <template>
   <div class="course-manage">
     <div class="header-course mb-20">
@@ -91,14 +92,14 @@
             :on-change="handleChange"
             :show-file-list="false"
             :auto-upload="false">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <img alt="网络错误" v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
       </el-form>
-      <template slot="footer">
+      <template #footer>
         <el-button type="primary" @click="serve">确定</el-button>
-        <el-button type="info" @click="cancel">取消</el-button>
+        <el-button @click="cancel">取消</el-button>
       </template>
     </el-dialog>
   </div>

@@ -110,9 +110,6 @@ export default {
     chooseDate() {
       console.log(this.date);
     },
-    disableDate1(time) {
-      return time.getTime() < this.date2.getTime();
-    },
   },
   mounted() {},
 };

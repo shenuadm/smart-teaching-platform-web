@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="serve" type="primary">确认</el-button>
-        <el-button @click="cancel" type="info">取消</el-button>
+        <el-button @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>

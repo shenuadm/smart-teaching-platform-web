@@ -1,10 +1,6 @@
 <template>
   <div class="experimentManagement">
     <div class="header mb-20">
-      <!-- <div class="title">实验标题:</div> -->
-      <!-- <el-input v-model="input" id="inputh" placeholder="请输入实验标题"></el-input> -->
-      <!-- <el-button size="small" type="primary" @click="search">搜索</el-button> -->
-      <!-- <el-button size="small" type="primary" @click="resetting">重置</el-button> -->
       <el-button size="small" type="primary" @click="addexper">添加实验</el-button>
       <el-button size="small" type="danger" @click="delexper">批量删除</el-button>
       <el-button size="small" type="primary" @click="returnexper">返回章节</el-button>
@@ -53,10 +49,10 @@
           <el-input type="textarea" v-model="revise.description" placeholder="请输入实验描述" :rows="8"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer">
+      <template #footer>
         <el-button type="primary" @click="serve">保存</el-button>
-        <el-button @click="closeDialog" type="info">取消</el-button>
-      </div>
+        <el-button @click="closeDialog">取消</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -94,7 +90,7 @@ export default {
   methods: {
     // 关闭弹框
     closeDialog() {
-      // this.$refs['revise'].resetFields();
+      this.$refs['revise'].resetFields();
       this.dialogVisible = false;
     },
     //实验报告
@@ -106,17 +102,6 @@ export default {
           sort: e.sort,
         },
       });
-    },
-    //搜索
-    search() {
-      this.tableData = this.tableData.filter((item) => {
-        return item.title.includes(this.input);
-      });
-    },
-    //重置
-    resetting() {
-      this.input = '';
-      // this.break();
     },
     //添加实验
     addexper() {
@@ -208,19 +193,8 @@ export default {
 }
 </style>
 <style>
-.experimentManagement #inputh {
-  height: 30px !important;
-  width: 200px !important;
-}
 .experimentManagement .el-input-group__prepend {
   width: 55px;
-}
-.experimentManagement #inputwd {
-  width: 195px !important;
-  margin-left: 160px;
-  margin-top: -89px;
-  height: 72px !important;
-  border-radius: none;
 }
 .experimentManagement .form-btn .el-form-item__content {
   margin-left: 0 !important;

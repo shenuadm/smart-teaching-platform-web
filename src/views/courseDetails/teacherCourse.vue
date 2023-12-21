@@ -148,9 +148,9 @@
           <div>{{ stuForm.comment }}</div>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button type="primary" @click="showDetailsVisible = false">关 闭</el-button>
-      </span>
+      </template>
     </el-dialog>
     <!-- 教师端，点击编辑，可以编辑学生的成绩以及评语 -->
     <el-dialog
@@ -176,7 +176,7 @@
         </el-form>
       </div>
       <template #footer>
-        <el-button type="info" @click="cancel('stuForm')">取 消</el-button>
+        <el-button @click="cancel('stuForm')">取 消</el-button>
         <el-button type="primary" @click="determine">确 定</el-button>
       </template>
     </el-dialog>

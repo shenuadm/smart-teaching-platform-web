@@ -16,15 +16,6 @@ export function adddata(e) {
   return http.post('/menu/add', e);
 }
 // 学生端
-// 获取个人信息
-export function getPersonInfo() {
-  return http.get('/user/getInfo');
-}
-// 保存个人信息的修改
-export function savePersonInfo(data) {
-  return http.post('/user/updateMyself', data);
-}
-
 // 课程详情
 export function courseDetails(id) {
   return http.get('/studentCourse/detail/' + id);
@@ -37,10 +28,6 @@ export function getTreeData(id) {
 // 获取实验步骤
 export function getExperimentStudentData(id, studentCourseId) {
   return http.get('/ExperimentReportPlan/student/getExperimentPlanId/' + id + '/' + studentCourseId);
-}
-// 获取实验结果
-export function getExperimentResult(id, studentCourseId) {
-  return http.get('/experimentReport/student/' + id + '/' + studentCourseId);
 }
 
 // 超级管理员端
@@ -158,10 +145,6 @@ export function mdelstep(data) {
 //删除实验步骤
 export function delstep(id) {
   return http.get('ExperimentReportPlan/delete/' + id);
-}
-//实验步骤查看详情
-export function getdetail(id) {
-  return http.get('ExperimentReportPlan/getDetail/' + id);
 }
 // 修改菜单管理数据
 export function upmenuData(u) {

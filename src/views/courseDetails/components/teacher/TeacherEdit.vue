@@ -6,8 +6,7 @@
       :rules="rules"
       class="ml-20 tea-edit-stu-home"
       label-position="top"
-      v-loading="$store.state.isLoading"
-    >
+      v-loading="$store.state.isLoading">
       <el-form-item label="作业名称">
         <div>{{ formData.name }}</div>
       </el-form-item>
@@ -22,15 +21,14 @@
           v-model.number="formData.score"
           placeholder="请输入学生成绩"
           type="number"
-          style="width: 200px"
-        ></el-input>
+          style="width: 200px"></el-input>
       </el-form-item>
       <el-form-item label="评语" prop="comments">
         <el-input v-model="formData.comments" type="textarea" :rows="4" placeholder="请输入学生评语"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit">提交</el-button>
-        <el-button type="info" @click="cancel">取消</el-button>
+        <el-button @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>

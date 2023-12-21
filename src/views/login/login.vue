@@ -24,7 +24,7 @@
               </el-input>
             </el-form-item>
             <el-form-item class="login-btn text-center">
-              <el-button type="primary" @click="Login('loginForm')">登录</el-button>
+              <el-button type="primary" @click="login('loginForm')">登录</el-button>
             </el-form-item>
             <!-- <el-button type="" @click="www">退出</el-button> -->
             <!-- <img src="https://engine443.com/ovirt-engine/web-ui/sso/logout" /> -->
@@ -131,20 +131,10 @@ export default {
       this.logindis = true;
       this.enrolldis = false;
     },
-    www() {
-      // fetch('https://engine443.com/ovirt-engine/web-ui/sso/logout');
-      const ele = document.createElement('script');
-      ele.src = 'https://engine443.com/ovirt-engine/web-ui/sso/logout';
-      document.querySelector('body').append(ele);
-    },
-    toEnroll() {
-      this.logindis = false;
-      this.enrolldis = true;
-    },
     test(e) {
       e.preventDefault();
     },
-    Login(formName) {
+    login(formName) {
       const data = {
         account: this.loginForm.logNum,
         password: this.loginForm.logPas,
@@ -181,27 +171,6 @@ export default {
         }
       });
     },
-    toRegister() {
-      this.enrolldis = true;
-      this.logindis = false;
-    },
-    Enroll(formName) {
-      const data = {
-        account: this.registerForm.username,
-        username: this.registerForm.nikename,
-        password: this.registerForm.password,
-      };
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          toRegister(data).then(() => {
-            this.$message.success('注册成功');
-            this.registerForm = {};
-          });
-        } else {
-          return this.$message.warning('请输入正确的账号密码');
-        }
-      });
-    },
   },
   name: 'loginIndex',
 };
@@ -235,18 +204,15 @@ img {
   width: 100px;
   height: 100px;
 }
-.login-num,
-.enroll-num {
+.login-num {
   width: 50%;
   height: 62px;
   font-size: 16px;
   text-align: center;
   line-height: 62px;
-  /* cursor: pointer; */
   background-color: white;
 }
-.bglog,
-.bgenr {
+.bglog {
   position: relative;
   width: 100%;
   height: 62px;
@@ -265,43 +231,9 @@ img {
   height: auto;
   margin-top: 20px;
 }
-.enroll-login {
-  position: relative;
-  height: auto;
-  top: 20px;
-}
-.number,
-.pas,
-.name,
-.pas-tow,
-.enr-number {
-  position: relative;
-  width: 338px;
-  height: 67px;
-  margin-top: 20px;
-}
 .pas-tow > span {
   display: inline-block;
   text-indent: 10px;
-}
-.input-number,
-.input-pas,
-.input-name,
-.input-pas-tow,
-.input-enr-number {
-  position: relative;
-  width: 338px;
-  height: 40px;
-  padding-left: 15px;
-  border: 1px solid #e1e1e1;
-}
-.input-number:focus,
-.input-pas:focus,
-.input-name:focus,
-.input-pas-tow:focus,
-.input-enr-number:focus {
-  outline: none;
-  border-color: #43bc60;
 }
 .number > span,
 .pas > span,

@@ -1,11 +1,11 @@
+<!--suppress CssUnusedSymbol -->
 <template>
   <el-dialog
     :visible="visible"
     :title="(formData.id ? '编辑' : '新增') + '作业'"
     width="30%"
     :before-close="cancel"
-    :close-on-click-modal="false"
-  >
+    :close-on-click-modal="false">
     <el-form :model="formData" ref="homeworkForm" :rules="rules" label-width="80px" v-loading="$store.state.isLoading">
       <el-form-item label="作业名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入作业名称"></el-input>
@@ -23,9 +23,9 @@
         <el-date-picker v-model="formData.endTime" type="datetime" placeholder="请选择作业截至时间"> </el-date-picker>
       </el-form-item>
     </el-form>
-    <template slot="footer">
+    <template #footer>
       <el-button type="primary" @click="submit">确认</el-button>
-      <el-button type="info" @click="cancel">取消</el-button>
+      <el-button @click="cancel">取消</el-button>
     </template>
   </el-dialog>
 </template>

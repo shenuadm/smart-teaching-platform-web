@@ -6,27 +6,27 @@
         <li><i class="el-icon-s-order"></i>公告</li>
         <li><i class="el-icon-chat-line-round"></i>公众号</li>
       </ul>
-      <img src="@/assets/cancel.png" alt="" class="cancel-img" @click="retract">
+      <img src="@/assets/cancel.png" alt="" class="cancel-img" @click="retract" />
     </div>
-    <img src="@/assets/robot.png" alt="" class="robot-img" @click="expand">
+    <img src="@/assets/robot.png" alt="" class="robot-img" @click="expand" />
   </div>
 </template>
 
 <script>
 export default {
-  name: "asideIndex",
-  data(){
-    return{
-      isShow:false
-    }
+  name: 'asideIndex',
+  data() {
+    return {
+      isShow: false,
+    };
   },
   methods: {
-    retract(){
-      this.isShow = false
+    retract() {
+      this.isShow = false;
     },
-    expand(){
-      this.isShow = true
-    }
+    expand() {
+      this.isShow = true;
+    },
   },
 };
 </script>
@@ -38,7 +38,7 @@ export default {
   top: 100px;
   right: 20px;
 }
-.robot-img{
+.robot-img {
   width: 50px;
   height: 50px;
   position: fixed;
@@ -46,10 +46,10 @@ export default {
   right: 20px;
   cursor: pointer;
 }
-.aside-nav{
+.aside-nav {
   position: relative;
 }
-.cancel-img{
+.cancel-img {
   width: 20px;
   height: 20px;
   position: absolute;
@@ -62,7 +62,7 @@ ul {
   background-color: #fff;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0px 2px 10px #efefef;
+  box-shadow: 0 2px 10px #efefef;
 }
 li {
   height: 50px;
