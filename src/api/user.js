@@ -13,3 +13,5 @@ export const saveUserInfoService = ({ oldpwd, password, username, phone }) =>
  * @returns
  */
 export const getUserInfoService = () => http.get('/user/getInfo');
+
+export const userLogout = () => http.get('/user/logout');

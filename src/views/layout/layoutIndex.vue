@@ -1,14 +1,13 @@
 <template>
   <el-container class="personalInfo layout-index warpper">
     <!-- 侧导航 -->
-    <div :span="4" class="mr-20">
+    <div class="mr-20">
       <el-menu
         :default-active="$route.path"
         class="el-menu-vertical-demo text-center"
         router
         :collapse="false"
-        style="width: 200px"
-      >
+        style="width: 200px">
         <div v-for="item in navList" :key="item.id">
           <el-menu-item v-if="item.type === '菜单'" :index="item.funurl">
             <!-- 系统通知，展示未读通知数 -->
@@ -36,7 +35,7 @@
       </el-menu>
     </div>
     <!-- 信息内容 -->
-    <div :span="20" class="person-container">
+    <div class="person-container">
       <!-- 路由出口 -->
       <router-view></router-view>
     </div>
@@ -58,7 +57,7 @@ export default {
     this.rolename = sessionStorage.getItem('rolename');
     // 如果有系统通知选项，就获取未读的通知
     if (this.navList.find((item) => item.funurl === '/userNotice')) {
-      this.$store.dispatch('getUnreadNotice');
+      await this.$store.dispatch('getUnreadNotice');
     }
   },
 };

@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { v4 as uuidV4 } from 'uuid';
 import { getTreeData } from '@/utils/api.js';
 import { getExperimentContentService } from '@/api/experiment.js';
 import TeacherHomework from './teacher/TeacherHomework.vue';
@@ -170,11 +171,13 @@ export default {
             cnode.children.push({
               title: '查看课件',
               treeType: 1,
+              id: uuidV4(),
             });
             cnode.children.push({
               title: '查看作业',
               treeType: 3,
               articleId: cnode.id,
+              id: uuidV4(),
             });
           }
           cnode.pid !== '' && (cnode.index = `第${index + 1}节 `);
@@ -183,14 +186,16 @@ export default {
       node.pid === 0 && (node.index = `第${index + 1}章 `);
       return node;
     });
+    console.log(this.data);
+    console.log(Object.freeze(this.data));
     // 添加默认展开的节点
-    const [chapter] = data;
+    const [chapter] = data; // 章
     this.defaultExpandedKeys.push(chapter.id);
     if (chapter.children) {
-      const [joint] = chapter.children;
+      const [joint] = chapter.children; // 节
       this.defaultExpandedKeys.push(joint.id);
       if (joint.children) {
-        const [item] = joint.children;
+        const [item] = joint.children; // 实验
         this.defaultExpandedKeys.push(item.id);
         // 触发默认展开的子节点的点击事件
         this.handleNodeClick(item);

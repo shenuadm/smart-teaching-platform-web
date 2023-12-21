@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { userLogout } from '@/api/user';
+
 export default {
   components: {},
   data() {
@@ -53,15 +55,15 @@ export default {
     };
   },
   methods: {
-    exitLogin() {
+    async exitLogin() {
       sessionStorage.clear();
       localStorage.clear();
       this.$store.state.username = '';
-
       this.$router.push({
         path: '/',
         name: 'login',
       });
+      userLogout()
     },
   },
 };
