@@ -101,7 +101,6 @@ export default {
         phone: [{ validator: phone, trigger: 'submit' }],
         majorId: [{ validator: userRule }],
       },
-      majorData: [], // 专业年级班级列表
       majorGradeClass: [], // 当前选择的专业年级班级
     };
   },
@@ -134,11 +133,6 @@ export default {
         }
       });
     },
-    // 获取专业列表
-    async getMajorData() {
-      const { data } = await getActiveLearService();
-      this.majorData = data;
-    },
     changeMajor(val) {
       this.formData.majorId = val[0];
       val[1] && (this.formData.gradeId = val[1]);
@@ -154,16 +148,13 @@ export default {
       return item.rolename === 'student';
     },
   },
-  props: ['visible', 'editData', 'roleList'],
+  props: ['visible', 'editData', 'roleList', 'majorData'],
   watch: {
-    isStudent(newVal) {
-      if (newVal && this.majorData.length === 0) {
-        this.getMajorData();
-      }
-    },
     visible(newVal) {
       if (newVal) {
         const { majorId, gradeId, clazzId } = this.editData;
+        console.log(this.editData);
+        console.log(majorId, gradeId, clazzId);
         majorId && this.majorGradeClass.push(majorId);
         gradeId && this.majorGradeClass.push(gradeId);
         clazzId && this.majorGradeClass.push(clazzId);

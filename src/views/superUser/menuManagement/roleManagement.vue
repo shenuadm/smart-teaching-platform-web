@@ -15,7 +15,13 @@
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button size="mini" type="primary" @click="empower(scope.$index, scope.row)">授权</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              :disabled="scope.row.rolename === 'supper_admin'"
+              @click="empower(scope.$index, scope.row)"
+              >授权</el-button
+            >
             <el-button
               size="mini"
               :disabled="isClick(scope.row.rolename)"
@@ -75,8 +81,8 @@
           show-checkbox
           node-key="id"
           :props="defaultProps"
-          :default-checked-keys="checked"
           @check="check"
+          @check-change="checkChange"
           v-loading="$store.state.isLoading">
         </el-tree>
         <template #footer>
@@ -91,6 +97,14 @@
 <script>
 import { ackEmpower, addRole, delRole, roleManagement, updateRole } from '@/utils/api.js';
 import { getEmpowerTreeService } from '@/api/role.js';
+import { getMenuService } from '@/api/menu';
+
+const defaultData = {
+  rolename: '',
+  nickname: '',
+  description: '',
+  status: false,
+};
 
 export default {
   data() {
@@ -98,12 +112,7 @@ export default {
       // 角色表格
       tableData: [],
       // 编辑表单
-      form: {
-        rolename: '',
-        nickname: '',
-        description: '',
-        active: false,
-      },
+      form: { ...defaultData },
       // 表单校验
       rules: {
         rolename: [{ required: true, message: '角色标识不能为空', trigger: 'blur' }],
@@ -118,10 +127,11 @@ export default {
         children: 'children',
         label: 'menuName',
       },
-      checked: [], //授权树默认勾选的节点
+      checked: [], //勾选的节点
       roleId: '',
       isAddRole: true, //是否添加角色
       dialogLoading: true,
+      halfChecked: [], // 半勾选的节点
     };
   },
   created() {
@@ -129,9 +139,15 @@ export default {
     this.getroleManagement();
   },
   methods: {
+    checkChange(...arg) {
+      // console.log(arg);
+    },
     check(obj, treeInfo) {
+      console.log(treeInfo, 'treeInfo');
       this.checked = treeInfo.checkedKeys;
-      console.log(this.checked);
+      this.halfChecked = treeInfo.halfCheckedKeys;
+      console.log(this.checked, 'check');
+      console.log(this.halfChecked, 'halfCheck');
     },
     // 获取数据
     async getroleManagement() {
@@ -142,6 +158,7 @@ export default {
     addRole() {
       this.isAddRole = true;
       this.aeditVisible = true;
+      this.form = { ...defaultData };
     },
     // 编辑
     edit(index, row) {
@@ -154,7 +171,6 @@ export default {
     cancel() {
       this.aeditVisible = false;
       this.$refs['form'].resetFields();
-      this.form = {};
     },
     // 提交
     submit() {
@@ -174,40 +190,54 @@ export default {
     },
     // 授权
     async empower(index, row) {
+      if (this.treeData.length === 0) {
+        const { data } = await getMenuService();
+        this.treeData = data;
+      }
+
       this.empowerVisible = true;
       this.roleId = row.roleid;
-      const res = await getEmpowerTreeService(this.roleId);
-      this.treeData = res.data;
-      console.log(res.data[0]);
-      const getId = (data) => {
-        data.forEach((item) => {
-          if (item.checked) {
-            this.checked.push(item.id);
-          }
-          if (item.children != null) {
-            getId(item.children);
-          }
-        });
-      };
-      getId(res.data);
-      this.checked = Array.from(new Set([...this.checked]));
-      console.log(this.checked);
+      const { data } = await getEmpowerTreeService(this.roleId);
+      this.checked = data;
+      data.forEach((item) => {
+        this.$refs.tree.setChecked(item, true, false);
+      });
+      this.$nextTick(() => {
+        console.log(this.$refs.tree.getCurrentKey(), 'next');
+      });
+      // this.$refs.tree.setCheckedKeys(data);
+      // this.treeData = res.data;
+      // console.log(res.data[0]);
+      // const getId = (data) => {
+      //   data.forEach((item) => {
+      //     if (item.checked) {
+      //       this.checked.push(item.id);
+      //     }
+      //     if (item.children != null) {
+      //       getId(item.children);
+      //     }
+      //   });
+      // };
+      // getId(res.data);
+      // this.checked = Array.from(new Set([...this.checked]));
+      // console.log(this.checked);
     },
     // 确认授权
     async confirmEmpower() {
+      const permissionIds = Array.from(new Set([...this.checked, ...this.halfChecked]));
       const data = {
         roleId: this.roleId,
-        permissionIds: this.checked.join(','),
+        permissionIds,
       };
-      console.log(this.checked);
       await ackEmpower(data);
       this.$message.success('授权成功');
-      this.empowerVisible = false;
+      this.cancelEmpower();
     },
     // 取消授权
     cancelEmpower() {
       this.empowerVisible = false;
       this.checked = [];
+      console.log(this.checked);
     },
     // 判断该用户是否可以编辑与删除信息,可以返回false，不可以返回true
     isClick(rolename) {

@@ -3,15 +3,15 @@
     <div class="header">
       <div class="header-top">
         <div class="search-input">
-          <div class="title">账号:</div>
+          <div class="title">账号：</div>
           <el-input size="small" v-model="search.account" placeholder="请输入账号"></el-input>
         </div>
         <div class="search-input">
-          <div class="title">姓名:</div>
+          <div class="title">姓名：</div>
           <el-input size="small" v-model="search.username" placeholder="请输入姓名"></el-input>
         </div>
         <div class="search-input">
-          <div class="title">角色:</div>
+          <div class="title">角色：</div>
           <el-select v-model="search.role_id" size="small" class="mr-10" placeholder="用户角色">
             <el-option
               v-for="item in roleList"
@@ -20,14 +20,18 @@
               :value="item.roleid"></el-option>
           </el-select>
         </div>
-        <div class="search-input flex-grow">
-          <div>专业/年级/班级:</div>
-          <el-cascader
-            v-model="cascaderList"
-            :options="majorData"
-            @change="changeMajor"
-            :props="{ label: 'name', children: 'children', value: 'id' }"></el-cascader>
-        </div>
+      </div>
+      <div class="header-middle my-5 flex align-center gap-10">
+        专业/年级/班级：
+        <el-cascader
+          placeholder="请选择专业/年级/班级"
+          :disabled="false"
+          v-model="cascaderList"
+          :options="majorData"
+          size="small "
+          @change="changeMajor"
+          style="width: 300px"
+          :props="{ label: 'name', children: 'children', value: 'id' }"></el-cascader>
         <el-button type="primary" size="mini" @click="searchClick" class="btn-search">搜索</el-button>
         <el-button type="primary" size="mini" @click="resetting">重置</el-button>
       </div>
@@ -160,6 +164,7 @@ export default {
     resetting() {
       this.search = {};
       this.searchInfo = {};
+      this.cascaderList = [];
       this.getData();
     },
     //批量删除
@@ -290,6 +295,7 @@ export default {
 .search-input {
   display: flex;
   align-items: center;
+  flex-grow: 1;
 }
 .title {
   width: 50px;

@@ -174,7 +174,7 @@ export function empowerTree(id) {
 }
 // 确认授权
 export function ackEmpower(data) {
-  return http.post('/role/updateRolePermissions', data);
+  return http.post('/role/attachMenu', data);
 }
 // 添加角色
 export function addRole(data) {
