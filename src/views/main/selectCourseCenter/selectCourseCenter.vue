@@ -54,8 +54,9 @@ export default {
     async getData() {
       const res = await stuGetSelectCourseService();
       this.chooseCourse = res.data.map((item) => {
+        let picture;
         if (item.picture !== null) {
-          var picture = item.picture.split(',')[1];
+          picture = item.picture.split(',')[1];
         }
         if (!picture) {
           picture = '';

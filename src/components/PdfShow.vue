@@ -61,12 +61,11 @@ export default {
   },
 };
 </script>
-<style >
-.pdf{
+<style>
+.pdf {
   width: 52%;
   left: 50%;
-  box-shadow: 0px 5px 20px #999999;
+  box-shadow: 0 5px 20px #999999;
   transform: translateX(-50%);
 }
-
 </style>

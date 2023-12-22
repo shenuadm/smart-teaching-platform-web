@@ -61,8 +61,7 @@
       :visible.sync="addVisible"
       width="40%"
       :before-close="addcancel"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <el-form ref="form" :model="revise" :rules="rules" label-width="80px">
         <el-form-item label="显示名称" prop="title">
           <el-input v-model="revise.title" placeholder="请输入显示名称"></el-input>
@@ -85,11 +84,11 @@
         <el-form-item label="菜单图标" prop="icon">
           <el-input placeholder="请输入菜单图标的名称" v-model="revise.icon"></el-input>
         </el-form-item>
-        <el-form-item class="form-btn">
-          <el-button size="small" type="primary" @click="saveRootNode">确 定</el-button>
-          <el-button size="small" @click="addcancel">取 消</el-button>
-        </el-form-item>
       </el-form>
+      <template #footer>
+        <el-button size="small" type="primary" @click="saveRootNode">确 定</el-button>
+        <el-button size="small" @click="addcancel">取 消</el-button>
+      </template>
     </el-dialog>
     <!-- 节点功能 -->
     <el-dialog
@@ -97,8 +96,7 @@
       :visible.sync="addsonVisible"
       width="40%"
       :before-close="colseDialog"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <el-form ref="form" :model="revise" label-width="80px" :rules="rules">
         <el-form-item label="显示名称" prop="title">
           <el-input v-model="revise.title" placeholder="请输入显示名称"></el-input>
@@ -121,11 +119,11 @@
         <el-form-item label="菜单图标" prop="icon">
           <el-input placeholder="请输入菜单图标的名称" v-model="revise.icon"></el-input>
         </el-form-item>
-        <el-form-item class="form-btn">
-          <el-button size="small" type="primary" @click="saveSonNode">确 定</el-button>
-          <el-button size="small" @click="colseDialog">取 消</el-button>
-        </el-form-item>
       </el-form>
+      <template #footer>
+        <el-button size="small" type="primary" @click="saveSonNode">确 定</el-button>
+        <el-button size="small" @click="colseDialog">取 消</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -156,7 +154,7 @@ export default {
         menuName: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
         icon: [{ required: false, message: '请输入菜单图标', trigger: 'blur' }],
         funurl: [{ required: true, message: '请输入菜单路径', trigger: 'blur' }],
-        funtype: [{ required: true, message: '请选择菜单类型', trigger: 'change' }],
+        funtype: [{ required: true, message: '请选择菜单类型', trigger: 'blur' }],
         sort: [{ required: true, message: '请选择菜单排序', trigger: 'blur' }],
       },
       menuType: Object.freeze(menuType),
@@ -223,7 +221,6 @@ export default {
     saveSonNode() {
       this.$refs['form'].validate(async (valid) => {
         if (valid) {
-          console.log(this.revise, 'revise1');
           const data = {
             title: this.revise.title,
             menuName: this.revise.menuName,
@@ -235,7 +232,6 @@ export default {
           if (this.isAddSonNode) {
             // 新增子节点
             data.funpid = this.updataId;
-            console.log(data, '添加数据');
             await adddata(data);
             this.$message.success('添加节点成功');
             this.getMenuData();
@@ -243,7 +239,6 @@ export default {
           } else {
             data.funpid = this.revise.funpid;
             data.id = this.revise.id;
-            console.log(data, '修改数据');
             await upmenuData(data);
             this.$message.success('修改节点成功');
             this.getMenuData();
@@ -332,12 +327,11 @@ export default {
   display: block;
   width: 100%;
   height: 50px;
-  margin: 5px 0 0;
   text-align: center;
   line-height: 50px;
   background-color: #fafafa;
   box-shadow: 0 2px 2px #dddddd;
-  margin-top: 20px;
+  margin: 20px 0 0;
 }
 .funurl {
   white-space: nowrap;
@@ -380,9 +374,5 @@ export default {
   height: 50px !important;
   background-color: #fafafa;
   box-shadow: 0 2px 2px #dddddd;
-}
-/* 新增弹出框的脚部 */
-.menu-management .el-dialog__footer {
-  text-align: center !important;
 }
 </style>

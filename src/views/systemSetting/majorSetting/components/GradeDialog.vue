@@ -5,8 +5,7 @@
     center
     width="30%"
     :before-close="cancel"
-    :close-on-click-modal="false"
-  >
+    :close-on-click-modal="false">
     <el-form :model="formData" ref="formRef" :rules="rules" label-position="top" v-loading="$store.state.isLoading">
       <el-form-item label="年级名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入年级名称"></el-input>
@@ -15,9 +14,9 @@
         <el-switch v-model="formData.status" active-text="启用" inactive-text="禁用"></el-switch>
       </el-form-item>
     </el-form>
-    <template slot="footer">
+    <template #footer>
       <el-button type="primary" @click="submit">确认</el-button>
-      <el-button type="cancel" @click="cancel">取消</el-button>
+      <el-button @click="cancel">取消</el-button>
     </template>
   </el-dialog>
 </template>

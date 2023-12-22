@@ -1,10 +1,7 @@
+<!--suppress CssUnusedSymbol -->
 <template>
   <div class="laboratory-report">
     <div class="header mb-20">
-      <!-- <div class="title">实验报告标题:</div> -->
-      <!-- <el-input v-model="input" id="inputh" placeholder="请输入实验报告标题"></el-input> -->
-      <!-- <button class="but" @click="search">搜索</button> -->
-      <!-- <button class="but" @click="resetting">重置</button> -->
       <el-button type="primary" class="exper" @click="addreport">添加实验报告</el-button>
       <el-button type="primary" class="exper" @click="returnexper">返回实验</el-button>
       <el-button type="danger" class="exper" @click="delexper">批量删除</el-button>
@@ -71,20 +68,11 @@
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 4 }"></el-input>
         </el-form-item>
-        <!-- <el-form-item :label="isAddReport ? '上传课件' : '修改课件'" class="upload-file laboratory-from">
-          <el-upload action="" :auto-upload="false" :file-list="fileList" :limit="1" :on-change="handlePreview">
-            <el-button size="small" type="primary" plain v-if="fileList.length === 0">{{
-              isAddReport ? '点击上传' : '点击修改'
-            }}</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传单个文件</div>
-          </el-upload>
-          <a :href="revise.fileUrl" v-if="revise.fileUrl" class="pdf-view">查看课件</a>
-        </el-form-item> -->
-        <el-form-item class="form-btn">
-          <el-button @click="serve" type="primary">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
-        </el-form-item>
       </el-form>
+      <template #footer>
+        <el-button @click="serve" type="primary">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -130,10 +118,6 @@ export default {
       this.empty(this.revise);
       this.dialogVisible = true;
     },
-    // 上传报告文件
-    handlePreview(file) {
-      console.log(file);
-    },
     //跳转至实验步骤
     exreport(e) {
       this.$router.push({
@@ -165,20 +149,6 @@ export default {
       this.$refs['formRule'].resetFields();
       this.dialogVisible = false;
     },
-    //搜索
-    search() {
-      this.exdialogtabledata = true;
-      this.reportdata = this.tableData.filter((item) => {
-        // 根据实际需求编写模糊搜索的逻辑，例如使用正则表达式
-        return item.title.includes(this.input);
-      });
-    },
-    //重置
-    resetting() {
-      this.exdialogtabledata = false;
-      this.input = '';
-      this.reportdata = [];
-    },
     //返回实验
     returnexper() {
       history.back();
@@ -209,12 +179,6 @@ export default {
           this.$message.success('删除成功');
         })
         .catch(() => {});
-    },
-    handleSizeChange(val) {
-      this.pageSize = val;
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
     },
     handleSelectionChange(val) {
       this.arr = val.map((item) => item.id);
@@ -254,83 +218,14 @@ export default {
   width: 120px;
   line-height: 30px;
 }
-.but {
-  position: relative;
-  text-align: center;
-  line-height: 30px;
-  width: 40px !important;
-  background-color: #409eff;
-  border: none;
-  margin-left: 5px;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-}
 .exper {
   position: relative;
   margin-left: 5px;
   text-align: center;
   line-height: 7px;
 }
-.inputw {
-  width: 300px !important;
-  margin-top: 10px;
-}
 .el-input {
   width: 200px;
-}
-.dec {
-  position: relative;
-  width: 101px;
-  height: 70px;
-  top: 10px;
-  margin-left: 127px;
-  border: 1px solid #dcdfe6;
-  line-height: 70px;
-  color: #909399;
-}
-.custom-file-button {
-  position: relative;
-  display: block;
-  top: 10px;
-  left: 125px;
-  width: 100px;
-  height: 37px !important;
-  border: 1px solid #dcdfe6;
-  color: #909399;
-  line-height: 37px;
-}
-.custom-file-buttont {
-  position: relative;
-  top: -53px;
-}
-.status {
-  position: relative;
-  width: 300px;
-  height: 100px;
-  margin-left: 122px;
-  line-height: 40px;
-  top: 10px;
-}
-.statusx {
-  position: relative;
-  width: 100px;
-  height: 38px;
-  border: 1px solid #dcdfe6;
-  left: 3px;
-}
-.type {
-  position: relative;
-  top: -30px;
-}
-.el-radio-group {
-  position: relative;
-  top: -74px;
-  left: 85px;
-}
-.pdf-view {
-  color: #409eff;
-  padding-left: 50px;
 }
 </style>
 <style>
@@ -368,17 +263,6 @@ export default {
 .laboratory-report .el-dialog__body .form-btn .el-form-item__content {
   display: flex;
   justify-content: space-evenly;
-}
-.laboratory-report #inputh {
-  height: 30px !important;
-  width: 200px !important;
-}
-.laboratory-report #inputwd {
-  position: relative;
-  width: 200px !important;
-  margin-left: 228px;
-  top: -62px;
-  height: 72px !important;
 }
 .laboratory-report .el-input-group__prepend {
   width: 55px;

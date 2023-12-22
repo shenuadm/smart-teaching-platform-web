@@ -5,8 +5,7 @@
       ref="homeworkForm"
       class="ml-20 student-edit-homework-form"
       label-position="top"
-      v-loading="$store.state.isLoading"
-    >
+      v-loading="$store.state.isLoading">
       <el-form-item label="作业名称">
         <div>{{ formData.name }}</div>
       </el-form-item>
@@ -19,8 +18,7 @@
           v-model="formData.answer"
           placeholder="请输入您作业的结果"
           type="textarea"
-          :rows="10"
-        ></el-input>
+          :rows="10"></el-input>
         <el-input v-else :value="formData.answer" type="textarea" disabled autosize></el-input>
       </el-form-item>
       <template v-if="!isCanEdit">
@@ -34,7 +32,7 @@
       <template v-if="isCanEdit">
         <el-form-item>
           <el-button type="primary" @click="submit">保存</el-button>
-          <el-button type="info" @click="cancel">取消</el-button>
+          <el-button @click="cancel">取消</el-button>
         </el-form-item>
       </template>
     </el-form>
