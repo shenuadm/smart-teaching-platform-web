@@ -12,7 +12,7 @@
         </div>
         <div class="search-input">
           <div class="title">角色:</div>
-          <el-select v-model="search.role" size="small" class="mr-10" placeholder="用户角色">
+          <el-select v-model="search.role_id" size="small" class="mr-10" placeholder="用户角色">
             <el-option
               v-for="item in roleList"
               :key="item.roleid"
@@ -115,7 +115,7 @@ export default {
         username: '',
         major: '',
         grade: '',
-        role: '',
+        role_id: '',
       }, // 搜索显示内容
       searchInfo: {}, // 实际搜索信息
       visible: false, // 弹框状态
