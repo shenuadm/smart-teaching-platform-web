@@ -10,82 +10,96 @@
         @success="getStudentData"></StudentHomeworkTable>
     </template>
     <template v-else>
-      <el-tabs v-model="tabActive" @tab-click="handleTabs">
-        <el-tab-pane label="系统作业" name="0">
-          <el-table
-            v-if="isSystem"
-            :data="systemData"
-            border
-            @selection-change="handleTable"
-            v-loading="$store.state.isLoading">
-            <el-table-column type="selection" width="50"> </el-table-column>
-            <el-table-column label="作业名称" prop="name"></el-table-column>
-            <el-table-column label="作业内容" prop="content"></el-table-column>
-            <el-table-column label="参考答案" prop="answer"></el-table-column>
-            <el-table-column label="截止时间" prop="endTime">
-              <template #default="{ row }">
-                <el-date-picker v-model="row.endTime" type="datetime" :editable="false" placeholder="选择作业截止时间">
-                </el-date-picker>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作">
-              <template #default="{ row }">
-                <el-button
-                  :type="row.assign ? 'info' : 'primary'"
-                  :disabled="row.assign"
-                  size="small"
-                  @click="submitHomework(row)"
-                  >布置</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane label="布置的作业" name="1">
-          <el-table v-if="isAssign" :data="arrangeData" border v-loading="$store.state.isLoading">
-            <el-table-column label="作业名称" prop="name"></el-table-column>
-            <el-table-column label="作业内容" prop="content"></el-table-column>
-            <el-table-column label="类型" prop="custom">
-              <template #default="{ row }">
-                {{ row.custom ? '老师' : '系统' }}
-              </template>
-            </el-table-column>
-            <el-table-column label="截止时间" prop="endTime"> </el-table-column>
-            <el-table-column label="操作">
-              <template #default="{ row }">
-                <el-button type="primary" size="small" @click="homeworkDetail(row)">编辑</el-button>
-                <el-button type="danger" size="small" @click="deleteHomework(row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane label="学生作业" name="2">
-          <el-table v-if="isSutdent" :data="studentData" border v-loading="$store.state.isLoading">
-            <el-table-column label="账号" prop="account"></el-table-column>
-            <el-table-column label="姓名" prop="username"></el-table-column>
-            <el-table-column label="专业" prop="major"></el-table-column>
-            <el-table-column label="年级" prop="grade"></el-table-column>
-            <el-table-column label="班级" prop="clazz"></el-table-column>
-            <el-table-column label="分数" prop="score">
-              <template #default="{ row }">{{
-                Number.isInteger(row.score) ? row.score : row.score.toFixed(1)
-              }}</template>
-            </el-table-column>
-            <el-table-column label="操作">
-              <template #default="{ row }">
-                <el-button type="primary" size="small" @click="studentHomeWork(row)">详情</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
-      <div class="action">
-        <el-button type="primary" @click="addHomework" v-if="isAssign">新增作业</el-button>
-        <el-date-picker v-if="isSystem" v-model="allDate" type="datetime" placeholder="请选择作业截止时间">
-        </el-date-picker>
-        <el-button v-if="isSystem" type="primary" @click="allSubmit">一键发布</el-button>
+      <div class="flex align-center">
+        <el-tabs v-model="tabActive" @tab-click="handleTabs">
+          <el-tab-pane label="系统作业" name="0"></el-tab-pane>
+          <el-tab-pane label="布置的作业" name="1"></el-tab-pane>
+          <el-tab-pane label="学生作业" name="2"></el-tab-pane>
+        </el-tabs>
+        <div class="flex ml-30 gap-10" style="margin-bottom: 15px">
+          <template v-if="isAssign">
+            <el-button type="primary" @click="addHomework" v-if="isAssign">新增作业</el-button>
+            <el-button style="margin-left: 0">下载模板</el-button>
+            <el-upload
+              action=""
+              :auto-upload="false"
+              class="teacher-homework-list-upload flex"
+              :file-list="fileList"
+              ref="upload"
+              :on-change="uploadChange">
+              <el-button type="primary" slot="trigger">导入作业文件</el-button>
+              <el-button type="primary" class="ml-10">确认上传</el-button>
+            </el-upload>
+          </template>
+          <el-date-picker v-if="isSystem" v-model="allDate" type="datetime" placeholder="请选择作业截止时间">
+          </el-date-picker>
+          <el-button v-if="isSystem" type="primary" @click="allSubmit">一键发布</el-button>
+        </div>
       </div>
+      <!--   学生列表   -->
+      <el-table v-if="isSutdent" :data="studentData" border v-loading="$store.state.isLoading">
+        <el-table-column label="账号" prop="account"></el-table-column>
+        <el-table-column label="姓名" prop="username"></el-table-column>
+        <el-table-column label="专业" prop="major"></el-table-column>
+        <el-table-column label="年级" prop="grade"></el-table-column>
+        <el-table-column label="班级" prop="clazz"></el-table-column>
+        <el-table-column label="分数" prop="score">
+          <template #default="{ row }">{{ Number.isInteger(row.score) ? row.score : row.score.toFixed(1) }}</template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template #default="{ row }">
+            <el-button type="primary" size="small" @click="studentHomeWork(row)">详情</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--   布置的作业表格   -->
+      <el-table v-if="isAssign" :data="arrangeData" border v-loading="$store.state.isLoading">
+        <el-table-column label="作业名称" prop="name"></el-table-column>
+        <el-table-column label="作业内容" prop="content"></el-table-column>
+        <el-table-column label="类型" prop="custom">
+          <template #default="{ row }">
+            {{ row.custom ? '老师' : '系统' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="截止时间" prop="endTime"> </el-table-column>
+        <el-table-column label="操作">
+          <template #default="{ row }">
+            <el-button type="primary" size="small" @click="homeworkDetail(row)">编辑</el-button>
+            <el-button type="danger" size="small" @click="deleteHomework(row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--   系统作业表格   -->
+      <el-table
+        v-if="isSystem"
+        :data="systemData"
+        border
+        @selection-change="handleTable"
+        v-loading="$store.state.isLoading">
+        <el-table-column type="selection" width="50"> </el-table-column>
+        <el-table-column label="作业名称" prop="name"></el-table-column>
+        <el-table-column label="作业内容" prop="content"></el-table-column>
+        <el-table-column label="参考答案" prop="answer"></el-table-column>
+        <el-table-column label="截止时间" prop="endTime">
+          <template #default="{ row }">
+            <el-date-picker v-model="row.endTime" type="datetime" :editable="false" placeholder="选择作业截止时间">
+            </el-date-picker>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template #default="{ row }">
+            <el-button
+              :type="row.assign ? 'info' : 'primary'"
+              :disabled="row.assign"
+              size="small"
+              @click="submitHomework(row)"
+              >布置</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
     </template>
+    <!--  作业详情弹框  -->
     <HomeworkDetail
       :visible.sync="homeworkDetailVisible"
       :editData="editHomeworkData"
@@ -106,6 +120,7 @@ import {
 import HomeworkDetail from './HomeworkDetail.vue';
 import { isAfterNow } from '@/utils/date.js';
 import StudentHomeworkTable from './StudentHomeworkTable.vue';
+import { isAllowFile } from '@/utils/upload';
 
 // 编辑新增作业默认数据
 const defaultData = {
@@ -128,6 +143,7 @@ export default {
       editHomeworkData: { ...defaultData }, // 编辑的作业
       studentHomeworkVisible: false, // 学生作业列表显示状态
       studentId: '', // 查看学生作业的学生id
+      fileList: [],
     };
   },
   props: ['articleId'], // 节id
@@ -135,11 +151,11 @@ export default {
     // 页面切换
     async handleTabs() {
       if (this.isSystem && this.systemData.length === 0) {
-        this.getSystemData();
+        await this.getSystemData();
       } else if (this.isAssign && this.arrangeData.length === 0) {
-        this.getSubmitData();
+        await this.getSubmitData();
       } else if (this.isSutdent && this.studentData.length === 0) {
-        this.getStudentData();
+        await this.getStudentData();
       }
     },
     // 获取系统作业数据
@@ -192,7 +208,7 @@ export default {
         .then(async () => {
           await teaDelHomeworkService(id);
           this.$message.success('删除作业成功');
-          this.getSubmitData();
+          await this.getSubmitData();
         })
         .catch(() => {});
     },
@@ -211,6 +227,18 @@ export default {
           return a;
         }, [])
         .join(',');
+    },
+    uploadChange(file) {
+      console.log(this.fileList);
+      console.log(this.$refs.upload.uploadFiles);
+      if (!isAllowFile(file.raw.name, ['.xls', '.xlsx'])) {
+        this.$refs.upload.uploadFiles.pop();
+        return this.$message.error('请上传excel类型文件');
+      }
+      if (this.$refs.upload.uploadFiles.length === 2) {
+        this.$refs.upload.uploadFiles.shift();
+      }
+      console.log(this.$refs.upload.uploadFiles);
     },
   },
   mounted() {
@@ -248,15 +276,16 @@ export default {
 .teacher-homework-list {
   position: relative;
 }
-.action {
-  position: absolute;
-  display: flex;
-  gap: 20px;
-  top: 0;
-  right: 0;
-}
 .student-homework-action {
   height: 40px;
   margin-bottom: 15px;
+}
+</style>
+<style>
+.teacher-homework-list-upload .el-upload-list {
+  display: flex;
+  align-items: center;
+}
+.teacher-homework-list-upload .el-upload-list li {
 }
 </style>

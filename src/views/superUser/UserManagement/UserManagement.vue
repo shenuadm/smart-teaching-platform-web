@@ -20,13 +20,13 @@
               :value="item.roleid"></el-option>
           </el-select>
         </div>
-        <div class="search-input">
-          <div class="title">专业:</div>
-          <el-input size="small" v-model="search.major" placeholder="请输入专业"></el-input>
-        </div>
-        <div class="search-input">
-          <div class="title">年级:</div>
-          <el-input size="small" v-model="search.grade" placeholder="请输入年级"></el-input>
+        <div class="search-input flex-grow">
+          <div>专业/年级/班级:</div>
+          <el-cascader
+            v-model="cascaderList"
+            :options="majorData"
+            @change="changeMajor"
+            :props="{ label: 'name', children: 'children', value: 'id' }"></el-cascader>
         </div>
         <el-button type="primary" size="mini" @click="searchClick" class="btn-search">搜索</el-button>
         <el-button type="primary" size="mini" @click="resetting">重置</el-button>
@@ -93,7 +93,12 @@
         :hide-on-single-page="count <= 10">
       </el-pagination>
     </div>
-    <EditUser :visible.sync="visible" @success="getData" :editData="editData" :role-list="roleList"></EditUser>
+    <EditUser
+      :visible.sync="visible"
+      @success="getData"
+      :editData="editData"
+      :role-list="roleList"
+      :major-data="majorData"></EditUser>
   </div>
 </template>
 
@@ -102,6 +107,8 @@ import { delUsers, getUserData, resetPass, delUser } from '@/utils/api';
 import { isAllowFile } from '@/utils/upload.js';
 import { uploadStudentExcelService, getUserRoleService } from '@/api/userManagement.js';
 import EditUser from './components/EditUser.vue';
+import { getActiveLearService } from '@/api/systemSetting';
+import { getSearchInfo } from '@/utils';
 
 export default {
   data() {
@@ -113,8 +120,9 @@ export default {
       search: {
         account: '',
         username: '',
-        major: '',
-        grade: '',
+        major_id: '',
+        grade_id: '',
+        clazz_id: '',
         role_id: '',
       }, // 搜索显示内容
       searchInfo: {}, // 实际搜索信息
@@ -123,12 +131,15 @@ export default {
       tableData: [], // 表格数据
       multipleSelection: [], // 多选框当前选中的
       editData: {}, // 编辑数据
-      roleList: [],
+      roleList: [], //  角色列表
+      majorData: [], // 年级班级专业级联列表
+      cascaderList: [],
     };
   },
   mounted() {
     this.getData();
     this.getRoleList();
+    this.getMajorData();
   },
   methods: {
     //添加用户表
@@ -189,22 +200,22 @@ export default {
     // 选择框选中事件
     handleSelectionChange(val) {
       this.multipleSelection = val.map((item) => (item.roleName !== 'supper_admin' ? item.userid : ''));
-      // console.log(this.multipleSelection);
     },
     // 获取数据
     async getData() {
-      let res;
-      if (Object.values(this.searchInfo).every((item) => item === '')) {
-        res = await getUserData({ page: this.page });
-      } else {
-        res = await getUserData({ ...this.searchInfo, page: this.page });
-      }
-      this.count = res.count;
-      this.tableData = res.data;
+      const search = { ...this.searchInfo, page: this.page };
+      const params = getSearchInfo(search);
+      const { count, data } = await getUserData(params);
+      this.count = count;
+      this.tableData = data;
+    },
+    // 获取专业列表
+    async getMajorData() {
+      const { data } = await getActiveLearService();
+      this.majorData = data;
     },
     async getRoleList() {
       const { data } = await getUserRoleService();
-      console.log(data, 'roleData');
       this.roleList = data;
     },
     // 选择文件后触发
@@ -230,6 +241,13 @@ export default {
     },
     async downloadSample() {
       location.href = 'http://localhost:8080/export/UserImportTemplate_170122009491646.xlsx';
+    },
+    changeMajor(val) {
+      const [majorId, gradeId, clazzId] = val;
+      this.search.major_id = majorId;
+      this.search.grade_id = gradeId;
+      this.search.clazz_id = clazzId;
+      console.log(clazzId, 'clazz');
     },
   },
   components: {

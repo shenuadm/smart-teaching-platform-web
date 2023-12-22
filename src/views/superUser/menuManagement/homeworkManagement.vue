@@ -4,6 +4,17 @@
       <el-button type="primary" size="small" @click="addexper">添加作业</el-button>
       <el-button type="danger" size="small" @click="delexper">批量删除</el-button>
       <el-button type="primary" size="small" @click="returnexper">返回章节</el-button>
+      <el-button size="small" class="mr-10">下载模板</el-button>
+      <el-upload
+        action=""
+        :auto-upload="false"
+        class="homework-manage-upload flex"
+        :file-list="fileList"
+        ref="upload"
+        :on-change="uploadChange">
+        <el-button size="small" type="primary" slot="trigger">导入作业文件</el-button>
+        <el-button size="small" type="primary" class="ml-10">确认上传</el-button>
+      </el-upload>
     </div>
     <el-table
       ref="multipleTable"
@@ -67,6 +78,7 @@
 <script>
 import { addHomeWork, editHomeWork, delHomeWork, delAllHomeWork } from '@/utils/api';
 import { getHomeWorkListService } from '@/api/homework.js';
+import { isAllowFile } from '@/utils/upload';
 
 const defaultData = {
   name: '',
@@ -95,6 +107,7 @@ export default {
           trigger: 'blur',
         },
       },
+      fileList: [],
     };
   },
   methods: {
@@ -164,6 +177,18 @@ export default {
       const res = await getHomeWorkListService(this.$route.query.id);
       this.tableData = res.data;
     },
+    uploadChange(file) {
+      // console.log(this.$refs.upload.uploadFiles);
+      const upload = this.$refs.upload.uploadFiles;
+      if (!isAllowFile(file.raw.name, ['.xls', '.xlsx'])) {
+        upload.pop();
+        return this.$message.error('请上传excel类型文件');
+      }
+      if (upload.length === 2) {
+        upload.shift();
+      }
+      console.log(upload);
+    },
   },
   created() {
     this.getDataList();
@@ -174,12 +199,21 @@ export default {
 <style scoped>
 .header {
   width: 100%;
-  height: 30px;
   display: flex;
   align-items: center;
 }
 
 .form-status {
   margin-bottom: 10px;
+}
+.homework-manage-upload {
+  height: 34px;
+}
+</style>
+
+<style>
+.homework-manage-upload .el-upload-list {
+  display: flex;
+  align-items: center;
 }
 </style>

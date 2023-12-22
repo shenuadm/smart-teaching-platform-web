@@ -202,12 +202,14 @@ img {
 .flex {
   display: flex;
 }
-
 .flex-grow {
   flex-grow: 1;
 }
 .align-center {
   align-items: center;
+}
+.gap-10 {
+  gap: 10px;
 }
 
 .justify-around {
