@@ -8,13 +8,6 @@ export function toLogin(data) {
 export function toRegister(data) {
   return http.post('/user/register', data);
 }
-// 获取全部数据
-export function getdata() {
-  return http.get('/menu/list');
-}
-export function adddata(e) {
-  return http.post('/menu/add', e);
-}
 // 学生端
 // 课程详情
 export function courseDetails(id) {
@@ -31,10 +24,6 @@ export function getExperimentStudentData(id, studentCourseId) {
 }
 
 // 超级管理员端
-// 删除菜单管理数据
-export function deldata(id) {
-  return http.delete('/menu/delete/' + id);
-}
 //课程请获取数据
 export function course(data) {
   return http.get('/course/list?', data);
@@ -145,10 +134,6 @@ export function mdelstep(data) {
 //删除实验步骤
 export function delstep(id) {
   return http.get('ExperimentReportPlan/delete/' + id);
-}
-// 修改菜单管理数据
-export function upmenuData(u) {
-  return http.post('/menu/update', u);
 }
 // 超级管理员用户管理//
 //用户管理数据获取

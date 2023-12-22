@@ -1,11 +1,10 @@
-<!--suppress CssUnusedSymbol, CssUnusedSymbol -->
 <template>
   <div class="course-manage">
     <div class="header-course mb-20">
-      <div class="title">课程名称:</div>
-      <el-input v-model="input" class="ml-10 mr-10 input-content" placeholder="请输入内容"></el-input>
-      <el-button type="primary" size="small" @click="search">搜索</el-button>
-      <el-button type="primary" size="small" @click="resetting">重置</el-button>
+      <!--      <div class="title">课程名称:</div>-->
+      <!--      <el-input v-model="input" class="ml-10 mr-10 input-content" placeholder="请输入内容"></el-input>-->
+      <!--      <el-button type="primary" size="small" @click="search">搜索</el-button>-->
+      <!--      <el-button type="primary" size="small" @click="resetting">重置</el-button>-->
       <el-button type="primary" size="small" @click="addcourse">添加课程</el-button>
       <el-button type="danger" size="small" @click="batchdel">批量删除</el-button>
     </div>
@@ -159,10 +158,6 @@ export default {
       this.imageUrl = '';
       this.dialogVisible = true;
     },
-    //课程搜索
-    search() {
-      if (!this.input) return this.$message.warning('请输入课程名称后再进行搜索');
-    },
     //保存
     serve() {
       this.$refs['ruleForm'].validate(async (valid) => {
@@ -214,10 +209,6 @@ export default {
         })
         .catch(() => {});
     },
-    //重置按钮
-    resetting() {
-      this.input = '';
-    },
     //章节管理
     chapter(e) {
       this.$router.push({
@@ -229,7 +220,6 @@ export default {
         },
       });
     },
-
     handleSelectionChange(val) {
       this.arr = val.map((item) => item.id);
     },

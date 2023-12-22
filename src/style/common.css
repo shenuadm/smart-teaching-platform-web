@@ -206,6 +206,9 @@ img {
 .flex-grow {
   flex-grow: 1;
 }
+.align-center {
+  align-items: center;
+}
 
 .justify-around {
   justify-content: space-around;

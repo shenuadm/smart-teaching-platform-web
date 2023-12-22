@@ -22,7 +22,7 @@
           }}</el-col>
           <el-col :span="10">
             <el-button v-if="node.data.level !== 3" size="small" type="primary" @click="add(node.data)">新增</el-button>
-            <!-- {{ node.data.level === 1 ? '年级' : '班级' }} -->
+            <!--            {{ node.data.level === 1 ? '年级' : '班级' }}-->
             <el-button size="small" type="primary" @click="edit(node.data)">编辑</el-button>
             <el-button size="small" type="danger" @click="del(node.data)">删除</el-button>
           </el-col>
