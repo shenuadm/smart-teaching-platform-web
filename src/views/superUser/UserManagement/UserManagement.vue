@@ -229,7 +229,7 @@ export default {
       this.$refs.upload.clearFiles();
     },
     async downloadSample() {
-      location.href = 'http://localhost:8080/export/UserImportTemplate_170122009491646.xlsx';
+      location.href = '/export/UserImportTemplate_170122009491646.xlsx';
     },
   },
   components: {
