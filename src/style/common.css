@@ -208,6 +208,9 @@ img {
 .align-center {
   align-items: center;
 }
+.flex-shark-0 {
+  flex-shrink: 0;
+}
 .gap-10 {
   gap: 10px;
 }

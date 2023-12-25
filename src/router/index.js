@@ -42,6 +42,11 @@ const routes = [
             name: 'menuManagement',
             component: () => import('@/views/superUser/menuManagement/menuManagement'),
           },
+          {
+            path: '/syslog',
+            name: 'syslog',
+            component: () => import('@/views/superUser/logManagement/logManagement.vue'),
+          },
           // 用户管理
           {
             path: '/UserManagement',
