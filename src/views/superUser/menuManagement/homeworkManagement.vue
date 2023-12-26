@@ -96,16 +96,8 @@ export default {
       revise: { ...defaultData },
       rules: {
         name: { required: true, message: '课程名称不能为空', trigger: 'blur' },
-        content: {
-          required: true,
-          message: '课程内容不能为空',
-          trigger: 'blur',
-        },
-        answer: {
-          required: true,
-          message: '参考答案不能为空',
-          trigger: 'blur',
-        },
+        content: { required: true, message: '课程内容不能为空', trigger: 'blur' },
+        answer: { required: true, message: '参考答案不能为空', trigger: 'blur' },
       },
       fileList: [],
     };

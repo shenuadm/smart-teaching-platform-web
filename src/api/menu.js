@@ -14,10 +14,12 @@ export const getMenuService = () => http.get('/menu/list');
  * @param menuName
  * @param sort
  * @param title
+ *
+ * @param icon
  * @returns {*}
  */
-export const addMenuService = ({ funpid, funurl, funtype, menuName, sort, title }) =>
-  http.post('/menu/add', { funpid, funurl, menuName, sort, funtype, title });
+export const addMenuService = ({ funpid, funurl, funtype, menuName, sort, title, icon }) =>
+  http.post('/menu/add', { funpid, funurl, menuName, sort, funtype, title, icon });
 
 /**
  * 修改菜单
@@ -28,10 +30,11 @@ export const addMenuService = ({ funpid, funurl, funtype, menuName, sort, title 
  * @param sort
  * @param title
  * @param id
+ * @param icon
  * @returns {*}
  */
-export const updateMenuService = ({ funpid, funurl, funtype, menuName, sort, title, id }) =>
-  http.post('/menu/update', { funpid, funurl, menuName, sort, funtype, title, id });
+export const updateMenuService = ({ funpid, funurl, funtype, menuName, sort, title, id, icon }) =>
+  http.post('/menu/update', { funpid, funurl, menuName, sort, funtype, title, id, icon });
 
 /**
  * 删除菜单

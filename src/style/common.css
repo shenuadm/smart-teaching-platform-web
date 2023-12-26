@@ -69,6 +69,11 @@ img {
   border: 1px solid #dcdfe6;
 }
 
+.min-width-1-3 {
+  min-width: 33%;
+}
+
+
 
 /* 字体大小 */
 /* 一级标题 */

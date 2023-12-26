@@ -30,4 +30,9 @@ export const deleteLogsService = (ids) => http.delete(`/syslog/deletes/${ids}`);
 export const deleteLogByTimeService = (startTime, endTime) =>
   http.delete(`/syslog/deletesByYear/${startTime}/${endTime}`);
 
+/**
+ * 获取日志详情
+ * @param id
+ * @returns {*}
+ */
 export const getLogDetailService = (id) => http.get(`/syslog/detail/${id}`);

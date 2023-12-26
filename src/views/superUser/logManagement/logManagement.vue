@@ -3,12 +3,14 @@
     <div class="flex align-center mb-10 gap-10">
       <div class="flex-shark-0">账户：</div>
       <el-input placeholder="请输入用户账户" v-model="searchInput.account" size="small"></el-input>
-      <div class="flex-shark-0">ip：</div>
-      <el-input placeholder="请输入ip地址" v-model="searchInput.ip" size="small"></el-input>
-      <div class="flex-shark-0">信息：</div>
+      <div class="flex-shark-0">IP：</div>
+      <el-input placeholder="请输入IP地址" v-model="searchInput.ip" size="small"></el-input>
+      <div class="flex-shark-0">标题：</div>
       <el-input placeholder="请输入日志信息" v-model="searchInput.message" size="small"></el-input>
-      <div class="flex-shark-0">操作：</div>
-      <el-input placeholder="请输入" v-model="searchInput.operation" size="small"></el-input>
+      <div class="flex-shark-0">类型：</div>
+      <el-select v-model="searchInput.operation" style="width: 100%" size="small" placeholder="请输入操作类型">
+        <el-option v-for="item in actionType" :key="item" :label="item" :value="item"></el-option>
+      </el-select>
       <el-button size="small" type="primary" @click="search">搜索</el-button>
       <el-button size="small" type="primary" @click="reset">重置</el-button>
     </div>
@@ -33,10 +35,10 @@
       <el-table-column label="ip地址" prop="ip"></el-table-column>
       <el-table-column label="信息" prop="message"></el-table-column>
       <el-table-column label="类型" prop="operation"></el-table-column>
-      <el-table-column label="耗时" prop="totalTime"></el-table-column>
+      <el-table-column label="耗时(ms)" prop="totalTime"></el-table-column>
       <el-table-column label="操作">
         <template #default="{ row }">
-          <el-button size="medium" type="primary">详情</el-button>
+          <el-button size="medium" type="primary" @click="getDetail(row.id)">详情</el-button>
           <el-button size="medium" type="danger" @click="deleteLog(row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -47,6 +49,7 @@
       :current-page="page"
       @current-change="getData"
       :hide-on-single-page="total <= 10"></el-pagination>
+    <LogDetail :visible.sync="visible" :id="id"></LogDetail>
   </div>
 </template>
 
@@ -54,6 +57,8 @@
 import { getSearchInfo } from '@/utils';
 import { deleteLogByTimeService, deleteLogService, deleteLogsService, getLogService } from '@/api/log';
 import { dateToSecond } from '@/utils/date';
+import LogDetail from '@/views/superUser/logManagement/components/LogDetail.vue';
+import { actionType } from '@/constant/log';
 
 const defaultSearch = {
   account: '',
@@ -72,6 +77,9 @@ export default {
       page: 1,
       selectList: [],
       deleteTime: '',
+      visible: false,
+      id: 0,
+      actionType,
     };
   },
   methods: {
@@ -90,10 +98,7 @@ export default {
       this.getData();
     },
     reset() {
-      if (Reflect.ownKeys(this.searchInfo).length === 0) return false;
-      console.log(this.searchInfo);
-      console.log(Object.values(this.searchInfo));
-      console.log(Object.values(getSearchInfo(this.searchInfo)));
+      if (Object.values(getSearchInfo(this.searchInfo)).length === 0) return false;
       this.page = 1;
       this.searchInfo = { ...defaultSearch };
       this.searchInput = { ...defaultSearch };
@@ -117,28 +122,29 @@ export default {
         this.getData();
       });
     },
+    getDetail(id) {
+      this.id = id;
+      this.visible = true;
+    },
     deleteByTime() {
-      console.log(this.deleteTime);
       if (this.deleteTime.length !== 2) return this.$message.warning('请选择删除时间');
       this.$confirm('是否要删除当前选中时间范围内的日志?', '提示', { type: 'warning' }).then(async () => {
-        const startTime = dateToSecond(this.deleteTime[0]);
-        const endTime = dateToSecond(this.deleteTime[1]);
-        // await deleteLogByTimeService(dateToSecond(this.deleteTime[0]), dateToSecond(this.deleteTime[1]));
-        await deleteLogByTimeService(startTime, endTime);
+        // const startTime = dateToSecond(this.deleteTime[0]);
+        // const endTime = dateToSecond(this.deleteTime[1]);
+        await deleteLogByTimeService(dateToSecond(this.deleteTime[0]), dateToSecond(this.deleteTime[1]));
+        // await deleteLogByTimeService(startTime, endTime);
         this.$message.success('删除日志成功');
+        this.deleteTime = [];
         this.getData();
       });
     },
     dateToSecond,
   },
+  components: { LogDetail },
   mounted() {
     this.getData();
   },
 };
 </script>
 
-<style scoped>
-.title {
-  width: 200px;
-}
-</style>
+<style scoped></style>

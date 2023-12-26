@@ -44,22 +44,7 @@ export function delcourse(id) {
 export function delcoursem(data) {
   return http.delete('course/deletes/' + data);
 }
-//章节管理接收数据
-export function chapter(id) {
-  return http.get('/article/list/' + id);
-}
-//添加章节数据
-export function addchapter(data) {
-  return http.formDate('/article/add', data);
-}
-//修改章节信息
-export function rchapter(data) {
-  return http.formDate('/article/update', data);
-}
-//删除章节信息
-export function dalchapter(id) {
-  return http.get('/article/delete/' + id);
-}
+
 //实验管理信息
 export function exper(id) {
   return http.get('/experiment/list/' + id);
