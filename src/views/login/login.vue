@@ -1,75 +1,27 @@
 <template>
   <div class="bg" id="loginRegister">
     <div class="login center" v-loading="$store.state.isLoading">
-      <div class="login-tab">
-        <div class="login-num flex-grow" @click="toLogin">
-          登录账号
-          <div class="bglog" v-if="enrolldis">登录账号</div>
-        </div>
-        <!-- <div class="enroll-num" @click="toEnroll">
-          学生注册账号
-          <div class="bgenr" v-if="logindis">学生注册账号</div>
-        </div> -->
-      </div>
-      <div class="content center">
-        <!-- 登录 -->
-        <div class="content-login" v-if="logindis">
-          <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="账号" prop="logNum">
-              <el-input type="text" v-model="loginForm.logNum" autocomplete="off" placeholder="请输入用户名">
-              </el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="logPas">
-              <el-input type="password" v-model="loginForm.logPas" autocomplete="off" placeholder="请输入密码">
-              </el-input>
-            </el-form-item>
-            <el-form-item class="login-btn text-center">
-              <el-button type="primary" @click="login('loginForm')">登录</el-button>
-            </el-form-item>
-            <!-- <el-button type="" @click="www">退出</el-button> -->
-            <!-- <img src="https://engine443.com/ovirt-engine/web-ui/sso/logout" /> -->
-            <!-- <a href="javascript:void(https://engine443.com/ovirt-engine/web-ui/sso/logout)">退出</a> -->
-            <!-- <a href="https://engine443.com/ovirt-engine/web-ui/sso/logout" id="qwer">qwe</a> -->
-          </el-form>
-          <!-- <div>
-            <p>还没有账号？<a href="javascript:void(0)" class="text-blue" @click="toRegister">去注册</a></p>
-          </div> -->
-        </div>
-        <!-- 注册
-        <div class="enroll-login" v-if="enrolldis">
-          <el-form
-            :model="registerForm"
-            :rules="registerRules"
-            ref="registerForm"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item label="学号" prop="username">
-              <el-input v-model="registerForm.username" maxlength="30" placeholder="请输入用户名，最长30个字符">
-              </el-input>
-            </el-form-item>
-            <el-form-item label="姓名" prop="nikename">
-              <el-input v-model="registerForm.nikename" maxlength="20" placeholder="请输入昵称，最长20个字符">
-              </el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input v-model="registerForm.password" maxlength="18" placeholder="请输入3-18位英文、数字组成的密码">
-              </el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="enrPast">
-              <el-input v-model="registerForm.enrPast" placeholder="请确认密码"> </el-input>
-            </el-form-item>
-            <el-form-item class="register-btn">
-              <el-button type="primary" @click="Enroll('registerForm')">注册</el-button>
-            </el-form-item>
-          </el-form>
-        </div> -->
+      <div class="login-num flex-grow">登录账号</div>
+      <!-- 登录 -->
+      <div class="content-login">
+        <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="账号" prop="account">
+            <el-input type="text" v-model="loginForm.account" autocomplete="off" placeholder="请输入用户名"> </el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input type="password" v-model="loginForm.password" autocomplete="off" placeholder="请输入密码">
+            </el-input>
+          </el-form-item>
+          <el-form-item class="login-btn text-center">
+            <el-button type="primary" @click="login">登录</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { toLogin, toRegister } from '@/utils/api.js';
+import { loginService } from '@/api/user';
 export default {
   data() {
     // 密码
@@ -83,89 +35,32 @@ export default {
         callback();
       }
     };
-    // 确认密码
-    let repwd = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'));
-      } else if (value !== this.registerForm.password) {
-        callback(new Error('两次输入密码不一致!'));
-      } else {
-        callback();
-      }
-    };
     return {
-      logindis: true,
-      enrolldis: false,
       loginForm: {
-        logNum: '',
-        logPas: '',
+        account: '',
+        password: '',
       },
       loginRules: {
-        logNum: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        logPas: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-      },
-      registerForm: {
-        account: '',
-        username: '',
-        password: '',
-        enrPast: '',
-      },
-      registerRules: {
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        nikename: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
-        password: [{ required: true, validator: pwd, trigger: 'blur' }],
-        enrPast: [{ required: true, validator: repwd, trigger: 'blur' }],
+        account: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { validator: pwd, trigger: 'blur' },
+        ],
       },
     };
   },
-  mounted() {
-    // const element = document.getElementById('qwer');
-    // console.log(element);
-    // element.addEventListener('click', (event) => {
-    //   event.preventDefault();
-    //   console.log('点击');
-    // });
-  },
   methods: {
-    toLogin() {
-      this.logindis = true;
-      this.enrolldis = false;
-    },
-    test(e) {
-      e.preventDefault();
-    },
-    login(formName) {
-      const data = {
-        account: this.loginForm.logNum,
-        password: this.loginForm.logPas,
-      };
-      this.$refs[formName].validate(async (valid) => {
+    login() {
+      this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
           // 登录
-          const res = await toLogin(data);
+          const res = await loginService(this.loginForm);
           localStorage.setItem('satoken', res.tokenValue); // 存token
           localStorage.setItem('navData', JSON.stringify(res.menuVoList)); // 存导航信息
           sessionStorage.setItem('rolename', res.rolename); // 角色名称
           this.$store.commit('getRolename');
           this.$store.commit('updateUsername', res.username);
           sessionStorage.setItem('username', res.username);
-          // console.log(data.password, '');
-          // // 获取可访问的路径
-          // const getRoleUrl = (data) => {
-          //   const res = [];
-          //   function arrange(arr) {
-          //     arr.forEach((item) => {
-          //       // 如果funtype是1表示是菜单，是可以访问的路径
-          //       item.funtype === 1 && res.push(item.funurl);
-          //       // 有children就递归遍历children
-          //       item.children !== null && arrange(item.children);
-          //     });
-          //   }
-          //   arrange(data);
-          //   return res;
-          // };
-          // 存入可访问的路径
-          // localStorage.setItem('roleUrl', JSON.stringify(getRoleUrl(res.menuVoList)));
           this.$message.success({ message: '登录成功', duration: 1500 });
           this.$router.push('/user/getInfo');
         }
@@ -195,41 +90,23 @@ export default {
   transform: translate(-50%, -50%);
   border: 1px solid #dedede;
 }
-.login-tab {
-  position: relative;
-  width: 100%;
-  display: flex;
-}
+
 img {
   width: 100px;
   height: 100px;
 }
 .login-num {
-  width: 50%;
   height: 62px;
   font-size: 16px;
   text-align: center;
   line-height: 62px;
   background-color: white;
 }
-.bglog {
-  position: relative;
-  width: 100%;
-  height: 62px;
-  background-color: #f8f6f6;
-  top: -62px;
-}
 
-.content {
-  position: relative;
-  width: 428px;
-  height: auto;
-  padding-bottom: 10px;
-  box-sizing: border-box;
-}
 .content-login {
   height: auto;
   margin-top: 20px;
+  padding-right: 20px;
 }
 .pas-tow > span {
   display: inline-block;

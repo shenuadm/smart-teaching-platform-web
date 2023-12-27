@@ -56,7 +56,6 @@
 
 <script>
 import { addUser, reviseUser } from '@/utils/api';
-import { getActiveLearService } from '@/api/systemSetting';
 
 const defaultData = {
   account: '',
@@ -110,7 +109,6 @@ export default {
       this.$emit('update:visible', false);
     },
     submit() {
-      console.log(this.majorGradeClass);
       this.$refs.formRef.validate(async (validate) => {
         if (validate) {
           if (this.roleList.find((item) => item.roleid === this.formData.roleId).rolename !== 'student') {
@@ -133,6 +131,7 @@ export default {
         }
       });
     },
+    // 设置当前的专业年级班级
     changeMajor(val) {
       this.formData.majorId = val[0];
       val[1] && (this.formData.gradeId = val[1]);
@@ -153,8 +152,7 @@ export default {
     visible(newVal) {
       if (newVal) {
         const { majorId, gradeId, clazzId } = this.editData;
-        console.log(this.editData);
-        console.log(majorId, gradeId, clazzId);
+        this.majorGradeClass = [];
         majorId && this.majorGradeClass.push(majorId);
         gradeId && this.majorGradeClass.push(gradeId);
         clazzId && this.majorGradeClass.push(clazzId);

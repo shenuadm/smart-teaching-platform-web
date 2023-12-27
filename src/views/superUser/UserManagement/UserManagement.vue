@@ -12,7 +12,7 @@
         </div>
         <div class="search-input">
           <div class="title">角色：</div>
-          <el-select v-model="search.role_id" size="small" class="mr-10" placeholder="用户角色">
+          <el-select @change="changeRole" v-model="search.role_id" size="small" class="mr-10" placeholder="用户角色">
             <el-option
               v-for="item in roleList"
               :key="item.roleid"
@@ -25,13 +25,13 @@
         专业/年级/班级：
         <el-cascader
           placeholder="请选择专业/年级/班级"
-          :disabled="false"
+          :disabled="!isStudent"
           v-model="cascaderList"
           :options="majorData"
           size="small "
           @change="changeMajor"
           style="width: 300px"
-          :props="{ label: 'name', children: 'children', value: 'id' }"></el-cascader>
+          :props="{ label: 'name', children: 'children', value: 'id', checkStrictly: true }"></el-cascader>
         <el-button type="primary" size="mini" @click="searchClick" class="btn-search">搜索</el-button>
         <el-button type="primary" size="mini" @click="resetting">重置</el-button>
       </div>
@@ -151,6 +151,11 @@ export default {
       this.visible = true;
       this.editData = {};
     },
+    changeRole(val) {
+      if (this.roleList.find((item) => item.roleid === val).rolename !== 'student') {
+        this.cascaderList = [];
+      }
+    },
     //搜索
     async searchClick() {
       console.log(this.search);
@@ -232,13 +237,11 @@ export default {
       if (this.$refs.upload.uploadFiles.length === 2) {
         this.$refs.upload.uploadFiles.shift();
       }
-      // this.file = file.raw;
     },
     // 确认提交用户信息文件
     async confirmUpload() {
       const uploadList = this.$refs.upload.uploadFiles;
       if (uploadList.length === 0) return this.$message.warning('请选择要上传的文件');
-      // if (this.file === '') return this.$message.warning('请选择要上传的文件');
       const fd = new FormData();
       fd.append('file', uploadList[0]);
       await uploadStudentExcelService(fd);
@@ -254,11 +257,16 @@ export default {
       this.search.major_id = majorId;
       this.search.grade_id = gradeId;
       this.search.clazz_id = clazzId;
-      console.log(clazzId, 'clazz');
     },
   },
   components: {
     EditUser,
+  },
+  computed: {
+    isStudent() {
+      if (this.search.role_id === '' || this.search.role_id === undefined || this.search.role_id === null) return true;
+      return this.roleList.find((item) => item.roleid === this.search.role_id).rolename === 'student';
+    },
   },
 };
 </script>

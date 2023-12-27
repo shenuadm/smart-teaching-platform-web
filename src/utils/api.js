@@ -1,13 +1,5 @@
 import http from './service.js';
 
-// 登录
-export function toLogin(data) {
-  return http.post('/user/login', data);
-}
-// 注册
-export function toRegister(data) {
-  return http.post('/user/register', data);
-}
 // 学生端
 // 课程详情
 export function courseDetails(id) {

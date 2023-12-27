@@ -29,7 +29,7 @@
       :page-size="pageSize"
       layout="total, prev, pager, next, jumper"
       :total="total"
-    >
+      :hide-on-single-page="total <= 10">
     </el-pagination>
     <EditVm v-if="editVisible" @getData="handleCurrentChange" :editForm="editForm"></EditVm>
     <NewVm v-if="newVisible" @getData="handleCurrentChange"></NewVm>
