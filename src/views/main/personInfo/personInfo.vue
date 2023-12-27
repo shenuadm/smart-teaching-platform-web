@@ -26,8 +26,7 @@
             v-model.number="ruleForm.phone"
             autocomplete="off"
             placeholder="请输入手机号"
-            maxlength="11"
-          ></el-input>
+            maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="原密码" prop="oldpwd">
           <el-input v-model="ruleForm.oldpwd" autocomplete="off" type="password" placeholder="请输入原密码"></el-input>
@@ -37,16 +36,14 @@
             v-model="ruleForm.password"
             autocomplete="off"
             type="password"
-            placeholder="请输入新密码"
-          ></el-input>
+            placeholder="请输入新密码"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="renewpwd">
           <el-input
             v-model="ruleForm.renewpwd"
             autocomplete="off"
             type="password"
-            placeholder="请输入确认密码"
-          ></el-input>
+            placeholder="请输入确认密码"></el-input>
         </el-form-item>
       </el-form>
       <!-- 其它角色信息 -->
@@ -62,8 +59,7 @@
             v-model.number="ruleForm.phone"
             autocomplete="off"
             placeholder="请输入手机号"
-            maxlength="11"
-          ></el-input>
+            maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="原密码" prop="oldpwd">
           <el-input v-model="ruleForm.oldpwd" autocomplete="off" type="password" placeholder="请输入原密码"></el-input>
@@ -73,16 +69,14 @@
             v-model="ruleForm.password"
             autocomplete="off"
             type="password"
-            placeholder="请输入新密码"
-          ></el-input>
+            placeholder="请输入新密码"></el-input>
         </el-form-item>
         <el-form-item label="确认新密码" prop="renewpwd">
           <el-input
             v-model="ruleForm.renewpwd"
             autocomplete="off"
             type="password"
-            placeholder="请输入确认密码"
-          ></el-input>
+            placeholder="请输入确认密码"></el-input>
         </el-form-item>
       </el-form>
       <div class="login-log">
@@ -168,10 +162,11 @@ export default {
     },
     // 获取用户信息
     async getUserInfo() {
-      const res = await getUserInfoService();
+      const { data } = await getUserInfoService();
+      sessionStorage.setItem('username', data.username);
       this.$store.commit('getUsername');
-      this.personMsg = { ...res.data, oldpwd: '', renewpwd: '', password: '' };
-      this.ruleForm = { ...res.data, oldpwd: '', renewpwd: '', password: '' };
+      this.personMsg = { ...data, oldpwd: '', renewpwd: '', password: '' };
+      this.ruleForm = { ...data, oldpwd: '', renewpwd: '', password: '' };
       console.log(this.ruleForm);
     },
     // 重置表单
