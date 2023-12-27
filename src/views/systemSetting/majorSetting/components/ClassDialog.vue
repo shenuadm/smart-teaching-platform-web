@@ -33,7 +33,10 @@ export default {
     return {
       formData: { ...defaultData },
       rules: {
-        name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+        name: [
+          { required: true, message: '请输入名称', trigger: 'blur' },
+          { min: 1, max: 20, message: '名称长度在50个字符以内', trigger: 'blur' },
+        ],
         status: [{ required: true, message: '请选择状态', trigger: 'change' }],
       },
     };

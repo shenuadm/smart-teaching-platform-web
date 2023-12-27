@@ -68,10 +68,10 @@
       <el-table-column prop="account" label="账号" width="120"></el-table-column>
       <el-table-column prop="username" label="姓名" width="150"></el-table-column>
       <el-table-column prop="roleNickName" label="角色" width="120" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="active" label="是否激活" width="80">
+      <el-table-column prop="active" label="是否禁用" width="80">
         <template #default="scope">
-          <div v-if="scope.row.active === 0" class="user">激活</div>
-          <div v-else-if="scope.row.active === 1" class="forbidden">未激活</div>
+          <div v-if="scope.row.active === 0" class="user">启用</div>
+          <div v-else-if="scope.row.active === 1" class="forbidden">禁用</div>
         </template>
       </el-table-column>
       <el-table-column prop="major" label="专业" show-overflow-tooltip> </el-table-column>

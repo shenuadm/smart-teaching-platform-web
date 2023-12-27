@@ -4,7 +4,7 @@
       <el-button type="primary" size="small" @click="addMenu({})">添加根节点</el-button>
     </div>
     <el-row class="top flex align-center" style="width: 100%">
-      <el-col :span="4"> 显示名称 </el-col>
+      <el-col :span="4" class="text-initial"> 显示名称 </el-col>
       <el-col :span="5"> 菜单名称 </el-col>
       <el-col :span="2"> 菜单类型 </el-col>
       <el-col :span="5"> 菜单路径 </el-col>
@@ -14,7 +14,7 @@
     <el-tree :data="menuData" node-key="id" accordion :expand-on-click-node="false">
       <template #default="{ node }">
         <el-row style="width: 100%" class="flex align-center">
-          <el-col :span="3">{{ node.data.title }}</el-col>
+          <el-col :span="3" class="text-initial ellipsis">{{ node.data.title }}</el-col>
           <el-col :span="6">{{ node.data.menuName }}</el-col>
           <el-col :span="2">{{ node.data.type }}</el-col>
           <el-col :span="5" class="ellipsis">{{ node.data.funurl }}</el-col>
@@ -83,6 +83,9 @@ export default {
 }
 .el-col.menu-action {
   min-width: 210px;
+}
+.menu-management .top {
+  padding-left: 24px;
 }
 </style>
 <style>

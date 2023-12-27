@@ -18,7 +18,7 @@
         <el-select v-model="searchInput['tc.status']" placeholder="请选择课程状态" size="small">
           <el-option v-for="item in teacherCourseStatus" :key="item[0]" :value="item[0]" :label="item[1]"></el-option>
         </el-select>
-        <div>授课时间：</div>
+        <div>创建时间：</div>
         <el-date-picker
           size="small"
           v-model="chooseDate"

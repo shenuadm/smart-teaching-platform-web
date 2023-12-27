@@ -16,7 +16,7 @@
       style="width: 100%">
       <template #default="{ node }">
         <el-row class="tree-list">
-          <el-col class="text-initial" :span="10">{{ node.data.name }}</el-col>
+          <el-col class="text-initial ellipsis" :span="10">{{ node.data.name }}</el-col>
           <el-col :class="node.data.status ? 'text-blue' : 'text-red'" :span="4">{{
             systemSettingStatus.get(+node.data.status)
           }}</el-col>

@@ -233,3 +233,8 @@ html {
   overflow-x: hidden;
 }
 
+.el-notification {
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+

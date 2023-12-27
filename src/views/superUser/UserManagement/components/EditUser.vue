@@ -40,10 +40,10 @@
             :props="{ label: 'name', children: 'children', value: 'id' }"></el-cascader>
         </el-form-item>
       </template>
-      <el-form-item label="是否激活：" prop="active" class="active">
+      <el-form-item label="是否启用：" prop="active" class="active">
         <el-radio-group v-model="formData.active">
-          <el-radio :label="0">激活</el-radio>
-          <el-radio :label="1">不激活</el-radio>
+          <el-radio :label="0">启用</el-radio>
+          <el-radio :label="1">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>

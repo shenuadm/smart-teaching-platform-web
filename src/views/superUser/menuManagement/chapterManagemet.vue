@@ -1,5 +1,5 @@
 <template>
-  <div class="chapter-managemet">
+  <div class="chapter-management">
     <div class="header">
       <!--      <el-button type="primary" size="small" @click="addchapter">添加章</el-button>-->
       <el-button type="primary" size="small" @click="add">添加章</el-button>
@@ -131,8 +131,12 @@ export default {
 }
 
 /* 章节标题靠左显示 */
-.chapter-managemet .el-tooltip {
+.chapter-management .el-tooltip {
   justify-content: initial;
+}
+/* 没有子元素的标题隔出空隙 */
+.chapter-management .el-tooltip:not(:has(.el-table__expand-icon)) {
+  margin-left: 20px;
 }
 </style>
 <style scoped>
