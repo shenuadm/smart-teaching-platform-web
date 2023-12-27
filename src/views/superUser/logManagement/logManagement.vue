@@ -48,6 +48,7 @@
       :page-size="10"
       :current-page="page"
       @current-change="getData"
+      layout="total, prev, pager, next, jumper"
       :hide-on-single-page="total <= 10"></el-pagination>
     <LogDetail :visible.sync="visible" :id="id"></LogDetail>
   </div>

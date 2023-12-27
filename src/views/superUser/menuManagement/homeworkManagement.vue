@@ -13,7 +13,7 @@
         ref="upload"
         :on-change="uploadChange">
         <el-button size="small" type="primary" slot="trigger">导入作业文件</el-button>
-        <el-button size="small" type="primary" class="ml-10">确认上传</el-button>
+        <el-button size="small" @click="confirmUpload" type="primary" class="ml-10">确认上传</el-button>
       </el-upload>
     </div>
     <el-table
@@ -147,6 +147,7 @@ export default {
         })
         .catch(() => {});
     },
+    confirmUpload() {},
     //批量删除
     delexper() {
       this.$confirm('您确认要删除选中的作业吗', '提示', { type: 'warning' })

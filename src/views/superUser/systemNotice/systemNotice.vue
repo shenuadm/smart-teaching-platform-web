@@ -14,13 +14,12 @@
         style="width: 100%"
         border
         v-loading="$store.state.isLoading"
-        @selection-change="handleSelectionChange"
-      >
+        @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="content" label="内容"></el-table-column>
         <el-table-column prop="" label="发布时间">
-          <template #default="{ row}">
+          <template #default="{ row }">
             {{ row.publishTime !== null ? dateToSecond(row.publishTime) : '' }}
           </template>
         </el-table-column>
@@ -40,12 +39,11 @@
     </div>
     <el-pagination
       :total="total"
-      :current-page="page"
+      :current-page.sync="page"
       :page-size="10"
       @current-change="getData"
       layout="total, prev, pager, next, jumper"
-      :hide-on-single-page="total <= 10"
-    ></el-pagination>
+      :hide-on-single-page="total <= 10"></el-pagination>
     <!-- 编辑弹框 -->
     <EditForm :visible.sync="editVisible" :editForm="editForm" @getData="getData"></EditForm>
     <!-- 新增弹框 -->

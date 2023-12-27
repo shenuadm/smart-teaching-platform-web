@@ -27,3 +27,17 @@ export const deleteChapterService = (id) => http.get(`/article/delete/${id}`);
  * @returns {Promise<AxiosResponse<any>> | *}
  */
 export const updateChapterService = (data) => http.formDate('/article/update', data);
+
+/**
+ * 获取教师课程
+ * @param params
+ * @returns {*}
+ */
+export const getTeacherCourseService = (params) => http.get('/systc/list', params);
+
+/**
+ * 删除教师课程
+ * @param id
+ * @returns {Promise<AxiosResponse<any>> | *}
+ */
+export const deleteTeacherCourseService = (id) => http.delete(`/systc/delete/${id}`);

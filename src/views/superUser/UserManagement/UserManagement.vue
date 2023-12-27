@@ -232,13 +232,15 @@ export default {
       if (this.$refs.upload.uploadFiles.length === 2) {
         this.$refs.upload.uploadFiles.shift();
       }
-      this.file = file.raw;
+      // this.file = file.raw;
     },
     // 确认提交用户信息文件
     async confirmUpload() {
-      if (this.file === '') return this.$message.warning('请选择要上传的文件');
+      const uploadList = this.$refs.upload.uploadFiles;
+      if (uploadList.length === 0) return this.$message.warning('请选择要上传的文件');
+      // if (this.file === '') return this.$message.warning('请选择要上传的文件');
       const fd = new FormData();
-      fd.append('file', this.file);
+      fd.append('file', uploadList[0]);
       await uploadStudentExcelService(fd);
       this.$message.success('上传用户信息成功');
       await this.getData();

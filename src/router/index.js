@@ -113,6 +113,12 @@ const routes = [
             name: 'svsvmList',
             component: () => import('@/views/superUser/vmsManagement/vmsManagement'),
           },
+          // 教师课程管理
+          {
+            path: '/systc',
+            name: 'systc',
+            component: () => import('@/views/superUser/teacherCourseManage/teacherCourseManage.vue'),
+          },
           // 学生
           // 主页
           {

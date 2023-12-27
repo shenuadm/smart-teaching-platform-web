@@ -11,3 +11,8 @@ export const teacherCourseStatus = new Map([
   [6, '已结束'],
   [7, '已关闭'],
 ]);
+
+export const courseType = new Map([
+  [0, '选修'],
+  [1, '必修'],
+]);

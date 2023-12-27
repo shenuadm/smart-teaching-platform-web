@@ -17,22 +17,22 @@
           <template #default="scope">
             <el-button
               size="mini"
-              type="primary"
-              :disabled="scope.row.rolename === 'supper_admin'"
+              :disabled="!scope.row.editable"
+              :type="!scope.row.editable ? 'info' : 'primary'"
               @click="empower(scope.$index, scope.row)"
               >授权</el-button
             >
             <el-button
               size="mini"
-              :disabled="isClick(scope.row.rolename)"
-              :type="isClick(scope.row.rolename) ? 'info' : 'primary'"
+              :disabled="!scope.row.editable"
+              :type="!scope.row.editable ? 'info' : 'primary'"
               @click="edit(scope.$index, scope.row)"
               >编辑</el-button
             >
             <el-button
               size="mini"
-              :disabled="isClick(scope.row.rolename)"
-              :type="isClick(scope.row.rolename) ? 'info' : 'danger'"
+              :disabled="!scope.row.editable"
+              :type="!scope.row.editable ? 'info' : 'danger'"
               @click="del(scope.$index, scope.row)"
               >删除</el-button
             >
@@ -177,11 +177,8 @@ export default {
       this.$refs['form'].validate(async (valid) => {
         if (valid) {
           const message = this.isAddRole ? '添加' : '修改' + '角色成功';
-          if (this.isAddRole) {
-            await addRole(this.form);
-          } else {
-            await updateRole(this.form);
-          }
+          if (this.isAddRole) await addRole(this.form);
+          else await updateRole(this.form);
           await this.getroleManagement();
           this.$message.success(message);
           this.aeditVisible = false;
@@ -194,7 +191,6 @@ export default {
         const { data } = await getMenuService();
         this.treeData = data;
       }
-
       this.empowerVisible = true;
       this.roleId = row.roleid;
       const { data } = await getEmpowerTreeService(this.roleId);
@@ -205,22 +201,6 @@ export default {
       this.$nextTick(() => {
         console.log(this.$refs.tree.getCurrentKey(), 'next');
       });
-      // this.$refs.tree.setCheckedKeys(data);
-      // this.treeData = res.data;
-      // console.log(res.data[0]);
-      // const getId = (data) => {
-      //   data.forEach((item) => {
-      //     if (item.checked) {
-      //       this.checked.push(item.id);
-      //     }
-      //     if (item.children != null) {
-      //       getId(item.children);
-      //     }
-      //   });
-      // };
-      // getId(res.data);
-      // this.checked = Array.from(new Set([...this.checked]));
-      // console.log(this.checked);
     },
     // 确认授权
     async confirmEmpower() {
@@ -238,10 +218,6 @@ export default {
       this.empowerVisible = false;
       this.checked = [];
       console.log(this.checked);
-    },
-    // 判断该用户是否可以编辑与删除信息,可以返回false，不可以返回true
-    isClick(rolename) {
-      return ['supper_admin', 'teacher', 'student', 'admin'].includes(rolename);
     },
     // 删除
     del(index, row) {

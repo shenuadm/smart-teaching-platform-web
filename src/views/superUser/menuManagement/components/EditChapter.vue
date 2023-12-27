@@ -74,11 +74,13 @@ export default {
   },
   props: ['visible', 'editData'],
   methods: {
+    // 取消
     cancel() {
       this.$emit('update:visible', false);
       this.fileList = [];
       this.$refs.formRef.resetFields();
     },
+    // 选择文件后
     handleFileChange(file) {
       console.log(file, 'file');
       const upload = this.$refs.upload.uploadFiles;
@@ -88,6 +90,7 @@ export default {
       }
       // this.formData.file = file.row;
     },
+    // 提交
     submit() {
       this.$refs.formRef.validate(async (valid) => {
         if (valid) {
